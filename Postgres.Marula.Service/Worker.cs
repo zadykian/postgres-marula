@@ -1,4 +1,3 @@
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
@@ -16,11 +15,8 @@ namespace Postgres.Marula.Service
 		/// <inheritdoc />
 		protected override async Task ExecuteAsync(CancellationToken stoppingToken)
 		{
-			while (!stoppingToken.IsCancellationRequested)
-			{
-				logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
-				await Task.Delay(1000, stoppingToken);
-			}
+			logger.LogInformation("app is running");
+			await Task.CompletedTask;
 		}
 	}
 }
