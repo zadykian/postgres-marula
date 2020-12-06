@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -5,11 +6,11 @@ namespace Postgres.Marula.Service
 {
 	internal static class Program
 	{
-		private static void Main(string[] args) => CreateHostBuilder(args).Build().Run();
-
-		private static IHostBuilder CreateHostBuilder(string[] args)
-			=> Host
+		private static async Task Main(string[] args)
+			=> await Host
 				.CreateDefaultBuilder(args)
-				.ConfigureServices((_, services) => services.AddHostedService<Worker>());
+				.ConfigureServices((_, services) => services.AddHostedService<Worker>())
+				.Build()
+				.RunAsync();
 	}
 }
