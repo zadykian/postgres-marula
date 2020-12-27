@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace Postgres.Marula.Service
+namespace Postgres.Marula.Host
 {
 	/// <inheritdoc />
 	internal class Worker : BackgroundService
