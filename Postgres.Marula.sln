@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Postgres.Marula.Host", "Postgres.Marula.Host\Postgres.Marula.Host.csproj", "{8B16635F-A9C5-4D6D-9A9B-B2693A458580}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Postgres.Marula.AppHost", "Postgres.Marula.AppHost\Postgres.Marula.AppHost.csproj", "{8B16635F-A9C5-4D6D-9A9B-B2693A458580}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".build", ".build", "{37435E2D-0CEA-4EA2-8647-CA5D40007786}"
 ProjectSection(SolutionItems) = preProject
