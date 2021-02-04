@@ -2,4 +2,8 @@
 
 	<Import Project="$(MSBuildThisFileDirectory)\..\common.props"/>
 
+	<ItemGroup>
+		<EmbeddedResource Include="SqlResources\Scripts\*.sql"/>
+	</ItemGroup>
+
 </Project>
