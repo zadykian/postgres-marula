@@ -7,7 +7,7 @@ ProjectSection(SolutionItems) = preProject
 	common.props = common.props
 EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Postgres.Marula.DatabaseAccess", "Postgres.Marula.DatabaseAccess\Postgres.Marula.DatabaseAccess.csproj", "{5AA71791-8113-4482-B98F-EEF1F7F16E86}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Postgres.Marula.DatabaseAccess2", "Postgres.Marula.DatabaseAccess2\Postgres.Marula.DatabaseAccess2.csproj", "{5AA71791-8113-4482-B98F-EEF1F7F16E86}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,4 +1,4 @@
-namespace Postgres.Marula.DatabaseAccess.Conventions
+namespace Postgres.Marula.DatabaseAccess2.Conventions
 {
 	/// <summary>
 	/// Database objects' naming conventions.
