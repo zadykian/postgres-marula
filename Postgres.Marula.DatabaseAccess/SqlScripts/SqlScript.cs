@@ -1,4 +1,4 @@
-namespace Postgres.Marula.DatabaseAccess2.SqlScripts
+namespace Postgres.Marula.DatabaseAccess.SqlScripts
 {
 	/// <summary>
 	/// SQL script (objects creation, system data modification and so on).

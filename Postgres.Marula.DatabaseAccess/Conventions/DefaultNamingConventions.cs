@@ -1,4 +1,4 @@
-namespace Postgres.Marula.DatabaseAccess2.Conventions
+namespace Postgres.Marula.DatabaseAccess.Conventions
 {
 	/// <inheritdoc />
 	internal class DefaultNamingConventions : INamingConventions
