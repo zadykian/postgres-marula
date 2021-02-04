@@ -1,5 +1,3 @@
-using Postgres.Marula.Infrastructure.Types;
-
 namespace Postgres.Marula.DatabaseAccess.SqlScripts
 {
 	/// <summary>
@@ -7,11 +5,11 @@ namespace Postgres.Marula.DatabaseAccess.SqlScripts
 	/// </summary>
 	internal readonly struct SqlScript
 	{
-		public SqlScript(NonEmptyString content) => Content = content;
+		public SqlScript(string content) => Content = content;
 
 		/// <summary>
 		/// Script's content - sequence of SQL commands, separated by ';' symbol.
 		/// </summary>
-		public NonEmptyString Content { get; }
+		public string Content { get; }
 	}
 }
