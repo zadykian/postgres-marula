@@ -1,7 +1,7 @@
 namespace Postgres.Marula.DatabaseAccess.SqlScripts
 {
 	/// <summary>
-	/// SQL script.
+	/// SQL script (objects creation, system data modification and so on).
 	/// </summary>
 	internal readonly struct SqlScript
 	{
