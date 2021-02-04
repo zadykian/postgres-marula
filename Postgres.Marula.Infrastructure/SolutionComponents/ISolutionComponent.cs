@@ -1,6 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Postgres.Marula.Infrastructure
+namespace Postgres.Marula.Infrastructure.SolutionComponents
 {
 	/// <summary>
 	/// Component of solution which contains application services.
@@ -13,6 +13,6 @@ namespace Postgres.Marula.Infrastructure
 		/// <param name="serviceCollection">
 		/// Collection of application services.
 		/// </param>
-		void Install(IServiceCollection serviceCollection);
+		void RegisterServices(IServiceCollection serviceCollection);
 	}
 }
