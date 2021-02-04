@@ -1,13 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-	<Import Project="$(MSBuildThisFileDirectory)\..\common.props"/>
+	<Import Project="$(MSBuildThisFileDirectory)\..\common.props" />
 
 	<ItemGroup>
-		<EmbeddedResource Include="SqlScripts\Scripts\*.sql"/>
+		<EmbeddedResource Include="SqlScripts\Scripts\*.sql" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Postgres.Marula.Infrastructure\Postgres.Marula.Infrastructure.csproj"/>
+		<ProjectReference Include="..\Postgres.Marula.Infrastructure\Postgres.Marula.Infrastructure.csproj" />
 	</ItemGroup>
 
 </Project>
