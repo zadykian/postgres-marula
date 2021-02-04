@@ -3,7 +3,7 @@ using System;
 namespace Postgres.Marula.Infrastructure.Types
 {
 	/// <summary>
-	/// Non empty string.
+	/// Non-empty string.
 	/// </summary>
 	public readonly struct NonEmptyString : IEquatable<NonEmptyString>
 	{
