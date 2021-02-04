@@ -6,11 +6,11 @@ using Microsoft.Extensions.Logging;
 namespace Postgres.Marula.AppHost
 {
 	/// <inheritdoc />
-	internal class Worker : BackgroundService
+	internal class MarulaService : BackgroundService
 	{
-		private readonly ILogger<Worker> logger;
+		private readonly ILogger<MarulaService> logger;
 
-		public Worker(ILogger<Worker> logger) => this.logger = logger;
+		public MarulaService(ILogger<MarulaService> logger) => this.logger = logger;
 
 		/// <inheritdoc />
 		protected override async Task ExecuteAsync(CancellationToken stoppingToken)
