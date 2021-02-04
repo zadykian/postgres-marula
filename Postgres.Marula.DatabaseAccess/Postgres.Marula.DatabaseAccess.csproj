@@ -1,9 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-	<Import Project="$(MSBuildThisFileDirectory)\..\common.props"/>
+	<Import Project="$(MSBuildThisFileDirectory)\..\common.props" />
 
 	<ItemGroup>
-		<EmbeddedResource Include="SqlResources\Scripts\*.sql"/>
+		<EmbeddedResource Include="SqlResources\Scripts\*.sql" />
 	</ItemGroup>
 
 </Project>

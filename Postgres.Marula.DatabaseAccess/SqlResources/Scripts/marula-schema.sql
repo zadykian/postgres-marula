@@ -1,3 +1,3 @@
 -- priority: 0
 
-create schema pg_marula;
+create schema SYSTEM_SCHEMA_NAME_TO_REPLACE;
