@@ -3,9 +3,9 @@ using System;
 namespace Postgres.Marula.Infrastructure.Extensions
 {
 	/// <summary>
-	/// Extension methods for generic nullable type.
+	/// Generic extension methods.
 	/// </summary>
-	public static class NullableTypeExtensions
+	public static class GenericExtensions
 	{
 		/// <summary>
 		/// Throw <see cref="ArgumentException"/> with message <paramref name="message"/>
@@ -15,5 +15,10 @@ namespace Postgres.Marula.Infrastructure.Extensions
 			=> nullableValue is null
 				? throw new ArgumentException(message)
 				: nullableValue;
+
+		/// <summary>
+		/// Apply value <paramref name="inputValue"/> to function <paramref name="func"/>. 
+		/// </summary>
+		public static TOut To<TIn, TOut>(this TIn inputValue, Func<TIn, TOut> func) => func(inputValue);
 	}
 }

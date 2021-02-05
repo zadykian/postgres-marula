@@ -18,5 +18,10 @@ namespace Postgres.Marula.Infrastructure.Extensions
 				action(item);
 			}
 		}
+
+		/// <summary>
+		/// Join string values <paramref name="stringValues"/> with separator <paramref name="separator"/>. 
+		/// </summary>
+		public static string JoinBy(this IEnumerable<string> stringValues, string separator) => string.Join(separator, stringValues);
 	}
 }

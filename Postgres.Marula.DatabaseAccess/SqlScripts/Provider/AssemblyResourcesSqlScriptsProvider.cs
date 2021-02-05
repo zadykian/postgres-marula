@@ -52,6 +52,28 @@ namespace Postgres.Marula.DatabaseAccess.SqlScripts.Provider
 		/// Parse resource content and extract SQL script with execution order. 
 		/// </summary>
 		private static (NonEmptyString Content, ushort ExecutionOrder) GetScriptWithExecutionOrder(NonEmptyString resourceContent)
-			=> throw new NotImplementedException();
+		{
+			var resourceContentLines = ((string) resourceContent).Split(Environment.NewLine);
+			var executionOrderLine = resourceContentLines.First();
+
+			const string orderValuePrefix = "-- execution-order: ";
+			var firstLinePattern = $"{orderValuePrefix}[0-9]+";
+
+			if (!Regex.IsMatch(executionOrderLine, firstLinePattern))
+			{
+				throw new ApplicationException($"SQL script must contain '{firstLinePattern}' as first line");
+			}
+
+			return
+			(
+				Content: resourceContentLines
+					.Skip(count: 1)
+					.JoinBy(Environment.NewLine),
+
+				ExecutionOrder: executionOrderLine
+					.Replace(orderValuePrefix, string.Empty)
+					.To(ushort.Parse)
+			);
+		}
 	}
 }
