@@ -7,8 +7,19 @@ namespace Postgres.Marula.DatabaseAccess.SqlScripts
 	/// </summary>
 	internal readonly struct SqlScript
 	{
-		public SqlScript(NonEmptyString content) => Content = content;
+		public SqlScript(
+			NonEmptyString name,
+			NonEmptyString content)
+		{
+			Name = name;
+			Content = content;
+		}
 
+		/// <summary>
+		/// Name of a script.
+		/// </summary>
+		public NonEmptyString Name { get; }
+		
 		/// <summary>
 		/// Script's content - sequence of SQL commands, separated by ';' symbol.
 		/// </summary>

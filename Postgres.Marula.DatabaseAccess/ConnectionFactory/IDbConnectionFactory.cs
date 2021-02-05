@@ -1,4 +1,5 @@
 using System.Data;
+using System.Threading.Tasks;
 
 namespace Postgres.Marula.DatabaseAccess.ConnectionFactory
 {
@@ -13,7 +14,7 @@ namespace Postgres.Marula.DatabaseAccess.ConnectionFactory
 		/// <remarks>
 		/// Preparation implies execution of all required SQL scripts.
 		/// </remarks>
-		IDbConnection GetPreparedConnection();
+		Task<IDbConnection> GetPreparedConnectionAsync();
 
 		/// <summary>
 		/// Release database connection. 

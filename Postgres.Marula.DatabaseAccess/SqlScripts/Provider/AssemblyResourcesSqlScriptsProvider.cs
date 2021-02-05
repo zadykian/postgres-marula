@@ -25,10 +25,16 @@ namespace Postgres.Marula.DatabaseAccess.SqlScripts.Provider
 				.GetExecutingAssembly()
 				.GetManifestResourceNames()
 				.Where(resourceName => Regex.IsMatch(resourceName, @".*\.sql"))
-				.Select(resourceName => GetSqlResourceFullContentByName(resourceName))
-				.Select(GetScriptWithExecutionOrder)
+				.Select(resourceName =>
+					GetSqlResourceFullContentByName(resourceName)
+						.To(GetScriptWithExecutionOrder)
+						.To(tuple => (
+							Name: resourceName,
+							Content: tuple.ScriptContent,
+							ExecutionOrder: tuple.ScriptExecutionOrder
+						)))
 				.OrderBy(tuple => tuple.ExecutionOrder)
-				.Select(tuple => new SqlScript(tuple.Content))
+				.Select(tuple => new SqlScript(tuple.Name, tuple.Content))
 				.ToImmutableArray();
 
 		/// <summary>
@@ -51,7 +57,7 @@ namespace Postgres.Marula.DatabaseAccess.SqlScripts.Provider
 		/// <summary>
 		/// Parse resource content and extract SQL script with execution order. 
 		/// </summary>
-		private static (NonEmptyString Content, ushort ExecutionOrder) GetScriptWithExecutionOrder(NonEmptyString resourceContent)
+		private static (NonEmptyString ScriptContent, ushort ScriptExecutionOrder) GetScriptWithExecutionOrder(NonEmptyString resourceContent)
 		{
 			var resourceContentLines = ((string) resourceContent).Split(Environment.NewLine);
 			var executionOrderLine = resourceContentLines.First();
@@ -66,11 +72,11 @@ namespace Postgres.Marula.DatabaseAccess.SqlScripts.Provider
 
 			return
 			(
-				Content: resourceContentLines
+				ScriptContent: resourceContentLines
 					.Skip(count: 2)
 					.JoinBy(Environment.NewLine),
 
-				ExecutionOrder: executionOrderLine
+				ScriptExecutionOrder: executionOrderLine
 					.Replace(orderValuePrefix, string.Empty)
 					.To(ushort.Parse)
 			);
