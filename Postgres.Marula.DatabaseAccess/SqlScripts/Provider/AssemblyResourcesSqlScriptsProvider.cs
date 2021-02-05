@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using Postgres.Marula.DatabaseAccess.Conventions;
+using Postgres.Marula.Infrastructure.Extensions;
 using Postgres.Marula.Infrastructure.Types;
 
 namespace Postgres.Marula.DatabaseAccess.SqlScripts.Provider
@@ -30,16 +31,15 @@ namespace Postgres.Marula.DatabaseAccess.SqlScripts.Provider
 				.Select(tuple => new SqlScript(tuple.Content))
 				.ToImmutableArray();
 
+		/// <summary>
+		/// Load resource with name <paramref name="resourceName"/> from current assembly. 
+		/// </summary>
 		private NonEmptyString GetSqlResourceFullContentByName(NonEmptyString resourceName)
 		{
 			using var resourceStream = Assembly
 				.GetExecutingAssembly()
-				.GetManifestResourceStream(resourceName);
-
-			if (resourceStream is null)
-			{
-				throw new ApplicationException($"Failed to load resource '{resourceName}' from assembly.");
-			}
+				.GetManifestResourceStream(resourceName)
+				.ThrowIfNull($"Failed to load resource '{resourceName}' from assembly.");
 
 			using var streamReader = new StreamReader(resourceStream);
 
@@ -48,7 +48,10 @@ namespace Postgres.Marula.DatabaseAccess.SqlScripts.Provider
 				.Replace("SYSTEM_SCHEMA_NAME_TO_REPLACE", namingConventions.SystemSchemaName);
 		}
 
-		private (NonEmptyString Content, ushort ExecutionOrder) GetScriptWithExecutionOrder(NonEmptyString resourceContent)
+		/// <summary>
+		/// Parse resource content and extract SQL script with execution order. 
+		/// </summary>
+		private static (NonEmptyString Content, ushort ExecutionOrder) GetScriptWithExecutionOrder(NonEmptyString resourceContent)
 			=> throw new NotImplementedException();
 	}
 }
