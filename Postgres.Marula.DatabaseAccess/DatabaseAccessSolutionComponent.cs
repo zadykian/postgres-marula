@@ -1,5 +1,6 @@
 using System.Runtime.CompilerServices;
 using Microsoft.Extensions.DependencyInjection;
+using Postgres.Marula.DatabaseAccess.ConnectionFactory;
 using Postgres.Marula.DatabaseAccess.Conventions;
 using Postgres.Marula.DatabaseAccess.SqlScripts.Provider;
 using Postgres.Marula.Infrastructure.SolutionComponents;
@@ -17,6 +18,7 @@ namespace Postgres.Marula.DatabaseAccess
 		void ISolutionComponent.RegisterServices(IServiceCollection serviceCollection)
 			=> serviceCollection
 				.AddSingleton<INamingConventions, DefaultNamingConventions>()
-				.AddSingleton<ISqlScriptsProvider, AssemblyResourcesSqlScriptsProvider>();
+				.AddSingleton<ISqlScriptsProvider, AssemblyResourcesSqlScriptsProvider>()
+				.AddSingleton<IDbConnectionFactory, NpgsqlConnectionFactory>();
 	}
 }
