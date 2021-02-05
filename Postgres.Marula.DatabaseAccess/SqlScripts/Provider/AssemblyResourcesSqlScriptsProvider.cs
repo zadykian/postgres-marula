@@ -67,7 +67,7 @@ namespace Postgres.Marula.DatabaseAccess.SqlScripts.Provider
 			return
 			(
 				Content: resourceContentLines
-					.Skip(count: 1)
+					.Skip(count: 2)
 					.JoinBy(Environment.NewLine),
 
 				ExecutionOrder: executionOrderLine
