@@ -80,7 +80,7 @@ namespace Postgres.Marula.DatabaseAccess.ConnectionFactory
 		private async Task<bool> ScriptsMustBeExecuted(IDbConnection dbConnection)
 		{
 			var commandText = string.Intern($@"
-				select exists (
+				select not exists (
 					select 1
 					from pg_catalog.pg_namespace
 					where nspname = @{nameof(INamingConventions.SystemSchemaName)});");
@@ -89,7 +89,7 @@ namespace Postgres.Marula.DatabaseAccess.ConnectionFactory
 		}
 
 		/// <inheritdoc />
-		async void IDbConnectionFactory.ReleaseConnection(IDbConnection dbConnection)
+		async Task IDbConnectionFactory.ReleaseConnectionAsync(IDbConnection dbConnection)
 		{
 			if (dbConnection is IAsyncDisposable asyncDisposable)
 			{

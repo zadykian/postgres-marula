@@ -19,6 +19,6 @@ namespace Postgres.Marula.DatabaseAccess.ConnectionFactory
 		/// <summary>
 		/// Release database connection. 
 		/// </summary>
-		void ReleaseConnection(IDbConnection dbConnection);
+		Task ReleaseConnectionAsync(IDbConnection dbConnection);
 	}
 }
