@@ -1,13 +1,13 @@
 using System;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
-using Postgres.Marula.DatabaseAccess;
 using Postgres.Marula.Infrastructure.SolutionComponents;
+using Microsoft.Extensions.Configuration;
 
 namespace Postgres.Marula.Tests.Base
 {
 	/// <summary>
-	/// Base class for testing of single <typeparamref name="TService"/>
+	/// Base class for testing of single service <typeparamref name="TService"/>
 	/// from component <typeparamref name="TSolutionComponent"/>. 
 	/// </summary>
 	[TestFixture]
@@ -35,8 +35,13 @@ namespace Postgres.Marula.Tests.Base
 		/// Perform additional services configuration. 
 		/// </summary>
 		protected virtual void ConfigureServices(IServiceCollection serviceCollection)
-		{
-		}
+			=> serviceCollection
+				.AddLogging()
+				.AddSingleton<IConfiguration>(_
+					=> new ConfigurationBuilder()
+						.AddJsonFile("appsettings.json")
+						.AddJsonFile("appsettings.local.json", optional: true)
+						.Build());
 
 		[OneTimeTearDown]
 		public void OneTimeTearDown() => (ServiceToTest as IDisposable)?.Dispose();
