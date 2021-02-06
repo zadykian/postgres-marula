@@ -85,7 +85,7 @@ namespace Postgres.Marula.DatabaseAccess.ConnectionFactory
 					from pg_catalog.pg_namespace
 					where nspname = @{nameof(INamingConventions.SystemSchemaName)});");
 
-			return await dbConnection.QuerySingleAsync<bool>(commandText, namingConventions);
+			return await dbConnection.QuerySingleAsync<bool>(commandText, new {namingConventions.SystemSchemaName});
 		}
 
 		/// <inheritdoc />
