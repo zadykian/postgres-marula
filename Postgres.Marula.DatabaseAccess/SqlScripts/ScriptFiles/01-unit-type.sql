@@ -6,7 +6,7 @@ create type parameter_unit as enum
 (
 	'ms',
 	'sec',
-	'without'
+	'none'
 );
 
 comment on type parameter_unit is 'Unit of parameter calculated by marula.';
