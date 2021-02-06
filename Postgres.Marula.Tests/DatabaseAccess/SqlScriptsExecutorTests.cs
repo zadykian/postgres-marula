@@ -10,6 +10,9 @@ using Postgres.Marula.Tests.Base;
 
 namespace Postgres.Marula.Tests.DatabaseAccess
 {
+	/// <summary>
+	/// SQL scripts execution tests.
+	/// </summary>
 	internal class SqlScriptsExecutorTests : SingleComponentTestFixtureBase<DatabaseAccessSolutionComponent>
 	{
 		private INamingConventions namingConventions;

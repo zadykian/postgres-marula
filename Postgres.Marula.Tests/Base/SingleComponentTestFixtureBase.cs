@@ -15,6 +15,9 @@ namespace Postgres.Marula.Tests.Base
 	{
 		private IServiceProvider serviceProvider;
 
+		/// <summary>
+		/// Method that is called once.
+		/// </summary>
 		[OneTimeSetUp]
 		public virtual void OneTimeSetUp()
 		{
