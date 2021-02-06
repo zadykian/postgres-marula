@@ -15,5 +15,5 @@ $func$
 $func$;
 
 comment on
-	function parameter_exists(parameter_name varchar)
+	function parameter_exists(parameter_name non_empty_string)
 	is 'Function to determine if the parameter with given name exists in database settings.';

@@ -5,7 +5,7 @@ set search_path to SYSTEM_SCHEMA_NAME_TO_REPLACE;
 create table calculated_parameters
 (
 	id   serial           primary key,
-	name non_empty_string not null check ( parameter_exists(value) ),
+	name non_empty_string check ( parameter_exists(name) ),
 	unit parameter_unit   not null
 );
 
