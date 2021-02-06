@@ -1,4 +1,4 @@
--- execution-order: 1
+-- execution-order: 2
 
 set search_path to SYSTEM_SCHEMA_NAME_TO_REPLACE;
 
