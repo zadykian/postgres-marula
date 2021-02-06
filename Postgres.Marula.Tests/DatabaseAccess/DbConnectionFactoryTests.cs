@@ -26,6 +26,7 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 			}
 		}
 
+		/// <inheritdoc />
 		protected override void ConfigureServices(IServiceCollection serviceCollection)
 		{
 			base.ConfigureServices(serviceCollection);
@@ -35,7 +36,7 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 		private sealed class TestNamingConventions : INamingConventions
 		{
 			/// <inheritdoc />
-			string INamingConventions.SystemSchemaName => "pg_marula_unit_tests";
+			string INamingConventions.SystemSchemaName => "marula_tool_unit_tests";
 		}
 	}
 }

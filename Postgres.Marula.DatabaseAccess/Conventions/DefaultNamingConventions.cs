@@ -4,6 +4,6 @@ namespace Postgres.Marula.DatabaseAccess.Conventions
 	internal class DefaultNamingConventions : INamingConventions
 	{
 		/// <inheritdoc />
-		string INamingConventions.SystemSchemaName => "pg_marula";
+		string INamingConventions.SystemSchemaName => "marula_tool";
 	}
 }
