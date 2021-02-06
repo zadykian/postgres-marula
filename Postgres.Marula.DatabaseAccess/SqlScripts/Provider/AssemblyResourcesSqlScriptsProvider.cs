@@ -24,7 +24,7 @@ namespace Postgres.Marula.DatabaseAccess.SqlScripts.Provider
 			=> Assembly
 				.GetExecutingAssembly()
 				.GetManifestResourceNames()
-				.Where(resourceName => Regex.IsMatch(resourceName, @".*\.sql"))
+				.Where(resourceName => Regex.IsMatch(resourceName, @".+\.sql$"))
 				.Select(resourceName =>
 					GetSqlResourceFullContentByName(resourceName)
 						.To(GetScriptWithExecutionOrder)
