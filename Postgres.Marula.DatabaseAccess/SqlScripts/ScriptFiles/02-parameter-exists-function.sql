@@ -3,15 +3,15 @@
 set search_path to SYSTEM_SCHEMA_NAME_TO_REPLACE;
 
 create function parameter_exists(in parameter_name varchar(64))
-    returns bool
-    cost 1
-    stable
-    language sql as
+	returns bool
+	cost 1
+	stable
+	language sql as
 $func$
-    select exists(
-        select 1
-        from pg_catalog.pg_settings
-        where name = $1)
+	select exists(
+		select 1
+		from pg_catalog.pg_settings
+		where name = $1)
 $func$;
 
 comment on
