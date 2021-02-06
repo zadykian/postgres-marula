@@ -7,29 +7,27 @@ using Microsoft.Extensions.Configuration;
 namespace Postgres.Marula.Tests.Base
 {
 	/// <summary>
-	/// Base class for testing of single service <typeparamref name="TService"/>
-	/// from component <typeparamref name="TSolutionComponent"/>. 
+	/// Base class for testing services from component <typeparamref name="TSolutionComponent"/>. 
 	/// </summary>
 	[TestFixture]
-	internal abstract class SingleServiceTestBase<TService, TSolutionComponent>
+	internal abstract class SingleComponentTestFixtureBase<TSolutionComponent>
 		where TSolutionComponent : ISolutionComponent, new()
 	{
-		/// <summary>
-		/// Service under test.
-		/// </summary>
-		protected TService ServiceToTest { get; private set; }
+		private IServiceProvider serviceProvider;
 
 		[OneTimeSetUp]
-		public void OneTimeSetUp()
+		public virtual void OneTimeSetUp()
 		{
 			var serviceCollection = new ServiceCollection();
 			new TSolutionComponent().RegisterServices(serviceCollection);
 			ConfigureServices(serviceCollection);
-
-			ServiceToTest = serviceCollection
-				.BuildServiceProvider()
-				.GetRequiredService<TService>();
+			serviceProvider = serviceCollection.BuildServiceProvider();
 		}
+
+		/// <summary>
+		/// Get registered implementation of service <typeparamref name="TService"/>. 
+		/// </summary>
+		protected TService GetService<TService>() => serviceProvider.GetRequiredService<TService>();
 
 		/// <summary>
 		/// Perform additional services configuration. 
@@ -42,8 +40,5 @@ namespace Postgres.Marula.Tests.Base
 						.AddJsonFile("appsettings.json")
 						.AddJsonFile("appsettings.local.json", optional: true)
 						.Build());
-
-		[OneTimeTearDown]
-		public void OneTimeTearDown() => (ServiceToTest as IDisposable)?.Dispose();
 	}
 }

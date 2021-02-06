@@ -1,8 +1,12 @@
+using System.Data;
 using System.Runtime.CompilerServices;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Postgres.Marula.DatabaseAccess.ConnectionFactory;
+using Npgsql;
 using Postgres.Marula.DatabaseAccess.Conventions;
+using Postgres.Marula.DatabaseAccess.SqlScripts.Executor;
 using Postgres.Marula.DatabaseAccess.SqlScripts.Provider;
+using Postgres.Marula.Infrastructure.Extensions;
 using Postgres.Marula.Infrastructure.SolutionComponents;
 
 // ReSharper disable UnusedType.Global
@@ -19,6 +23,12 @@ namespace Postgres.Marula.DatabaseAccess
 			=> serviceCollection
 				.AddSingleton<INamingConventions, DefaultNamingConventions>()
 				.AddSingleton<ISqlScriptsProvider, AssemblyResourcesSqlScriptsProvider>()
-				.AddSingleton<IDbConnectionFactory, NpgsqlConnectionFactory>();
+				.AddTransient<IDbConnection>(serviceProvider
+					=> serviceProvider
+						.GetRequiredService<IConfiguration>()
+						.GetConnectionString("Default")
+						.To(connectionString => new NpgsqlConnection(connectionString))
+						.Then(dbConnection => dbConnection.Open()))
+				.AddSingleton<ISqlScriptsExecutor, SqlScriptsExecutor>();
 	}
 }

@@ -6,13 +6,12 @@ using Postgres.Marula.Tests.Base;
 
 namespace Postgres.Marula.Tests.DatabaseAccess
 {
-	internal class SqlScriptsProviderTests
-		: SingleServiceTestBase<ISqlScriptsProvider, DatabaseAccessSolutionComponent>
+	internal class SqlScriptsProviderTests : SingleComponentTestFixtureBase<DatabaseAccessSolutionComponent>
 	{
 		[Test]
 		public void GetAllScriptsTest()
 		{
-			var sqlScripts = ServiceToTest.GetAllOrderedByExecution();
+			var sqlScripts = GetService<ISqlScriptsProvider>().GetAllOrderedByExecution();
 			Assert.IsTrue(sqlScripts.Any());
 		}
 	}

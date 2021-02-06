@@ -2,52 +2,32 @@ using System;
 using System.Data;
 using System.Threading.Tasks;
 using Dapper;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Npgsql;
 using Postgres.Marula.DatabaseAccess.Conventions;
 using Postgres.Marula.DatabaseAccess.SqlScripts.Provider;
 using Postgres.Marula.Infrastructure.Extensions;
 
-namespace Postgres.Marula.DatabaseAccess.ConnectionFactory
+namespace Postgres.Marula.DatabaseAccess.SqlScripts.Executor
 {
 	/// <inheritdoc />
-	internal class NpgsqlConnectionFactory : IDbConnectionFactory
+	internal class SqlScriptsExecutor : ISqlScriptsExecutor
 	{
 		private readonly ISqlScriptsProvider sqlScriptsProvider;
-		private readonly IConfiguration configuration;
-		private readonly ILogger<NpgsqlConnectionFactory> logger;
+		private readonly ILogger<SqlScriptsExecutor> logger;
 		private readonly INamingConventions namingConventions;
 
-		public NpgsqlConnectionFactory(
+		public SqlScriptsExecutor(
 			ISqlScriptsProvider sqlScriptsProvider,
-			IConfiguration configuration,
-			ILogger<NpgsqlConnectionFactory> logger,
+			ILogger<SqlScriptsExecutor> logger,
 			INamingConventions namingConventions)
 		{
 			this.sqlScriptsProvider = sqlScriptsProvider;
-			this.configuration = configuration;
 			this.logger = logger;
 			this.namingConventions = namingConventions;
 		}
-
+		
 		/// <inheritdoc />
-		async Task<IDbConnection> IDbConnectionFactory.GetPreparedConnectionAsync()
-		{
-			var dbConnection = configuration
-				.GetConnectionString("Default")
-				.To(connectionString => new NpgsqlConnection(connectionString));
-
-			await dbConnection.OpenAsync();
-			await ExecuteRequiredScriptsAsync(dbConnection);
-			return dbConnection;
-		}
-
-		/// <summary>
-		/// If necessary, execute scripts received from <see cref="sqlScriptsProvider"/>
-		/// within connection <paramref name="dbConnection"/>.
-		/// </summary>
-		private async Task ExecuteRequiredScriptsAsync(IDbConnection dbConnection)
+		async Task ISqlScriptsExecutor.ExecuteScriptsAsync(IDbConnection dbConnection)
 		{
 			if (!await ScriptsMustBeExecuted(dbConnection))
 			{
@@ -73,7 +53,7 @@ namespace Postgres.Marula.DatabaseAccess.ConnectionFactory
 
 			dbTransaction.Commit();
 		}
-
+		
 		/// <summary>
 		/// Figure out is scripts execution required.
 		/// </summary>
@@ -88,17 +68,5 @@ namespace Postgres.Marula.DatabaseAccess.ConnectionFactory
 			return await dbConnection.QuerySingleAsync<bool>(commandText, new {namingConventions.SystemSchemaName});
 		}
 
-		/// <inheritdoc />
-		async Task IDbConnectionFactory.ReleaseConnectionAsync(IDbConnection dbConnection)
-		{
-			if (dbConnection is IAsyncDisposable asyncDisposable)
-			{
-				await asyncDisposable.DisposeAsync();
-			}
-			else
-			{
-				dbConnection.Dispose();
-			}
-		}
 	}
 }
