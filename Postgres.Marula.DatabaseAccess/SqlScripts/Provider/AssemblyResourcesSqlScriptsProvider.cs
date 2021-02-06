@@ -67,7 +67,7 @@ namespace Postgres.Marula.DatabaseAccess.SqlScripts.Provider
 
 			if (!Regex.IsMatch(executionOrderLine, firstLinePattern))
 			{
-				throw new ApplicationException($"SQL script must contain '{firstLinePattern}' as first line");
+				throw new ApplicationException($"SQL script must contain '{firstLinePattern}' as first line.");
 			}
 
 			return
