@@ -5,7 +5,8 @@ set search_path to SYSTEM_SCHEMA_NAME_TO_REPLACE;
 create type parameter_unit as enum
 (
 	'ms',
-	'sec',
+	'bytes',
+	'enum',
 	'none'
 );
 
