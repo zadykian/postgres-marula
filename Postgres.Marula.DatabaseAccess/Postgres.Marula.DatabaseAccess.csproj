@@ -4,6 +4,7 @@
 
 	<ItemGroup>
 		<EmbeddedResource Include="SqlScripts\ScriptFiles\*.sql" />
+		<EmbeddedResource Include="SqlScripts\ScriptFiles\Schemas\system-schema.sql" />
 	</ItemGroup>
 
 	<ItemGroup>
