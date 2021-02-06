@@ -9,9 +9,14 @@ using Postgres.Marula.Tests.Base;
 
 namespace Postgres.Marula.Tests.DatabaseAccess
 {
+	// todo: drop schema if exists in OneTimeSetUp
+	
 	internal class DbConnectionFactoryTests
 		: SingleServiceTestBase<IDbConnectionFactory, DatabaseAccessSolutionComponent>
 	{
+		/// <summary>
+		/// Database connection creation with system schema initialization.
+		/// </summary>
 		[Test]
 		public async Task ConnectionCreationTest()
 		{
@@ -33,6 +38,7 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 			serviceCollection.AddSingleton<INamingConventions, TestNamingConventions>();
 		}
 
+		/// <inheritdoc />
 		private sealed class TestNamingConventions : INamingConventions
 		{
 			/// <inheritdoc />
