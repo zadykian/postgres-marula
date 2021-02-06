@@ -1,14 +1,14 @@
--- execution-order: 5
+-- execution-order: 6
 
 set search_path to SYSTEM_SCHEMA_NAME_TO_REPLACE;
 
 create table parameters_values_history
 (
-	id bigserial primary key,
-	parameter_id int not null references calculated_parameters(id),
-	calculated_value numeric not null,
-	status calculation_status not null,
-	calculation_date_time timestamp not null default now()
+	id                    bigserial          primary key,
+	parameter_id          int                not null references calculated_parameters(id),
+	calculated_value      numeric            not null,
+	status                calculation_status not null,
+	calculation_date_time timestamp          not null default now()
 );
 
 comment on table  parameters_values_history                       is 'Parameter values calculated my marula service.';

@@ -1,8 +1,8 @@
--- execution-order: 2
+-- execution-order: 3
 
 set search_path to SYSTEM_SCHEMA_NAME_TO_REPLACE;
 
-create function parameter_exists(in parameter_name varchar(64))
+create function parameter_exists(in parameter_name non_empty_string)
 	returns bool
 	cost 1
 	stable
