@@ -1,12 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk.Worker">
 
-	<Import Project="$(MSBuildThisFileDirectory)\..\common.props" />
+	<Import Project="$(MSBuildThisFileDirectory)\..\common.props"/>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0"/>
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Postgres.Marula.Infrastructure\Postgres.Marula.Infrastructure.csproj" />
+		<ProjectReference Include="..\Postgres.Marula.Infrastructure\Postgres.Marula.Infrastructure.csproj"/>
 	</ItemGroup>
+
 </Project>
