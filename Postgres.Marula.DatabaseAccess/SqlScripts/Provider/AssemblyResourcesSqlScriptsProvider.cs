@@ -7,7 +7,7 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using Postgres.Marula.DatabaseAccess.Conventions;
 using Postgres.Marula.Infrastructure.Extensions;
-using Postgres.Marula.Infrastructure.Types;
+using Postgres.Marula.Infrastructure.TypeDecorators;
 
 namespace Postgres.Marula.DatabaseAccess.SqlScripts.Provider
 {

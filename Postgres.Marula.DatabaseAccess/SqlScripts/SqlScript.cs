@@ -1,4 +1,4 @@
-using Postgres.Marula.Infrastructure.Types;
+using Postgres.Marula.Infrastructure.TypeDecorators;
 
 namespace Postgres.Marula.DatabaseAccess.SqlScripts
 {

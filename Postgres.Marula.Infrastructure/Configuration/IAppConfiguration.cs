@@ -3,11 +3,11 @@ namespace Postgres.Marula.Infrastructure.Configuration
 	/// <summary>
 	/// Application configuration.
 	/// </summary>
-	public interface IMarulaConfiguration
+	public interface IAppConfiguration
 	{
 		/// <summary>
-		/// Database connection string.
+		/// Get database connection string.
 		/// </summary>
-		ConnectionString DatabaseConnectionString { get; }
+		ConnectionString GetConnectionString();
 	}
 }

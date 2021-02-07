@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using Postgres.Marula.Infrastructure.Extensions;
-using Postgres.Marula.Infrastructure.Types;
+using Postgres.Marula.Infrastructure.TypeDecorators;
 
 namespace Postgres.Marula.Infrastructure.Configuration
 {

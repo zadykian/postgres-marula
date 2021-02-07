@@ -1,6 +1,6 @@
 using System;
 
-namespace Postgres.Marula.Infrastructure.Types
+namespace Postgres.Marula.Infrastructure.TypeDecorators
 {
 	/// <summary>
 	/// Non-empty string.
