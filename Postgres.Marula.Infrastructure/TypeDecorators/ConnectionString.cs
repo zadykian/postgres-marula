@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using Postgres.Marula.Infrastructure.Extensions;
-using Postgres.Marula.Infrastructure.TypeDecorators;
 
-namespace Postgres.Marula.Infrastructure.Configuration
+namespace Postgres.Marula.Infrastructure.TypeDecorators
 {
 	/// <summary>
 	/// Database connection string represented as 'key1=value1; key2=value2; ...'.

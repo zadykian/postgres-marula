@@ -1,11 +1,11 @@
 using System.Data;
 using System.Runtime.CompilerServices;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Npgsql;
 using Postgres.Marula.DatabaseAccess.Conventions;
 using Postgres.Marula.DatabaseAccess.SqlScripts.Executor;
 using Postgres.Marula.DatabaseAccess.SqlScripts.Provider;
+using Postgres.Marula.Infrastructure.Configuration;
 using Postgres.Marula.Infrastructure.Extensions;
 using Postgres.Marula.Infrastructure.SolutionComponents;
 
@@ -25,8 +25,8 @@ namespace Postgres.Marula.DatabaseAccess
 				.AddSingleton<ISqlScriptsProvider, AssemblyResourcesSqlScriptsProvider>()
 				.AddTransient<IDbConnection>(serviceProvider
 					=> serviceProvider
-						.GetRequiredService<IConfiguration>()
-						.GetConnectionString("Default")
+						.GetRequiredService<IAppConfiguration>()
+						.GetConnectionString()
 						.To(connectionString => new NpgsqlConnection(connectionString))
 						.Then(dbConnection => dbConnection.Open()))
 				.AddSingleton<ISqlScriptsExecutor, SqlScriptsExecutor>();

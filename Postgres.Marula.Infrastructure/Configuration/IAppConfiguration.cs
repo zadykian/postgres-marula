@@ -1,3 +1,5 @@
+using Postgres.Marula.Infrastructure.TypeDecorators;
+
 namespace Postgres.Marula.Infrastructure.Configuration
 {
 	/// <summary>

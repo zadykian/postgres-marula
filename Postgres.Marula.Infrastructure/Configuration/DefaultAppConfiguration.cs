@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Configuration;
 using Postgres.Marula.Infrastructure.Extensions;
+using Postgres.Marula.Infrastructure.TypeDecorators;
 
 namespace Postgres.Marula.Infrastructure.Configuration
 {
