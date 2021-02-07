@@ -22,6 +22,11 @@ namespace Postgres.Marula.Infrastructure.Extensions
 		public static TOut To<TIn, TOut>(this TIn inputValue, Func<TIn, TOut> func) => func(inputValue);
 
 		/// <summary>
+		/// Apply value <paramref name="inputValue"/> to function <paramref name="action"/>. 
+		/// </summary>
+		public static void To<TIn>(this TIn inputValue, Action<TIn> action) => action(inputValue);
+		
+		/// <summary>
 		/// Perform operation <paramref name="action"/> on value <paramref name="inputValue"/> and return it unmodified.
 		/// </summary>
 		public static T Then<T>(this T inputValue, Action<T> action)
