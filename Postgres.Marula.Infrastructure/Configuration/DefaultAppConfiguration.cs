@@ -15,6 +15,6 @@ namespace Postgres.Marula.Infrastructure.Configuration
 		ConnectionString IAppConfiguration.GetConnectionString()
 			=> configuration
 				.GetConnectionString("Default")
-				.To(connectionString => ConnectionString.Parse(connectionString));
+				.To(connectionString => new ConnectionString(connectionString));
 	}
 }

@@ -13,7 +13,7 @@ namespace Postgres.Marula.Infrastructure.TypeDecorators
 	{
 		private readonly IReadOnlyDictionary<NonEmptyString, NonEmptyString> parameters;
 
-		private ConnectionString(IReadOnlyDictionary<NonEmptyString, NonEmptyString> parameters) => this.parameters = parameters;
+		public ConnectionString(NonEmptyString connectionString) => parameters = Parse(connectionString);
 
 		/// <inheritdoc/>
 		public override string ToString()
@@ -32,7 +32,7 @@ namespace Postgres.Marula.Infrastructure.TypeDecorators
 		/// <exception cref="ArgumentException">
 		/// Parameter <paramref name="connectionString"/> does not match pattern 'key1=value1; key2=value2; ...'.
 		/// </exception>
-		public static implicit operator ConnectionString(string connectionString) => Parse(connectionString);
+		public static implicit operator ConnectionString(string connectionString) => new (connectionString);
 
 		/// <summary>
 		/// Parse input string <paramref name="stringToParse"/> into <see cref="ConnectionString"/> instance.
@@ -40,7 +40,7 @@ namespace Postgres.Marula.Infrastructure.TypeDecorators
 		/// <exception cref="ArgumentException">
 		/// Parameter <paramref name="stringToParse"/> does not match pattern 'key1=value1; key2=value2; ...'.
 		/// </exception>
-		public static ConnectionString Parse(NonEmptyString stringToParse)
+		private static IReadOnlyDictionary<NonEmptyString, NonEmptyString> Parse(NonEmptyString stringToParse)
 		{
 			KeyValuePair<NonEmptyString, NonEmptyString> ParseSingleKeyValue(string stringToken)
 				=> stringToken
@@ -56,8 +56,7 @@ namespace Postgres.Marula.Infrastructure.TypeDecorators
 				.Split(separator: ';')
 				.Where(token => !string.IsNullOrWhiteSpace(token))
 				.Select(ParseSingleKeyValue)
-				.ToImmutableDictionary()
-				.To(keyValuePairs => new ConnectionString(keyValuePairs));
+				.ToImmutableDictionary();
 		}
 	}
 }
