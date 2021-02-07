@@ -8,6 +8,6 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 	[TestFixture]
 	public class ConnectionStringTests
 	{
-		
+		// todo
 	}
 }

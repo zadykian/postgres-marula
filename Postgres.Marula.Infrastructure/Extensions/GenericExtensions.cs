@@ -16,6 +16,10 @@ namespace Postgres.Marula.Infrastructure.Extensions
 				value => value is null,
 				() => new ArgumentException(message))!;
 
+		/// <summary>
+		/// Throw exception created by <paramref name="exceptionFactory"/>
+		/// if value <paramref name="inputValue"/> matches predicate <paramref name="exceptionPredicate"/>.
+		/// </summary>
 		public static T ThrowIf<T>(this T inputValue,
 			Predicate<T> exceptionPredicate,
 			Func<Exception> exceptionFactory)
@@ -32,7 +36,7 @@ namespace Postgres.Marula.Infrastructure.Extensions
 		/// Apply value <paramref name="inputValue"/> to function <paramref name="action"/>. 
 		/// </summary>
 		public static void To<TIn>(this TIn inputValue, Action<TIn> action) => action(inputValue);
-		
+
 		/// <summary>
 		/// Perform operation <paramref name="action"/> on value <paramref name="inputValue"/> and return it unmodified.
 		/// </summary>

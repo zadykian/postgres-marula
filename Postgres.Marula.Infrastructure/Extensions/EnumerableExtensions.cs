@@ -19,7 +19,7 @@ namespace Postgres.Marula.Infrastructure.Extensions
 				action(item);
 			}
 		}
-		
+
 		/// <summary>
 		/// Perform action <paramref name="asyncFunc"/> for each item in <paramref name="enumerable"/>. 
 		/// </summary>
