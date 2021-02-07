@@ -39,14 +39,14 @@ namespace Postgres.Marula.Infrastructure.Types
 		#endregion
 
 		/// <summary>
-		/// Implicit cast operator 'NonEmptyString -> string'. 
+		/// Implicit cast operator '<see cref="NonEmptyString"/> -> <see cref="string"/>'. 
 		/// </summary>
 		public static implicit operator string(NonEmptyString nonEmptyString)
 			=> nonEmptyString.stringValue
 			   ?? throw new ArgumentException($"Default value of '{nameof(NonEmptyString)}' can't be casted to '{nameof(String)}' type.");
 
 		/// <summary>
-		/// Implicit cast operator 'string -> NonEmptyString'. 
+		/// Implicit cast operator '<see cref="string"/> -> <see cref="NonEmptyString"/>'. 
 		/// </summary>
 		public static implicit operator NonEmptyString(string stringValue)
 			=> new(stringValue);
