@@ -13,24 +13,28 @@ namespace Postgres.Marula.Tests.Base
 	internal abstract class SingleComponentTestFixtureBase<TSolutionComponent>
 		where TSolutionComponent : ISolutionComponent, new()
 	{
-		private IServiceProvider serviceProvider;
+		private readonly IServiceProvider serviceProvider;
+
+		protected SingleComponentTestFixtureBase()
+			=> serviceProvider = CreateServiceCollection().BuildServiceProvider();
 
 		/// <summary>
-		/// Method that is called once.
+		/// Create collection of services.
 		/// </summary>
-		[OneTimeSetUp]
-		public virtual void OneTimeSetUp()
+		private IServiceCollection CreateServiceCollection()
 		{
 			var serviceCollection = new ServiceCollection();
 			new TSolutionComponent().RegisterServices(serviceCollection);
 			ConfigureServices(serviceCollection);
-			serviceProvider = serviceCollection.BuildServiceProvider();
+			return serviceCollection;
 		}
 
 		/// <summary>
 		/// Get registered implementation of service <typeparamref name="TService"/>. 
 		/// </summary>
-		protected TService GetService<TService>() => serviceProvider.GetRequiredService<TService>();
+		protected TService GetService<TService>()
+			where TService : notnull
+			=> serviceProvider.GetRequiredService<TService>();
 
 		/// <summary>
 		/// Perform additional services configuration. 

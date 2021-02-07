@@ -15,24 +15,25 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 	/// </summary>
 	internal class SqlScriptsExecutorTests : SingleComponentTestFixtureBase<DatabaseAccessSolutionComponent>
 	{
-		private INamingConventions namingConventions;
-
-		/// <inheritdoc />
-		public override void OneTimeSetUp()
+		/// <summary>
+		/// Method that is called once.
+		/// </summary>
+		[OneTimeSetUp]
+		public void OneTimeSetUp()
 		{
-			base.OneTimeSetUp();
-			namingConventions = GetService<INamingConventions>();
+			var namingConventions = GetService<INamingConventions>();
 			using var dbConnection = GetService<IDbConnection>();
 			dbConnection.Execute($"drop schema if exists {namingConventions.SystemSchemaName} cascade;");
 		}
 
 		/// <summary>
-		/// Database connection creation with system schema initialization.
+		/// Database system schema initialization test.
 		/// </summary>
 		[Test]
 		public async Task ScriptExecutionTest()
 		{
 			var scriptsExecutor = GetService<ISqlScriptsExecutor>();
+			var namingConventions = GetService<INamingConventions>();
 			using var dbConnection = GetService<IDbConnection>();
 
 			await scriptsExecutor.ExecuteScriptsAsync(dbConnection);
