@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using Microsoft.Extensions.Configuration;
 using Postgres.Marula.Infrastructure.Extensions;
 using Postgres.Marula.Infrastructure.TypeDecorators;
@@ -16,5 +18,24 @@ namespace Postgres.Marula.Infrastructure.Configuration
 			=> configuration
 				.GetConnectionString("Default")
 				.To(connectionString => new ConnectionString(connectionString));
+
+		/// <inheritdoc />
+		PositiveTimespan IAppConfiguration.GetRecalculationInterval()
+			=> configuration
+				.GetSection("DynamicCalculation")
+				.GetChildren()
+				.Single(c => c.Key == "RecalculationIntervalInSeconds")
+				.Value
+				.To(double.Parse)
+				.To(TimeSpan.FromSeconds);
+
+		/// <inheritdoc />
+		bool IAppConfiguration.AutoAdjustIsEnabled()
+			=> configuration
+				.GetSection("DynamicCalculation")
+				.GetChildren()
+				.Single(c => c.Key == "AutoAdjustParams")
+				.Value
+				.To(bool.Parse);
 	}
 }
