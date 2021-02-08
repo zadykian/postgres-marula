@@ -6,7 +6,8 @@ create type calculation_status as enum
 (
 	'applied',
 	'requires_confirmation',
-	'requires_server_restart'
+	'requires_server_restart',
+	'requires_confirmation_and_restart'
 );
 
 comment on type calculation_status is 'Server parameter calculation status.';
