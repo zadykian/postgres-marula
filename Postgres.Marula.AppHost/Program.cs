@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
+using Postgres.Marula.Infrastructure.Extensions;
 using Postgres.Marula.Infrastructure.SolutionComponents.Factory;
 
 namespace Postgres.Marula.AppHost
@@ -10,10 +11,14 @@ namespace Postgres.Marula.AppHost
 		/// Application entry point. 
 		/// </summary>
 		private static async Task Main(string[] args)
-		{
-			var componentsFactory = new SolutionComponentsFactory();
-			var hostBuilder = Host.CreateDefaultBuilder(args);
-			await new Application(componentsFactory, hostBuilder).RunAsync();
-		}
+			=> await Host
+				.CreateDefaultBuilder(args)
+				.UseDefaultServiceProvider(options =>
+				{
+					options.ValidateScopes = true;
+					options.ValidateOnBuild = true;
+				})
+				.To(hostBuilder => new Application(hostBuilder, new SolutionComponentsFactory()))
+				.RunAsync();
 	}
 }

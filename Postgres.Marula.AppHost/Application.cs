@@ -10,15 +10,15 @@ namespace Postgres.Marula.AppHost
 	/// </summary>
 	internal class Application
 	{
-		private readonly ISolutionComponentsFactory solutionComponentsFactory;
 		private readonly IHostBuilder hostBuilder;
+		private readonly ISolutionComponentsFactory solutionComponentsFactory;
 
 		public Application(
-			ISolutionComponentsFactory solutionComponentsFactory,
-			IHostBuilder hostBuilder)
+			IHostBuilder hostBuilder,
+			ISolutionComponentsFactory solutionComponentsFactory)
 		{
-			this.solutionComponentsFactory = solutionComponentsFactory;
 			this.hostBuilder = hostBuilder;
+			this.solutionComponentsFactory = solutionComponentsFactory;
 		}
 
 		/// <summary>
