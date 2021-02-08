@@ -1,9 +1,8 @@
 using Postgres.Marula.Calculations.Parameters;
-using Postgres.Marula.Infrastructure.TypeDecorators;
 
 namespace Postgres.Marula.Calculations.Formulas
 {
-	internal interface IParameterFormula<out TValue>
+	internal interface IParameterFormula
 	{
 		/// <summary>
 		/// Parameter being calculated.
@@ -14,10 +13,5 @@ namespace Postgres.Marula.Calculations.Formulas
 		/// Calculate parameter value. 
 		/// </summary>
 		CalculationResult CalculateValue();
-	}
-
-	internal readonly struct CalculationResult
-	{
-		
 	}
 }
