@@ -18,7 +18,7 @@ namespace Postgres.Marula.Calculations.Parameters.Base
 		/// <summary>
 		/// Enumeration item.
 		/// </summary>
-		EnumItem = 3,
+		Enum = 3,
 
 		/// <summary>
 		/// Without unit (for example, factor).

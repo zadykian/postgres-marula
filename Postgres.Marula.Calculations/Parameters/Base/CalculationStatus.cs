@@ -17,7 +17,7 @@ namespace Postgres.Marula.Calculations.Parameters.Base
 
 		/// <summary>
 		/// Parameter calculation applied to database
-		/// but requires server restart to change value.
+		/// but requires server restart to change actual value.
 		/// </summary>
 		RequiresServerRestart = 3,
 
