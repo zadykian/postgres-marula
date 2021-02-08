@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Postgres.Marula.Infrastructure.Extensions;
 
 namespace Postgres.Marula.Infrastructure.TypeDecorators
@@ -42,14 +43,16 @@ namespace Postgres.Marula.Infrastructure.TypeDecorators
 		/// </exception>
 		private static IReadOnlyDictionary<NonEmptyString, NonEmptyString> Parse(NonEmptyString stringToParse)
 		{
-			KeyValuePair<NonEmptyString, NonEmptyString> ParseSingleKeyValue(string stringToken)
+			if (!Regex.IsMatch(stringToParse, "^([^=;]+=[^=;]+;)*([^=;]+=[^=;]+){1}(;){0,1}[\t| ]?$"))
+			{
+				throw new ArgumentException($"Input string '{stringToParse}' does not match pattern 'key1=value1; key2=value2; ...'.");
+			}
+
+			static KeyValuePair<NonEmptyString, NonEmptyString> ParseSingleKeyValue(string stringToken)
 				=> stringToken
 					.Split(separator: '=')
 					.Select(token => token.Trim())
 					.ToImmutableArray()
-					.ThrowIf(
-						array => array.Length != 2,
-						() => new ArgumentException($"Invalid connection string: '{stringToParse}'.", nameof(stringToParse)))
 					.To(array => new KeyValuePair<NonEmptyString, NonEmptyString>(array.First().ToLower(), array.Last()));
 
 			return ((string) stringToParse)
