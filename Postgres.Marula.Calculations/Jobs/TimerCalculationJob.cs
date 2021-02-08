@@ -19,7 +19,7 @@ namespace Postgres.Marula.Calculations.Jobs
 			timer = appConfiguration
 				.GetRecalculationInterval()
 				.To(interval => new Timer(interval.TotalMilliseconds) {AutoReset = false})
-				.Then(intervalTimer => intervalTimer.Elapsed += OnTimerElapsed);
+				.Then(intervalTimer => intervalTimer.Elapsed += (_, _) => OnTimerElapsed());
 
 			this.logger = logger;
 		}
@@ -33,7 +33,7 @@ namespace Postgres.Marula.Calculations.Jobs
 		/// <summary>
 		/// <see cref="Timer.Elapsed"/> event handler. 
 		/// </summary>
-		private void OnTimerElapsed(object _, ElapsedEventArgs eventArgs)
+		private void OnTimerElapsed()
 		{
 			logger.LogInformation("Parameters calculation iteration is started.");
 
