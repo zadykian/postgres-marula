@@ -13,7 +13,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Postgres.Marula.DatabaseAcc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Postgres.Marula.Tests", "Postgres.Marula.Tests\Postgres.Marula.Tests.csproj", "{0D365713-B79C-42AF-BE8D-2042FBF74D23}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Postgres.Marula.Core", "Postgres.Marula.Core\Postgres.Marula.Core.csproj", "{7D071539-C8D4-43AC-9C60-7939BE988EDA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Postgres.Marula.Calculations", "Postgres.Marula.Calculations\Postgres.Marula.Calculations.csproj", "{7D071539-C8D4-43AC-9C60-7939BE988EDA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

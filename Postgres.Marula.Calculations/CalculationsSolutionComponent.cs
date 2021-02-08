@@ -6,10 +6,10 @@ using Postgres.Marula.Infrastructure.SolutionComponents;
 
 [assembly: InternalsVisibleTo("Postgres.Marula.Tests")]
 
-namespace Postgres.Marula.Core
+namespace Postgres.Marula.Calculations
 {
 	/// <inheritdoc />
-	internal class CoreSolutionComponent : ISolutionComponent
+	internal class CalculationsSolutionComponent : ISolutionComponent
 	{
 		/// <inheritdoc />
 		void ISolutionComponent.RegisterServices(IServiceCollection serviceCollection)
