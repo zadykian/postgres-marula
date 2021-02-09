@@ -6,7 +6,7 @@ create table parameters_values_history
 (
 	id                    bigserial          primary key,
 	parameter_id          int                not null references calculated_parameters(id),
-	calculated_value      numeric            not null,
+	calculated_value      non_empty_string   not null,
 	status                calculation_status not null,
 	calculation_date_time timestamp          not null default now()
 );

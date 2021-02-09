@@ -5,7 +5,8 @@ namespace Postgres.Marula.Calculations.Parameters.Base
 	/// <summary>
 	/// Database server parameter.
 	/// </summary>
-	internal interface IParameter
+	internal interface IParameter<out TValue>
+		where TValue : IParameterValue
 	{
 		/// <summary>
 		/// Parameter name.
@@ -13,13 +14,8 @@ namespace Postgres.Marula.Calculations.Parameters.Base
 		NonEmptyString Name { get; }
 
 		/// <summary>
-		/// Parameter unit.
-		/// </summary>
-		ParameterUnit Unit { get; }
-
-		/// <summary>
 		/// Calculate parameter value. 
 		/// </summary>
-		CalculationResult Calculate();
+		TValue Calculate();
 	}
 }
