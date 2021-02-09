@@ -42,12 +42,11 @@ namespace Postgres.Marula.DatabaseAccess.SqlScripts.Provider
 		/// </summary>
 		private NonEmptyString GetSqlResourceFullContentByName(NonEmptyString resourceName)
 		{
-			using var resourceStream = Assembly
+			using var streamReader = Assembly
 				.GetExecutingAssembly()
 				.GetManifestResourceStream(resourceName)
-				.ThrowIfNull($"Failed to load resource '{resourceName}' from assembly.");
-
-			using var streamReader = new StreamReader(resourceStream);
+				.ThrowIfNull($"Failed to load resource '{resourceName}' from assembly.")
+				.To(resourceStream => new StreamReader(resourceStream));
 
 			return streamReader
 				.ReadToEnd()
