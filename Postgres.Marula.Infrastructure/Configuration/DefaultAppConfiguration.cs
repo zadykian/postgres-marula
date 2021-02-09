@@ -24,7 +24,7 @@ namespace Postgres.Marula.Infrastructure.Configuration
 			=> configuration
 				.GetSection("DynamicCalculation")
 				.GetChildren()
-				.Single(c => c.Key == "RecalculationIntervalInSeconds")
+				.Single(section => section.Key == "RecalculationIntervalInSeconds")
 				.Value
 				.To(double.Parse)
 				.To(TimeSpan.FromSeconds);
@@ -34,7 +34,7 @@ namespace Postgres.Marula.Infrastructure.Configuration
 			=> configuration
 				.GetSection("DynamicCalculation")
 				.GetChildren()
-				.Single(c => c.Key == "AutoAdjustParams")
+				.Single(section => section.Key == "AutoAdjustParams")
 				.Value
 				.To(bool.Parse);
 	}

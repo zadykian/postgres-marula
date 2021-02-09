@@ -39,7 +39,12 @@ namespace Postgres.Marula.Calculations.Jobs
 
 			try
 			{
-				// todo
+				RunCalculationIteration();
+			}
+			catch (Exception exception)
+			{
+				logger.LogError(exception, "Occured error during parameters calculation iteration.");
+				throw;
 			}
 			finally
 			{
@@ -47,6 +52,14 @@ namespace Postgres.Marula.Calculations.Jobs
 			}
 
 			logger.LogInformation("Parameters calculation iteration completed successfully.");
+		}
+
+		/// <summary>
+		/// Run new iteration of database parameters calculation.
+		/// </summary>
+		private void RunCalculationIteration()
+		{
+			// todo
 		}
 	}
 }
