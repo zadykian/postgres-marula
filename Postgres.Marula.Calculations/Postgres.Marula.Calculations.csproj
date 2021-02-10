@@ -10,8 +10,4 @@
 		<PackageReference Include="PipelineNet" Version="0.9.0" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <Folder Include="Pipeline\Components" />
-	</ItemGroup>
-
 </Project>

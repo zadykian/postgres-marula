@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using System.Timers;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Postgres.Marula.Calculations.Pipeline.Factory;
 using Postgres.Marula.Infrastructure.Configuration;
@@ -13,15 +14,18 @@ namespace Postgres.Marula.Calculations.Jobs
 	{
 		private readonly Timer timer;
 		private readonly IPipelineFactory pipelineFactory;
+		private readonly IServiceScopeFactory serviceScopeFactory;
 		private readonly ILogger<TimerCalculationJob> logger;
 
 		public TimerCalculationJob(
 			IAppConfiguration appConfiguration,
 			IPipelineFactory pipelineFactory,
+			IServiceScopeFactory serviceScopeFactory,
 			ILogger<TimerCalculationJob> logger)
 		{
 			timer = CreateTimer(appConfiguration);
 			this.pipelineFactory = pipelineFactory;
+			this.serviceScopeFactory = serviceScopeFactory;
 			this.logger = logger;
 		}
 
@@ -47,10 +51,11 @@ namespace Postgres.Marula.Calculations.Jobs
 		{
 			logger.LogInformation("Parameters calculation iteration is started.");
 
+			var serviceScope = serviceScopeFactory.CreateScope();
 			try
 			{
 				await pipelineFactory
-					.Create()
+					.CreateWithScope(serviceScope)
 					.RunAsync();
 			}
 			catch (Exception exception)
@@ -60,6 +65,7 @@ namespace Postgres.Marula.Calculations.Jobs
 			}
 			finally
 			{
+				serviceScope.Dispose();
 				timer.Start();
 			}
 

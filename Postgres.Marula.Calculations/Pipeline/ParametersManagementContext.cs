@@ -1,12 +1,22 @@
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using Postgres.Marula.Calculations.Parameters.Base;
 
 namespace Postgres.Marula.Calculations.Pipeline
 {
-	internal class ParametersManagementContext
+	/// <summary>
+	/// Parameters pipeline context.
+	/// </summary>
+	internal record ParametersManagementContext
 	{
-		public ParametersManagementContext(IReadOnlyCollection<IParameter> parameters) => Parameters = parameters;
+		public ParametersManagementContext(IEnumerable<IParameter> parameters)
+		{
+			Parameters = parameters.ToImmutableArray();
+		}
 
+		/// <summary>
+		/// Parameters being calculated.
+		/// </summary>
 		public IReadOnlyCollection<IParameter> Parameters { get; }
 	}
 }

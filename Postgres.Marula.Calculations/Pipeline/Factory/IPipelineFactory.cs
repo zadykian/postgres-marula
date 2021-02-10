@@ -1,3 +1,5 @@
+using Microsoft.Extensions.DependencyInjection;
+
 namespace Postgres.Marula.Calculations.Pipeline.Factory
 {
 	/// <summary>
@@ -8,6 +10,9 @@ namespace Postgres.Marula.Calculations.Pipeline.Factory
 		/// <summary>
 		/// Create parameters management pipeline.
 		/// </summary>
-		IParametersPipeline Create();
+		/// <param name="pipelineScope">
+		/// Scope of pipeline's single iteration.
+		/// </param>
+		IParametersPipeline CreateWithScope(IServiceScope pipelineScope);
 	}
 }
