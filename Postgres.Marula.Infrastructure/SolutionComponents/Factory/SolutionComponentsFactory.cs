@@ -23,9 +23,8 @@ namespace Postgres.Marula.Infrastructure.SolutionComponents.Factory
 		/// Predicate function for solution component types filtering.
 		/// </summary>
 		private static bool ComponentTypePredicate(Type type)
-			=> !type.IsAbstract
-			   && type
-				   .GetInterfaces()
-				   .Contains(typeof(ISolutionComponent));
+			=> type
+				.GetInterfaces()
+				.Contains(typeof(ISolutionComponent)) && !type.IsAbstract;
 	}
 }
