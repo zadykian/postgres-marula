@@ -7,7 +7,7 @@ namespace Postgres.Marula.Infrastructure.Extensions
 	/// <summary>
 	/// Extension methods for <see cref="IServiceCollection"/> type.
 	/// </summary>
-	internal static class ServiceCollectionExtensions
+	public static class ServiceCollectionExtensions
 	{
 		/// <summary>
 		/// Add all implementations of interface <typeparamref name="TInterface"/>
