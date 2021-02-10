@@ -20,14 +20,19 @@ namespace Postgres.Marula.Calculations.Jobs
 			IPipelineFactory pipelineFactory,
 			ILogger<TimerCalculationJob> logger)
 		{
-			timer = appConfiguration
-				.GetRecalculationInterval()
-				.To(interval => new Timer(interval.TotalMilliseconds) {AutoReset = false})
-				.Then(intervalTimer => intervalTimer.Elapsed += async (_, _) => await OnTimerElapsed());
-
+			timer = CreateTimer(appConfiguration);
 			this.pipelineFactory = pipelineFactory;
 			this.logger = logger;
 		}
+
+		/// <summary>
+		/// Create timer based on <paramref name="appConfiguration"/>. 
+		/// </summary>
+		private Timer CreateTimer(IAppConfiguration appConfiguration)
+			=> appConfiguration
+				.GetRecalculationInterval()
+				.To(interval => new Timer(interval.TotalMilliseconds) {AutoReset = false})
+				.Then(intervalTimer => intervalTimer.Elapsed += async (_, _) => await OnTimerElapsed());
 
 		/// <inheritdoc />
 		void ICalculationJob.Run() => timer.Start();

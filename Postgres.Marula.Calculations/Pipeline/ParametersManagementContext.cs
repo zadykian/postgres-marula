@@ -3,9 +3,9 @@ using Postgres.Marula.Calculations.Parameters.Base;
 
 namespace Postgres.Marula.Calculations.Pipeline
 {
-	internal class CalculationsContext
+	internal class ParametersManagementContext
 	{
-		public CalculationsContext(IReadOnlyCollection<IParameter> parameters) => Parameters = parameters;
+		public ParametersManagementContext(IReadOnlyCollection<IParameter> parameters) => Parameters = parameters;
 
 		public IReadOnlyCollection<IParameter> Parameters { get; }
 	}
