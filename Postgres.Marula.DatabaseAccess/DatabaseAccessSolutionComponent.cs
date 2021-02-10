@@ -23,7 +23,7 @@ namespace Postgres.Marula.DatabaseAccess
 			=> serviceCollection
 				.AddSingleton<INamingConventions, DefaultNamingConventions>()
 				.AddSingleton<ISqlScriptsProvider, AssemblyResourcesSqlScriptsProvider>()
-				.AddTransient<IDbConnection>(serviceProvider
+				.AddScoped<IDbConnection>(serviceProvider
 					=> serviceProvider
 						.GetRequiredService<IAppConfiguration>()
 						.GetConnectionString()
