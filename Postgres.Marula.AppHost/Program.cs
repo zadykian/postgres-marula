@@ -10,15 +10,19 @@ namespace Postgres.Marula.AppHost
 		/// <summary>
 		/// Application entry point. 
 		/// </summary>
-		private static async Task Main(string[] args)
-			=> await Host
+		private static Task Main(string[] args)
+			=> Host
 				.CreateDefaultBuilder(args)
 				.UseDefaultServiceProvider(options =>
 				{
 					options.ValidateScopes = true;
 					options.ValidateOnBuild = true;
 				})
-				.To(hostBuilder => new Application(hostBuilder, new DefaultSolutionComponentsFactory()))
+				.ConfigureServices((_, services) => new DefaultSolutionComponentsFactory()
+					.To(factory => (ISolutionComponentsFactory) factory)
+					.CreateAll()
+					.ForEach(solutionComponent => solutionComponent.RegisterServices(services)))
+				.Build()
 				.RunAsync();
 	}
 }
