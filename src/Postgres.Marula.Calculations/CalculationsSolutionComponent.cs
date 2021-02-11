@@ -3,8 +3,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Postgres.Marula.Calculations.Jobs;
 using Postgres.Marula.Calculations.Parameters.Base;
 using Postgres.Marula.Calculations.Pipeline;
-using Postgres.Marula.Calculations.Pipeline.Components;
 using Postgres.Marula.Calculations.Pipeline.Factory;
+using Postgres.Marula.Calculations.Pipeline.MiddlewareComponents;
 using Postgres.Marula.Infrastructure.Extensions;
 using Postgres.Marula.Infrastructure.SolutionComponents;
 

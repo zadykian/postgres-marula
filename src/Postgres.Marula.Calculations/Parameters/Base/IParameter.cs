@@ -7,13 +7,8 @@ namespace Postgres.Marula.Calculations.Parameters.Base
 	/// <summary>
 	/// Database server parameter.
 	/// </summary>
-	internal interface IParameter
+	internal interface IParameter : IParameterLink
 	{
-		/// <summary>
-		/// Parameter name.
-		/// </summary>
-		NonEmptyString Name { get; }
-
 		/// <summary>
 		/// Parameter context. 
 		/// </summary>
@@ -23,5 +18,19 @@ namespace Postgres.Marula.Calculations.Parameters.Base
 		/// Calculate parameter value. 
 		/// </summary>
 		IParameterValue Calculate();
+	}
+
+	/// <summary>
+	/// Extension methods for <see cref="IParameter"/> type.
+	/// </summary>
+	internal static class ParameterExtensions
+	{
+		/// <inheritdoc cref="IParameterLink"/>
+		private sealed record ParameterLink(NonEmptyString Name) : IParameterLink;
+
+		/// <summary>
+		/// Get link to database parameter <paramref name="parameter"/>. 
+		/// </summary>
+		public static IParameterLink GetLink(this IParameter parameter) => new ParameterLink(parameter.Name);
 	}
 }

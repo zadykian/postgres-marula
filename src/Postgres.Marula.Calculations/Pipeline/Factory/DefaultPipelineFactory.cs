@@ -1,6 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using PipelineNet.Pipelines;
-using Postgres.Marula.Calculations.Pipeline.Components;
+using Postgres.Marula.Calculations.Pipeline.MiddlewareComponents;
 using Postgres.Marula.Infrastructure.Extensions;
 
 namespace Postgres.Marula.Calculations.Pipeline.Factory

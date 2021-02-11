@@ -2,7 +2,7 @@ using System;
 using System.Threading.Tasks;
 using PipelineNet.Middleware;
 
-namespace Postgres.Marula.Calculations.Pipeline.Components
+namespace Postgres.Marula.Calculations.Pipeline.MiddlewareComponents
 {
 	/// <summary>
 	/// Pipeline component which is responsible

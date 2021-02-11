@@ -1,3 +1,4 @@
+using Postgres.Marula.Calculations.Parameters.Base;
 using Postgres.Marula.Calculations.Parameters.Properties;
 
 namespace Postgres.Marula.Calculations.Parameters.Values
@@ -7,6 +8,11 @@ namespace Postgres.Marula.Calculations.Parameters.Values
 	/// </summary>
 	internal interface IParameterValue
 	{
+		/// <summary>
+		/// Link to parameter.
+		/// </summary>
+		IParameterLink ParameterLink { get; }
+
 		/// <summary>
 		/// Parameter unit.
 		/// </summary>
