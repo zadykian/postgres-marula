@@ -22,7 +22,7 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 		public void OneTimeSetUp()
 		{
 			var namingConventions = GetService<INamingConventions>();
-			using var dbConnection = GetService<IDbConnection>();
+			var dbConnection = GetService<IDbConnection>();
 			dbConnection.Execute($"drop schema if exists {namingConventions.SystemSchemaName} cascade;");
 		}
 
@@ -34,7 +34,7 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 		{
 			var scriptsExecutor = GetService<ISqlScriptsExecutor>();
 			var namingConventions = GetService<INamingConventions>();
-			using var dbConnection = GetService<IDbConnection>();
+			var dbConnection = GetService<IDbConnection>();
 
 			await scriptsExecutor.ExecuteScriptsAsync(dbConnection);
 

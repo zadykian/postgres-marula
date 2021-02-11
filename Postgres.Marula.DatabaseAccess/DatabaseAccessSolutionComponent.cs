@@ -9,14 +9,12 @@ using Postgres.Marula.Infrastructure.Configuration;
 using Postgres.Marula.Infrastructure.Extensions;
 using Postgres.Marula.Infrastructure.SolutionComponents;
 
-// ReSharper disable UnusedType.Global
-
 [assembly: InternalsVisibleTo("Postgres.Marula.Tests")]
 
 namespace Postgres.Marula.DatabaseAccess
 {
 	/// <inheritdoc />
-	internal class DatabaseAccessSolutionComponent : ISolutionComponent
+	public class DatabaseAccessSolutionComponent : ISolutionComponent
 	{
 		/// <inheritdoc />
 		void ISolutionComponent.RegisterServices(IServiceCollection serviceCollection)

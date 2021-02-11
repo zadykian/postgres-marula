@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
+using Postgres.Marula.Infrastructure.SolutionComponents;
 
 namespace Postgres.Marula.Infrastructure.Extensions
 {
@@ -39,6 +40,17 @@ namespace Postgres.Marula.Infrastructure.Extensions
 				.Select(type => new ServiceDescriptor(typeof(TInterface), type, servicesLifetime))
 				.ForEach(serviceCollection.Add);
 
+			return serviceCollection;
+		}
+
+		/// <summary>
+		/// Add all services from component <typeparamref name="TComponent"/>
+		/// to collection <paramref name="serviceCollection"/>. 
+		/// </summary>
+		public static IServiceCollection AddComponent<TComponent>(this IServiceCollection serviceCollection)
+			where TComponent : ISolutionComponent, new()
+		{
+			new TComponent().RegisterServices(serviceCollection);
 			return serviceCollection;
 		}
 	}
