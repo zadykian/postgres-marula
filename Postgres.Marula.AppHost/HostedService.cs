@@ -7,14 +7,14 @@ using Postgres.Marula.Calculations.Jobs;
 namespace Postgres.Marula.AppHost
 {
 	/// <inheritdoc />
-	internal class MarulaService : BackgroundService
+	internal class HostedService : BackgroundService
 	{
 		private readonly ICalculationJob calculationJob;
-		private readonly ILogger<MarulaService> logger;
+		private readonly ILogger<HostedService> logger;
 
-		public MarulaService(
+		public HostedService(
 			ICalculationJob calculationJob,
-			ILogger<MarulaService> logger)
+			ILogger<HostedService> logger)
 		{
 			this.calculationJob = calculationJob;
 			this.logger = logger;

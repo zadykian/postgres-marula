@@ -10,6 +10,6 @@ namespace Postgres.Marula.AppHost
 	{
 		/// <inheritdoc />
 		void ISolutionComponent.RegisterServices(IServiceCollection serviceCollection)
-			=> serviceCollection.AddHostedService<MarulaService>();
+			=> serviceCollection.AddHostedService<HostedService>();
 	}
 }
