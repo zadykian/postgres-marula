@@ -1,4 +1,4 @@
-namespace Postgres.Marula.Calculations.Parameters.Values
+namespace Postgres.Marula.Calculations.Parameters.Properties
 {
 	/// <summary>
 	/// Unit of database server parameter.
