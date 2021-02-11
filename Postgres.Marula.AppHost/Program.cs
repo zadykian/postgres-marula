@@ -7,10 +7,13 @@ using Postgres.Marula.Infrastructure.Extensions;
 
 namespace Postgres.Marula.AppHost
 {
+	/// <summary>
+	/// Application entry point. 
+	/// </summary>
 	internal static class Program
 	{
 		/// <summary>
-		/// Application entry point. 
+		/// Entry point method. 
 		/// </summary>
 		private static Task Main(string[] args)
 			=> Host
