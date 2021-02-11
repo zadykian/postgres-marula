@@ -6,7 +6,7 @@ using System.Linq;
 namespace Postgres.Marula.Infrastructure.SolutionComponents.Factory
 {
 	/// <inheritdoc />
-	public class SolutionComponentsFactory : ISolutionComponentsFactory
+	public class DefaultSolutionComponentsFactory : ISolutionComponentsFactory
 	{
 		/// <inheritdoc />
 		IEnumerable<ISolutionComponent> ISolutionComponentsFactory.CreateAll()

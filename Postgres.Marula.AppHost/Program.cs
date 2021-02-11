@@ -18,7 +18,7 @@ namespace Postgres.Marula.AppHost
 					options.ValidateScopes = true;
 					options.ValidateOnBuild = true;
 				})
-				.To(hostBuilder => new Application(hostBuilder, new SolutionComponentsFactory()))
+				.To(hostBuilder => new Application(hostBuilder, new DefaultSolutionComponentsFactory()))
 				.RunAsync();
 	}
 }
