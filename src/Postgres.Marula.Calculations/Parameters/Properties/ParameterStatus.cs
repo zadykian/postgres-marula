@@ -1,9 +1,9 @@
-namespace Postgres.Marula.Calculations.Parameters.Base
+namespace Postgres.Marula.Calculations.Parameters.Properties
 {
 	/// <summary>
 	/// Parameter calculation status.
 	/// </summary>
-	internal enum CalculationStatus : byte
+	internal enum ParameterStatus : byte
 	{
 		/// <summary>
 		/// Parameter calculation is applied to database server.

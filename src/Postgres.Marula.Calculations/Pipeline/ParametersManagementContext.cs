@@ -5,6 +5,16 @@ using Postgres.Marula.Calculations.Parameters.Values;
 
 namespace Postgres.Marula.Calculations.Pipeline
 {
+	internal readonly struct ParameterContainer
+	{
+		public ParameterContainer(IParameterValue value)
+		{
+			Value = value;
+		}
+
+		public IParameterValue Value { get; }
+	}
+
 	/// <summary>
 	/// Parameters pipeline context.
 	/// </summary>

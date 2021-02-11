@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Postgres.Marula.Calculations.Jobs;
 using Postgres.Marula.Calculations.Parameters.Base;
 using Postgres.Marula.Calculations.Pipeline;
+using Postgres.Marula.Calculations.Pipeline.Components;
 using Postgres.Marula.Calculations.Pipeline.Factory;
 using Postgres.Marula.Infrastructure.Extensions;
 using Postgres.Marula.Infrastructure.SolutionComponents;
@@ -19,6 +20,9 @@ namespace Postgres.Marula.Calculations
 			=> serviceCollection
 				.AddBasedOn<IParameter>(ServiceLifetime.Transient)
 				.AddTransient<ParametersManagementContext>()
+				.AddTransient<ValueCalculationsMiddleware>()
+				.AddTransient<ParametersAdjustmentMiddleware>()
+				.AddTransient<ValuesHistoryMiddleware>()
 				.AddSingleton<IPipelineFactory, DefaultPipelineFactory>()
 				.AddSingleton<ICalculationJob, TimerCalculationJob>();
 	}
