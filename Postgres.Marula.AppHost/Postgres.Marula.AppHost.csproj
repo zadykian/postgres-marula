@@ -8,7 +8,6 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\Postgres.Marula.Calculations\Postgres.Marula.Calculations.csproj" />
-		<ProjectReference Include="..\Postgres.Marula.DatabaseAccess\Postgres.Marula.DatabaseAccess.csproj" />
 		<ProjectReference Include="..\Postgres.Marula.Infrastructure\Postgres.Marula.Infrastructure.csproj" />
 	</ItemGroup>
 
