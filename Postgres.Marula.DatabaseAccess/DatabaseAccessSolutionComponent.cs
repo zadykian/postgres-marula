@@ -29,6 +29,6 @@ namespace Postgres.Marula.DatabaseAccess
 						.GetConnectionString()
 						.To(connectionString => new NpgsqlConnection(connectionString))
 						.Then(dbConnection => dbConnection.Open()))
-				.AddSingleton<ISqlScriptsExecutor, SqlScriptsExecutor>();
+				.AddSingleton<ISqlScriptsExecutor, DefaultSqlScriptsExecutor>();
 	}
 }

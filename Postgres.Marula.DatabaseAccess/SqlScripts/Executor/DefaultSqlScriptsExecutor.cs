@@ -10,22 +10,22 @@ using Postgres.Marula.Infrastructure.Extensions;
 namespace Postgres.Marula.DatabaseAccess.SqlScripts.Executor
 {
 	/// <inheritdoc />
-	internal class SqlScriptsExecutor : ISqlScriptsExecutor
+	internal class DefaultSqlScriptsExecutor : ISqlScriptsExecutor
 	{
 		private readonly ISqlScriptsProvider sqlScriptsProvider;
-		private readonly ILogger<SqlScriptsExecutor> logger;
+		private readonly ILogger<DefaultSqlScriptsExecutor> logger;
 		private readonly INamingConventions namingConventions;
 
-		public SqlScriptsExecutor(
+		public DefaultSqlScriptsExecutor(
 			ISqlScriptsProvider sqlScriptsProvider,
-			ILogger<SqlScriptsExecutor> logger,
+			ILogger<DefaultSqlScriptsExecutor> logger,
 			INamingConventions namingConventions)
 		{
 			this.sqlScriptsProvider = sqlScriptsProvider;
 			this.logger = logger;
 			this.namingConventions = namingConventions;
 		}
-		
+
 		/// <inheritdoc />
 		async Task ISqlScriptsExecutor.ExecuteScriptsAsync(IDbConnection dbConnection)
 		{
@@ -53,7 +53,7 @@ namespace Postgres.Marula.DatabaseAccess.SqlScripts.Executor
 
 			dbTransaction.Commit();
 		}
-		
+
 		/// <summary>
 		/// Figure out is scripts execution required.
 		/// </summary>
@@ -67,6 +67,5 @@ namespace Postgres.Marula.DatabaseAccess.SqlScripts.Executor
 
 			return await dbConnection.QuerySingleAsync<bool>(commandText, new {namingConventions.SystemSchemaName});
 		}
-
 	}
 }
