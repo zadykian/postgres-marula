@@ -1,6 +1,9 @@
 using System;
+using System.Collections.Immutable;
+using System.Linq;
 using System.Threading.Tasks;
 using PipelineNet.Middleware;
+using Postgres.Marula.Infrastructure.Extensions;
 
 namespace Postgres.Marula.Calculations.Pipeline.MiddlewareComponents
 {
@@ -13,6 +16,12 @@ namespace Postgres.Marula.Calculations.Pipeline.MiddlewareComponents
 		/// <inheritdoc />
 		Task IAsyncMiddleware<ParametersManagementContext>.Run(
 			ParametersManagementContext context,
-			Func<ParametersManagementContext, Task> next) => throw new NotImplementedException();
+			Func<ParametersManagementContext, Task> next)
+			=> context
+				.Parameters
+				.Select(parameter => parameter.Calculate())
+				.ToImmutableArray()
+				.To(parameterValues => context with {CalculatedValues = parameterValues})
+				.To(next);
 	}
 }
