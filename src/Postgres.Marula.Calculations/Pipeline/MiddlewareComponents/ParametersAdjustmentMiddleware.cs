@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using PipelineNet.Middleware;
 using Postgres.Marula.Calculations.ExternalDependencies;
-using Postgres.Marula.Calculations.Parameters.Values;
+using Postgres.Marula.Calculations.Pipeline.MiddlewareComponents.Base;
 using Postgres.Marula.Infrastructure.Configuration;
 using Postgres.Marula.Infrastructure.Extensions;
 
@@ -13,18 +13,14 @@ namespace Postgres.Marula.Calculations.Pipeline.MiddlewareComponents
 	/// Pipeline component which is responsible
 	/// for database server parameters adjustment.
 	/// </summary>
-	internal class ParametersAdjustmentMiddleware : IAsyncMiddleware<ParametersManagementContext>
+	internal class ParametersAdjustmentMiddleware : ParametersMiddlewareBase, IAsyncMiddleware<ParametersManagementContext>
 	{
 		private readonly IDatabaseServer databaseServer;
-		private readonly IAppConfiguration appConfiguration;
 
 		public ParametersAdjustmentMiddleware(
 			IDatabaseServer databaseServer,
-			IAppConfiguration appConfiguration)
-		{
-			this.databaseServer = databaseServer;
-			this.appConfiguration = appConfiguration;
-		}
+			IAppConfiguration appConfiguration) : base(appConfiguration)
+			=> this.databaseServer = databaseServer;
 
 		/// <inheritdoc />
 		Task IAsyncMiddleware<ParametersManagementContext>.Run(
@@ -35,11 +31,5 @@ namespace Postgres.Marula.Calculations.Pipeline.MiddlewareComponents
 				.Where(ParameterAdjustmentIsAllowed)
 				.To(parameterValues => databaseServer.ApplyToConfigurationAsync(parameterValues))
 				.ContinueWith(_ => next(context), TaskContinuationOptions.OnlyOnRanToCompletion);
-
-		/// <summary>
-		/// Check if parameter value <paramref name="parameterValue"/>
-		/// can be applied to database server.
-		/// </summary>
-		private bool ParameterAdjustmentIsAllowed(IParameterValue parameterValue) => appConfiguration.AutoAdjustIsEnabled();
 	}
 }

@@ -48,4 +48,17 @@ namespace Postgres.Marula.Calculations.Parameters.Properties
 		/// </summary>
 		User = 6
 	}
+
+	/// <summary>
+	/// Extension methods for <see cref="ParameterContext"/> type.
+	/// </summary>
+	internal static class ParameterContextExtensions
+	{
+		/// <summary>
+		/// Check if database parameter with context <paramref name="parameterContext"/>
+		/// can be changed without server restart.
+		/// </summary>
+		public static bool RestartIsRequired(this ParameterContext parameterContext)
+			=> parameterContext == ParameterContext.Postmaster;
+	}
 }
