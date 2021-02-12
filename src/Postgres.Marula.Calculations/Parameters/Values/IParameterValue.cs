@@ -6,7 +6,7 @@ namespace Postgres.Marula.Calculations.Parameters.Values
 	/// <summary>
 	/// Calculated parameter value.
 	/// </summary>
-	internal interface IParameterValue
+	public interface IParameterValue
 	{
 		/// <summary>
 		/// Link to parameter.

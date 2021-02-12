@@ -3,7 +3,7 @@ namespace Postgres.Marula.Calculations.Parameters.Properties
 	/// <summary>
 	/// Unit of database server parameter.
 	/// </summary>
-	internal enum ParameterUnit : byte
+	public enum ParameterUnit : byte
 	{
 		/// <summary>
 		/// Milliseconds (interval, timeout and so on).
