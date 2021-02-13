@@ -20,7 +20,7 @@ namespace Postgres.Marula.Infrastructure.Configuration
 				.To(connectionString => new ConnectionString(connectionString));
 
 		/// <inheritdoc />
-		PositiveTimespan IAppConfiguration.GetRecalculationInterval()
+		PositiveTimeSpan IAppConfiguration.GetRecalculationInterval()
 			=> configuration
 				.GetSection("DynamicCalculation")
 				.GetChildren()

@@ -9,15 +9,15 @@ namespace Postgres.Marula.Calculations.Parameters.Values
 	/// <summary>
 	/// Database positive timespan parameter value.
 	/// </summary>
-	public class TimeSpanParameterValue : ParameterValueBase<PositiveTimespan>
+	public class TimeSpanParameterValue : ParameterValueBase<PositiveTimeSpan>
 	{
-		public TimeSpanParameterValue(IParameterLink parameterLink, PositiveTimespan value)
+		public TimeSpanParameterValue(IParameterLink parameterLink, PositiveTimeSpan value)
 			: base(parameterLink, value)
 		{
 		}
 
 		public TimeSpanParameterValue(IParameterLink parameterLink, ulong milliseconds)
-			: base(parameterLink, TimeSpan.FromMilliseconds(milliseconds))
+			: this(parameterLink, TimeSpan.FromMilliseconds(milliseconds))
 		{
 		}
 

@@ -15,7 +15,7 @@ namespace Postgres.Marula.Infrastructure.Configuration
 		/// <summary>
 		/// Get parameters recalculation interval. 
 		/// </summary>
-		PositiveTimespan GetRecalculationInterval();
+		PositiveTimeSpan GetRecalculationInterval();
 
 		/// <summary>
 		/// Automatic database's parameters adjustment is enabled. 
