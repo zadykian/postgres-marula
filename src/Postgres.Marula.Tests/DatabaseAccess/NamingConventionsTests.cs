@@ -33,6 +33,7 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 			=> GetService<INamingConventions>()
 				.To(namingConventions => namingConventions
 					.SystemSchemaName
+					.ToString()
 					.StartsWith("pg_"))
 				.To(hasReservedPrefix => Assert.IsFalse(
 					hasReservedPrefix,

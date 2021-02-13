@@ -2,7 +2,7 @@
 
 set search_path to SYSTEM_SCHEMA_NAME_TO_REPLACE;
 
-create table parameters_values_history
+create table VALUES_HISTORY_TABLE_NAME_TO_REPLACE
 (
 	id                    bigserial          primary key,
 	parameter_id          int                not null references calculated_parameters(id),
@@ -11,9 +11,9 @@ create table parameters_values_history
 	calculation_date_time timestamp          not null default now()
 );
 
-comment on table  parameters_values_history                       is 'Parameter values calculated my marula service.';
-comment on column parameters_values_history.id                    is 'Table identifier.';
-comment on column parameters_values_history.parameter_id          is 'Calculated parameter id.';
-comment on column parameters_values_history.calculated_value      is 'Calculated value.';
-comment on column parameters_values_history.status                is 'Value calculation status.';
-comment on column parameters_values_history.calculation_date_time is 'Calculation date and time.';
+comment on table  VALUES_HISTORY_TABLE_NAME_TO_REPLACE                       is 'Parameter values calculated my marula service.';
+comment on column VALUES_HISTORY_TABLE_NAME_TO_REPLACE.id                    is 'Table identifier.';
+comment on column VALUES_HISTORY_TABLE_NAME_TO_REPLACE.parameter_id          is 'Calculated parameter id.';
+comment on column VALUES_HISTORY_TABLE_NAME_TO_REPLACE.calculated_value      is 'Calculated value.';
+comment on column VALUES_HISTORY_TABLE_NAME_TO_REPLACE.status                is 'Value calculation status.';
+comment on column VALUES_HISTORY_TABLE_NAME_TO_REPLACE.calculation_date_time is 'Calculation date and time.';

@@ -1,3 +1,5 @@
+using Postgres.Marula.Infrastructure.TypeDecorators;
+
 namespace Postgres.Marula.DatabaseAccess.Conventions
 {
 	/// <summary>
@@ -8,6 +10,11 @@ namespace Postgres.Marula.DatabaseAccess.Conventions
 		/// <summary>
 		/// Name of database schema that contains all system tables, types and so on.
 		/// </summary>
-		string SystemSchemaName { get; }
+		DatabaseObjectName SystemSchemaName { get; }
+
+		/// <summary>
+		/// Name of calculated parameter values table.
+		/// </summary>
+		DatabaseObjectName ValuesHistoryTableName { get; } 
 	}
 }

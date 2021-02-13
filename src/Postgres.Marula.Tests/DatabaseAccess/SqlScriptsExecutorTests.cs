@@ -6,6 +6,7 @@ using NUnit.Framework;
 using Postgres.Marula.DatabaseAccess;
 using Postgres.Marula.DatabaseAccess.Conventions;
 using Postgres.Marula.DatabaseAccess.SqlScripts.Executor;
+using Postgres.Marula.Infrastructure.TypeDecorators;
 using Postgres.Marula.Tests.Base;
 
 namespace Postgres.Marula.Tests.DatabaseAccess
@@ -57,10 +58,10 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 		}
 
 		/// <inheritdoc />
-		private sealed class TestNamingConventions : INamingConventions
+		private sealed class TestNamingConventions : DefaultNamingConventions
 		{
 			/// <inheritdoc />
-			string INamingConventions.SystemSchemaName => "marula_tool_unit_tests";
+			public override DatabaseObjectName SystemSchemaName => "marula_tool_unit_tests";
 		}
 	}
 }
