@@ -25,9 +25,6 @@ namespace Postgres.Marula.Calculations.Parameters.Base
 	/// </summary>
 	internal static class ParameterExtensions
 	{
-		/// <inheritdoc cref="IParameterLink"/>
-		private sealed record ParameterLink(NonEmptyString Name) : IParameterLink;
-
 		/// <summary>
 		/// Get link to database parameter <paramref name="parameter"/>. 
 		/// </summary>

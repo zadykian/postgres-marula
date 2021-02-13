@@ -12,4 +12,7 @@ namespace Postgres.Marula.Calculations.Parameters.Base
 		/// </summary>
 		NonEmptyString Name { get; }
 	}
+
+	/// <inheritdoc cref="IParameterLink"/>
+	internal sealed record ParameterLink(NonEmptyString Name) : IParameterLink;
 }
