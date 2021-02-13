@@ -28,7 +28,7 @@ namespace Postgres.Marula.Calculations.Parameters.Values.Base
 		public abstract ParameterUnit Unit { get; }
 
 		/// <inheritdoc />
-		public virtual NonEmptyString AsString() => Value.ToString() ?? throw new ArgumentNullException();
+		public abstract NonEmptyString AsString();
 
 		#region EqualityMembers
 
