@@ -63,16 +63,13 @@ namespace Postgres.Marula.DatabaseAccess.SqlScripts.Provider
 				.First();
 
 			const string orderValuePrefix = "-- execution-order: ";
-			var firstLinePattern = $"{orderValuePrefix}[0-9]+";
+			var firstLinePattern = $"^{orderValuePrefix}[0-9]+$";
 
-			if (!Regex.IsMatch(executionOrderLine, firstLinePattern))
-			{
-				throw new ApplicationException($"SQL script must contain '{firstLinePattern}' as first line.");
-			}
-
-			return executionOrderLine
-				.Replace(orderValuePrefix, string.Empty)
-				.To(ushort.Parse);
+			return Regex.IsMatch(executionOrderLine, firstLinePattern)
+				? executionOrderLine
+					.Replace(orderValuePrefix, string.Empty)
+					.To(ushort.Parse)
+				: throw new ApplicationException($"SQL script must contain '{firstLinePattern}' as first line.");
 		}
 	}
 }
