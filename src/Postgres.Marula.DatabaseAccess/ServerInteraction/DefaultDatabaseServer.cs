@@ -73,7 +73,7 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 				"ms"  => 1,
 				"s"   => 1000,
 				"min" => 60 * 1000,
-				_ => throw new ArgumentOutOfRangeException(paramName: null, nameof(unit))
+				_     => throw new ArgumentOutOfRangeException(paramName: null, nameof(unit))
 			};
 
 			return TimeSpan.FromMilliseconds(number * (ulong) multiplier);
@@ -92,7 +92,7 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 				"kB" => 1024,
 				"MB" => 1024 * 1024,
 				"GB" => 1024 * 1024 * 1024,
-				_ => throw new ArgumentOutOfRangeException(paramName: null, nameof(unit))
+				_    => throw new ArgumentOutOfRangeException(paramName: null, nameof(unit))
 			};
 
 			return new Memory(number * (ulong) multiplier);

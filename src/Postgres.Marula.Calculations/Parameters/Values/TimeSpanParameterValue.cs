@@ -1,4 +1,3 @@
-using System;
 using Postgres.Marula.Calculations.Parameters.Base;
 using Postgres.Marula.Calculations.Parameters.Properties;
 using Postgres.Marula.Calculations.Parameters.Values.Base;
@@ -13,11 +12,6 @@ namespace Postgres.Marula.Calculations.Parameters.Values
 	{
 		public TimeSpanParameterValue(IParameterLink parameterLink, PositiveTimeSpan value)
 			: base(parameterLink, value)
-		{
-		}
-
-		public TimeSpanParameterValue(IParameterLink parameterLink, ulong milliseconds)
-			: this(parameterLink, TimeSpan.FromMilliseconds(milliseconds))
 		{
 		}
 

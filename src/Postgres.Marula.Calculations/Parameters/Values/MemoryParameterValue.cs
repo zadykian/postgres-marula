@@ -15,11 +15,6 @@ namespace Postgres.Marula.Calculations.Parameters.Values
 		{
 		}
 
-		public MemoryParameterValue(IParameterLink parameterLink, ulong totalBytes)
-			: this(parameterLink, new Memory(totalBytes))
-		{
-		}
-
 		/// <inheritdoc />
 		public override ParameterUnit Unit => ParameterUnit.Bytes;
 	}
