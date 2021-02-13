@@ -1,4 +1,4 @@
-using Postgres.Marula.Calculations.Parameters.Values;
+using Postgres.Marula.Calculations.Parameters.Values.Base;
 using Postgres.Marula.Infrastructure.Configuration;
 
 namespace Postgres.Marula.Calculations.Pipeline.MiddlewareComponents.Base

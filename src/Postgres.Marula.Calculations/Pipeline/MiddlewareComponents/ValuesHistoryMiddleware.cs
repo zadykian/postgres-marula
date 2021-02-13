@@ -5,7 +5,7 @@ using PipelineNet.Middleware;
 using Postgres.Marula.Calculations.ExternalDependencies;
 using Postgres.Marula.Calculations.Parameters.Base;
 using Postgres.Marula.Calculations.Parameters.Properties;
-using Postgres.Marula.Calculations.Parameters.Values;
+using Postgres.Marula.Calculations.Parameters.Values.Base;
 using Postgres.Marula.Calculations.Pipeline.MiddlewareComponents.Base;
 using Postgres.Marula.Infrastructure.Configuration;
 using Postgres.Marula.Infrastructure.Extensions;

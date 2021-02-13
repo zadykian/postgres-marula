@@ -1,6 +1,6 @@
 using Postgres.Marula.Calculations.Parameters.Properties;
 
-namespace Postgres.Marula.Calculations.Parameters.Values
+namespace Postgres.Marula.Calculations.Parameters.Values.Base
 {
 	/// <summary>
 	/// Database parameter value with calculation status.

@@ -1,7 +1,7 @@
 using Postgres.Marula.Calculations.Parameters.Base;
 using Postgres.Marula.Calculations.Parameters.Properties;
 
-namespace Postgres.Marula.Calculations.Parameters.Values
+namespace Postgres.Marula.Calculations.Parameters.Values.Base
 {
 	/// <summary>
 	/// Calculated parameter value.
