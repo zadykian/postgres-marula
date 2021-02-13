@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Postgres.Marula.Infrastructure.Extensions
 {
@@ -17,6 +18,23 @@ namespace Postgres.Marula.Infrastructure.Extensions
 			{
 				action(item);
 			}
+		}
+
+		/// <summary>
+		/// Transform collection <paramref name="enumerable"/> by application of <paramref name="selector"/> to each item.
+		/// </summary>
+		public static async Task<IEnumerable<TOut>> SelectAsync<TIn, TOut>(
+			this IEnumerable<TIn> enumerable,
+			Func<TIn, Task<TOut>> selector)
+		{
+			var resultCollection = new List<TOut>();
+
+			foreach (var item in enumerable)
+			{
+				resultCollection.Add(await selector(item));
+			}
+
+			return resultCollection;
 		}
 
 		/// <summary>

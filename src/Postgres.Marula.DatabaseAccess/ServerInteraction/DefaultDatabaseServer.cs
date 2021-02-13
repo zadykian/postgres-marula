@@ -48,7 +48,7 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 
 			return parameterValueAsString switch
 			{
-				{ } when Regex.IsMatch(parameterValueAsString, "^[0-9]+(ms|s|min)$")
+				{ } when Regex.IsMatch(parameterValueAsString, "^[0-9]+(ms|s|min|h)$")
 					=> ParseTimeSpan(parameterValueAsString)
 						.To(timeSpan => new TimeSpanParameterValue(parameterLink, timeSpan)),
 
@@ -73,6 +73,7 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 				"ms"  => 1,
 				"s"   => 1000,
 				"min" => 60 * 1000,
+				"h"   => 60 * 60 * 1000,
 				_     => throw new ArgumentOutOfRangeException(paramName: null, nameof(unit))
 			};
 
