@@ -29,8 +29,7 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 				select exists (
 					select null
 					from pg_catalog.pg_namespace
-					where nspname = @{nameof(INamingConventions.SystemSchemaName)});",
-				new {namingConventions.SystemSchemaName});
+					where nspname = '{namingConventions.SystemSchemaName}');");
 
 			Assert.IsTrue(systemSchemaExists);
 		}

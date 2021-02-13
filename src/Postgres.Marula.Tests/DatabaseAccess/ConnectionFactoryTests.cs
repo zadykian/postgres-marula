@@ -12,7 +12,7 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 	internal class ConnectionFactoryTests : DatabaseAccessTestFixtureBase
 	{
 		/// <summary>
-		/// Prepared connection creation test. 
+		/// Prepared connection creation test.
 		/// </summary>
 		[Test]
 		public async Task PreparedConnectionCreationTest()
