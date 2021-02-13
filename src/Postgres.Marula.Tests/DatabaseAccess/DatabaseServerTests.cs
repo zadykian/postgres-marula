@@ -18,17 +18,6 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 	internal class DatabaseServerTests : SingleComponentTestFixtureBase<DatabaseAccessSolutionComponent>
 	{
 		/// <summary>
-		/// Apply empty collection of parameter values. 
-		/// </summary>
-		[Test]
-		public async Task EmptyParametersCollectionTest()
-		{
-			var databaseServer = GetService<IDatabaseServer>();
-			await databaseServer.ApplyToConfigurationAsync(ImmutableArray<IParameterValue>.Empty);
-			Assert.Pass();
-		}
-
-		/// <summary>
 		/// Get timespan parameter value from database server.
 		/// </summary>
 		[Test]
@@ -59,20 +48,31 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 		}
 
 		/// <summary>
+		/// Apply empty collection of parameter values. 
+		/// </summary>
+		[Test]
+		public async Task EmptyParametersCollectionTest()
+		{
+			var databaseServer = GetService<IDatabaseServer>();
+			await databaseServer.ApplyToConfigurationAsync(ImmutableArray<IParameterValue>.Empty);
+			Assert.Pass();
+		}
+
+		/// <summary>
 		/// Apply single parameter value. 
 		/// </summary>
 		[Test]
-		public async Task ApplySingleParameterValueTest()
+		public async Task ApplySingleTimeSpanParameterValueTest()
 		{
-			var parameterValues = new[]
-			{
-				new TimeSpanParameterValue(
-					new ParameterLink("autovacuum_naptime"),
-					TimeSpan.FromSeconds(value: 30))
-			};
+			var valueToApply =  new TimeSpanParameterValue(
+				new ParameterLink("autovacuum_vacuum_cost_delay"),
+				TimeSpan.FromMilliseconds(value: 10));
 
 			var databaseServer = GetService<IDatabaseServer>();
-			await databaseServer.ApplyToConfigurationAsync(parameterValues);
+			await databaseServer.ApplyToConfigurationAsync(new[] {valueToApply});
+
+			var valueFromDatabase = await databaseServer.GetParameterValueAsync(valueToApply.ParameterLink.Name);
+			Assert.AreEqual(valueToApply, valueFromDatabase);
 		}
 	}
 }
