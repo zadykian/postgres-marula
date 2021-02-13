@@ -21,17 +21,6 @@ namespace Postgres.Marula.Infrastructure.Extensions
 		}
 
 		/// <summary>
-		/// Perform action <paramref name="asyncFunc"/> for each item in <paramref name="enumerable"/>. 
-		/// </summary>
-		public static async Task ForEachAsync<T>(this IEnumerable<T> enumerable, Func<T, Task> asyncFunc)
-		{
-			foreach (var item in enumerable)
-			{
-				await asyncFunc(item);
-			}
-		}
-
-		/// <summary>
 		/// Join string values <paramref name="stringValues"/> with separator <paramref name="separator"/>. 
 		/// </summary>
 		public static string JoinBy(this IEnumerable<string> stringValues, string separator) => string.Join(separator, stringValues);

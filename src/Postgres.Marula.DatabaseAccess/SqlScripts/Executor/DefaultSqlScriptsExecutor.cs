@@ -5,7 +5,6 @@ using Dapper;
 using Microsoft.Extensions.Logging;
 using Postgres.Marula.DatabaseAccess.Conventions;
 using Postgres.Marula.DatabaseAccess.SqlScripts.Provider;
-using Postgres.Marula.Infrastructure.Extensions;
 
 namespace Postgres.Marula.DatabaseAccess.SqlScripts.Executor
 {
@@ -36,20 +35,18 @@ namespace Postgres.Marula.DatabaseAccess.SqlScripts.Executor
 
 			using var dbTransaction = dbConnection.BeginTransaction();
 
-			await sqlScriptsProvider
-				.GetAllOrderedByExecution()
-				.ForEachAsync(async sqlScript =>
+			foreach (var sqlScript in sqlScriptsProvider.GetAllOrderedByExecution())
+			{
+				try
 				{
-					try
-					{
-						await dbConnection.ExecuteAsync(sqlScript.Content, transaction: dbTransaction);
-					}
-					catch (Exception exception)
-					{
-						logger.LogError(exception, $"Failed to execute SQL script '{sqlScript.Name}'.");
-						throw;
-					}
-				});
+					await dbConnection.ExecuteAsync(sqlScript.Content, transaction: dbTransaction);
+				}
+				catch (Exception exception)
+				{
+					logger.LogError(exception, $"Failed to execute SQL script '{sqlScript.Name}'.");
+					throw;
+				}
+			}
 
 			dbTransaction.Commit();
 		}

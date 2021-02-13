@@ -16,7 +16,7 @@ namespace Postgres.Marula.Infrastructure.TypeDecorators
 
 		public ConnectionString(NonEmptyString connectionString) => parameters = Parse(connectionString);
 
-		/// <inheritdoc/>
+		/// <inheritdoc />
 		public override string ToString()
 			=> parameters
 				.Select(pair => $"{pair.Key}={pair.Value}")
@@ -53,9 +53,10 @@ namespace Postgres.Marula.Infrastructure.TypeDecorators
 					.Split(separator: '=')
 					.Select(token => token.Trim())
 					.ToImmutableArray()
-					.To(array => new KeyValuePair<NonEmptyString, NonEmptyString>(array.First().ToLower(), array.Last()));
+					.To(array => new KeyValuePair<NonEmptyString, NonEmptyString>(array.First(), array.Last()));
 
-			return ((string) stringToParse)
+			return stringToParse
+				.ToString()
 				.Split(separator: ';')
 				.Where(token => !string.IsNullOrWhiteSpace(token))
 				.Select(ParseSingleKeyValue)
