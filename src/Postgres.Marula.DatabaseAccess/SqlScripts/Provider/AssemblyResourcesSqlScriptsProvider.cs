@@ -51,7 +51,8 @@ namespace Postgres.Marula.DatabaseAccess.SqlScripts.Provider
 				.ReadToEnd()
 				.Replace("SYSTEM_SCHEMA_NAME_TO_REPLACE", namingConventions.SystemSchemaName)
 				.Replace("VALUES_HISTORY_TABLE_NAME_TO_REPLACE", namingConventions.ValuesHistoryTableName)
-				.Replace("PARAMETERS_TABLE_NAME_TO_REPLACE", namingConventions.ParametersTableName);
+				.Replace("PARAMETERS_TABLE_NAME_TO_REPLACE", namingConventions.ParametersTableName)
+				.Replace("STATUS_ENUM_NAME_TO_REPLACE", namingConventions.CalculationStatusEnumName);
 		}
 
 		/// <summary>

@@ -1,4 +1,8 @@
+using System.Data;
+using System.Threading.Tasks;
+using Dapper;
 using Microsoft.Extensions.DependencyInjection;
+using NUnit.Framework;
 using Postgres.Marula.DatabaseAccess;
 using Postgres.Marula.DatabaseAccess.Conventions;
 using Postgres.Marula.Infrastructure.TypeDecorators;
@@ -11,6 +15,18 @@ namespace Postgres.Marula.Tests.DatabaseAccess.Base
 	/// </summary>
 	internal abstract class DatabaseAccessTestFixtureBase  : SingleComponentTestFixtureBase<DatabaseAccessSolutionComponent>
 	{
+		/// <summary>
+		/// Method that is called once.
+		/// </summary>
+		[OneTimeSetUp]
+		public async Task OneTimeSetUp()
+		{
+			var namingConventions = GetService<INamingConventions>();
+			var dbConnection = GetService<IDbConnection>();
+			dbConnection.Open();
+			await dbConnection.ExecuteAsync($"drop schema if exists {namingConventions.SystemSchemaName} cascade;");
+		}
+
 		/// <inheritdoc />
 		protected override void ConfigureServices(IServiceCollection serviceCollection)
 		{

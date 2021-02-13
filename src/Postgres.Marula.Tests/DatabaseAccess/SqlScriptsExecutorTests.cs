@@ -14,18 +14,6 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 	internal class SqlScriptsExecutorTests : DatabaseAccessTestFixtureBase
 	{
 		/// <summary>
-		/// Method that is called once.
-		/// </summary>
-		[OneTimeSetUp]
-		public void OneTimeSetUp()
-		{
-			var namingConventions = GetService<INamingConventions>();
-			var dbConnection = GetService<IDbConnection>();
-			dbConnection.Open();
-			dbConnection.Execute($"drop schema if exists {namingConventions.SystemSchemaName} cascade;");
-		}
-
-		/// <summary>
 		/// Database system schema initialization test.
 		/// </summary>
 		[Test]

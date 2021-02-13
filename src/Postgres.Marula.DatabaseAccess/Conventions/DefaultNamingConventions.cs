@@ -13,5 +13,8 @@ namespace Postgres.Marula.DatabaseAccess.Conventions
 
 		/// <inheritdoc />
 		DatabaseObjectName INamingConventions.ParametersTableName => "calculated_parameters";
+
+		/// <inheritdoc />
+		DatabaseObjectName INamingConventions.CalculationStatusEnumName => "calculation_status";
 	}
 }

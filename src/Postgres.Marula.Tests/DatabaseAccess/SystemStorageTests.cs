@@ -1,12 +1,15 @@
 using System;
 using System.Collections.Immutable;
 using System.Threading.Tasks;
+using Dapper;
 using NUnit.Framework;
 using Postgres.Marula.Calculations.ExternalDependencies;
 using Postgres.Marula.Calculations.Parameters.Base;
 using Postgres.Marula.Calculations.Parameters.Properties;
 using Postgres.Marula.Calculations.Parameters.Values;
 using Postgres.Marula.Calculations.Parameters.Values.Base;
+using Postgres.Marula.DatabaseAccess.ConnectionFactory;
+using Postgres.Marula.DatabaseAccess.Conventions;
 using Postgres.Marula.Infrastructure.TypeDecorators;
 using Postgres.Marula.Tests.DatabaseAccess.Base;
 
@@ -34,6 +37,8 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 		[Test]
 		public async Task InsertCalculatedValuesTest()
 		{
+			await InsertTestParameters();
+
 			var parameterValues = new ParameterValueWithStatus[]
 			{
 				new (
@@ -64,6 +69,27 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 			var systemStorage = GetService<ISystemStorage>();
 			await systemStorage.SaveParameterValuesAsync(parameterValues);
 			Assert.Pass();
+		}
+
+		/// <summary>
+		/// Insert (if not exists) test parameters to system dictionary.
+		/// </summary>
+		private async Task InsertTestParameters()
+		{
+			var namingConventions = GetService<INamingConventions>();
+
+			var commandText = $@"
+				insert into {namingConventions.SystemSchemaName}.{namingConventions.ParametersTableName}
+					(name, unit)
+				values
+					('deadlock_timeout', 'ms'),
+					('log_rotation_size', 'bytes'),
+					('wal_buffers', 'bytes'),
+					('shared_buffers', 'bytes')
+				on conflict (name) do nothing;";
+
+			var dbConnection = await GetService<IPreparedDbConnectionFactory>().GetPreparedConnectionAsync();
+			await dbConnection.ExecuteAsync(commandText);
 		}
 	}
 }

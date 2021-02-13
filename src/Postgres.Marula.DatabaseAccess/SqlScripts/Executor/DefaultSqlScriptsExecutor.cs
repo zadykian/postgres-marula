@@ -60,9 +60,9 @@ namespace Postgres.Marula.DatabaseAccess.SqlScripts.Executor
 				select not exists (
 					select null
 					from pg_catalog.pg_namespace
-					where nspname = @{nameof(INamingConventions.SystemSchemaName)});");
+					where nspname = '{namingConventions.SystemSchemaName}');");
 
-			return await dbConnection.QuerySingleAsync<bool>(commandText, new {namingConventions.SystemSchemaName});
+			return await dbConnection.QuerySingleAsync<bool>(commandText);
 		}
 	}
 }

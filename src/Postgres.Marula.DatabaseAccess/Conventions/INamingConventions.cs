@@ -21,5 +21,10 @@ namespace Postgres.Marula.DatabaseAccess.Conventions
 		/// Name of calculated parameters dictionary table.
 		/// </summary>
 		DatabaseObjectName ParametersTableName { get; }
+
+		/// <summary>
+		/// Name of calculation status enumeration type.
+		/// </summary>
+		DatabaseObjectName CalculationStatusEnumName { get; }
 	}
 }

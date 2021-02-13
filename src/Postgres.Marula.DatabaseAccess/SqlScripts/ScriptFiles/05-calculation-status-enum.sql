@@ -2,7 +2,7 @@
 
 set search_path to SYSTEM_SCHEMA_NAME_TO_REPLACE;
 
-create type calculation_status as enum
+create type STATUS_ENUM_NAME_TO_REPLACE as enum
 (
 	'applied',
 	'requires_confirmation',
@@ -10,4 +10,4 @@ create type calculation_status as enum
 	'requires_confirmation_and_restart'
 );
 
-comment on type calculation_status is 'Server parameter calculation status.';
+comment on type STATUS_ENUM_NAME_TO_REPLACE is 'Server parameter calculation status.';

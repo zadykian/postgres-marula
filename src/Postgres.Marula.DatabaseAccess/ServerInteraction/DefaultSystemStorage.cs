@@ -64,14 +64,14 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 		/// <summary>
 		/// Represent <paramref name="parameterValue"/> as string '(param_name, param_value, calculation_status)'.
 		/// </summary>
-		private static NonEmptyString ToValuesString(ParameterValueWithStatus parameterValue)
+		private NonEmptyString ToValuesString(ParameterValueWithStatus parameterValue)
 			=> new []
 				{
-					parameterValue.Value.ParameterLink.Name,
-					parameterValue.Value.AsString(),
-					GetDatabaseRepresentation(parameterValue.CalculationStatus)
+					$"'{parameterValue.Value.ParameterLink.Name}'",
+					$"'{parameterValue.Value.AsString()}'",
+					$"'{GetDatabaseRepresentation(parameterValue.CalculationStatus)}'" +
+						$"::{namingConventions.SystemSchemaName}.{namingConventions.CalculationStatusEnumName}"
 				}
-				.Select(value => $"'{value}'")
 				.JoinBy(", ")
 				.To(values => $"({values})");
 
