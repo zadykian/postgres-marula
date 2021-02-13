@@ -44,6 +44,21 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 		}
 
 		/// <summary>
+		/// Get memory parameter value from database server.
+		/// </summary>
+		[Test]
+		public async Task GetMemoryParameterValueTest()
+		{
+			var databaseServer = GetService<IDatabaseServer>();
+			const string parameterName = "effective_cache_size";
+			var parameterValue = await databaseServer.GetParameterValueAsync(parameterName);
+
+			Assert.IsInstanceOf<MemoryParameterValue>(parameterValue);
+			Assert.AreEqual(ParameterUnit.Bytes, parameterValue.Unit);
+			Assert.AreEqual(parameterName, parameterValue.ParameterLink.Name.ToString());
+		}
+
+		/// <summary>
 		/// Apply single parameter value. 
 		/// </summary>
 		[Test]
