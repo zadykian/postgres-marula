@@ -15,6 +15,11 @@ namespace Postgres.Marula.DatabaseAccess.Conventions
 		/// <summary>
 		/// Name of calculated parameter values table.
 		/// </summary>
-		DatabaseObjectName ValuesHistoryTableName { get; } 
+		DatabaseObjectName ValuesHistoryTableName { get; }
+
+		/// <summary>
+		/// Name of calculated parameters dictionary table.
+		/// </summary>
+		DatabaseObjectName ParametersTableName { get; }
 	}
 }

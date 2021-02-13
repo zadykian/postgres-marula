@@ -19,6 +19,6 @@ namespace Postgres.Marula.Calculations.Parameters.Values
 		public override ParameterUnit Unit => ParameterUnit.Bytes;
 
 		/// <inheritdoc />
-		public override string AsStringValue() => $"{Value.TotalBytes}{Unit.AsString()}";
+		public override NonEmptyString AsString() => Value.TotalBytes.ToString();
 	}
 }

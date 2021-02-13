@@ -1,3 +1,4 @@
+using System.Globalization;
 using Postgres.Marula.Calculations.Parameters.Base;
 using Postgres.Marula.Calculations.Parameters.Properties;
 using Postgres.Marula.Calculations.Parameters.Values.Base;
@@ -19,6 +20,6 @@ namespace Postgres.Marula.Calculations.Parameters.Values
 		public override ParameterUnit Unit => ParameterUnit.Milliseconds;
 
 		/// <inheritdoc />
-		public override string AsStringValue() => $"{Value.TotalMilliseconds}{Unit.AsString()}";
+		public override NonEmptyString AsString() => ((ulong) Value.TotalMilliseconds).ToString();
 	}
 }

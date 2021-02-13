@@ -1,5 +1,6 @@
 using Postgres.Marula.Calculations.Parameters.Base;
 using Postgres.Marula.Calculations.Parameters.Properties;
+using Postgres.Marula.Infrastructure.TypeDecorators;
 
 namespace Postgres.Marula.Calculations.Parameters.Values.Base
 {
@@ -19,8 +20,8 @@ namespace Postgres.Marula.Calculations.Parameters.Values.Base
 		ParameterUnit Unit { get; }
 
 		/// <summary>
-		/// Represent parameter value as string to be applied to database server. 
+		/// Represent parameter value as string without unit. 
 		/// </summary>
-		string AsStringValue();
+		NonEmptyString AsString();
 	}
 }

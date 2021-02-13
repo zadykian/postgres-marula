@@ -7,10 +7,10 @@ namespace Postgres.Marula.Calculations.Parameters.Values.Base
 	/// </summary>
 	public readonly struct ParameterValueWithStatus
 	{
-		public ParameterValueWithStatus(IParameterValue value, ParameterStatus parameterStatus)
+		public ParameterValueWithStatus(IParameterValue value, CalculationStatus calculationStatus)
 		{
 			Value = value;
-			ParameterStatus = parameterStatus;
+			CalculationStatus = calculationStatus;
 		}
 
 		/// <summary>
@@ -21,6 +21,6 @@ namespace Postgres.Marula.Calculations.Parameters.Values.Base
 		/// <summary>
 		/// Parameter calculation status.
 		/// </summary>
-		public ParameterStatus ParameterStatus { get; }
+		public CalculationStatus CalculationStatus { get; }
 	}
 }

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Dapper;
 using Postgres.Marula.Calculations.ExternalDependencies;
 using Postgres.Marula.Calculations.Parameters.Base;
+using Postgres.Marula.Calculations.Parameters.Properties;
 using Postgres.Marula.Calculations.Parameters.Values;
 using Postgres.Marula.Calculations.Parameters.Values.Base;
 using Postgres.Marula.DatabaseAccess.ConnectionFactory;
@@ -31,7 +32,7 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 			}
 
 			var commandText = parameterValues
-				.Select(value => $"alter system set {value.ParameterLink.Name} = '{value.AsStringValue()}';")
+				.Select(value => $"alter system set {value.ParameterLink.Name} = '{value.AsString()}{value.Unit.AsString()}';")
 				.Add("select pg_reload_conf();")
 				.JoinBy(Environment.NewLine);
 

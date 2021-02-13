@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Postgres.Marula.Infrastructure.TypeDecorators;
 
 namespace Postgres.Marula.Infrastructure.Extensions
 {
@@ -40,7 +41,14 @@ namespace Postgres.Marula.Infrastructure.Extensions
 		/// <summary>
 		/// Join string values <paramref name="stringValues"/> with separator <paramref name="separator"/>. 
 		/// </summary>
-		public static string JoinBy(this IEnumerable<string> stringValues, string separator) => string.Join(separator, stringValues);
+		public static string JoinBy(this IEnumerable<string> stringValues, string separator)
+			=> string.Join(separator, stringValues);
+
+		/// <summary>
+		/// Join string values <paramref name="stringValues"/> with separator <paramref name="separator"/>. 
+		/// </summary>
+		public static NonEmptyString JoinBy(this IEnumerable<NonEmptyString> stringValues, NonEmptyString separator)
+			=> string.Join(separator, stringValues);
 
 		/// <summary>
 		/// Append item <paramref name="itemToAppend"/> to enumerable <paramref name="enumerable"/>. 

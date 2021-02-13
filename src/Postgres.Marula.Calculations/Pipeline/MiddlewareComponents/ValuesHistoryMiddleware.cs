@@ -42,13 +42,13 @@ namespace Postgres.Marula.Calculations.Pipeline.MiddlewareComponents
 		/// <summary>
 		/// Get database parameter calculation status. 
 		/// </summary>
-		private ParameterStatus GetCalculationStatus(IParameterValue parameterValue, IParameter parameter)
+		private CalculationStatus GetCalculationStatus(IParameterValue parameterValue, IParameter parameter)
 			=> (ParameterAdjustmentIsAllowed(parameterValue), parameter.Context.RestartIsRequired()) switch
 			{
-				( false, false ) => ParameterStatus.RequiresConfirmation,
-				( false, true  ) => ParameterStatus.RequiresConfirmationAndRestart,
-				( true,  false ) => ParameterStatus.Applied,
-				( true,  true  ) => ParameterStatus.RequiresServerRestart
+				( false, false ) => CalculationStatus.RequiresConfirmation,
+				( false, true  ) => CalculationStatus.RequiresConfirmationAndRestart,
+				( true,  false ) => CalculationStatus.Applied,
+				( true,  true  ) => CalculationStatus.RequiresServerRestart
 			};
 	}
 }

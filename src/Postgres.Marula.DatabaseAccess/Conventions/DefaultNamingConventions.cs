@@ -10,5 +10,8 @@ namespace Postgres.Marula.DatabaseAccess.Conventions
 
 		/// <inheritdoc />
 		DatabaseObjectName INamingConventions.ValuesHistoryTableName => "parameters_values_history";
+
+		/// <inheritdoc />
+		DatabaseObjectName INamingConventions.ParametersTableName => "calculated_parameters";
 	}
 }

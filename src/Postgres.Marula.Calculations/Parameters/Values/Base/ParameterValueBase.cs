@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Postgres.Marula.Calculations.Parameters.Base;
 using Postgres.Marula.Calculations.Parameters.Properties;
+using Postgres.Marula.Infrastructure.TypeDecorators;
 
 namespace Postgres.Marula.Calculations.Parameters.Values.Base
 {
@@ -27,7 +28,7 @@ namespace Postgres.Marula.Calculations.Parameters.Values.Base
 		public abstract ParameterUnit Unit { get; }
 
 		/// <inheritdoc />
-		public virtual string AsStringValue() => $"{Value.ToString()}{Unit.AsString()}";
+		public virtual NonEmptyString AsString() => Value.ToString() ?? throw new ArgumentNullException();
 
 		#region EqualityMembers
 
