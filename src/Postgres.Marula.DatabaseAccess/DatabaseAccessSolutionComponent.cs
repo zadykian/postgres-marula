@@ -24,13 +24,14 @@ namespace Postgres.Marula.DatabaseAccess
 			=> serviceCollection
 				.AddSingleton<INamingConventions, DefaultNamingConventions>()
 				.AddSingleton<ISqlScriptsProvider, AssemblyResourcesSqlScriptsProvider>()
+				.AddSingleton<ISqlScriptsExecutor, DefaultSqlScriptsExecutor>()
 				.AddScoped<IDbConnection>(serviceProvider
 					=> serviceProvider
 						.GetRequiredService<IAppConfiguration>()
 						.GetConnectionString()
 						.To(connectionString => new NpgsqlConnection(connectionString)))
-				.AddSingleton<ISqlScriptsExecutor, DefaultSqlScriptsExecutor>()
 				.AddScoped<IPreparedDbConnectionFactory, DefaultPreparedDbConnectionFactory>()
-				.AddScoped<IDatabaseServer, DefaultDatabaseServer>();
+				.AddScoped<IDatabaseServer, DefaultDatabaseServer>()
+				.AddScoped<ISystemStorage, DefaultSystemStorage>();
 	}
 }
