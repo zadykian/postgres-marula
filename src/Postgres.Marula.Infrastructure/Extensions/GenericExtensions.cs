@@ -12,20 +12,7 @@ namespace Postgres.Marula.Infrastructure.Extensions
 		/// in case when <paramref name="nullableValue"/> is null.
 		/// </summary>
 		public static T ThrowIfNull<T>(this T? nullableValue, string? message = null)
-			=> nullableValue.ThrowIf(
-				value => value is null,
-				() => new ArgumentException(message))!;
-
-		/// <summary>
-		/// Throw exception created by <paramref name="exceptionFactory"/>
-		/// if value <paramref name="inputValue"/> matches predicate <paramref name="exceptionPredicate"/>.
-		/// </summary>
-		public static T ThrowIf<T>(this T inputValue,
-			Predicate<T> exceptionPredicate,
-			Func<Exception> exceptionFactory)
-			=> exceptionPredicate(inputValue)
-				? throw exceptionFactory()
-				: inputValue;
+			=> nullableValue ?? throw new ArgumentNullException(message);
 
 		/// <summary>
 		/// Apply value <paramref name="inputValue"/> to function <paramref name="func"/>. 
