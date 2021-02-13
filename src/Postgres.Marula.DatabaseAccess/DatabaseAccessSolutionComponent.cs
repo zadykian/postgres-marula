@@ -2,8 +2,10 @@ using System.Data;
 using System.Runtime.CompilerServices;
 using Microsoft.Extensions.DependencyInjection;
 using Npgsql;
+using Postgres.Marula.Calculations.ExternalDependencies;
 using Postgres.Marula.DatabaseAccess.ConnectionFactory;
 using Postgres.Marula.DatabaseAccess.Conventions;
+using Postgres.Marula.DatabaseAccess.ServerInteraction;
 using Postgres.Marula.DatabaseAccess.SqlScripts.Executor;
 using Postgres.Marula.DatabaseAccess.SqlScripts.Provider;
 using Postgres.Marula.Infrastructure.Configuration;
@@ -27,7 +29,8 @@ namespace Postgres.Marula.DatabaseAccess
 						.GetRequiredService<IAppConfiguration>()
 						.GetConnectionString()
 						.To(connectionString => new NpgsqlConnection(connectionString)))
+				.AddSingleton<ISqlScriptsExecutor, DefaultSqlScriptsExecutor>()
 				.AddScoped<IPreparedDbConnectionFactory, DefaultPreparedDbConnectionFactory>()
-				.AddSingleton<ISqlScriptsExecutor, DefaultSqlScriptsExecutor>();
+				.AddScoped<IDatabaseServer, DefaultDatabaseServer>();
 	}
 }

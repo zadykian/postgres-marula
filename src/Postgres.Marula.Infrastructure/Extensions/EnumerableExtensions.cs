@@ -23,5 +23,18 @@ namespace Postgres.Marula.Infrastructure.Extensions
 		/// Join string values <paramref name="stringValues"/> with separator <paramref name="separator"/>. 
 		/// </summary>
 		public static string JoinBy(this IEnumerable<string> stringValues, string separator) => string.Join(separator, stringValues);
+
+		/// <summary>
+		/// Append item <paramref name="itemToAppend"/> to enumerable <paramref name="enumerable"/>. 
+		/// </summary>
+		public static IEnumerable<T> Add<T>(this IEnumerable<T> enumerable, T itemToAppend)
+		{
+			foreach (var item in enumerable)
+			{
+				yield return item;
+			}
+
+			yield return itemToAppend;
+		}
 	}
 }

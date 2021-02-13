@@ -13,6 +13,6 @@ namespace Postgres.Marula.Calculations.ExternalDependencies
 		/// Apply parameter values <paramref name="parameterValues"/>
 		/// to database server configuration.
 		/// </summary>
-		Task ApplyToConfigurationAsync(IEnumerable<IParameterValue> parameterValues);
+		Task ApplyToConfigurationAsync(IReadOnlyCollection<IParameterValue> parameterValues);
 	}
 }

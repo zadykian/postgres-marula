@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Threading.Tasks;
 using PipelineNet.Middleware;
@@ -29,6 +30,7 @@ namespace Postgres.Marula.Calculations.Pipeline.MiddlewareComponents
 			=> context
 				.CalculatedValues
 				.Where(ParameterAdjustmentIsAllowed)
+				.ToImmutableArray()
 				.To(parameterValues => databaseServer.ApplyToConfigurationAsync(parameterValues))
 				.ContinueWith(_ => next(context), TaskContinuationOptions.OnlyOnRanToCompletion);
 	}
