@@ -40,7 +40,7 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 
 			var systemSchemaExists = await dbConnection.QuerySingleAsync<bool>($@"
 				select exists (
-					select 1
+					select null
 					from pg_catalog.pg_namespace
 					where nspname = @{nameof(INamingConventions.SystemSchemaName)});",
 				new {namingConventions.SystemSchemaName});

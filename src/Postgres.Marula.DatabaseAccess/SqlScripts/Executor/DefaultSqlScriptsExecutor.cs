@@ -58,7 +58,7 @@ namespace Postgres.Marula.DatabaseAccess.SqlScripts.Executor
 		{
 			var commandText = string.Intern($@"
 				select not exists (
-					select 1
+					select null
 					from pg_catalog.pg_namespace
 					where nspname = @{nameof(INamingConventions.SystemSchemaName)});");
 

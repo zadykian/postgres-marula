@@ -9,7 +9,7 @@ create function parameter_exists(in parameter_name non_empty_string)
 	language sql as
 $func$
 	select exists(
-		select 1
+		select null
 		from pg_catalog.pg_settings
 		where name = $1)
 $func$;
