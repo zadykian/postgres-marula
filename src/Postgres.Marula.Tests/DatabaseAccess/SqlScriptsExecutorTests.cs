@@ -23,6 +23,7 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 		{
 			var namingConventions = GetService<INamingConventions>();
 			var dbConnection = GetService<IDbConnection>();
+			dbConnection.Open();
 			dbConnection.Execute($"drop schema if exists {namingConventions.SystemSchemaName} cascade;");
 		}
 

@@ -5,7 +5,7 @@ using Postgres.Marula.Calculations.Parameters.Values.Base;
 namespace Postgres.Marula.Calculations.Parameters.Values
 {
 	/// <summary>
-	/// Database memory parameter represented in bytes.
+	/// Database memory parameter value represented in bytes.
 	/// </summary>
 	public class MemoryParameterValue : ParameterValueBase<ulong>
 	{

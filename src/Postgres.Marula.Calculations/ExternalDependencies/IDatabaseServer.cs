@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Postgres.Marula.Calculations.Parameters.Values.Base;
+using Postgres.Marula.Infrastructure.TypeDecorators;
 
 namespace Postgres.Marula.Calculations.ExternalDependencies
 {
@@ -14,5 +15,10 @@ namespace Postgres.Marula.Calculations.ExternalDependencies
 		/// to database server configuration.
 		/// </summary>
 		Task ApplyToConfigurationAsync(IReadOnlyCollection<IParameterValue> parameterValues);
+
+		/// <summary>
+		/// Get value of parameter named <paramref name="parameterName"/>.
+		/// </summary>
+		Task<IParameterValue> GetParameterValueAsync(NonEmptyString parameterName);
 	}
 }
