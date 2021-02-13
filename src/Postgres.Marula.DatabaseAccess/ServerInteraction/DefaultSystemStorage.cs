@@ -25,8 +25,13 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 			=> this.namingConventions = namingConventions;
 
 		/// <inheritdoc />
-		async Task ISystemStorage.SaveParameterValuesAsync(IEnumerable<ParameterValueWithStatus> parameterValues)
+		async Task ISystemStorage.SaveParameterValuesAsync(IReadOnlyCollection<ParameterValueWithStatus> parameterValues)
 		{
+			if (parameterValues.Count == 0)
+			{
+				return;
+			}
+
 			var commandText = GetCommandTextToInsertValues(parameterValues);
 			var dbConnection = await GetConnectionAsync();
 			await dbConnection.ExecuteAsync(commandText);
@@ -66,6 +71,7 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 					parameterValue.Value.AsString(),
 					GetDatabaseRepresentation(parameterValue.CalculationStatus)
 				}
+				.Select(value => $"'{value}'")
 				.JoinBy(", ")
 				.To(values => $"({values})");
 

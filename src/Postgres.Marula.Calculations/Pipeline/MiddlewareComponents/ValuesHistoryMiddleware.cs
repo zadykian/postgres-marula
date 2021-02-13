@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Threading.Tasks;
 using PipelineNet.Middleware;
@@ -36,7 +37,8 @@ namespace Postgres.Marula.Calculations.Pipeline.MiddlewareComponents
 					value => value.ParameterLink,
 					parameter => parameter.GetLink(),
 					(value, parameter) => new ParameterValueWithStatus(value, GetCalculationStatus(value, parameter)))
-				.To(systemStorage.SaveParameterValuesAsync)
+				.ToImmutableArray()
+				.To(parameterValues => systemStorage.SaveParameterValuesAsync(parameterValues))
 				.ContinueWith(_ => next(context), TaskContinuationOptions.OnlyOnRanToCompletion);
 
 		/// <summary>

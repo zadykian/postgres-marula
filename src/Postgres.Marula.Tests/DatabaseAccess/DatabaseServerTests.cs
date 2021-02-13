@@ -8,17 +8,16 @@ using Postgres.Marula.Calculations.Parameters.Base;
 using Postgres.Marula.Calculations.Parameters.Properties;
 using Postgres.Marula.Calculations.Parameters.Values;
 using Postgres.Marula.Calculations.Parameters.Values.Base;
-using Postgres.Marula.DatabaseAccess;
 using Postgres.Marula.Infrastructure.Extensions;
 using Postgres.Marula.Infrastructure.TypeDecorators;
-using Postgres.Marula.Tests.Base;
+using Postgres.Marula.Tests.DatabaseAccess.Base;
 
 namespace Postgres.Marula.Tests.DatabaseAccess
 {
 	/// <summary>
 	/// Database server access tests.
 	/// </summary>
-	internal class DatabaseServerTests : SingleComponentTestFixtureBase<DatabaseAccessSolutionComponent>
+	internal class DatabaseServerTests : DatabaseAccessTestFixtureBase
 	{
 		/// <summary>
 		/// Get timespan parameter value from database server.

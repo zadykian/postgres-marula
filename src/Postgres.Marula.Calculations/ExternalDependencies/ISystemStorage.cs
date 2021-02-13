@@ -12,6 +12,6 @@ namespace Postgres.Marula.Calculations.ExternalDependencies
 		/// <summary>
 		/// Save calculated parameter values.
 		/// </summary>
-		Task SaveParameterValuesAsync(IEnumerable<ParameterValueWithStatus> parameterValues);
+		Task SaveParameterValuesAsync(IReadOnlyCollection<ParameterValueWithStatus> parameterValues);
 	}
 }
