@@ -53,7 +53,7 @@ namespace Postgres.Marula.DatabaseAccess.SqlScripts.Provider
 		}
 
 		/// <summary>
-		/// Parse resource content and extract SQL script with execution order. 
+		/// Parse resource content and extract SQL script execution order. 
 		/// </summary>
 		private static ushort GetScriptExecutionOrder(NonEmptyString resourceContent)
 		{

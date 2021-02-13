@@ -12,7 +12,7 @@ namespace Postgres.Marula.Infrastructure.Extensions
 		/// in case when <paramref name="nullableValue"/> is null.
 		/// </summary>
 		public static T ThrowIfNull<T>(this T? nullableValue, string? message = null)
-			=> nullableValue ?? throw new ArgumentNullException(message);
+			=> nullableValue ?? throw new ArgumentNullException(paramName: null, message);
 
 		/// <summary>
 		/// Apply value <paramref name="inputValue"/> to function <paramref name="func"/>. 
