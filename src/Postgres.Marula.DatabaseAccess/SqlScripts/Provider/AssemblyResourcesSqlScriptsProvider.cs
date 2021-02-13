@@ -27,11 +27,10 @@ namespace Postgres.Marula.DatabaseAccess.SqlScripts.Provider
 				.Where(resourceName => Regex.IsMatch(resourceName, @".+\.sql$"))
 				.Select(resourceName =>
 					GetSqlResourceFullContentByName(resourceName)
-						.To(GetScriptWithExecutionOrder)
-						.To(tuple => (
+						.To(resourceContent => (
 							Name: resourceName,
-							Content: tuple.ScriptContent,
-							ExecutionOrder: tuple.ScriptExecutionOrder
+							Content: resourceContent,
+							ExecutionOrder: GetScriptExecutionOrder(resourceContent)
 						)))
 				.OrderBy(tuple => tuple.ExecutionOrder)
 				.Select(tuple => new SqlScript(tuple.Name, tuple.Content))
@@ -56,10 +55,12 @@ namespace Postgres.Marula.DatabaseAccess.SqlScripts.Provider
 		/// <summary>
 		/// Parse resource content and extract SQL script with execution order. 
 		/// </summary>
-		private static (NonEmptyString ScriptContent, ushort ScriptExecutionOrder) GetScriptWithExecutionOrder(NonEmptyString resourceContent)
+		private static ushort GetScriptExecutionOrder(NonEmptyString resourceContent)
 		{
-			var resourceContentLines = ((string) resourceContent).Split(Environment.NewLine);
-			var executionOrderLine = resourceContentLines.First();
+			var executionOrderLine = resourceContent
+				.ToString()
+				.Split(Environment.NewLine)
+				.First();
 
 			const string orderValuePrefix = "-- execution-order: ";
 			var firstLinePattern = $"{orderValuePrefix}[0-9]+";
@@ -69,16 +70,9 @@ namespace Postgres.Marula.DatabaseAccess.SqlScripts.Provider
 				throw new ApplicationException($"SQL script must contain '{firstLinePattern}' as first line.");
 			}
 
-			return
-			(
-				ScriptContent: resourceContentLines
-					.Skip(count: 2)
-					.JoinBy(Environment.NewLine),
-
-				ScriptExecutionOrder: executionOrderLine
-					.Replace(orderValuePrefix, string.Empty)
-					.To(ushort.Parse)
-			);
+			return executionOrderLine
+				.Replace(orderValuePrefix, string.Empty)
+				.To(ushort.Parse);
 		}
 	}
 }
