@@ -8,6 +8,7 @@ using Postgres.Marula.Calculations.Parameters.Properties;
 using Postgres.Marula.Calculations.Parameters.Values;
 using Postgres.Marula.Calculations.Parameters.Values.Base;
 using Postgres.Marula.DatabaseAccess;
+using Postgres.Marula.Infrastructure.TypeDecorators;
 using Postgres.Marula.Tests.Base;
 
 namespace Postgres.Marula.Tests.DatabaseAccess
@@ -59,7 +60,7 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 		}
 
 		/// <summary>
-		/// Apply single parameter value. 
+		/// Apply single timespan parameter value.
 		/// </summary>
 		[Test]
 		public async Task ApplySingleTimeSpanParameterValueTest()
@@ -67,6 +68,23 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 			var valueToApply =  new TimeSpanParameterValue(
 				new ParameterLink("autovacuum_vacuum_cost_delay"),
 				TimeSpan.FromMilliseconds(value: 10));
+
+			var databaseServer = GetService<IDatabaseServer>();
+			await databaseServer.ApplyToConfigurationAsync(new[] {valueToApply});
+
+			var valueFromDatabase = await databaseServer.GetParameterValueAsync(valueToApply.ParameterLink.Name);
+			Assert.AreEqual(valueToApply, valueFromDatabase);
+		}
+
+		/// <summary>
+		/// Apply single memory parameter value.
+		/// </summary>
+		[Test]
+		public async Task ApplySingleMemoryParameterValueTest()
+		{
+			var valueToApply =  new MemoryParameterValue(
+				new ParameterLink("checkpoint_flush_after"),
+				new Memory(512 * 1024));
 
 			var databaseServer = GetService<IDatabaseServer>();
 			await databaseServer.ApplyToConfigurationAsync(new[] {valueToApply});

@@ -7,23 +7,26 @@ namespace Postgres.Marula.Infrastructure.TypeDecorators
 	/// </summary>
 	public readonly struct Memory : IEquatable<Memory>
 	{
-		private readonly ulong totalBytes;
+		public Memory(ulong totalBytes) => TotalBytes = totalBytes;
 
-		public Memory(ulong totalBytes) => this.totalBytes = totalBytes;
+		/// <summary>
+		/// Memory value in bytes.
+		/// </summary>
+		public ulong TotalBytes { get; }
 
 		/// <inheritdoc />
-		public override string ToString() => $"{totalBytes} bytes";
+		public override string ToString() => $"{TotalBytes} bytes";
 
 		#region EqualityMembers
 
 		/// <inheritdoc />
-		public bool Equals(Memory other) => totalBytes == other.totalBytes;
+		public bool Equals(Memory other) => TotalBytes == other.TotalBytes;
 
 		/// <inheritdoc />
 		public override bool Equals(object? obj) => obj is Memory other && Equals(other);
 
 		/// <inheritdoc />
-		public override int GetHashCode() => totalBytes.GetHashCode();
+		public override int GetHashCode() => TotalBytes.GetHashCode();
 
 		/// <summary>
 		/// <see cref="Memory"/> equality operator. 
@@ -43,6 +46,6 @@ namespace Postgres.Marula.Infrastructure.TypeDecorators
 		/// <summary>
 		/// Implicit cast operator <see cref="Memory"/> -> <see cref="ulong"/>.
 		/// </summary>
-		public static implicit operator ulong(Memory memory) => memory.totalBytes;
+		public static implicit operator ulong(Memory memory) => memory.TotalBytes;
 	}
 }
