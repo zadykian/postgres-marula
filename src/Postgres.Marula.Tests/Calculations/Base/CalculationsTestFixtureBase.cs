@@ -15,11 +15,15 @@ namespace Postgres.Marula.Tests.Calculations.Base
 	{
 		/// <inheritdoc />
 		protected override void ConfigureServices(IServiceCollection serviceCollection)
-			=> serviceCollection
+		{
+			base.ConfigureServices(serviceCollection);
+
+			serviceCollection
 				.AddSingleton<IDatabaseServer, FakeDatabaseServer>()
 				.AddSingleton<ISystemStorage, FakeSystemStorage>()
 				.RemoveAll<IParameter>()
 				.AddScoped<IParameter, SharedBuffersFakeParameter>()
 				.AddScoped<IParameter, AutovacuumVacuumCostDelayFakeParameter>();
+		}
 	}
 }
