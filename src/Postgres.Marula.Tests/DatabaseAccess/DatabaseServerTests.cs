@@ -126,8 +126,8 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 
 			// has range [0..100] in pg_settings
 			yield return new FractionParameterValue(
-				new ParameterLink("autovacuum_vacuum_scale_factor"),
-				value: 0.2M);
+				new ParameterLink("autovacuum_analyze_scale_factor"),
+				value: 0.004M);
 		}
 
 		/// <summary>
@@ -152,7 +152,7 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 
 				new FractionParameterValue(
 					new ParameterLink("autovacuum_vacuum_scale_factor"),
-					value: 0.08M)
+					value: 0.008M)
 			};
 
 			var databaseServer = GetService<IDatabaseServer>();
