@@ -50,6 +50,36 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 		}
 
 		/// <summary>
+		/// Get value of parameter represented as fraction in range [0..1]. 
+		/// </summary>
+		[Test]
+		public async Task GetFactionParameterValueTest()
+		{
+			var databaseServer = GetService<IDatabaseServer>();
+			const string parameterName = "checkpoint_completion_target";
+			var parameterValue = await databaseServer.GetParameterValueAsync(parameterName);
+
+			Assert.IsInstanceOf<FractionParameterValue>(parameterValue);
+			Assert.AreEqual(ParameterUnit.None, parameterValue.Unit);
+			Assert.AreEqual(parameterName, parameterValue.ParameterLink.Name.ToString());
+		}
+
+		/// <summary>
+		/// Get value of parameter represented as percents in range [0..100]. 
+		/// </summary>
+		[Test]
+		public async Task GetPercentsFactionParameterValueTest()
+		{
+			var databaseServer = GetService<IDatabaseServer>();
+			const string parameterName = "autovacuum_vacuum_scale_factor";
+			var parameterValue = await databaseServer.GetParameterValueAsync(parameterName);
+
+			Assert.IsInstanceOf<FractionParameterValue>(parameterValue);
+			Assert.AreEqual(ParameterUnit.None, parameterValue.Unit);
+			Assert.AreEqual(parameterName, parameterValue.ParameterLink.Name.ToString());
+		}
+
+		/// <summary>
 		/// Apply empty collection of parameter values. 
 		/// </summary>
 		[Test]
