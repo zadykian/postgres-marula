@@ -44,7 +44,14 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 		async Task<IParameterValue> IDatabaseServer.GetParameterValueAsync(NonEmptyString parameterName)
 		{
 			var dbConnection = await GetConnectionAsync();
-			var parameterValueAsString = await dbConnection.QuerySingleAsync<string>($"show {parameterName};");
+
+			var (parameterValueAsString, minValue, maxValue) = await dbConnection
+				.QuerySingleAsync<(NonEmptyString, decimal?, decimal?)>($@"
+					select current_setting(name), min_val, max_val
+					from pg_catalog.pg_settings
+					where name = @{nameof(parameterName)};",
+					new {parameterName});
+
 			var parameterLink = new ParameterLink(parameterName);
 
 			return parameterValueAsString switch
@@ -57,9 +64,15 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 					=> ParseMemory(parameterValueAsString)
 						.To(memory => new MemoryParameterValue(parameterLink, memory)),
 
-				{ } when decimal.TryParse(parameterValueAsString, out var decimalValue) //todo
-				         && decimalValue.InRangeBetween(decimal.Zero, decimal.One)
+				{ } when decimal.TryParse(parameterValueAsString, out var decimalValue)
+				         && (minValue, maxValue) == (decimal.Zero, decimal.One)
 					=> new FractionParameterValue(parameterLink, decimalValue),
+
+				{ } when decimal.TryParse(parameterValueAsString, out var decimalValue)
+				         && (minValue, maxValue) == (decimal.Zero, 100)
+					=> decimal
+						.Divide(decimalValue, 100)
+						.To(fraction => new FractionParameterValue(parameterLink, fraction)),
 
 				_ => throw new ApplicationException(
 					$"Failed to parse value '{parameterValueAsString}' of parameter '{parameterName}'.")
