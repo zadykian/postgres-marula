@@ -32,5 +32,12 @@ namespace Postgres.Marula.Infrastructure.Extensions
 			action(inputValue);
 			return inputValue;
 		}
+
+		/// <summary>
+		/// Check if value <paramref name="value"/> belongs to range [<paramref name="leftBound"/> .. <paramref name="rightBound"/>]. 
+		/// </summary>
+		public static bool InRangeBetween<T>(this T value, T leftBound, T rightBound)
+			where T : IComparable<T>
+			=> value.CompareTo(leftBound) >= 0 && value.CompareTo(rightBound) <= 0;
 	}
 }

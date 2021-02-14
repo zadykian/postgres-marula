@@ -57,6 +57,10 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 					=> ParseMemory(parameterValueAsString)
 						.To(memory => new MemoryParameterValue(parameterLink, memory)),
 
+				{ } when decimal.TryParse(parameterValueAsString, out var decimalValue) //todo
+				         && decimalValue.InRangeBetween(decimal.Zero, decimal.One)
+					=> new FractionParameterValue(parameterLink, decimalValue),
+
 				_ => throw new ApplicationException(
 					$"Failed to parse value '{parameterValueAsString}' of parameter '{parameterName}'.")
 			};
