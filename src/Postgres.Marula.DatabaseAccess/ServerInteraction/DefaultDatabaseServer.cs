@@ -95,7 +95,7 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 		/// </summary>
 		private static PositiveTimeSpan ParseTimeSpan(string stringToParse)
 		{
-			var (number, unit) = ParseToTokens(stringToParse);
+			var (totalMilliseconds, unit) = ParseToTokens(stringToParse);
 
 			var multiplier = unit switch
 			{
@@ -106,7 +106,7 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 				_     => throw new ArgumentOutOfRangeException(paramName: null, nameof(unit))
 			};
 
-			return TimeSpan.FromMilliseconds(number * (ulong) multiplier);
+			return TimeSpan.FromMilliseconds(totalMilliseconds * (ulong) multiplier);
 		}
 
 		/// <summary>
@@ -114,7 +114,7 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 		/// </summary>
 		private static Memory ParseMemory(string stringToParse)
 		{
-			var (number, unit) = ParseToTokens(stringToParse);
+			var (totalBytes, unit) = ParseToTokens(stringToParse);
 
 			var multiplier = unit switch
 			{
@@ -125,7 +125,7 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 				_    => throw new ArgumentOutOfRangeException(paramName: null, nameof(unit))
 			};
 
-			return new Memory(number * (ulong) multiplier);
+			return new Memory(totalBytes * (ulong) multiplier);
 		}
 
 		/// <summary>

@@ -4,6 +4,7 @@ using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using System.Text.RegularExpressions;
 using Postgres.Marula.DatabaseAccess.Conventions;
 using Postgres.Marula.Infrastructure.Extensions;
@@ -47,12 +48,18 @@ namespace Postgres.Marula.DatabaseAccess.SqlScripts.Provider
 				.ThrowIfNull($"Failed to load resource '{resourceName}' from assembly.")
 				.To(resourceStream => new StreamReader(resourceStream));
 
-			return streamReader
+			var stringBuilder = streamReader
 				.ReadToEnd()
-				.Replace("SYSTEM_SCHEMA_NAME_TO_REPLACE", namingConventions.SystemSchemaName)
-				.Replace("VALUES_HISTORY_TABLE_NAME_TO_REPLACE", namingConventions.ValuesHistoryTableName)
-				.Replace("PARAMETERS_TABLE_NAME_TO_REPLACE", namingConventions.ParametersTableName)
-				.Replace("STATUS_ENUM_NAME_TO_REPLACE", namingConventions.CalculationStatusEnumName);
+				.To(stringValue => new StringBuilder(stringValue));
+
+			typeof(INamingConventions)
+				.GetProperties()
+				.Select(propertyInfo => (
+					ScriptPlaceholder: propertyInfo.GetCustomAttribute<ScriptPlaceholderAttribute>()!.Placeholder,
+					PropertyValue:     (string) propertyInfo.GetValue(namingConventions)!))
+				.ForEach(tuple => stringBuilder.Replace(tuple.ScriptPlaceholder, tuple.PropertyValue));
+
+			return stringBuilder.ToString();
 		}
 
 		/// <summary>
