@@ -43,14 +43,7 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 		/// <inheritdoc />
 		async Task<IParameterValue> IDatabaseServer.GetParameterValueAsync(NonEmptyString parameterName)
 		{
-			var dbConnection = await GetConnectionAsync();
-
-			var (parameterValueAsString, minValue, maxValue) = await dbConnection
-				.QuerySingleAsync<(NonEmptyString, decimal?, decimal?)>($@"
-					select current_setting(name), min_val, max_val
-					from pg_catalog.pg_settings
-					where name = @{nameof(parameterName)};",
-					new {parameterName});
+			var (parameterValueAsString, minValue, maxValue) = await GetParameterInfoFromServer(parameterName);
 
 			var parameterLink = new ParameterLink(parameterName);
 
@@ -77,6 +70,24 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 				_ => throw new ApplicationException(
 					$"Failed to parse value '{parameterValueAsString}' of parameter '{parameterName}'.")
 			};
+		}
+
+		/// <summary>
+		/// Get parameter value as string and range of valid values. 
+		/// </summary>
+		private async Task<(NonEmptyString Value, decimal? MinValue, decimal? MaxValue)> GetParameterInfoFromServer(
+			NonEmptyString parameterName)
+		{
+			var commandText = string.Intern($@"
+				select current_setting(name), min_val, max_val
+				from pg_catalog.pg_settings
+				where name = @{nameof(parameterName)};");
+
+			var dbConnection = await GetConnectionAsync();
+
+			return await dbConnection.QuerySingleAsync<(NonEmptyString, decimal?, decimal?)>(
+				commandText,
+				new {parameterName});
 		}
 
 		/// <summary>
