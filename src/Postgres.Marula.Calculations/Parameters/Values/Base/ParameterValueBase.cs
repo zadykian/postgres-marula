@@ -8,7 +8,7 @@ namespace Postgres.Marula.Calculations.Parameters.Values.Base
 {
 	/// <inheritdoc cref="IParameterValue"/>
 	public abstract class ParameterValueBase<T> : IParameterValue, IEquatable<ParameterValueBase<T>>
-		where T : notnull
+		where T : IEquatable<T>
 	{
 		private protected ParameterValueBase(IParameterLink parameterLink, T value)
 		{
@@ -29,6 +29,9 @@ namespace Postgres.Marula.Calculations.Parameters.Values.Base
 
 		/// <inheritdoc />
 		public abstract NonEmptyString AsString();
+
+		/// <inheritdoc />
+		public override string ToString() => $"{ParameterLink.Name}: {AsString()}{Unit.AsString()}";
 
 		#region EqualityMembers
 

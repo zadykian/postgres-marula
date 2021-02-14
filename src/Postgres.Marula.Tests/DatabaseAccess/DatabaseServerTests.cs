@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Threading.Tasks;
@@ -94,12 +95,10 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 		/// Apply single timespan parameter value.
 		/// </summary>
 		[Test]
-		public async Task ApplySingleTimeSpanParameterValueTest()
+		public async Task ApplySingleTimeSpanParameterValueTest(
+			[ValueSource(nameof(ValuesToApplySource))]
+			IParameterValue valueToApply)
 		{
-			var valueToApply = new TimeSpanParameterValue(
-				new ParameterLink("autovacuum_vacuum_cost_delay"),
-				TimeSpan.FromMilliseconds(value: 10));
-
 			var databaseServer = GetService<IDatabaseServer>();
 			await databaseServer.ApplyToConfigurationAsync(new[] {valueToApply});
 
@@ -108,20 +107,27 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 		}
 
 		/// <summary>
-		/// Apply single memory parameter value.
+		/// Parameter values source. 
 		/// </summary>
-		[Test]
-		public async Task ApplySingleMemoryParameterValueTest()
+		private static IEnumerable<IParameterValue> ValuesToApplySource()
 		{
-			var valueToApply = new MemoryParameterValue(
+			yield return new TimeSpanParameterValue(
+				new ParameterLink("autovacuum_vacuum_cost_delay"),
+				TimeSpan.FromMilliseconds(value: 10));
+
+			yield return new MemoryParameterValue(
 				new ParameterLink("checkpoint_flush_after"),
 				new Memory(512 * 1024));
 
-			var databaseServer = GetService<IDatabaseServer>();
-			await databaseServer.ApplyToConfigurationAsync(new[] {valueToApply});
+			// has range [0..1] in pg_settings
+			yield return new FractionParameterValue(
+				new ParameterLink("cursor_tuple_fraction"),
+				value: 0.128M);
 
-			var valueFromDatabase = await databaseServer.GetParameterValueAsync(valueToApply.ParameterLink.Name);
-			Assert.AreEqual(valueToApply, valueFromDatabase);
+			// has range [0..100] in pg_settings
+			yield return new FractionParameterValue(
+				new ParameterLink("autovacuum_vacuum_scale_factor"),
+				value: 0.2M);
 		}
 
 		/// <summary>
@@ -135,14 +141,18 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 				new TimeSpanParameterValue(
 					new ParameterLink("deadlock_timeout"),
 					TimeSpan.FromMilliseconds(value: 800)),
-				
+
 				new MemoryParameterValue(
 					new ParameterLink("log_rotation_size"),
 					new Memory(16 * 1024 * 1024)),
 
 				new TimeSpanParameterValue(
 					new ParameterLink("log_rotation_age"),
-					TimeSpan.FromHours(value: 12))
+					TimeSpan.FromHours(value: 12)),
+
+				new FractionParameterValue(
+					new ParameterLink("autovacuum_vacuum_scale_factor"),
+					value: 0.08M)
 			};
 
 			var databaseServer = GetService<IDatabaseServer>();
