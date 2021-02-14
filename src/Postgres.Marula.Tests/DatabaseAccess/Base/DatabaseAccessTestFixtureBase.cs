@@ -13,7 +13,7 @@ namespace Postgres.Marula.Tests.DatabaseAccess.Base
 	/// <summary>
 	/// Base class for testing services from database access component.
 	/// </summary>
-	internal abstract class DatabaseAccessTestFixtureBase  : SingleComponentTestFixtureBase<DatabaseAccessSolutionComponent>
+	internal abstract class DatabaseAccessTestFixtureBase : SingleComponentTestFixtureBase<DatabaseAccessSolutionComponent>
 	{
 		/// <summary>
 		/// Method that is called once.
