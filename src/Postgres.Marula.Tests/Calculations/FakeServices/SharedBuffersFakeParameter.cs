@@ -4,7 +4,7 @@ using Postgres.Marula.Calculations.Parameters.Values;
 using Postgres.Marula.Calculations.Parameters.Values.Base;
 using Postgres.Marula.Infrastructure.TypeDecorators;
 
-namespace Postgres.Marula.Tests.Calculations.FakeParameters
+namespace Postgres.Marula.Tests.Calculations.FakeServices
 {
 	/// <inheritdoc />
 	internal class SharedBuffersFakeParameter : IParameter
