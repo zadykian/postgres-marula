@@ -1,5 +1,9 @@
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Postgres.Marula.Calculations;
+using Postgres.Marula.Calculations.Parameters.Base;
 using Postgres.Marula.Tests.Base;
+using Postgres.Marula.Tests.Calculations.FakeParameters;
 
 namespace Postgres.Marula.Tests.Calculations.Base
 {
@@ -8,5 +12,10 @@ namespace Postgres.Marula.Tests.Calculations.Base
 	/// </summary>
 	internal abstract class CalculationsTestFixtureBase : SingleComponentTestFixtureBase<CalculationsSolutionComponent>
 	{
+		/// <inheritdoc />
+		protected override void ConfigureServices(IServiceCollection serviceCollection)
+			=>serviceCollection
+				.RemoveAll<IParameter>()
+				.AddScoped<IParameter, SharedBuffersFakeParameter>();
 	}
 }
