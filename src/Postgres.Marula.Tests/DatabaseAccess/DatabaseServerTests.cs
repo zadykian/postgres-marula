@@ -92,10 +92,10 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 		}
 
 		/// <summary>
-		/// Apply single timespan parameter value.
+		/// Apply single parameter value.
 		/// </summary>
 		[Test]
-		public async Task ApplySingleTimeSpanParameterValueTest(
+		public async Task ApplySingleParameterValueTest(
 			[ValueSource(nameof(ValuesToApplySource))]
 			IParameterValue valueToApply)
 		{

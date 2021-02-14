@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -31,13 +32,49 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 				return;
 			}
 
-			var commandText = parameterValues
-				.Select(value => $"alter system set {value.ParameterLink.Name} = '{value.AsString()}{value.Unit.AsString()}';")
+			var alterSystemCommands = await parameterValues
+				.SelectAsync(async value => 
+					$"alter system set {value.ParameterLink.Name} = " +
+					$"'{await GetValueStringRepresentation(value)}';"); 
+
+			var commandText = alterSystemCommands
 				.Add("select pg_reload_conf();")
 				.JoinBy(Environment.NewLine);
 
 			var dbConnection = await GetConnectionAsync();
 			await dbConnection.ExecuteAsync(commandText);
+		}
+
+		/// <summary>
+		/// Get parameter value full string representation. 
+		/// </summary>
+		private async ValueTask<NonEmptyString> GetValueStringRepresentation(IParameterValue parameterValue)
+		{
+			if (parameterValue is not FractionParameterValue fractionParameterValue)
+			{
+				return $"{parameterValue.AsString()}{parameterValue.Unit.AsString()}";
+			}
+
+			var commandText = string.Intern($@"
+				select min_val, max_val
+				from pg_catalog.pg_settings
+				where name = @{nameof(IParameterLink.Name)};");
+
+			var dbConnection = await GetConnectionAsync();
+			var (minValue, maxValue) = await dbConnection.QuerySingleAsync<(decimal, decimal)>(
+				commandText,
+				new {parameterValue.ParameterLink.Name});
+
+			var multiplier = (minValue, maxValue) switch
+			{
+				(decimal.Zero, decimal.One) => decimal.One,
+				(decimal.Zero, 100)         => 100,
+				_ => throw new NotSupportedException(
+					$"Fraction parameter range [{minValue} .. {maxValue}] is not " +
+					$"supported (parameter '{parameterValue.ParameterLink.Name}').")
+			};
+
+			return (fractionParameterValue.Value * multiplier).ToString(CultureInfo.InvariantCulture);
 		}
 
 		/// <inheritdoc />

@@ -56,7 +56,7 @@ namespace Postgres.Marula.DatabaseAccess.SqlScripts.Provider
 				.GetProperties()
 				.Select(propertyInfo => (
 					ScriptPlaceholder: propertyInfo.GetCustomAttribute<ScriptPlaceholderAttribute>()!.Placeholder,
-					PropertyValue:     (string) propertyInfo.GetValue(namingConventions)!))
+					PropertyValue:     (DatabaseObjectName) propertyInfo.GetValue(namingConventions)!))
 				.ForEach(tuple => stringBuilder.Replace(tuple.ScriptPlaceholder, tuple.PropertyValue));
 
 			return stringBuilder.ToString();
