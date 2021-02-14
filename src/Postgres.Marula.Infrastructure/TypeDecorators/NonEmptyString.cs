@@ -28,14 +28,6 @@ namespace Postgres.Marula.Infrastructure.TypeDecorators
 		/// <inheritdoc />
 		public override int GetHashCode() => stringValue.GetHashCode();
 
-		/// <summary>
-		/// <see cref="NonEmptyString"/> equality operator. 
-		/// </summary>
-		public static bool operator ==(NonEmptyString left, NonEmptyString right) => left.Equals(right);
-
-		/// <inheritdoc cref="op_Equality"/>
-		public static bool operator !=(NonEmptyString left, NonEmptyString right) => !left.Equals(right);
-
 		#endregion
 
 		/// <summary>

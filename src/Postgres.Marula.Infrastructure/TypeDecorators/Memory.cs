@@ -28,14 +28,6 @@ namespace Postgres.Marula.Infrastructure.TypeDecorators
 		/// <inheritdoc />
 		public override int GetHashCode() => TotalBytes.GetHashCode();
 
-		/// <summary>
-		/// <see cref="Memory"/> equality operator. 
-		/// </summary>
-		public static bool operator ==(Memory left, Memory right) => left.Equals(right);
-
-		/// <inheritdoc cref="op_Equality"/>
-		public static bool operator !=(Memory left, Memory right) => !left.Equals(right);
-
 		#endregion
 
 		/// <summary>

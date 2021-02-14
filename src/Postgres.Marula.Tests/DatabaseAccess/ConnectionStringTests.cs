@@ -1,5 +1,6 @@
 using System;
 using NUnit.Framework;
+using Postgres.Marula.Infrastructure.Extensions;
 using Postgres.Marula.Infrastructure.TypeDecorators;
 
 namespace Postgres.Marula.Tests.DatabaseAccess
@@ -33,5 +34,11 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 		[Test]
 		public void WhiteSpacesTest()
 			=> Assert.IsNotEmpty(new ConnectionString("\tserver = localhost ; "));
+
+		[Test]
+		public void FromStringValueTest()
+			=> "\tserver = localhost ; "
+				.To(stringValue => (ConnectionString) stringValue)
+				.To(connectionString => Assert.IsNotEmpty(connectionString));
 	}
 }

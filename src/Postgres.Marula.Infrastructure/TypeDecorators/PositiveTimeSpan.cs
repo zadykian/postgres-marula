@@ -34,14 +34,6 @@ namespace Postgres.Marula.Infrastructure.TypeDecorators
 		/// <inheritdoc />
 		public override int GetHashCode() => underlyingValue.GetHashCode();
 
-		/// <summary>
-		/// <see cref="PositiveTimeSpan"/> equality operator. 
-		/// </summary>
-		public static bool operator ==(PositiveTimeSpan left, PositiveTimeSpan right) => left.Equals(right);
-
-		/// <see cref="op_Equality"/>
-		public static bool operator !=(PositiveTimeSpan left, PositiveTimeSpan right) => !left.Equals(right);
-
 		#endregion
 
 		/// <summary>

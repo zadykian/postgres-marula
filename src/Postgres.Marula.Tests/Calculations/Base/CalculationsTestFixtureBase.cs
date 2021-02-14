@@ -19,7 +19,10 @@ namespace Postgres.Marula.Tests.Calculations.Base
 			base.ConfigureServices(serviceCollection);
 
 			serviceCollection
-				.AddSingleton<IDatabaseServer, FakeDatabaseServer>()
+				.AddSingleton<FakeDatabaseServer>()
+				.AddSingleton<IDatabaseServer>(provider => provider.GetRequiredService<FakeDatabaseServer>())
+				.AddSingleton<IDatabaseServerAccessTracker>(provider => provider.GetRequiredService<FakeDatabaseServer>())
+
 				.AddSingleton<ISystemStorage, FakeSystemStorage>()
 				.RemoveAll<IParameter>()
 				.AddScoped<IParameter, SharedBuffersFakeParameter>()

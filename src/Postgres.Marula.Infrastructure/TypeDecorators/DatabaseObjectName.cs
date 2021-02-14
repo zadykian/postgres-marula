@@ -29,14 +29,6 @@ namespace Postgres.Marula.Infrastructure.TypeDecorators
 		/// <inheritdoc />
 		public override int GetHashCode() => objectName.GetHashCode();
 
-		/// <summary>
-		/// <see cref="DatabaseObjectName"/> equality operator. 
-		/// </summary>
-		public static bool operator ==(DatabaseObjectName left, DatabaseObjectName right) => left.Equals(right);
-
-		/// <inheritdoc cref="op_Equality"/>
-		public static bool operator !=(DatabaseObjectName left, DatabaseObjectName right) => !left.Equals(right);
-
 		#endregion
 
 		/// <summary>

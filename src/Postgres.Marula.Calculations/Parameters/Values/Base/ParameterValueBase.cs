@@ -55,14 +55,6 @@ namespace Postgres.Marula.Calculations.Parameters.Values.Base
 		/// <inheritdoc />
 		public override int GetHashCode() => HashCode.Combine(Value, ParameterLink, (int) Unit);
 
-		/// <summary>
-		/// <see cref="ParameterValueBase{T}"/> equality operator. 
-		/// </summary>
-		public static bool operator ==(ParameterValueBase<T>? left, ParameterValueBase<T>? right) => Equals(left, right);
-
-		/// <see cref="op_Equality"/>
-		public static bool operator !=(ParameterValueBase<T>? left, ParameterValueBase<T>? right) => !Equals(left, right);
-
 		#endregion
 	}
 }

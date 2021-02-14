@@ -33,14 +33,6 @@ namespace Postgres.Marula.Infrastructure.TypeDecorators
 		/// <inheritdoc />
 		public override int GetHashCode() => fractionValue.GetHashCode();
 
-		/// <summary>
-		/// <see cref="Fraction"/> equality operator. 
-		/// </summary>
-		public static bool operator ==(Fraction left, Fraction right) => left.Equals(right);
-
-		/// <inheritdoc cref="op_Equality"/>
-		public static bool operator !=(Fraction left, Fraction right) => !left.Equals(right);
-
 		#endregion
 
 		/// <summary>
