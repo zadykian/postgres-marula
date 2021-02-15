@@ -38,4 +38,4 @@ jobs:
     - name: Build
       run: dotnet build --no-restore
     - name: Test
-      run: for _ in [1..10] do; dotnet test --no-build --verbosity normal; done
+      run: dotnet test --no-build --verbosity normal
