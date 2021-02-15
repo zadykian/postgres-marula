@@ -21,10 +21,14 @@ namespace Postgres.Marula.Tests.DatabaseAccess.Base
 		[OneTimeSetUp]
 		public async Task OneTimeSetUp()
 		{
-			var namingConventions = GetService<INamingConventions>();
+			var commandText = $@"
+				drop schema if exists {GetService<INamingConventions>().SystemSchemaName} cascade;
+				reset all;
+				select pg_reload_conf();";
+
 			var dbConnection = GetService<IDbConnection>();
 			dbConnection.Open();
-			await dbConnection.ExecuteAsync($"drop schema if exists {namingConventions.SystemSchemaName} cascade;");
+			await dbConnection.ExecuteAsync(commandText);
 		}
 
 		/// <inheritdoc />
