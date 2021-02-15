@@ -33,9 +33,9 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 			}
 
 			var alterSystemCommands = await parameterValues
-				.SelectAsync(async value => 
+				.SelectAsync(async value =>
 					$"alter system set {value.ParameterLink.Name} = " +
-					$"'{await GetValueStringRepresentation(value)}';"); 
+					$"'{await GetValueStringRepresentation(value)}';");
 
 			var commandText = alterSystemCommands
 				.Add("select pg_reload_conf();")
@@ -140,7 +140,7 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 				"s"   => 1000,
 				"min" => 60 * 1000,
 				"h"   => 60 * 60 * 1000,
-				_     => throw new ArgumentOutOfRangeException(paramName: null, nameof(unit))
+				_     => throw new ArgumentOutOfRangeException(nameof(stringToParse), stringToParse, message: null)
 			};
 
 			return TimeSpan.FromMilliseconds(totalMilliseconds * (ulong) multiplier);
@@ -159,7 +159,7 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 				"kB" => 1024,
 				"MB" => 1024 * 1024,
 				"GB" => 1024 * 1024 * 1024,
-				_    => throw new ArgumentOutOfRangeException(paramName: null, nameof(unit))
+				_    => throw new ArgumentOutOfRangeException(nameof(stringToParse), stringToParse, message: null)
 			};
 
 			return new Memory(totalBytes * (ulong) multiplier);

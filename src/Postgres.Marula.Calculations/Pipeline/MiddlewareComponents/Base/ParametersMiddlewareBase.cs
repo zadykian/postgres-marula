@@ -11,7 +11,7 @@ namespace Postgres.Marula.Calculations.Pipeline.MiddlewareComponents.Base
 		private readonly IAppConfiguration appConfiguration;
 
 		protected ParametersMiddlewareBase(IAppConfiguration appConfiguration) => this.appConfiguration = appConfiguration;
-		
+
 		/// <summary>
 		/// Check if parameter value <paramref name="parameterValue"/>
 		/// can be applied to database server.

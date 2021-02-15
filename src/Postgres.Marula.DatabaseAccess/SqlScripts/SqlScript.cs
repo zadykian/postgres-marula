@@ -19,7 +19,7 @@ namespace Postgres.Marula.DatabaseAccess.SqlScripts
 		/// Name of a script.
 		/// </summary>
 		public NonEmptyString Name { get; }
-		
+
 		/// <summary>
 		/// Script's content - sequence of SQL commands, separated by ';' symbol.
 		/// </summary>
