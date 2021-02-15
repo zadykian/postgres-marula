@@ -12,6 +12,7 @@ using Postgres.Marula.Calculations.Parameters.Values;
 using Postgres.Marula.Calculations.Parameters.Values.Base;
 using Postgres.Marula.DatabaseAccess.ConnectionFactory;
 using Postgres.Marula.DatabaseAccess.ServerInteraction.Base;
+using Postgres.Marula.DatabaseAccess.ServerInteraction.Exceptions;
 using Postgres.Marula.Infrastructure.Extensions;
 using Postgres.Marula.Infrastructure.TypeDecorators;
 
@@ -42,7 +43,12 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 				.JoinBy(Environment.NewLine);
 
 			var dbConnection = await GetConnectionAsync();
-			await dbConnection.ExecuteAsync(commandText);
+			var signalWasSentSuccessfully = await dbConnection.QuerySingleAsync<bool>(commandText);
+
+			if (!signalWasSentSuccessfully)
+			{
+				throw new DatabaseServerConfigurationException("Failed to reload server configuration.");
+			}
 		}
 
 		/// <summary>
@@ -104,7 +110,7 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 						.Divide(decimalValue, 100)
 						.To(fraction => new FractionParameterValue(parameterLink, fraction)),
 
-				_ => throw new ApplicationException(
+				_ => throw new DatabaseServerConfigurationException(
 					$"Failed to parse value '{parameterValueAsString}' of parameter '{parameterName}'.")
 			};
 		}
