@@ -1,4 +1,4 @@
-name: tests-with-pg
+name: project-ci
 
 on:
   pull_request:
