@@ -1,4 +1,4 @@
-name: .NET
+name: tests-with-pg
 
 on:
   pull_request:
@@ -9,7 +9,7 @@ defaults:
     working-directory: src
 
 jobs:
-  build:
+  run-tests-with-pg:
     
     services:
 
