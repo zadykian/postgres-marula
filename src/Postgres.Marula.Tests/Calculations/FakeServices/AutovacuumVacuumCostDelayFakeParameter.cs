@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Postgres.Marula.Calculations.Parameters.Base;
 using Postgres.Marula.Calculations.Parameters.Properties;
 using Postgres.Marula.Calculations.ParameterValues;
@@ -14,7 +15,7 @@ namespace Postgres.Marula.Tests.Calculations.FakeServices
 		NonEmptyString IParameterLink.Name => "autovacuum_vacuum_cost_delay";
 
 		/// <inheritdoc />
-		ParameterContext IParameter.Context => ParameterContext.Sighup;
+		Task<ParameterContext> IParameter.GetContextAsync() => Task.FromResult(ParameterContext.Sighup);
 
 		/// <inheritdoc />
 		IParameterValue IParameter.Calculate() => new TimeSpanParameterValue(

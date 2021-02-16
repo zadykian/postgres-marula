@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Postgres.Marula.Calculations.Parameters.Base;
 using Postgres.Marula.Calculations.Parameters.Properties;
 using Postgres.Marula.Calculations.ParameterValues;
@@ -12,7 +13,7 @@ namespace Postgres.Marula.Tests.Calculations.FakeServices
 		NonEmptyString IParameterLink.Name => "shared_buffers";
 
 		/// <inheritdoc />
-		ParameterContext IParameter.Context => ParameterContext.Postmaster;
+		Task<ParameterContext> IParameter.GetContextAsync() => Task.FromResult(ParameterContext.Postmaster);
 
 		/// <inheritdoc />
 		IParameterValue IParameter.Calculate() => new MemoryParameterValue(this.GetLink(), 1024 * 1024 * 1024);

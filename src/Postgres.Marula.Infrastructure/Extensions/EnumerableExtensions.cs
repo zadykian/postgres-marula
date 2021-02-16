@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Threading.Tasks;
 using Postgres.Marula.Infrastructure.TypeDecorators;
 
@@ -62,5 +63,10 @@ namespace Postgres.Marula.Infrastructure.Extensions
 
 			yield return itemToAppend;
 		}
+
+		/// <summary>
+		/// Transform <paramref name="enumerable"/> to read-only collection. 
+		/// </summary>
+		public static IReadOnlyCollection<T> ToReadOnlyCollection<T>(this IEnumerable<T> enumerable) => enumerable.ToImmutableArray();
 	}
 }
