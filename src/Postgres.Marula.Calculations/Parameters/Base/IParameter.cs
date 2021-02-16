@@ -1,5 +1,5 @@
 using Postgres.Marula.Calculations.Parameters.Properties;
-using Postgres.Marula.Calculations.Parameters.Values.Base;
+using Postgres.Marula.Calculations.ParameterValues.Base;
 
 namespace Postgres.Marula.Calculations.Parameters.Base
 {

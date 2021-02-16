@@ -1,7 +1,7 @@
 using Postgres.Marula.Calculations.Parameters.Base;
 using Postgres.Marula.Calculations.Parameters.Properties;
-using Postgres.Marula.Calculations.Parameters.Values;
-using Postgres.Marula.Calculations.Parameters.Values.Base;
+using Postgres.Marula.Calculations.ParameterValues;
+using Postgres.Marula.Calculations.ParameterValues.Base;
 using Postgres.Marula.Infrastructure.TypeDecorators;
 
 namespace Postgres.Marula.Tests.Calculations.FakeServices

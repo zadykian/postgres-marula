@@ -3,7 +3,7 @@ using Postgres.Marula.Calculations.Parameters.Base;
 using Postgres.Marula.Calculations.Parameters.Properties;
 using Postgres.Marula.Infrastructure.TypeDecorators;
 
-namespace Postgres.Marula.Calculations.Parameters.Values.Base
+namespace Postgres.Marula.Calculations.ParameterValues.Base
 {
 	/// <inheritdoc cref="IParameterValue"/>
 	public abstract class ParameterValueBase<T> : IParameterValue, IEquatable<ParameterValueBase<T>>
