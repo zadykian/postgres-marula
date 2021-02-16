@@ -1,6 +1,6 @@
 using System;
 
-namespace Postgres.Marula.Calculations.Parameters.Properties
+namespace Postgres.Marula.Calculations.ParameterProperties
 {
 	/// <summary>
 	/// Unit of database server parameter.

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Postgres.Marula.Calculations.ExternalDependencies;
+using Postgres.Marula.Calculations.ParameterProperties;
 using Postgres.Marula.Calculations.ParameterValues.Base;
 using Postgres.Marula.Infrastructure.TypeDecorators;
 
@@ -17,6 +18,10 @@ namespace Postgres.Marula.Tests.Calculations.FakeServices
 
 		/// <inheritdoc />
 		Task<IParameterValue> IDatabaseServer.GetParameterValueAsync(NonEmptyString parameterName)
+			=> throw new System.NotSupportedException();
+
+		/// <inheritdoc />
+		Task<ParameterContext> IDatabaseServer.GetParameterContextAsync(NonEmptyString parameterName)
 			=> throw new System.NotSupportedException();
 
 		public bool ApplyMethodWasCalled { get; private set; }

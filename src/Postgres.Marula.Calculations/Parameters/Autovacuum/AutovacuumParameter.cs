@@ -1,5 +1,6 @@
 // ReSharper disable UnusedType.Global
 
+using Postgres.Marula.Calculations.ExternalDependencies;
 using Postgres.Marula.Calculations.Parameters.Base;
 using Postgres.Marula.Calculations.ParameterValues;
 using Postgres.Marula.Calculations.ParameterValues.Base;
@@ -12,6 +13,10 @@ namespace Postgres.Marula.Calculations.Parameters.Autovacuum
 	/// </summary>
 	internal class AutovacuumParameter : ParameterBase
 	{
+		public AutovacuumParameter(IDatabaseServer databaseServer) : base(databaseServer)
+		{
+		}
+
 		/// <inheritdoc />
 		public override NonEmptyString Name => "autovacuum";
 

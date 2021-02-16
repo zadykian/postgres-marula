@@ -2,12 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Dapper;
 using Postgres.Marula.Calculations.ExternalDependencies;
+using Postgres.Marula.Calculations.ParameterProperties;
 using Postgres.Marula.Calculations.Parameters.Base;
-using Postgres.Marula.Calculations.Parameters.Properties;
 using Postgres.Marula.Calculations.ParameterValues;
 using Postgres.Marula.Calculations.ParameterValues.Base;
 using Postgres.Marula.DatabaseAccess.ConnectionFactory;
@@ -194,6 +195,26 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 				.To(charArray => new string(charArray));
 
 			return (Value: value, Unit: unit);
+		}
+
+		/// <inheritdoc />
+		async Task<ParameterContext> IDatabaseServer.GetParameterContextAsync(NonEmptyString parameterName)
+		{
+			var commandText = string.Intern($@"
+				select context
+				from pg_catalog.pg_settings
+				where name = @{nameof(parameterName)};");
+
+			var dbConnection = await GetConnectionAsync();
+			var parameterContext = await dbConnection.QuerySingleAsync<NonEmptyString>(commandText, new {parameterName});
+
+			return typeof(ParameterContext)
+				.GetFields()
+				.Select(memberInfo => (
+					ContextValue: (ParameterContext) memberInfo.GetValue(obj: null)!,
+					StringRepresentation: memberInfo.GetCustomAttribute<StringRepresentationAttribute>()!.Value))
+				.Single(tuple => tuple.StringRepresentation == parameterContext)
+				.ContextValue;
 		}
 	}
 }

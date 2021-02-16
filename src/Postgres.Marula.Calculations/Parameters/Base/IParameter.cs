@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using Postgres.Marula.Calculations.Parameters.Properties;
+using Postgres.Marula.Calculations.ParameterProperties;
 using Postgres.Marula.Calculations.ParameterValues.Base;
 
 namespace Postgres.Marula.Calculations.Parameters.Base
