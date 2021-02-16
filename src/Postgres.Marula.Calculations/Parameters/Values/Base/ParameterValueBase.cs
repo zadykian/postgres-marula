@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using Postgres.Marula.Calculations.Parameters.Base;
 using Postgres.Marula.Calculations.Parameters.Properties;
 using Postgres.Marula.Infrastructure.TypeDecorators;
@@ -40,7 +39,7 @@ namespace Postgres.Marula.Calculations.Parameters.Values.Base
 		{
 			if (ReferenceEquals(null, other)) return false;
 			if (ReferenceEquals(this, other)) return true;
-			return EqualityComparer<T>.Default.Equals(Value, other.Value) && ParameterLink.Equals(other.ParameterLink) && Unit == other.Unit;
+			return Value.Equals(other.Value) && ParameterLink.Equals(other.ParameterLink) && Unit == other.Unit;
 		}
 
 		/// <inheritdoc />

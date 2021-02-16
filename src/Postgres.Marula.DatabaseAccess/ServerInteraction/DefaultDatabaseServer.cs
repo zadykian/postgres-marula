@@ -110,6 +110,12 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 						.Divide(decimalValue, 100)
 						.To(fraction => new FractionParameterValue(parameterLink, fraction)),
 
+				{ } when parameterValueAsString == "on"
+					=> new BooleanParameterValue(parameterLink, value: true),
+
+				{ } when parameterValueAsString == "off"
+					=> new BooleanParameterValue(parameterLink, value: false),
+
 				_ => throw new DatabaseServerConfigurationException(
 					$"Failed to parse value '{parameterValueAsString}' of parameter '{parameterName}'.")
 			};

@@ -131,6 +131,10 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 			yield return new FractionParameterValue(
 				new ParameterLink("autovacuum_analyze_scale_factor"),
 				value: 0.004M);
+
+			yield return new BooleanParameterValue(
+				new ParameterLink("autovacuum"),
+				value: true);
 		}
 
 		/// <summary>
