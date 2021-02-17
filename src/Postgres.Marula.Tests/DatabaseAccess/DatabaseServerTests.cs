@@ -28,7 +28,7 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 		{
 			var databaseServer = GetService<IDatabaseServer>();
 			const string parameterName = "autovacuum_naptime";
-			var parameterValue = await databaseServer.GetParameterValueAsync(parameterName);
+			var parameterValue = await databaseServer.GetRawParameterValueAsync(parameterName);
 
 			Assert.IsInstanceOf<TimeSpanParameterValue>(parameterValue);
 			Assert.AreEqual(ParameterUnit.Milliseconds, parameterValue.Unit);
@@ -43,7 +43,7 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 		{
 			var databaseServer = GetService<IDatabaseServer>();
 			const string parameterName = "effective_cache_size";
-			var parameterValue = await databaseServer.GetParameterValueAsync(parameterName);
+			var parameterValue = await databaseServer.GetRawParameterValueAsync(parameterName);
 
 			Assert.IsInstanceOf<MemoryParameterValue>(parameterValue);
 			Assert.AreEqual(ParameterUnit.Bytes, parameterValue.Unit);
@@ -58,7 +58,7 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 		{
 			var databaseServer = GetService<IDatabaseServer>();
 			const string parameterName = "checkpoint_completion_target";
-			var parameterValue = await databaseServer.GetParameterValueAsync(parameterName);
+			var parameterValue = await databaseServer.GetRawParameterValueAsync(parameterName);
 
 			Assert.IsInstanceOf<FractionParameterValue>(parameterValue);
 			Assert.AreEqual(ParameterUnit.None, parameterValue.Unit);
@@ -73,7 +73,7 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 		{
 			var databaseServer = GetService<IDatabaseServer>();
 			const string parameterName = "autovacuum_vacuum_scale_factor";
-			var parameterValue = await databaseServer.GetParameterValueAsync(parameterName);
+			var parameterValue = await databaseServer.GetRawParameterValueAsync(parameterName);
 
 			Assert.IsInstanceOf<FractionParameterValue>(parameterValue);
 			Assert.AreEqual(ParameterUnit.None, parameterValue.Unit);
@@ -105,7 +105,7 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 			// let postmaster reload configuration. 
 			await Task.Delay(millisecondsDelay: 100);
 
-			var valueFromDatabase = await databaseServer.GetParameterValueAsync(valueToApply.ParameterLink.Name);
+			var valueFromDatabase = await databaseServer.GetRawParameterValueAsync(valueToApply.ParameterLink.Name);
 			Assert.AreEqual(valueToApply, valueFromDatabase);
 		}
 
@@ -167,7 +167,7 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 
 			var valuesFromServer = await parameterValues
 				.Select(parameterValue => parameterValue.ParameterLink.Name)
-				.SelectAsync(async parameterName => await databaseServer.GetParameterValueAsync(parameterName));
+				.SelectAsync(async parameterName => await databaseServer.GetRawParameterValueAsync(parameterName));
 
 			// let postmaster reload configuration. 
 			await Task.Delay(millisecondsDelay: 100);

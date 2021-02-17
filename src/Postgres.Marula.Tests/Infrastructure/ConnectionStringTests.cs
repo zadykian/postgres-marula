@@ -3,7 +3,7 @@ using NUnit.Framework;
 using Postgres.Marula.Infrastructure.Extensions;
 using Postgres.Marula.Infrastructure.TypeDecorators;
 
-namespace Postgres.Marula.Tests.DatabaseAccess
+namespace Postgres.Marula.Tests.Infrastructure
 {
 	/// <summary>
 	/// Database connection string tests.
