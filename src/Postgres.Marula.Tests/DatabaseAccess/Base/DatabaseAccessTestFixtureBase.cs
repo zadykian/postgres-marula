@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Dapper;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
+using Postgres.Marula.Calculations.ParameterValueParsing;
 using Postgres.Marula.DatabaseAccess;
 using Postgres.Marula.DatabaseAccess.Conventions;
 using Postgres.Marula.Infrastructure.TypeDecorators;
@@ -35,7 +36,9 @@ namespace Postgres.Marula.Tests.DatabaseAccess.Base
 		protected override void ConfigureServices(IServiceCollection serviceCollection)
 		{
 			base.ConfigureServices(serviceCollection);
-			serviceCollection.AddSingleton<INamingConventions, TestNamingConventions>();
+			serviceCollection
+				.AddSingleton<INamingConventions, TestNamingConventions>()
+				.AddSingleton<IParameterValueParser, DefaultParameterValueParser>();
 		}
 
 		/// <inheritdoc />

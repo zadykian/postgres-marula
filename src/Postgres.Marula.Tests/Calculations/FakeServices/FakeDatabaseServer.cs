@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Postgres.Marula.Calculations.ExternalDependencies;
 using Postgres.Marula.Calculations.ParameterProperties;
 using Postgres.Marula.Calculations.ParameterValues.Base;
+using Postgres.Marula.Calculations.ParameterValues.Raw;
 using Postgres.Marula.Infrastructure.TypeDecorators;
 
 namespace Postgres.Marula.Tests.Calculations.FakeServices
@@ -17,7 +18,7 @@ namespace Postgres.Marula.Tests.Calculations.FakeServices
 		}
 
 		/// <inheritdoc />
-		Task<IParameterValue> IDatabaseServer.GetParameterValueAsync(NonEmptyString parameterName)
+		Task<RawParameterValue> IDatabaseServer.GetRawParameterValueAsync(NonEmptyString parameterName)
 			=> throw new System.NotSupportedException();
 
 		/// <inheritdoc />

@@ -7,8 +7,10 @@ using NUnit.Framework;
 using Postgres.Marula.Calculations.ExternalDependencies;
 using Postgres.Marula.Calculations.ParameterProperties;
 using Postgres.Marula.Calculations.Parameters.Base;
+using Postgres.Marula.Calculations.ParameterValueParsing;
 using Postgres.Marula.Calculations.ParameterValues;
 using Postgres.Marula.Calculations.ParameterValues.Base;
+using Postgres.Marula.Calculations.ParameterValues.Raw;
 using Postgres.Marula.Infrastructure.Extensions;
 using Postgres.Marula.Infrastructure.TypeDecorators;
 using Postgres.Marula.Tests.DatabaseAccess.Base;
@@ -20,68 +22,35 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 	/// </summary>
 	internal class DatabaseServerTests : DatabaseAccessTestFixtureBase
 	{
-		/// <summary>
-		/// Get timespan parameter value from database server.
-		/// </summary>
 		[Test]
-		public async Task GetTimeSpanParameterValueTest()
+		public async Task GetRawParameterValueTest(
+			[ValueSource(nameof(ParameterNameTestCaseSource))]
+			(NonEmptyString ParameterName, bool WithRange) testCase)
 		{
 			var databaseServer = GetService<IDatabaseServer>();
-			const string parameterName = "autovacuum_naptime";
-			var parameterValue = await databaseServer.GetParameterValueAsync(parameterName);
-
-			Assert.IsInstanceOf<TimeSpanParameterValue>(parameterValue);
-			Assert.AreEqual(ParameterUnit.Milliseconds, parameterValue.Unit);
-			Assert.AreEqual(parameterName, parameterValue.ParameterLink.Name.ToString());
+			var rawParameterValue = await databaseServer.GetRawParameterValueAsync(testCase.ParameterName);
+			Assert.AreEqual(testCase.WithRange, rawParameterValue is RawRangeParameterValue);
 		}
 
 		/// <summary>
-		/// Get memory parameter value from database server.
+		/// Test case source for <see cref="GetRawParameterValueTest"/>. 
 		/// </summary>
-		[Test]
-		public async Task GetMemoryParameterValueTest()
-		{
-			var databaseServer = GetService<IDatabaseServer>();
-			const string parameterName = "effective_cache_size";
-			var parameterValue = await databaseServer.GetParameterValueAsync(parameterName);
+		private static IEnumerable<(NonEmptyString ParameterName, bool WithRange)> ParameterNameTestCaseSource()
+			=> new (NonEmptyString, bool)[]
+			{
+				("autovacuum", false),
+				("autovacuum_vacuum_cost_delay", true),
+				("cursor_tuple_fraction", true),
+				("deadlock_timeout", true),
 
-			Assert.IsInstanceOf<MemoryParameterValue>(parameterValue);
-			Assert.AreEqual(ParameterUnit.Bytes, parameterValue.Unit);
-			Assert.AreEqual(parameterName, parameterValue.ParameterLink.Name.ToString());
-		}
+				("log_rotation_age", true),
+				("checkpoint_flush_after", true),
+				("track_counts", false),
+				("autovacuum_vacuum_scale_factor", true)
+			};
 
 		/// <summary>
-		/// Get value of parameter represented as fraction in range [0..1]. 
-		/// </summary>
-		[Test]
-		public async Task GetFactionParameterValueTest()
-		{
-			var databaseServer = GetService<IDatabaseServer>();
-			const string parameterName = "checkpoint_completion_target";
-			var parameterValue = await databaseServer.GetParameterValueAsync(parameterName);
-
-			Assert.IsInstanceOf<FractionParameterValue>(parameterValue);
-			Assert.AreEqual(ParameterUnit.None, parameterValue.Unit);
-			Assert.AreEqual(parameterName, parameterValue.ParameterLink.Name.ToString());
-		}
-
-		/// <summary>
-		/// Get value of parameter represented as percents in range [0..100]. 
-		/// </summary>
-		[Test]
-		public async Task GetPercentsFactionParameterValueTest()
-		{
-			var databaseServer = GetService<IDatabaseServer>();
-			const string parameterName = "autovacuum_vacuum_scale_factor";
-			var parameterValue = await databaseServer.GetParameterValueAsync(parameterName);
-
-			Assert.IsInstanceOf<FractionParameterValue>(parameterValue);
-			Assert.AreEqual(ParameterUnit.None, parameterValue.Unit);
-			Assert.AreEqual(parameterName, parameterValue.ParameterLink.Name.ToString());
-		}
-
-		/// <summary>
-		/// Apply empty collection of parameter values. 
+		/// Apply empty collection of parameter values.
 		/// </summary>
 		[Test]
 		public async Task EmptyParametersCollectionTest()
@@ -105,8 +74,11 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 			// let postmaster reload configuration. 
 			await Task.Delay(millisecondsDelay: 100);
 
-			var valueFromDatabase = await databaseServer.GetParameterValueAsync(valueToApply.ParameterLink.Name);
-			Assert.AreEqual(valueToApply, valueFromDatabase);
+			var rawParameterValue = await databaseServer.GetRawParameterValueAsync(valueToApply.ParameterLink.Name);
+
+			var parameterValueParser = GetService<IParameterValueParser>();
+			var parsedValue = parameterValueParser.Parse(valueToApply.ParameterLink.Name, rawParameterValue);
+			Assert.AreEqual(valueToApply, parsedValue);
 		}
 
 		/// <summary>
@@ -165,12 +137,18 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 			var databaseServer = GetService<IDatabaseServer>();
 			await databaseServer.ApplyToConfigurationAsync(parameterValues);
 
-			var valuesFromServer = await parameterValues
-				.Select(parameterValue => parameterValue.ParameterLink.Name)
-				.SelectAsync(async parameterName => await databaseServer.GetParameterValueAsync(parameterName));
-
 			// let postmaster reload configuration. 
 			await Task.Delay(millisecondsDelay: 100);
+
+			var parameterValueParser = GetService<IParameterValueParser>();
+
+			var valuesFromServer = await parameterValues
+				.Select(parameterValue => parameterValue.ParameterLink.Name)
+				.SelectAsync(async parameterName =>
+				{
+					var rawParameterValue = await databaseServer.GetRawParameterValueAsync(parameterName);
+					return parameterValueParser.Parse(parameterName, rawParameterValue);
+				});
 
 			parameterValues
 				.Zip(valuesFromServer)
