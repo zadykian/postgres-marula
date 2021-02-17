@@ -1,5 +1,6 @@
-using Postgres.Marula.Calculations.Parameters.Properties;
-using Postgres.Marula.Calculations.Parameters.Values.Base;
+using System.Threading.Tasks;
+using Postgres.Marula.Calculations.ParameterProperties;
+using Postgres.Marula.Calculations.ParameterValues.Base;
 
 namespace Postgres.Marula.Calculations.Parameters.Base
 {
@@ -9,9 +10,9 @@ namespace Postgres.Marula.Calculations.Parameters.Base
 	internal interface IParameter : IParameterLink
 	{
 		/// <summary>
-		/// Parameter context. 
+		/// Get parameter context.
 		/// </summary>
-		ParameterContext Context { get; }
+		Task<ParameterContext> GetContextAsync();
 
 		/// <summary>
 		/// Calculate parameter value. 

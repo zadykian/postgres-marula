@@ -2,14 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Dapper;
 using Postgres.Marula.Calculations.ExternalDependencies;
+using Postgres.Marula.Calculations.ParameterProperties;
 using Postgres.Marula.Calculations.Parameters.Base;
-using Postgres.Marula.Calculations.Parameters.Properties;
-using Postgres.Marula.Calculations.Parameters.Values;
-using Postgres.Marula.Calculations.Parameters.Values.Base;
+using Postgres.Marula.Calculations.ParameterValues;
+using Postgres.Marula.Calculations.ParameterValues.Base;
 using Postgres.Marula.DatabaseAccess.ConnectionFactory;
 using Postgres.Marula.DatabaseAccess.ServerInteraction.Base;
 using Postgres.Marula.DatabaseAccess.ServerInteraction.Exceptions;
@@ -110,6 +111,12 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 						.Divide(decimalValue, 100)
 						.To(fraction => new FractionParameterValue(parameterLink, fraction)),
 
+				{ } when parameterValueAsString == "on"
+					=> new BooleanParameterValue(parameterLink, value: true),
+
+				{ } when parameterValueAsString == "off"
+					=> new BooleanParameterValue(parameterLink, value: false),
+
 				_ => throw new DatabaseServerConfigurationException(
 					$"Failed to parse value '{parameterValueAsString}' of parameter '{parameterName}'.")
 			};
@@ -188,6 +195,26 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 				.To(charArray => new string(charArray));
 
 			return (Value: value, Unit: unit);
+		}
+
+		/// <inheritdoc />
+		async Task<ParameterContext> IDatabaseServer.GetParameterContextAsync(NonEmptyString parameterName)
+		{
+			var commandText = string.Intern($@"
+				select context
+				from pg_catalog.pg_settings
+				where name = @{nameof(parameterName)};");
+
+			var dbConnection = await GetConnectionAsync();
+			var parameterContext = await dbConnection.QuerySingleAsync<NonEmptyString>(commandText, new {parameterName});
+
+			return typeof(ParameterContext)
+				.GetFields(BindingFlags.Public | BindingFlags.Static)
+				.Select(memberInfo => (
+					ContextValue: (ParameterContext) memberInfo.GetValue(obj: null)!,
+					StringRepresentation: memberInfo.GetCustomAttribute<StringRepresentationAttribute>()!.Value))
+				.Single(tuple => tuple.StringRepresentation == parameterContext)
+				.ContextValue;
 		}
 	}
 }

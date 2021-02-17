@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Postgres.Marula.Calculations.Parameters.Values.Base;
+using Postgres.Marula.Calculations.ParameterValues.Base;
 
 namespace Postgres.Marula.Calculations.ExternalDependencies
 {

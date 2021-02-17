@@ -5,10 +5,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using Postgres.Marula.Calculations.ExternalDependencies;
+using Postgres.Marula.Calculations.ParameterProperties;
 using Postgres.Marula.Calculations.Parameters.Base;
-using Postgres.Marula.Calculations.Parameters.Properties;
-using Postgres.Marula.Calculations.Parameters.Values;
-using Postgres.Marula.Calculations.Parameters.Values.Base;
+using Postgres.Marula.Calculations.ParameterValues;
+using Postgres.Marula.Calculations.ParameterValues.Base;
 using Postgres.Marula.Infrastructure.Extensions;
 using Postgres.Marula.Infrastructure.TypeDecorators;
 using Postgres.Marula.Tests.DatabaseAccess.Base;
@@ -131,6 +131,10 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 			yield return new FractionParameterValue(
 				new ParameterLink("autovacuum_analyze_scale_factor"),
 				value: 0.004M);
+
+			yield return new BooleanParameterValue(
+				new ParameterLink("autovacuum"),
+				value: true);
 		}
 
 		/// <summary>
@@ -171,6 +175,30 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 			parameterValues
 				.Zip(valuesFromServer)
 				.ForEach(tuple => Assert.AreEqual(tuple.First, tuple.Second));
+		}
+
+		/// <summary>
+		/// Get database server parameter context. 
+		/// </summary>
+		[Test]
+		public async Task GetParameterContextTest(
+			[ValueSource(nameof(ContextTestCaseSource))]
+			(NonEmptyString ParameterName, ParameterContext ExpectedContext) testCase)
+		{
+			var databaseServer = GetService<IDatabaseServer>();
+			var parameterContext = await databaseServer.GetParameterContextAsync(testCase.ParameterName);
+			Assert.AreEqual(testCase.ExpectedContext, parameterContext);
+		}
+
+		/// <summary>
+		/// Test case source for <see cref="GetParameterContextTest"/>. 
+		/// </summary>
+		private static IEnumerable<(NonEmptyString ParameterName, ParameterContext ExpectedContext)> ContextTestCaseSource()
+		{
+			yield return ("autovacuum", ParameterContext.Sighup);
+			yield return ("shared_buffers", ParameterContext.Postmaster);
+			yield return ("autovacuum_vacuum_scale_factor", ParameterContext.Sighup);
+			yield return ("track_counts", ParameterContext.Superuser);
 		}
 	}
 }

@@ -1,4 +1,4 @@
-namespace Postgres.Marula.Calculations.Parameters.Properties
+namespace Postgres.Marula.Calculations.ParameterProperties
 {
 	/// <summary>
 	/// Parameter calculation status.
