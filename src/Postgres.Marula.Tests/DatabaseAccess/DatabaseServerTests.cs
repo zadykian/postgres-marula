@@ -176,5 +176,29 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 				.Zip(valuesFromServer)
 				.ForEach(tuple => Assert.AreEqual(tuple.First, tuple.Second));
 		}
+
+		/// <summary>
+		/// Get database server parameter context. 
+		/// </summary>
+		[Test]
+		public async Task GetParameterContextTest(
+			[ValueSource(nameof(ContextTestCaseSource))]
+			(NonEmptyString ParameterName, ParameterContext ExpectedContext) testCase)
+		{
+			var databaseServer = GetService<IDatabaseServer>();
+			var parameterContext = await databaseServer.GetParameterContextAsync(testCase.ParameterName);
+			Assert.AreEqual(testCase.ExpectedContext, parameterContext);
+		}
+
+		/// <summary>
+		/// Test case source for <see cref="GetParameterContextTest"/>. 
+		/// </summary>
+		private static IEnumerable<(NonEmptyString ParameterName, ParameterContext ExpectedContext)> ContextTestCaseSource()
+		{
+			yield return ("autovacuum", ParameterContext.Sighup);
+			yield return ("shared_buffers", ParameterContext.Postmaster);
+			yield return ("autovacuum_vacuum_scale_factor", ParameterContext.Sighup);
+			yield return ("track_counts", ParameterContext.Superuser);
+		}
 	}
 }

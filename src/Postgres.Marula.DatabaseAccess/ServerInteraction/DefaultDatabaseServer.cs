@@ -209,7 +209,7 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 			var parameterContext = await dbConnection.QuerySingleAsync<NonEmptyString>(commandText, new {parameterName});
 
 			return typeof(ParameterContext)
-				.GetFields()
+				.GetFields(BindingFlags.Public | BindingFlags.Static)
 				.Select(memberInfo => (
 					ContextValue: (ParameterContext) memberInfo.GetValue(obj: null)!,
 					StringRepresentation: memberInfo.GetCustomAttribute<StringRepresentationAttribute>()!.Value))

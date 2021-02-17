@@ -6,19 +6,20 @@ using Postgres.Marula.Infrastructure.TypeDecorators;
 
 // ReSharper disable UnusedType.Global
 
-namespace Postgres.Marula.Calculations.Parameters.Autovacuum
+namespace Postgres.Marula.Calculations.Parameters.Statistics
 {
 	/// <summary>
-	/// Controls whether the server should run the autovacuum launcher daemon.
+	/// Enables collection of statistics on database activity.
+	/// This parameter affects autovacuum, because the autovacuum daemon needs the collected information.
 	/// </summary>
-	internal class AutovacuumParameter : ParameterBase
+	internal class TrackCountsParameter : ParameterBase
 	{
-		public AutovacuumParameter(IDatabaseServer databaseServer) : base(databaseServer)
+		public TrackCountsParameter(IDatabaseServer databaseServer) : base(databaseServer)
 		{
 		}
 
 		/// <inheritdoc />
-		public override NonEmptyString Name => "autovacuum";
+		public override NonEmptyString Name => "track_counts";
 
 		/// <inheritdoc />
 		public override IParameterValue Calculate() => new BooleanParameterValue(this.GetLink(), value: true);
