@@ -20,8 +20,35 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 	/// </summary>
 	internal class DatabaseServerTests : DatabaseAccessTestFixtureBase
 	{
+		[Test]
+		public async Task GetRawParameterValueTest(
+			[ValueSource(nameof(ParameterNameTestCaseSource))]
+			(NonEmptyString ParameterName, bool WithRange) testCase)
+		{
+			var databaseServer = GetService<IDatabaseServer>();
+			var rawParameterValue = await databaseServer.GetRawParameterValueAsync(testCase.ParameterName);
+			Assert.AreEqual(testCase.WithRange, rawParameterValue.ValidRange is not null);
+		}
+
 		/// <summary>
-		/// Apply empty collection of parameter values. 
+		/// Test case source for <see cref="GetRawParameterValueTest"/>. 
+		/// </summary>
+		private static IEnumerable<(NonEmptyString ParameterName, bool WithRange)> ParameterNameTestCaseSource()
+			=> new (NonEmptyString, bool)[]
+			{
+				("autovacuum", false),
+				("autovacuum_vacuum_cost_delay", true),
+				("cursor_tuple_fraction", true),
+				("deadlock_timeout", true),
+
+				("log_rotation_age", true),
+				("checkpoint_flush_after", true),
+				("track_counts", false),
+				("autovacuum_vacuum_scale_factor", true)
+			};
+
+		/// <summary>
+		/// Apply empty collection of parameter values.
 		/// </summary>
 		[Test]
 		public async Task EmptyParametersCollectionTest()
