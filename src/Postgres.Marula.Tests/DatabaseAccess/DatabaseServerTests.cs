@@ -7,6 +7,7 @@ using NUnit.Framework;
 using Postgres.Marula.Calculations.ExternalDependencies;
 using Postgres.Marula.Calculations.ParameterProperties;
 using Postgres.Marula.Calculations.Parameters.Base;
+using Postgres.Marula.Calculations.ParameterValueParsing;
 using Postgres.Marula.Calculations.ParameterValues;
 using Postgres.Marula.Calculations.ParameterValues.Base;
 using Postgres.Marula.Infrastructure.Extensions;
@@ -72,8 +73,11 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 			// let postmaster reload configuration. 
 			await Task.Delay(millisecondsDelay: 100);
 
-			var valueFromDatabase = await databaseServer.GetRawParameterValueAsync(valueToApply.ParameterLink.Name);
-			Assert.AreEqual(valueToApply, valueFromDatabase);
+			var rawParameterValue = await databaseServer.GetRawParameterValueAsync(valueToApply.ParameterLink.Name);
+
+			var parameterValueParser = GetService<IParameterValueParser>();
+			var parsedValue = parameterValueParser.Parse(valueToApply.ParameterLink.Name, rawParameterValue);
+			Assert.AreEqual(valueToApply, parsedValue);
 		}
 
 		/// <summary>
@@ -132,15 +136,21 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 			var databaseServer = GetService<IDatabaseServer>();
 			await databaseServer.ApplyToConfigurationAsync(parameterValues);
 
-			var valuesFromServer = await parameterValues
-				.Select(parameterValue => parameterValue.ParameterLink.Name)
-				.SelectAsync(async parameterName => await databaseServer.GetRawParameterValueAsync(parameterName));
-
 			// let postmaster reload configuration. 
 			await Task.Delay(millisecondsDelay: 100);
 
+			var parameterValueParser = GetService<IParameterValueParser>();
+
+			var rawParameterValues = await parameterValues
+				.Select(parameterValue => parameterValue.ParameterLink.Name)
+				.SelectAsync(async parameterName =>
+				{
+					var rawParameterValue = await databaseServer.GetRawParameterValueAsync(parameterName);
+					return parameterValueParser.Parse(parameterName, rawParameterValue);
+				});
+
 			parameterValues
-				.Zip(valuesFromServer)
+				.Zip(rawParameterValues)
 				.ForEach(tuple => Assert.AreEqual(tuple.First, tuple.Second));
 		}
 
