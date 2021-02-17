@@ -2,6 +2,7 @@ using System.Runtime.CompilerServices;
 using Microsoft.Extensions.DependencyInjection;
 using Postgres.Marula.Calculations.Jobs;
 using Postgres.Marula.Calculations.Parameters.Base;
+using Postgres.Marula.Calculations.ParameterValueParsing;
 using Postgres.Marula.Calculations.Pipeline;
 using Postgres.Marula.Calculations.Pipeline.Factory;
 using Postgres.Marula.Calculations.Pipeline.MiddlewareComponents;
@@ -24,6 +25,7 @@ namespace Postgres.Marula.Calculations
 				.AddTransient<ParametersAdjustmentMiddleware>()
 				.AddTransient<ValuesHistoryMiddleware>()
 				.AddSingleton<IPipelineFactory, DefaultPipelineFactory>()
-				.AddSingleton<ICalculationJob, TimerCalculationJob>();
+				.AddSingleton<ICalculationJob, TimerCalculationJob>()
+				.AddSingleton<IParameterValueParser, DefaultParameterValueParser>();
 	}
 }

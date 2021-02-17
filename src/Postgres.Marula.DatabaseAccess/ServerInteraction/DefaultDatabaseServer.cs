@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Dapper;
 using Postgres.Marula.Calculations.ExternalDependencies;
@@ -98,11 +97,10 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 				commandText,
 				new {parameterName});
 
-			var range = minValue.HasValue && maxValue.HasValue
+			return minValue.HasValue && maxValue.HasValue
 				? new Range<decimal>(minValue.Value, maxValue.Value)
-				: (Range<decimal>?) null;
-
-			return new RawParameterValue(parameterValue, range);
+					.To(range => new RawParameterValue(parameterValue, range))
+				: new RawParameterValue(parameterValue);
 		}
 
 		/// <inheritdoc />

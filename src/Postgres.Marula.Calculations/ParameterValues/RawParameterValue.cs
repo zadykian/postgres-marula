@@ -7,7 +7,7 @@ namespace Postgres.Marula.Calculations.ParameterValues
 	/// </summary>
 	public readonly struct RawParameterValue
 	{
-		public RawParameterValue(NonEmptyString value, Range<decimal>? validRange)
+		public RawParameterValue(NonEmptyString value, Range<decimal>? validRange = default)
 		{
 			Value = value;
 			ValidRange = validRange;
@@ -24,6 +24,6 @@ namespace Postgres.Marula.Calculations.ParameterValues
 		public Range<decimal>? ValidRange { get; }
 
 		/// <inheritdoc />
-		public override string ToString() => $"{Value} {ValidRange}";
+		public override string ToString() => $"'{Value}' with range: {ValidRange.ToString() ?? "null"}";
 	}
 }

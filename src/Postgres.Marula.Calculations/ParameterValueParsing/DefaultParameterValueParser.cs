@@ -28,13 +28,8 @@ namespace Postgres.Marula.Calculations.ParameterValueParsing
 						.To(memory => new MemoryParameterValue(parameterLink, memory)),
 
 				{ } when decimal.TryParse(rawParameterValue.Value, out var decimalValue)
-				         && (minValue, maxValue) == (decimal.Zero, decimal.One)
-					=> new FractionParameterValue(parameterLink, decimalValue),
-
-				{ } when decimal.TryParse(rawParameterValue.Value, out var decimalValue)
-				         && (minValue, maxValue) == (decimal.Zero, 100)
-					=> decimal
-						.Divide(decimalValue, 100)
+				         && rawParameterValue.ValidRange.HasValue
+					=> ToFraction(decimalValue, rawParameterValue.ValidRange.Value)
 						.To(fraction => new FractionParameterValue(parameterLink, fraction)),
 
 				{ } when rawParameterValue.Value == "on"
@@ -103,6 +98,21 @@ namespace Postgres.Marula.Calculations.ParameterValueParsing
 				.To(charArray => new string(charArray));
 
 			return (Value: value, Unit: unit);
+		}
+
+		/// <summary>
+		/// Convert decimal value with range of valid values to <see cref="Fraction"/> instance.
+		/// </summary>
+		private static Fraction ToFraction(decimal value, Range<decimal> validRange)
+		{
+			var multiplier = (validRange.LeftBound, validRange.RightBound) switch
+			{
+				(decimal.Zero, decimal.One) => decimal.One,
+				(decimal.Zero,         100) => 0.01M,
+				_ => throw new ArgumentOutOfRangeException(nameof(validRange), validRange, message: null)
+			};
+
+			return new Fraction(value * multiplier);
 		}
 	}
 }
