@@ -10,6 +10,7 @@ using Postgres.Marula.Calculations.ParameterProperties;
 using Postgres.Marula.Calculations.Parameters.Base;
 using Postgres.Marula.Calculations.ParameterValues;
 using Postgres.Marula.Calculations.ParameterValues.Base;
+using Postgres.Marula.Calculations.ParameterValues.Raw;
 using Postgres.Marula.DatabaseAccess.ConnectionFactory;
 using Postgres.Marula.DatabaseAccess.ServerInteraction.Base;
 using Postgres.Marula.DatabaseAccess.ServerInteraction.Exceptions;
@@ -99,7 +100,7 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 
 			return minValue.HasValue && maxValue.HasValue
 				? new Range<decimal>(minValue.Value, maxValue.Value)
-					.To(range => new RawParameterValue(parameterValue, range))
+					.To(range => new RawRangeParameterValue(parameterValue, range))
 				: new RawParameterValue(parameterValue);
 		}
 

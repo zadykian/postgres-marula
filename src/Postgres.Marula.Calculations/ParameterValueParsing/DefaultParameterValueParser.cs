@@ -4,6 +4,7 @@ using System.Text.RegularExpressions;
 using Postgres.Marula.Calculations.Parameters.Base;
 using Postgres.Marula.Calculations.ParameterValues;
 using Postgres.Marula.Calculations.ParameterValues.Base;
+using Postgres.Marula.Calculations.ParameterValues.Raw;
 using Postgres.Marula.Infrastructure.Extensions;
 using Postgres.Marula.Infrastructure.TypeDecorators;
 
@@ -28,8 +29,8 @@ namespace Postgres.Marula.Calculations.ParameterValueParsing
 						.To(memory => new MemoryParameterValue(parameterLink, memory)),
 
 				{ } when decimal.TryParse(rawParameterValue.Value, out var decimalValue)
-				         && rawParameterValue.ValidRange.HasValue
-					=> ToFraction(decimalValue, rawParameterValue.ValidRange.Value)
+				         && rawParameterValue is RawRangeParameterValue rawRangeParameterValue
+					=> ToFraction(decimalValue, rawRangeParameterValue.ValidRange)
 						.To(fraction => new FractionParameterValue(parameterLink, fraction)),
 
 				{ } when rawParameterValue.Value == "on"

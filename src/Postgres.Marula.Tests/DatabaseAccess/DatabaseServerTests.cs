@@ -10,6 +10,7 @@ using Postgres.Marula.Calculations.Parameters.Base;
 using Postgres.Marula.Calculations.ParameterValueParsing;
 using Postgres.Marula.Calculations.ParameterValues;
 using Postgres.Marula.Calculations.ParameterValues.Base;
+using Postgres.Marula.Calculations.ParameterValues.Raw;
 using Postgres.Marula.Infrastructure.Extensions;
 using Postgres.Marula.Infrastructure.TypeDecorators;
 using Postgres.Marula.Tests.DatabaseAccess.Base;
@@ -28,7 +29,7 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 		{
 			var databaseServer = GetService<IDatabaseServer>();
 			var rawParameterValue = await databaseServer.GetRawParameterValueAsync(testCase.ParameterName);
-			Assert.AreEqual(testCase.WithRange, rawParameterValue.ValidRange is not null);
+			Assert.AreEqual(testCase.WithRange, rawParameterValue is RawRangeParameterValue);
 		}
 
 		/// <summary>

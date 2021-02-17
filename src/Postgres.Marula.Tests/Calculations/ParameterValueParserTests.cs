@@ -2,6 +2,7 @@ using NUnit.Framework;
 using Postgres.Marula.Calculations.ParameterProperties;
 using Postgres.Marula.Calculations.ParameterValueParsing;
 using Postgres.Marula.Calculations.ParameterValues;
+using Postgres.Marula.Calculations.ParameterValues.Raw;
 using Postgres.Marula.Tests.Calculations.Base;
 
 namespace Postgres.Marula.Tests.Calculations
@@ -18,7 +19,7 @@ namespace Postgres.Marula.Tests.Calculations
 		public void ParseTimeSpanParameterValueTest()
 		{
 			const string parameterName = "autovacuum_naptime";
-			var rawParameterValue = new RawParameterValue("30s", (1, 2147483));
+			var rawParameterValue = new RawRangeParameterValue("30s", (1, 2147483));
 
 			var parameterValueParser = GetService<IParameterValueParser>();
 			var parameterValue = parameterValueParser.Parse(parameterName, rawParameterValue);
@@ -35,7 +36,7 @@ namespace Postgres.Marula.Tests.Calculations
 		public void ParseMemoryParameterValueTest()
 		{
 			const string parameterName = "effective_cache_size";
-			var rawParameterValue = new RawParameterValue("4GB", (1, 2147483647));
+			var rawParameterValue = new RawRangeParameterValue("4GB", (1, 2147483647));
 
 			var parameterValueParser = GetService<IParameterValueParser>();
 			var parameterValue = parameterValueParser.Parse(parameterName, rawParameterValue);
@@ -52,7 +53,7 @@ namespace Postgres.Marula.Tests.Calculations
 		public void ParseFactionParameterValueTest()
 		{
 			const string parameterName = "checkpoint_completion_target";
-			var rawParameterValue = new RawParameterValue("0.5", (0, 1));
+			var rawParameterValue = new RawRangeParameterValue("0.5", (0, 1));
 
 			var parameterValueParser = GetService<IParameterValueParser>();
 			var parameterValue = parameterValueParser.Parse(parameterName, rawParameterValue);
@@ -69,7 +70,7 @@ namespace Postgres.Marula.Tests.Calculations
 		public void ParsePercentsFactionParameterValueTest()
 		{
 			const string parameterName = "autovacuum_vacuum_scale_factor";
-			var rawParameterValue = new RawParameterValue("0.8", (0, 100));
+			var rawParameterValue = new RawRangeParameterValue("0.8", (0, 100));
 
 			var parameterValueParser = GetService<IParameterValueParser>();
 			var parameterValue = parameterValueParser.Parse(parameterName, rawParameterValue);
