@@ -141,7 +141,7 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 
 			var parameterValueParser = GetService<IParameterValueParser>();
 
-			var rawParameterValues = await parameterValues
+			var valuesFromServer = await parameterValues
 				.Select(parameterValue => parameterValue.ParameterLink.Name)
 				.SelectAsync(async parameterName =>
 				{
@@ -150,7 +150,7 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 				});
 
 			parameterValues
-				.Zip(rawParameterValues)
+				.Zip(valuesFromServer)
 				.ForEach(tuple => Assert.AreEqual(tuple.First, tuple.Second));
 		}
 
