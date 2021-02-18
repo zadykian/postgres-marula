@@ -6,7 +6,7 @@ using Postgres.Marula.Infrastructure.TypeDecorators;
 namespace Postgres.Marula.Calculations.ParameterValues.Base
 {
 	/// <inheritdoc cref="IParameterValue"/>
-	public abstract class ParameterValueBase<T> : IParameterValue<T>, IEquatable<ParameterValueBase<T>>
+	public abstract class ParameterValueBase<T> : IParameterValue, IEquatable<ParameterValueBase<T>>
 		where T : IEquatable<T>
 	{
 		private protected ParameterValueBase(IParameterLink parameterLink, T value)
@@ -15,7 +15,9 @@ namespace Postgres.Marula.Calculations.ParameterValues.Base
 			Value = value;
 		}
 
-		/// <inheritdoc />
+		/// <summary>
+		/// Value or parameter.
+		/// </summary>
 		public T Value { get; }
 
 		/// <inheritdoc />

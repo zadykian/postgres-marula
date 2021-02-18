@@ -7,7 +7,8 @@ namespace Postgres.Marula.Calculations.Parameters.Base
 {
 	/// <inheritdoc />
 	internal abstract class ParameterBase<TParameterValue, TValue> : IParameter
-		where TParameterValue : IParameterValue<TValue>
+		where TParameterValue : ParameterValueBase<TValue>
+		where TValue : IEquatable<TValue>
 	{
 		/// <inheritdoc />
 		public abstract NonEmptyString Name { get; }
