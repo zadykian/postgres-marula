@@ -19,11 +19,16 @@ namespace Postgres.Marula.Calculations.Pipeline.MiddlewareComponents
 	internal class ValuesHistoryMiddleware : ParametersMiddlewareBase, IAsyncMiddleware<ParametersManagementContext>
 	{
 		private readonly ISystemStorage systemStorage;
+		private readonly IDatabaseServer databaseServer;
 
 		public ValuesHistoryMiddleware(
 			ISystemStorage systemStorage,
+			IDatabaseServer databaseServer,
 			IAppConfiguration appConfiguration) : base(appConfiguration)
-			=> this.systemStorage = systemStorage;
+		{
+			this.systemStorage = systemStorage;
+			this.databaseServer = databaseServer;
+		}
 
 		/// <inheritdoc />
 		async Task IAsyncMiddleware<ParametersManagementContext>.Run(
@@ -51,12 +56,12 @@ namespace Postgres.Marula.Calculations.Pipeline.MiddlewareComponents
 		/// <summary>
 		/// Get database parameter calculation status. 
 		/// </summary>
-		private async Task<CalculationStatus> GetCalculationStatus(IParameter parameter, IParameterValue parameterValue)
+		private async Task<CalculationStatus> GetCalculationStatus(IParameterLink parameterLink, IParameterValue parameterValue)
 		{
 			var adjustmentIsAllowed = ParameterAdjustmentIsAllowed(parameterValue);
-			var restartIsRequired = (await parameter.GetContextAsync()).RestartIsRequired();
+			var parameterContext = await databaseServer.GetParameterContextAsync(parameterLink.Name);			
 
-			return (adjustmentIsAllowed, restartIsRequired) switch
+			return (adjustmentIsAllowed, parameterContext.RestartIsRequired()) switch
 			{
 				( false, false ) => CalculationStatus.RequiresConfirmation,
 				( false, true  ) => CalculationStatus.RequiresConfirmationAndRestart,

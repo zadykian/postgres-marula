@@ -1,8 +1,6 @@
-using System.Collections.Concurrent;
-using System.Threading.Tasks;
-using Postgres.Marula.Calculations.ExternalDependencies;
-using Postgres.Marula.Calculations.ParameterProperties;
+using System;
 using Postgres.Marula.Calculations.ParameterValues.Base;
+using Postgres.Marula.Infrastructure.Extensions;
 using Postgres.Marula.Infrastructure.TypeDecorators;
 
 namespace Postgres.Marula.Calculations.Parameters.Base
@@ -11,27 +9,18 @@ namespace Postgres.Marula.Calculations.Parameters.Base
 	internal abstract class ParameterBase<TParameterValue, TValue> : IParameter
 		where TParameterValue : IParameterValue<TValue>
 	{
-		private static readonly ConcurrentDictionary<NonEmptyString, ParameterContext> contextCache = new();
-		private readonly IDatabaseServer databaseServer;
-
-		protected ParameterBase(IDatabaseServer databaseServer) => this.databaseServer = databaseServer;
-
 		/// <inheritdoc />
 		public abstract NonEmptyString Name { get; }
 
 		/// <inheritdoc />
-		public abstract IParameterValue Calculate();
+		IParameterValue IParameter.Calculate()
+			=> Activator
+				.CreateInstance(typeof(TParameterValue), this.GetLink(), CalculateValue())
+				.To(instance => (IParameterValue) instance!);
 
-		/// <inheritdoc />
-		async Task<ParameterContext> IParameter.GetContextAsync()
-		{
-			if (!contextCache.TryGetValue(Name, out var parameterContext))
-			{
-				parameterContext = await databaseServer.GetParameterContextAsync(Name);
-				contextCache[Name] = parameterContext;
-			}
-
-			return parameterContext;
-		}
+		/// <summary>
+		/// Calculate parameter value. 
+		/// </summary>
+		protected abstract TValue CalculateValue();
 	}
 }
