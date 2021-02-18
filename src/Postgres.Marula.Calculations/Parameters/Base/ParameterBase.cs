@@ -8,7 +8,8 @@ using Postgres.Marula.Infrastructure.TypeDecorators;
 namespace Postgres.Marula.Calculations.Parameters.Base
 {
 	/// <inheritdoc />
-	internal abstract class ParameterBase : IParameter
+	internal abstract class ParameterBase<TParameterValue, TValue> : IParameter
+		where TParameterValue : IParameterValue<TValue>
 	{
 		private static readonly ConcurrentDictionary<NonEmptyString, ParameterContext> contextCache = new();
 		private readonly IDatabaseServer databaseServer;
