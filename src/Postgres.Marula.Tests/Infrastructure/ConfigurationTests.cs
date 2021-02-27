@@ -11,7 +11,7 @@ namespace Postgres.Marula.Tests.Infrastructure
 	/// <summary>
 	/// Application configuration tests.
 	/// </summary>
-	internal class ConfigurationTests : SingleComponentTestFixtureBase<InfrastructureSolutionComponent>
+	internal class ConfigurationTests : SingleComponentTestFixtureBase<InfrastructureAppComponent>
 	{
 		[Test]
 		public void ConnectionStringTest()

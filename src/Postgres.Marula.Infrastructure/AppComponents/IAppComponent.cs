@@ -1,11 +1,11 @@
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Postgres.Marula.Infrastructure.SolutionComponents
+namespace Postgres.Marula.Infrastructure.AppComponents
 {
 	/// <summary>
-	/// Component of solution which contains application services.
+	/// Component which contains application services.
 	/// </summary>
-	public interface ISolutionComponent
+	public interface IAppComponent
 	{
 		/// <summary>
 		/// Install component's services.

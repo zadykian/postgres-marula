@@ -11,24 +11,24 @@ using Postgres.Marula.DatabaseAccess.DapperTypeHandlers;
 using Postgres.Marula.DatabaseAccess.ServerInteraction;
 using Postgres.Marula.DatabaseAccess.SqlScripts.Executor;
 using Postgres.Marula.DatabaseAccess.SqlScripts.Provider;
+using Postgres.Marula.Infrastructure.AppComponents;
 using Postgres.Marula.Infrastructure.Extensions;
-using Postgres.Marula.Infrastructure.SolutionComponents;
 
 [assembly: InternalsVisibleTo("Postgres.Marula.Tests")]
 
 namespace Postgres.Marula.DatabaseAccess
 {
 	/// <inheritdoc />
-	public class DatabaseAccessSolutionComponent : ISolutionComponent
+	public class DatabaseAccessAppComponent : IAppComponent
 	{
-		public DatabaseAccessSolutionComponent()
+		public DatabaseAccessAppComponent()
 		{
 			SqlMapper.AddTypeHandler(new NonEmptyStringTypeHandler());
 			SqlMapper.AddTypeHandler(new DatabaseObjectNameTypeHandler());
 		}
 
 		/// <inheritdoc />
-		void ISolutionComponent.RegisterServices(IServiceCollection serviceCollection)
+		void IAppComponent.RegisterServices(IServiceCollection serviceCollection)
 			=> serviceCollection
 				.AddSingleton<INamingConventions, DefaultNamingConventions>()
 				.AddSingleton<ISqlScriptsProvider, AssemblyResourcesSqlScriptsProvider>()

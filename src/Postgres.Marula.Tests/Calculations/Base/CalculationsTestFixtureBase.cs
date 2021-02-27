@@ -9,7 +9,7 @@ namespace Postgres.Marula.Tests.Calculations.Base
 	/// <summary>
 	/// Base class for testing services from calculations component.
 	/// </summary>
-	internal abstract class CalculationsTestFixtureBase : SingleComponentTestFixtureBase<CalculationsSolutionComponent>
+	internal abstract class CalculationsTestFixtureBase : SingleComponentTestFixtureBase<CalculationsAppComponent>
 	{
 		/// <inheritdoc />
 		protected override void ConfigureServices(IServiceCollection serviceCollection)

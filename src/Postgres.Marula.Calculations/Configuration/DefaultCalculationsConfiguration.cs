@@ -8,7 +8,7 @@ namespace Postgres.Marula.Calculations.Configuration
 {
 	/// <inheritdoc cref="ICalculationsConfiguration"/>
 	internal class DefaultCalculationsConfiguration :
-		ConfigurationBase<CalculationsSolutionComponent>,
+		ConfigurationBase<CalculationsAppComponent>,
 		ICalculationsConfiguration
 	{
 		public DefaultCalculationsConfiguration(IConfiguration configuration) : base(configuration)

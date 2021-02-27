@@ -7,7 +7,7 @@ namespace Postgres.Marula.DatabaseAccess.Configuration
 {
 	/// <inheritdoc cref="IDatabaseAccessConfiguration"/>
 	internal class DefaultDatabaseAccessConfiguration :
-		ConfigurationBase<DatabaseAccessSolutionComponent>,
+		ConfigurationBase<DatabaseAccessAppComponent>,
 		IDatabaseAccessConfiguration
 	{
 		public DefaultDatabaseAccessConfiguration(IConfiguration configuration) : base(configuration)

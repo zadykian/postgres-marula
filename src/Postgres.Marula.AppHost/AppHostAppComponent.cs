@@ -1,15 +1,15 @@
 using Microsoft.Extensions.DependencyInjection;
-using Postgres.Marula.Infrastructure.SolutionComponents;
+using Postgres.Marula.Infrastructure.AppComponents;
 
 // ReSharper disable UnusedType.Global
 
 namespace Postgres.Marula.AppHost
 {
 	/// <inheritdoc />
-	internal class AppHostSolutionComponent : ISolutionComponent
+	internal class AppHostAppComponent : IAppComponent
 	{
 		/// <inheritdoc />
-		void ISolutionComponent.RegisterServices(IServiceCollection serviceCollection)
+		void IAppComponent.RegisterServices(IServiceCollection serviceCollection)
 			=> serviceCollection.AddHostedService<HostedService>();
 	}
 }

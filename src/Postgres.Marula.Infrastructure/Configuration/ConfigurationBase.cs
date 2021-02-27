@@ -1,6 +1,6 @@
 using Microsoft.Extensions.Configuration;
+using Postgres.Marula.Infrastructure.AppComponents;
 using Postgres.Marula.Infrastructure.Extensions;
-using Postgres.Marula.Infrastructure.SolutionComponents;
 
 namespace Postgres.Marula.Infrastructure.Configuration
 {
@@ -8,16 +8,16 @@ namespace Postgres.Marula.Infrastructure.Configuration
 	/// Base class for application component configuration.
 	/// </summary>
 	public abstract class ConfigurationBase<TComponent>
-		where TComponent : ISolutionComponent
+		where TComponent : IAppComponent
 	{
 		protected ConfigurationBase(IConfiguration configuration)
 			=> ConfigurationSection = typeof(TComponent)
 				.Name
-				.Replace("SolutionComponent", string.Empty)
+				.Replace("Component", string.Empty)
 				.To(configuration.GetSection);
 
 		/// <summary>
-		/// Configuration section of current solution component. 
+		/// Configuration section of current component. 
 		/// </summary>
 		protected IConfigurationSection ConfigurationSection { get; }
 	}
