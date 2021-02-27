@@ -19,6 +19,14 @@ namespace Postgres.Marula.Infrastructure.Configuration
 		/// <summary>
 		/// Configuration section of current component. 
 		/// </summary>
+		/// <remarks>
+		/// <para>
+		/// Value of <see cref="IConfigurationSection.Key"/> matches <typeparamref name="TAppComponent"/> type name prefix.
+		/// </para>
+		/// <para>
+		/// Therefore, component name must have pattern '[SectionKey]AppComponent'.
+		/// </para>
+		/// </remarks>
 		protected IConfigurationSection ConfigurationSection { get; }
 	}
 }
