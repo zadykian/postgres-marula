@@ -2,12 +2,12 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using PipelineNet.Middleware;
+using Postgres.Marula.Calculations.Configuration;
 using Postgres.Marula.Calculations.ExternalDependencies;
 using Postgres.Marula.Calculations.ParameterProperties;
 using Postgres.Marula.Calculations.Parameters.Base;
 using Postgres.Marula.Calculations.ParameterValues.Base;
 using Postgres.Marula.Calculations.Pipeline.MiddlewareComponents.Base;
-using Postgres.Marula.Infrastructure.Configuration;
 using Postgres.Marula.Infrastructure.Extensions;
 
 namespace Postgres.Marula.Calculations.Pipeline.MiddlewareComponents
@@ -24,7 +24,7 @@ namespace Postgres.Marula.Calculations.Pipeline.MiddlewareComponents
 		public ValuesHistoryMiddleware(
 			ISystemStorage systemStorage,
 			IDatabaseServer databaseServer,
-			IAppConfiguration appConfiguration) : base(appConfiguration)
+			ICalculationsConfiguration calculationsConfiguration) : base(calculationsConfiguration)
 		{
 			this.systemStorage = systemStorage;
 			this.databaseServer = databaseServer;

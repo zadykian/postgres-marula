@@ -3,7 +3,8 @@ using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 using Postgres.Marula.Infrastructure.SolutionComponents;
 using Microsoft.Extensions.Configuration;
-using Postgres.Marula.Infrastructure.Configuration;
+using Postgres.Marula.Calculations.Configuration;
+using Postgres.Marula.DatabaseAccess.Configuration;
 
 namespace Postgres.Marula.Tests.Base
 {
@@ -48,6 +49,7 @@ namespace Postgres.Marula.Tests.Base
 						.AddJsonFile("appsettings.json")
 						.AddJsonFile("appsettings.local.json", optional: true)
 						.Build())
-				.AddSingleton<IAppConfiguration, DefaultAppConfiguration>();
+				.AddSingleton<ICalculationsConfiguration, DefaultCalculationsConfiguration>()
+				.AddSingleton<IDatabaseAccessConfiguration, DefaultDatabaseAccessConfiguration>();
 	}
 }

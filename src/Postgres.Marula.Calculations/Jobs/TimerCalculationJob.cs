@@ -3,8 +3,8 @@ using System.Threading.Tasks;
 using System.Timers;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Postgres.Marula.Calculations.Configuration;
 using Postgres.Marula.Calculations.Pipeline.Factory;
-using Postgres.Marula.Infrastructure.Configuration;
 using Postgres.Marula.Infrastructure.Extensions;
 
 namespace Postgres.Marula.Calculations.Jobs
@@ -18,22 +18,22 @@ namespace Postgres.Marula.Calculations.Jobs
 		private readonly ILogger<TimerCalculationJob> logger;
 
 		public TimerCalculationJob(
-			IAppConfiguration appConfiguration,
+			ICalculationsConfiguration calculationsConfiguration,
 			IPipelineFactory pipelineFactory,
 			IServiceScopeFactory serviceScopeFactory,
 			ILogger<TimerCalculationJob> logger)
 		{
-			timer = CreateTimer(appConfiguration);
+			timer = CreateTimer(calculationsConfiguration);
 			this.pipelineFactory = pipelineFactory;
 			this.serviceScopeFactory = serviceScopeFactory;
 			this.logger = logger;
 		}
 
 		/// <summary>
-		/// Create timer based on <paramref name="appConfiguration"/>. 
+		/// Create timer based on <paramref name="calculationsConfiguration"/>. 
 		/// </summary>
-		private Timer CreateTimer(IAppConfiguration appConfiguration)
-			=> appConfiguration
+		private Timer CreateTimer(ICalculationsConfiguration calculationsConfiguration)
+			=> calculationsConfiguration
 				.GetRecalculationInterval()
 				.To(interval => new Timer(interval.TotalMilliseconds) {AutoReset = false})
 				.Then(intervalTimer => intervalTimer.Elapsed += async (_, _) => await OnTimerElapsed());

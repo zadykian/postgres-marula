@@ -1,7 +1,8 @@
 using System;
 using NUnit.Framework;
+using Postgres.Marula.Calculations.Configuration;
+using Postgres.Marula.DatabaseAccess.Configuration;
 using Postgres.Marula.Infrastructure;
-using Postgres.Marula.Infrastructure.Configuration;
 using Postgres.Marula.Infrastructure.Extensions;
 using Postgres.Marula.Tests.Base;
 
@@ -14,13 +15,13 @@ namespace Postgres.Marula.Tests.Infrastructure
 	{
 		[Test]
 		public void ConnectionStringTest()
-			=> GetService<IAppConfiguration>()
+			=> GetService<IDatabaseAccessConfiguration>()
 				.GetConnectionString()
 				.To(connectionString => Assert.IsNotEmpty(connectionString));
 
 		[Test]
 		public void RecalculationIntervalTest()
-			=> GetService<IAppConfiguration>()
+			=> GetService<ICalculationsConfiguration>()
 				.GetRecalculationInterval()
 				.To(recalculationInterval => Assert.IsTrue(
 					((TimeSpan) recalculationInterval).TotalSeconds > 0
@@ -28,7 +29,7 @@ namespace Postgres.Marula.Tests.Infrastructure
 
 		[Test]
 		public void AutoAdjustmentParameterTest()
-			=> GetService<IAppConfiguration>()
+			=> GetService<ICalculationsConfiguration>()
 				.AutoAdjustIsEnabled()
 				.To(_ => Assert.Pass());
 	}
