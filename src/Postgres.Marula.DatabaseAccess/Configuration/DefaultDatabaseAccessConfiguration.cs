@@ -6,7 +6,9 @@ using Postgres.Marula.Infrastructure.TypeDecorators;
 namespace Postgres.Marula.DatabaseAccess.Configuration
 {
 	/// <inheritdoc cref="IDatabaseAccessConfiguration"/>
-	internal class DefaultDatabaseAccessConfiguration : ConfigurationBase, IDatabaseAccessConfiguration
+	internal class DefaultDatabaseAccessConfiguration :
+		ConfigurationBase<DatabaseAccessSolutionComponent>,
+		IDatabaseAccessConfiguration
 	{
 		public DefaultDatabaseAccessConfiguration(IConfiguration configuration) : base(configuration)
 		{
@@ -14,8 +16,8 @@ namespace Postgres.Marula.DatabaseAccess.Configuration
 
 		/// <inheritdoc />
 		ConnectionString IDatabaseAccessConfiguration.ConnectionString()
-			=> Configuration
-				.GetConnectionString("Default")
-				.To(connectionString => new ConnectionString(connectionString));
+			=> ConfigurationSection
+				.GetSection("ConnectionString")
+				.To(stringSection => new ConnectionString(stringSection.Value));
 	}
 }
