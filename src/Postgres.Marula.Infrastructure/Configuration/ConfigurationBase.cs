@@ -7,13 +7,13 @@ namespace Postgres.Marula.Infrastructure.Configuration
 	/// <summary>
 	/// Base class for application component configuration.
 	/// </summary>
-	public abstract class ConfigurationBase<TComponent>
-		where TComponent : IAppComponent
+	public abstract class ConfigurationBase<TAppComponent>
+		where TAppComponent : IAppComponent
 	{
 		protected ConfigurationBase(IConfiguration configuration)
-			=> ConfigurationSection = typeof(TComponent)
+			=> ConfigurationSection = typeof(TAppComponent)
 				.Name
-				.Replace("Component", string.Empty)
+				.Replace("AppComponent", string.Empty)
 				.To(configuration.GetSection);
 
 		/// <summary>

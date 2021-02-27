@@ -9,11 +9,11 @@ using Postgres.Marula.Infrastructure.AppComponents;
 namespace Postgres.Marula.Tests.Base
 {
 	/// <summary>
-	/// Base class for testing services from component <typeparamref name="TComponent"/>. 
+	/// Base class for testing services from component <typeparamref name="TAppComponent"/>. 
 	/// </summary>
 	[TestFixture]
-	internal abstract class SingleComponentTestFixtureBase<TComponent>
-		where TComponent : IAppComponent, new()
+	internal abstract class SingleComponentTestFixtureBase<TAppComponent>
+		where TAppComponent : IAppComponent, new()
 	{
 		private readonly IServiceProvider serviceProvider;
 
@@ -26,7 +26,7 @@ namespace Postgres.Marula.Tests.Base
 		private IServiceCollection CreateServiceCollection()
 		{
 			var serviceCollection = new ServiceCollection();
-			new TComponent().RegisterServices(serviceCollection);
+			new TAppComponent().RegisterServices(serviceCollection);
 			ConfigureServices(serviceCollection);
 			return serviceCollection;
 		}
