@@ -33,7 +33,7 @@ namespace Postgres.Marula.Infrastructure.TypeDecorators
 		/// <exception cref="ArgumentException">
 		/// Parameter <paramref name="connectionString"/> does not match pattern 'key1=value1; key2=value2; ...'.
 		/// </exception>
-		public static implicit operator ConnectionString(string connectionString) => new (connectionString);
+		public static implicit operator ConnectionString(string connectionString) => new(connectionString);
 
 		/// <summary>
 		/// Parse input string <paramref name="stringToParse"/> into <see cref="ConnectionString"/> instance.

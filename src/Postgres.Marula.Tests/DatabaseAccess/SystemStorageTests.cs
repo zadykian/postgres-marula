@@ -41,25 +41,25 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 
 			var parameterValues = new ParameterValueWithStatus[]
 			{
-				new (
+				new(
 					new TimeSpanParameterValue(
 						new ParameterLink("deadlock_timeout"),
 						TimeSpan.FromMilliseconds(value: 800)),
 					CalculationStatus.Applied),
 
-				new (
+				new(
 					new MemoryParameterValue(
 						new ParameterLink("log_rotation_size"),
 						new Memory(16 * 1024 * 1024)),
 					CalculationStatus.RequiresConfirmation),
 
-				new (
+				new(
 					new MemoryParameterValue(
 						new ParameterLink("wal_buffers"),
 						new Memory(8 * 1024 * 1024)),
 					CalculationStatus.RequiresServerRestart),
 
-				new (
+				new(
 					new MemoryParameterValue(
 						new ParameterLink("shared_buffers"),
 						new Memory(2 * 1024 * 1024 * 1024UL)),
