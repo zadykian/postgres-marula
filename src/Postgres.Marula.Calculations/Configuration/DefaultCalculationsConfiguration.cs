@@ -29,9 +29,5 @@ namespace Postgres.Marula.Calculations.Configuration
 				.GetSection("General:AutoAdjustParams")
 				.Value
 				.To(bool.Parse);
-
-		/// <inheritdoc />
-		Fraction ICalculationsConfiguration.TargetRelationsBloatFraction()
-			=> throw new NotImplementedException();
 	}
 }
