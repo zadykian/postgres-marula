@@ -26,6 +26,6 @@ namespace Postgres.Marula.Calculations.ExternalDependencies
 		/// <summary>
 		/// Get context of parameter named <paramref name="parameterName"/>. 
 		/// </summary>
-		Task<ParameterContext> GetParameterContextAsync(NonEmptyString parameterName);
+		ValueTask<ParameterContext> GetParameterContextAsync(NonEmptyString parameterName);
 	}
 }

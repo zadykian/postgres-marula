@@ -7,24 +7,26 @@ using Postgres.Marula.Infrastructure.TypeDecorators;
 namespace Postgres.Marula.Calculations.Configuration
 {
 	/// <inheritdoc cref="ICalculationsConfiguration"/>
-	internal class DefaultCalculationsConfiguration : ConfigurationBase, ICalculationsConfiguration
+	internal class DefaultCalculationsConfiguration :
+		ConfigurationBase<CalculationsSolutionComponent>,
+		ICalculationsConfiguration
 	{
 		public DefaultCalculationsConfiguration(IConfiguration configuration) : base(configuration)
 		{
 		}
 
 		/// <inheritdoc />
-		PositiveTimeSpan ICalculationsConfiguration.GetRecalculationInterval()
-			=> Configuration
-				.GetSection("DynamicCalculation:RecalculationIntervalInSeconds")
+		PositiveTimeSpan ICalculationsConfiguration.RecalculationInterval()
+			=> ConfigurationSection
+				.GetSection("General:RecalculationIntervalInSeconds")
 				.Value
 				.To(double.Parse)
 				.To(TimeSpan.FromSeconds);
 
 		/// <inheritdoc />
-		bool ICalculationsConfiguration.AutoAdjustIsEnabled()
-			=> Configuration
-				.GetSection("DynamicCalculation:AutoAdjustParams")
+		bool ICalculationsConfiguration.AutoAdjustmentIsEnabled()
+			=> ConfigurationSection
+				.GetSection("General:AutoAdjustParams")
 				.Value
 				.To(bool.Parse);
 	}

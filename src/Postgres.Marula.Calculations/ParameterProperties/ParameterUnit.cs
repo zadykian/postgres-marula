@@ -42,7 +42,7 @@ namespace Postgres.Marula.Calculations.ParameterProperties
 			ParameterUnit.Bytes        => "B",
 			ParameterUnit.Enum         => string.Empty,
 			ParameterUnit.None         => string.Empty,
-			_ => throw new ArgumentOutOfRangeException(nameof(parameterUnit), parameterUnit, null)
+			_ => throw new ArgumentOutOfRangeException(nameof(parameterUnit), parameterUnit, message: null)
 		};
 	}
 }

@@ -10,6 +10,6 @@ namespace Postgres.Marula.DatabaseAccess.Configuration
 		/// <summary>
 		/// Get database connection string.
 		/// </summary>
-		ConnectionString GetConnectionString();
+		ConnectionString ConnectionString();
 	}
 }

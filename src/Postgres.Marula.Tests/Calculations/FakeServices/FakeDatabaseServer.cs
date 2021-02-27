@@ -22,8 +22,8 @@ namespace Postgres.Marula.Tests.Calculations.FakeServices
 			=> throw new System.NotSupportedException();
 
 		/// <inheritdoc />
-		Task<ParameterContext> IDatabaseServer.GetParameterContextAsync(NonEmptyString parameterName)
-			=> Task.FromResult(ParameterContext.Sighup);
+		ValueTask<ParameterContext> IDatabaseServer.GetParameterContextAsync(NonEmptyString parameterName)
+			=> ValueTask.FromResult(ParameterContext.Sighup);
 
 		public bool ApplyMethodWasCalled { get; private set; }
 	}

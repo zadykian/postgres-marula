@@ -34,7 +34,7 @@ namespace Postgres.Marula.Calculations.Jobs
 		/// </summary>
 		private Timer CreateTimer(ICalculationsConfiguration calculationsConfiguration)
 			=> calculationsConfiguration
-				.GetRecalculationInterval()
+				.RecalculationInterval()
 				.To(interval => new Timer(interval.TotalMilliseconds) {AutoReset = false})
 				.Then(intervalTimer => intervalTimer.Elapsed += async (_, _) => await OnTimerElapsed());
 

@@ -37,7 +37,7 @@ namespace Postgres.Marula.DatabaseAccess
 				.AddScoped<IDbConnection>(serviceProvider
 					=> serviceProvider
 						.GetRequiredService<IDatabaseAccessConfiguration>()
-						.GetConnectionString()
+						.ConnectionString()
 						.To(connectionString => new NpgsqlConnection(connectionString)))
 				.AddScoped<IPreparedDbConnectionFactory, DefaultPreparedDbConnectionFactory>()
 				.AddScoped<IDatabaseServer, DefaultDatabaseServer>()

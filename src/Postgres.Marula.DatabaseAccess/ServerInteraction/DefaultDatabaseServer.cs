@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -104,24 +105,39 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 				: new RawParameterValue(parameterValue);
 		}
 
+		private static readonly ConcurrentDictionary<NonEmptyString, ParameterContext> contextCache = new();
+
 		/// <inheritdoc />
-		async Task<ParameterContext> IDatabaseServer.GetParameterContextAsync(NonEmptyString parameterName)
+		async ValueTask<ParameterContext> IDatabaseServer.GetParameterContextAsync(NonEmptyString parameterName)
 		{
+			if (contextCache.TryGetValue(parameterName, out var parameterContext))
+			{
+				return parameterContext;
+			}
+
 			var commandText = string.Intern($@"
 				select context
 				from pg_catalog.pg_settings
 				where name = @{nameof(parameterName)};");
 
 			var dbConnection = await GetConnectionAsync();
-			var parameterContext = await dbConnection.QuerySingleAsync<NonEmptyString>(commandText, new {parameterName});
+			var stringRepresentation = await dbConnection.QuerySingleAsync<NonEmptyString>(commandText, new {parameterName});
 
-			return typeof(ParameterContext)
+			parameterContext = GetFromStringRepresentation(stringRepresentation);
+			contextCache[parameterName] = parameterContext;
+			return parameterContext;
+		}
+
+		/// <summary>
+		/// Get parameter context from its string representation. 
+		/// </summary>
+		private static ParameterContext GetFromStringRepresentation(NonEmptyString stringRepresentation)
+			=> typeof(ParameterContext)
 				.GetFields(BindingFlags.Public | BindingFlags.Static)
 				.Select(memberInfo => (
 					ContextValue: (ParameterContext) memberInfo.GetValue(obj: null)!,
 					StringRepresentation: memberInfo.GetCustomAttribute<StringRepresentationAttribute>()!.Value))
-				.Single(tuple => tuple.StringRepresentation == parameterContext)
+				.Single(tuple => tuple.StringRepresentation == stringRepresentation)
 				.ContextValue;
-		}
 	}
 }
