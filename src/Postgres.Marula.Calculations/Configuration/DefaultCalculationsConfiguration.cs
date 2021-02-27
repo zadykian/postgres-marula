@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using Microsoft.Extensions.Configuration;
 using Postgres.Marula.Infrastructure.Configuration;
 using Postgres.Marula.Infrastructure.Extensions;
@@ -17,9 +16,7 @@ namespace Postgres.Marula.Calculations.Configuration
 		/// <inheritdoc />
 		PositiveTimeSpan ICalculationsConfiguration.GetRecalculationInterval()
 			=> Configuration
-				.GetSection("DynamicCalculation")
-				.GetChildren()
-				.Single(section => section.Key == "RecalculationIntervalInSeconds")
+				.GetSection("DynamicCalculation:RecalculationIntervalInSeconds")
 				.Value
 				.To(double.Parse)
 				.To(TimeSpan.FromSeconds);
@@ -27,9 +24,7 @@ namespace Postgres.Marula.Calculations.Configuration
 		/// <inheritdoc />
 		bool ICalculationsConfiguration.AutoAdjustIsEnabled()
 			=> Configuration
-				.GetSection("DynamicCalculation")
-				.GetChildren()
-				.Single(section => section.Key == "AutoAdjustParams")
+				.GetSection("DynamicCalculation:AutoAdjustParams")
 				.Value
 				.To(bool.Parse);
 	}
