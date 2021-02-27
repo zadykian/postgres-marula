@@ -1,5 +1,6 @@
 using System.Runtime.CompilerServices;
 using Microsoft.Extensions.DependencyInjection;
+using Postgres.Marula.Calculations.Configuration;
 using Postgres.Marula.Calculations.Jobs;
 using Postgres.Marula.Calculations.Parameters.Base;
 using Postgres.Marula.Calculations.ParameterValueParsing;
@@ -19,6 +20,7 @@ namespace Postgres.Marula.Calculations
 		/// <inheritdoc />
 		void ISolutionComponent.RegisterServices(IServiceCollection serviceCollection)
 			=> serviceCollection
+				.AddSingleton<ICalculationsConfiguration, DefaultCalculationsConfiguration>()
 				.AddBasedOn<IParameter>(ServiceLifetime.Transient)
 				.AddTransient<ParametersManagementContext>()
 				.AddTransient<ValueCalculationsMiddleware>()

@@ -3,9 +3,9 @@ using System.Collections.Immutable;
 using System.Linq;
 using System.Threading.Tasks;
 using PipelineNet.Middleware;
+using Postgres.Marula.Calculations.Configuration;
 using Postgres.Marula.Calculations.ExternalDependencies;
 using Postgres.Marula.Calculations.Pipeline.MiddlewareComponents.Base;
-using Postgres.Marula.Infrastructure.Configuration;
 using Postgres.Marula.Infrastructure.Extensions;
 
 namespace Postgres.Marula.Calculations.Pipeline.MiddlewareComponents
@@ -20,7 +20,7 @@ namespace Postgres.Marula.Calculations.Pipeline.MiddlewareComponents
 
 		public ParametersAdjustmentMiddleware(
 			IDatabaseServer databaseServer,
-			IAppConfiguration appConfiguration) : base(appConfiguration)
+			ICalculationsConfiguration calculationsConfiguration) : base(calculationsConfiguration)
 			=> this.databaseServer = databaseServer;
 
 		/// <inheritdoc />

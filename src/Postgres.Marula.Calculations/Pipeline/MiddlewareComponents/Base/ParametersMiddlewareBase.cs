@@ -1,5 +1,5 @@
+using Postgres.Marula.Calculations.Configuration;
 using Postgres.Marula.Calculations.ParameterValues.Base;
-using Postgres.Marula.Infrastructure.Configuration;
 
 namespace Postgres.Marula.Calculations.Pipeline.MiddlewareComponents.Base
 {
@@ -8,14 +8,14 @@ namespace Postgres.Marula.Calculations.Pipeline.MiddlewareComponents.Base
 	/// </summary>
 	internal abstract class ParametersMiddlewareBase
 	{
-		private readonly IAppConfiguration appConfiguration;
+		private readonly ICalculationsConfiguration calculationsConfiguration;
 
-		protected ParametersMiddlewareBase(IAppConfiguration appConfiguration) => this.appConfiguration = appConfiguration;
+		protected ParametersMiddlewareBase(ICalculationsConfiguration calculationsConfiguration) => this.calculationsConfiguration = calculationsConfiguration;
 
 		/// <summary>
 		/// Check if parameter value <paramref name="parameterValue"/>
 		/// can be applied to database server.
 		/// </summary>
-		protected bool ParameterAdjustmentIsAllowed(IParameterValue parameterValue) => appConfiguration.AutoAdjustIsEnabled();
+		protected bool ParameterAdjustmentIsAllowed(IParameterValue parameterValue) => calculationsConfiguration.AutoAdjustIsEnabled();
 	}
 }
