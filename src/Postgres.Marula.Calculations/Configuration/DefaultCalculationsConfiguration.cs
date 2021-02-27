@@ -14,7 +14,7 @@ namespace Postgres.Marula.Calculations.Configuration
 		}
 
 		/// <inheritdoc />
-		PositiveTimeSpan ICalculationsConfiguration.GetRecalculationInterval()
+		PositiveTimeSpan ICalculationsConfiguration.RecalculationInterval()
 			=> Configuration
 				.GetSection("DynamicCalculation:RecalculationIntervalInSeconds")
 				.Value
@@ -22,10 +22,14 @@ namespace Postgres.Marula.Calculations.Configuration
 				.To(TimeSpan.FromSeconds);
 
 		/// <inheritdoc />
-		bool ICalculationsConfiguration.AutoAdjustIsEnabled()
+		bool ICalculationsConfiguration.AutoAdjustmentIsEnabled()
 			=> Configuration
 				.GetSection("DynamicCalculation:AutoAdjustParams")
 				.Value
 				.To(bool.Parse);
+
+		/// <inheritdoc />
+		Fraction ICalculationsConfiguration.TargetRelationsBloatFraction()
+			=> throw new NotImplementedException();
 	}
 }

@@ -16,13 +16,13 @@ namespace Postgres.Marula.Tests.Infrastructure
 		[Test]
 		public void ConnectionStringTest()
 			=> GetService<IDatabaseAccessConfiguration>()
-				.GetConnectionString()
+				.ConnectionString()
 				.To(connectionString => Assert.IsNotEmpty(connectionString));
 
 		[Test]
 		public void RecalculationIntervalTest()
 			=> GetService<ICalculationsConfiguration>()
-				.GetRecalculationInterval()
+				.RecalculationInterval()
 				.To(recalculationInterval => Assert.IsTrue(
 					((TimeSpan) recalculationInterval).TotalSeconds > 0
 				));
@@ -30,7 +30,7 @@ namespace Postgres.Marula.Tests.Infrastructure
 		[Test]
 		public void AutoAdjustmentParameterTest()
 			=> GetService<ICalculationsConfiguration>()
-				.AutoAdjustIsEnabled()
+				.AutoAdjustmentIsEnabled()
 				.To(_ => Assert.Pass());
 	}
 }

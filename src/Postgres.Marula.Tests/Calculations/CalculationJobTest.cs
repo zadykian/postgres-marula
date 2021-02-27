@@ -23,7 +23,7 @@ namespace Postgres.Marula.Tests.Calculations
 			calculationJob.Run();
 
 			var configuration = GetService<ICalculationsConfiguration>();
-			await Task.Delay(configuration.GetRecalculationInterval() + TimeSpan.FromMilliseconds(value: 100));
+			await Task.Delay(configuration.RecalculationInterval() + TimeSpan.FromMilliseconds(value: 100));
 
 			var databaseTracker = GetService<IDatabaseServerAccessTracker>();
 			Assert.IsTrue(databaseTracker.ApplyMethodWasCalled);

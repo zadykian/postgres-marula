@@ -16,6 +16,6 @@ namespace Postgres.Marula.Calculations.Pipeline.MiddlewareComponents.Base
 		/// Check if parameter value <paramref name="parameterValue"/>
 		/// can be applied to database server.
 		/// </summary>
-		protected bool ParameterAdjustmentIsAllowed(IParameterValue parameterValue) => calculationsConfiguration.AutoAdjustIsEnabled();
+		protected bool ParameterAdjustmentIsAllowed(IParameterValue parameterValue) => calculationsConfiguration.AutoAdjustmentIsEnabled();
 	}
 }

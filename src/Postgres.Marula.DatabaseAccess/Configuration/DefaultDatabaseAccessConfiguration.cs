@@ -13,7 +13,7 @@ namespace Postgres.Marula.DatabaseAccess.Configuration
 		}
 
 		/// <inheritdoc />
-		ConnectionString IDatabaseAccessConfiguration.GetConnectionString()
+		ConnectionString IDatabaseAccessConfiguration.ConnectionString()
 			=> Configuration
 				.GetConnectionString("Default")
 				.To(connectionString => new ConnectionString(connectionString));
