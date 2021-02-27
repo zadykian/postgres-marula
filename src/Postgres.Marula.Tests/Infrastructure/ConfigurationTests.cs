@@ -32,5 +32,11 @@ namespace Postgres.Marula.Tests.Infrastructure
 			=> GetService<ICalculationsConfiguration>()
 				.AutoAdjustmentIsEnabled()
 				.To(_ => Assert.Pass());
+
+		[Test]
+		public void TargetRelationsBloatFractionTest()
+			=> GetService<ICalculationsConfiguration>()
+				.TargetRelationsBloatFraction()
+				.To(_ => Assert.Pass());
 	}
 }

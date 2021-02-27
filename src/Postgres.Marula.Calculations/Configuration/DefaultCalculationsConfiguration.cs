@@ -32,6 +32,9 @@ namespace Postgres.Marula.Calculations.Configuration
 
 		/// <inheritdoc />
 		Fraction ICalculationsConfiguration.TargetRelationsBloatFraction()
-			=> throw new NotImplementedException();
+			=> ConfigurationSection
+				.GetSection("Autovacuum:TargetRelationsBloatFraction")
+				.Value
+				.To(decimal.Parse);
 	}
 }
