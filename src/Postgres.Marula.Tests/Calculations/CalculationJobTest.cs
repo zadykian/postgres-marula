@@ -1,8 +1,8 @@
 using System;
 using System.Threading.Tasks;
 using NUnit.Framework;
+using Postgres.Marula.Calculations.Configuration;
 using Postgres.Marula.Calculations.Jobs;
-using Postgres.Marula.Infrastructure.Configuration;
 using Postgres.Marula.Tests.Calculations.Base;
 using Postgres.Marula.Tests.Calculations.FakeServices;
 
@@ -22,7 +22,7 @@ namespace Postgres.Marula.Tests.Calculations
 			var calculationJob = GetService<ICalculationJob>();
 			calculationJob.Run();
 
-			var configuration = GetService<IAppConfiguration>();
+			var configuration = GetService<ICalculationsConfiguration>();
 			await Task.Delay(configuration.GetRecalculationInterval() + TimeSpan.FromMilliseconds(value: 100));
 
 			var databaseTracker = GetService<IDatabaseServerAccessTracker>();

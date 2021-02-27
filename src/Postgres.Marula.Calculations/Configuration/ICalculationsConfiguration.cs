@@ -1,17 +1,12 @@
 using Postgres.Marula.Infrastructure.TypeDecorators;
 
-namespace Postgres.Marula.Infrastructure.Configuration
+namespace Postgres.Marula.Calculations.Configuration
 {
 	/// <summary>
 	/// Application configuration.
 	/// </summary>
-	public interface IAppConfiguration
+	internal interface ICalculationsConfiguration
 	{
-		/// <summary>
-		/// Get database connection string.
-		/// </summary>
-		ConnectionString GetConnectionString();
-
 		/// <summary>
 		/// Get parameters recalculation interval. 
 		/// </summary>
