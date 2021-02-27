@@ -8,7 +8,7 @@ namespace Postgres.Marula.Calculations.Configuration
 {
 	/// <inheritdoc cref="ICalculationsConfiguration"/>
 	internal class DefaultCalculationsConfiguration :
-		ConfigurationBase<CalculationsSolutionComponent>,
+		ConfigurationBase<CalculationsAppComponent>,
 		ICalculationsConfiguration
 	{
 		public DefaultCalculationsConfiguration(IConfiguration configuration) : base(configuration)
@@ -29,5 +29,12 @@ namespace Postgres.Marula.Calculations.Configuration
 				.GetSection("General:AutoAdjustParams")
 				.Value
 				.To(bool.Parse);
+
+		/// <inheritdoc />
+		Fraction ICalculationsConfiguration.TargetRelationsBloatFraction()
+			=> ConfigurationSection
+				.GetSection("Autovacuum:TargetRelationsBloatFraction")
+				.Value
+				.To(decimal.Parse);
 	}
 }

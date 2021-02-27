@@ -7,18 +7,18 @@ using Postgres.Marula.Calculations.ParameterValueParsing;
 using Postgres.Marula.Calculations.Pipeline;
 using Postgres.Marula.Calculations.Pipeline.Factory;
 using Postgres.Marula.Calculations.Pipeline.MiddlewareComponents;
+using Postgres.Marula.Infrastructure.AppComponents;
 using Postgres.Marula.Infrastructure.Extensions;
-using Postgres.Marula.Infrastructure.SolutionComponents;
 
 [assembly: InternalsVisibleTo("Postgres.Marula.Tests")]
 
 namespace Postgres.Marula.Calculations
 {
 	/// <inheritdoc />
-	public class CalculationsSolutionComponent : ISolutionComponent
+	public class CalculationsAppComponent : IAppComponent
 	{
 		/// <inheritdoc />
-		void ISolutionComponent.RegisterServices(IServiceCollection serviceCollection)
+		void IAppComponent.RegisterServices(IServiceCollection serviceCollection)
 			=> serviceCollection
 				.AddSingleton<ICalculationsConfiguration, DefaultCalculationsConfiguration>()
 				.AddBasedOn<IParameter>(ServiceLifetime.Transient)

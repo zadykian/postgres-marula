@@ -36,7 +36,7 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 		/// Test case source for <see cref="GetRawParameterValueTest"/>. 
 		/// </summary>
 		private static IEnumerable<(NonEmptyString ParameterName, bool WithRange)> ParameterNameTestCaseSource()
-			=> new (NonEmptyString, bool)[]
+			=> new(NonEmptyString, bool)[]
 			{
 				("autovacuum", false),
 				("autovacuum_vacuum_cost_delay", true),

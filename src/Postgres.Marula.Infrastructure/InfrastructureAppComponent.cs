@@ -1,16 +1,16 @@
 using System.Runtime.CompilerServices;
 using Microsoft.Extensions.DependencyInjection;
-using Postgres.Marula.Infrastructure.SolutionComponents;
+using Postgres.Marula.Infrastructure.AppComponents;
 
 [assembly: InternalsVisibleTo("Postgres.Marula.Tests")]
 
 namespace Postgres.Marula.Infrastructure
 {
 	/// <inheritdoc />
-	public class InfrastructureSolutionComponent : ISolutionComponent
+	public class InfrastructureAppComponent : IAppComponent
 	{
 		/// <inheritdoc />
-		void ISolutionComponent.RegisterServices(IServiceCollection serviceCollection)
+		void IAppComponent.RegisterServices(IServiceCollection serviceCollection)
 		{
 		}
 	}

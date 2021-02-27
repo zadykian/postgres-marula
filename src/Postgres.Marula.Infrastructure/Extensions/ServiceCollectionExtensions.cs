@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
-using Postgres.Marula.Infrastructure.SolutionComponents;
+using Postgres.Marula.Infrastructure.AppComponents;
 
 namespace Postgres.Marula.Infrastructure.Extensions
 {
@@ -44,13 +44,13 @@ namespace Postgres.Marula.Infrastructure.Extensions
 		}
 
 		/// <summary>
-		/// Add all services from component <typeparamref name="TComponent"/>
+		/// Add all services from component <typeparamref name="TAppComponent"/>
 		/// to collection <paramref name="serviceCollection"/>. 
 		/// </summary>
-		public static IServiceCollection AddComponent<TComponent>(this IServiceCollection serviceCollection)
-			where TComponent : ISolutionComponent, new()
+		public static IServiceCollection AddComponent<TAppComponent>(this IServiceCollection serviceCollection)
+			where TAppComponent : IAppComponent, new()
 		{
-			new TComponent().RegisterServices(serviceCollection);
+			new TAppComponent().RegisterServices(serviceCollection);
 			return serviceCollection;
 		}
 	}

@@ -1,19 +1,19 @@
 using System;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
-using Postgres.Marula.Infrastructure.SolutionComponents;
 using Microsoft.Extensions.Configuration;
 using Postgres.Marula.Calculations.Configuration;
 using Postgres.Marula.DatabaseAccess.Configuration;
+using Postgres.Marula.Infrastructure.AppComponents;
 
 namespace Postgres.Marula.Tests.Base
 {
 	/// <summary>
-	/// Base class for testing services from component <typeparamref name="TSolutionComponent"/>. 
+	/// Base class for testing services from component <typeparamref name="TAppComponent"/>. 
 	/// </summary>
 	[TestFixture]
-	internal abstract class SingleComponentTestFixtureBase<TSolutionComponent>
-		where TSolutionComponent : ISolutionComponent, new()
+	internal abstract class SingleComponentTestFixtureBase<TAppComponent>
+		where TAppComponent : IAppComponent, new()
 	{
 		private readonly IServiceProvider serviceProvider;
 
@@ -26,7 +26,7 @@ namespace Postgres.Marula.Tests.Base
 		private IServiceCollection CreateServiceCollection()
 		{
 			var serviceCollection = new ServiceCollection();
-			new TSolutionComponent().RegisterServices(serviceCollection);
+			new TAppComponent().RegisterServices(serviceCollection);
 			ConfigureServices(serviceCollection);
 			return serviceCollection;
 		}

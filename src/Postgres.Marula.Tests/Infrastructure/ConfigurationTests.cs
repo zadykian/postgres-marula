@@ -11,7 +11,7 @@ namespace Postgres.Marula.Tests.Infrastructure
 	/// <summary>
 	/// Application configuration tests.
 	/// </summary>
-	internal class ConfigurationTests : SingleComponentTestFixtureBase<InfrastructureSolutionComponent>
+	internal class ConfigurationTests : SingleComponentTestFixtureBase<InfrastructureAppComponent>
 	{
 		[Test]
 		public void ConnectionStringTest()
@@ -31,6 +31,12 @@ namespace Postgres.Marula.Tests.Infrastructure
 		public void AutoAdjustmentParameterTest()
 			=> GetService<ICalculationsConfiguration>()
 				.AutoAdjustmentIsEnabled()
+				.To(_ => Assert.Pass());
+
+		[Test]
+		public void TargetRelationsBloatFractionTest()
+			=> GetService<ICalculationsConfiguration>()
+				.TargetRelationsBloatFraction()
 				.To(_ => Assert.Pass());
 	}
 }

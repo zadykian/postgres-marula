@@ -39,7 +39,7 @@ namespace Postgres.Marula.Infrastructure.TypeDecorators
 		/// <summary>
 		/// Implicit cast operator <see cref="TimeSpan"/> -> <see cref="PositiveTimeSpan"/>. 
 		/// </summary>
-		public static implicit operator PositiveTimeSpan(TimeSpan timeSpan) => new (timeSpan);
+		public static implicit operator PositiveTimeSpan(TimeSpan timeSpan) => new(timeSpan);
 
 		/// <summary>
 		/// Implicit cast operator <see cref="PositiveTimeSpan"/> -> <see cref="TimeSpan"/>. 

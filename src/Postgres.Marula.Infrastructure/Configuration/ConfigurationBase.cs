@@ -1,24 +1,32 @@
 using Microsoft.Extensions.Configuration;
+using Postgres.Marula.Infrastructure.AppComponents;
 using Postgres.Marula.Infrastructure.Extensions;
-using Postgres.Marula.Infrastructure.SolutionComponents;
 
 namespace Postgres.Marula.Infrastructure.Configuration
 {
 	/// <summary>
 	/// Base class for application component configuration.
 	/// </summary>
-	public abstract class ConfigurationBase<TComponent>
-		where TComponent : ISolutionComponent
+	public abstract class ConfigurationBase<TAppComponent>
+		where TAppComponent : IAppComponent
 	{
 		protected ConfigurationBase(IConfiguration configuration)
-			=> ConfigurationSection = typeof(TComponent)
+			=> ConfigurationSection = typeof(TAppComponent)
 				.Name
-				.Replace("SolutionComponent", string.Empty)
+				.Replace("AppComponent", string.Empty)
 				.To(configuration.GetSection);
 
 		/// <summary>
-		/// Configuration section of current solution component. 
+		/// Configuration section of current component. 
 		/// </summary>
+		/// <remarks>
+		/// <para>
+		/// Value of <see cref="IConfigurationSection.Key"/> matches <typeparamref name="TAppComponent"/> type name prefix.
+		/// </para>
+		/// <para>
+		/// Therefore, component name must have pattern '[SectionKey]AppComponent'.
+		/// </para>
+		/// </remarks>
 		protected IConfigurationSection ConfigurationSection { get; }
 	}
 }
