@@ -1,3 +1,4 @@
+using System;
 using System.Data;
 using System.Runtime.CompilerServices;
 using Dapper;
@@ -34,13 +35,18 @@ namespace Postgres.Marula.DatabaseAccess
 				.AddSingleton<ISqlScriptsProvider, AssemblyResourcesSqlScriptsProvider>()
 				.AddSingleton<ISqlScriptsExecutor, DefaultSqlScriptsExecutor>()
 				.AddSingleton<IDatabaseAccessConfiguration, DefaultDatabaseAccessConfiguration>()
-				.AddScoped<IDbConnection>(serviceProvider
-					=> serviceProvider
-						.GetRequiredService<IDatabaseAccessConfiguration>()
-						.ConnectionString()
-						.To(connectionString => new NpgsqlConnection(connectionString)))
+				.AddScoped(DbConnectionFactory)
 				.AddScoped<IPreparedDbConnectionFactory, DefaultPreparedDbConnectionFactory>()
 				.AddScoped<IDatabaseServer, DefaultDatabaseServer>()
 				.AddScoped<ISystemStorage, DefaultSystemStorage>();
+
+		/// <summary>
+		/// Database connection factory method. 
+		/// </summary>
+		private static IDbConnection DbConnectionFactory(IServiceProvider serviceProvider)
+			=> serviceProvider
+				.GetRequiredService<IDatabaseAccessConfiguration>()
+				.ConnectionString()
+				.To(connectionString => new NpgsqlConnection(connectionString));
 	}
 }
