@@ -42,7 +42,7 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 		/// </summary>
 		private string GetCommandTextToInsertValues(IEnumerable<ParameterValueWithStatus> parameterValues)
 			=> $@"
-				with parameter_values (parameter_name, calculated_value, status) as
+				with parameter_values (parameter_name, calculated_value, unit, status) as
 				(
 					select *
 					from (
@@ -51,10 +51,11 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 					) as values
 				)
 				insert into {namingConventions.SystemSchemaName}.{namingConventions.ValuesHistoryTableName}
-					(parameter_id, calculated_value, status)
+					(parameter_id, calculated_value, unit, status)
 				select
 					parameters.id,
 					parameter_values.calculated_value,
+					parameter_values.unit,
 					parameter_values.status
 				from
 					{namingConventions.SystemSchemaName}.{namingConventions.ParametersTableName} as parameters
@@ -72,6 +73,10 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 				{
 					$"'{parameterValue.Value.ParameterLink.Name}'",
 					$"'{parameterValue.Value.AsString()}'",
+
+					$"'{parameterValue.Value.Unit.StringRepresentation()}'" +
+						$"::{namingConventions.SystemSchemaName}.{namingConventions.ParameterUnitEnumName}",
+
 					$"'{parameterValue.CalculationStatus.StringRepresentation()}'" +
 						$"::{namingConventions.SystemSchemaName}.{namingConventions.CalculationStatusEnumName}"
 				}

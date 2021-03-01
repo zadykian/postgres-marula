@@ -2,7 +2,7 @@
 
 set search_path to SYSTEM_SCHEMA_NAME_TO_REPLACE;
 
-create type parameter_unit as enum
+create type UNIT_ENUM_NAME_TO_REPLACE as enum
 (
 	'ms',
 	'bytes',
@@ -10,4 +10,4 @@ create type parameter_unit as enum
 	'none'
 );
 
-comment on type parameter_unit is 'Unit of parameter calculated by marula.';
+comment on type UNIT_ENUM_NAME_TO_REPLACE is 'Unit of parameter calculated by marula.';

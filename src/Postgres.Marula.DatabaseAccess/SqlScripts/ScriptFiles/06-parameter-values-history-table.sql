@@ -7,7 +7,7 @@ create table VALUES_HISTORY_TABLE_NAME_TO_REPLACE
 	id                    bigserial                   primary key,
 	parameter_id          smallint                    not null references calculated_parameters(id),
 	calculated_value      non_empty_string            not null,
-	unit			      parameter_unit              not null,
+	unit			      UNIT_ENUM_NAME_TO_REPLACE   not null,
 	status                STATUS_ENUM_NAME_TO_REPLACE not null,
 	calculation_date_time timestamp                   not null default now()
 );
