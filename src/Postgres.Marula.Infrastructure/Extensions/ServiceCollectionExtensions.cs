@@ -48,6 +48,9 @@ namespace Postgres.Marula.Infrastructure.Extensions
 		/// Add all registered services with service type <typeparamref name="TExisting"/>
 		/// as services of type <typeparamref name="TNew"/>.
 		/// </summary>
+		/// <remarks>
+		/// Services of <typeparamref name="TNew"/> will be resolvable only as <see cref="IEnumerable{TNew}"/>.
+		/// </remarks>
 		public static IServiceCollection Forward<TExisting, TNew>(this IServiceCollection serviceCollection)
 			where TExisting : class, TNew
 			where TNew : notnull
@@ -55,10 +58,7 @@ namespace Postgres.Marula.Infrastructure.Extensions
 				.AddTransient(provider
 					=> provider
 						.GetRequiredService<IEnumerable<TExisting>>()
-						.Cast<TNew>())
-				.AddTransient(provider
-					=> provider
-						.GetRequiredService<TExisting>());
+						.Cast<TNew>());
 
 		/// <summary>
 		/// Add all services from component <typeparamref name="TAppComponent"/>

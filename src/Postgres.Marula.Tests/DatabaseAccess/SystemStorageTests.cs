@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Immutable;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 using Postgres.Marula.Calculations.ExternalDependencies;
 using Postgres.Marula.Calculations.ParameterProperties;
@@ -17,6 +18,17 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 	/// </summary>
 	internal class SystemStorageTests : DatabaseAccessTestFixtureBase
 	{
+		protected override void ConfigureServices(IServiceCollection serviceCollection)
+		{
+			base.ConfigureServices(serviceCollection);
+
+			serviceCollection
+				.AddSingleton<IParameterLink>(new ParameterLink("deadlock_timeout"))
+				.AddSingleton<IParameterLink>(new ParameterLink("log_rotation_size"))
+				.AddSingleton<IParameterLink>(new ParameterLink("wal_buffers"))
+				.AddSingleton<IParameterLink>(new ParameterLink("shared_buffers"));
+		}
+
 		/// <summary>
 		/// Insert empty collection of values. 
 		/// </summary>

@@ -81,9 +81,9 @@ namespace Postgres.Marula.DatabaseAccess.ConnectionFactory
 		private async Task FillParameterDictionaryTable(IDbConnection dbConnection)
 		{
 			var parameterNames = allParameterLinks
-				.Select(parameterLink => parameterLink.Name)
+				.Select(parameterLink => (string) parameterLink.Name)
 				.ToImmutableArray();
-			
+
 			var commandText = $@"
 				insert into {namingConventions.SystemSchemaName}.{namingConventions.ParametersTableName}
 					(name)
