@@ -38,7 +38,7 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 		}
 
 		/// <summary>
-		/// Get insert statement to save calculated values to <see cref="INamingConventions.ValuesHistoryTableName"/> table. 
+		/// Get insert statement to save calculated values to <see cref="INamingConventions.ValuesHistoryTableName"/> table.
 		/// </summary>
 		private string GetCommandTextToInsertValues(IEnumerable<ParameterValueWithStatus> parameterValues)
 			=> $@"
@@ -61,7 +61,7 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 					{namingConventions.SystemSchemaName}.{namingConventions.ParametersTableName} as parameters
 
 				-- perform right join to fail in case when
-                -- parameters dictionary table is not consistent.
+				-- parameters dictionary table is not consistent.
 				right join
 					parameter_values on parameters.name = parameter_values.parameter_name;";
 
