@@ -3,6 +3,8 @@ using System.Data;
 using System.Data.Common;
 using System.Threading;
 using System.Threading.Tasks;
+using Dapper;
+using Postgres.Marula.DatabaseAccess.Conventions;
 using Postgres.Marula.DatabaseAccess.SqlScripts.Executor;
 
 namespace Postgres.Marula.DatabaseAccess.ConnectionFactory
@@ -12,16 +14,19 @@ namespace Postgres.Marula.DatabaseAccess.ConnectionFactory
 	{
 		private readonly Lazy<Task<IDbConnection>> lazyPreparedConnection;
 		private readonly ISqlScriptsExecutor sqlScriptsExecutor;
+		private readonly INamingConventions namingConventions;
 
 		public DefaultPreparedDbConnectionFactory(
 			IDbConnection dbConnection,
-			ISqlScriptsExecutor sqlScriptsExecutor)
+			ISqlScriptsExecutor sqlScriptsExecutor,
+			INamingConventions namingConventions)
 		{
 			lazyPreparedConnection = new Lazy<Task<IDbConnection>>(
 				() => PrepareConnectionAsync(dbConnection),
 				LazyThreadSafetyMode.PublicationOnly);
 
 			this.sqlScriptsExecutor = sqlScriptsExecutor;
+			this.namingConventions = namingConventions;
 		}
 
 		/// <inheritdoc />
@@ -38,8 +43,27 @@ namespace Postgres.Marula.DatabaseAccess.ConnectionFactory
 				else dbConnection.Open();
 			}
 
+			if (await DatabaseIsPrepared(dbConnection))
+			{
+				return dbConnection;
+			}
+
 			await sqlScriptsExecutor.ExecuteScriptsAsync(dbConnection);
 			return dbConnection;
+		}
+		
+		/// <summary>
+		/// Figure out is database is prepared already.
+		/// </summary>
+		private async Task<bool> DatabaseIsPrepared(IDbConnection dbConnection)
+		{
+			var commandText = string.Intern($@"
+				select not exists (
+					select null
+					from pg_catalog.pg_namespace
+					where nspname = @{nameof(INamingConventions.SystemSchemaName)});");
+
+			return await dbConnection.QuerySingleAsync<bool>(commandText, new {namingConventions.SystemSchemaName});
 		}
 	}
 }
