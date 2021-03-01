@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 using Postgres.Marula.Infrastructure.AppComponents;
@@ -48,19 +49,16 @@ namespace Postgres.Marula.Infrastructure.Extensions
 		/// as services of type <typeparamref name="TNew"/>.
 		/// </summary>
 		public static IServiceCollection Forward<TExisting, TNew>(this IServiceCollection serviceCollection)
-			where TExisting : TNew
+			where TExisting : class, TNew
 			where TNew : notnull
-		{
-			serviceCollection
-				.Where(descriptor => descriptor.ServiceType == typeof(TExisting))
-				.Select(descriptor => new ServiceDescriptor(
-					typeof(TNew),
-					provider => provider.GetRequiredService<TExisting>(),
-					descriptor.Lifetime))
-				.ForEach(serviceCollection.Add);
-
-			return serviceCollection;
-		}
+			=> serviceCollection
+				.AddTransient(provider
+					=> provider
+						.GetRequiredService<IEnumerable<TExisting>>()
+						.Cast<TNew>())
+				.AddTransient(provider
+					=> provider
+						.GetRequiredService<TExisting>());
 
 		/// <summary>
 		/// Add all services from component <typeparamref name="TAppComponent"/>

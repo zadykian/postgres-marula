@@ -3,9 +3,11 @@ using System.Threading.Tasks;
 using Dapper;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
+using Postgres.Marula.Calculations.Parameters.Base;
 using Postgres.Marula.Calculations.ParameterValueParsing;
 using Postgres.Marula.DatabaseAccess;
 using Postgres.Marula.DatabaseAccess.Conventions;
+using Postgres.Marula.Infrastructure.Extensions;
 using Postgres.Marula.Infrastructure.TypeDecorators;
 using Postgres.Marula.Tests.Base;
 
@@ -38,7 +40,11 @@ namespace Postgres.Marula.Tests.DatabaseAccess.Base
 			base.ConfigureServices(serviceCollection);
 			serviceCollection
 				.AddSingleton<INamingConventions, TestNamingConventions>()
-				.AddSingleton<IParameterValueParser, DefaultParameterValueParser>();
+				.AddSingleton<IParameterValueParser, DefaultParameterValueParser>()
+
+				// parameters are required for dictionary table filling.
+				.AddBasedOn<IParameter>(ServiceLifetime.Transient)
+				.Forward<IParameter, IParameterLink>();
 		}
 
 		/// <inheritdoc />
