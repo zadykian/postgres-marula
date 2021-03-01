@@ -58,7 +58,7 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 		{
 			if (parameterValue is not FractionParameterValue fractionParameterValue)
 			{
-				return $"{parameterValue.AsString()}{parameterValue.Unit.AsString()}";
+				return $"{parameterValue.AsString()}{parameterValue.Unit.NumberSuffix()}";
 			}
 
 			var commandText = string.Intern($@"
