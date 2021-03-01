@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using Microsoft.Extensions.Configuration;
 using Postgres.Marula.Infrastructure.Configuration;
 using Postgres.Marula.Infrastructure.Extensions;
@@ -20,7 +21,7 @@ namespace Postgres.Marula.Calculations.Configuration
 			=> ConfigurationSection
 				.GetSection("General:RecalculationIntervalInSeconds")
 				.Value
-				.To(double.Parse)
+				.To(stringValue => double.Parse(stringValue, CultureInfo.InvariantCulture))
 				.To(TimeSpan.FromSeconds);
 
 		/// <inheritdoc />
@@ -35,6 +36,6 @@ namespace Postgres.Marula.Calculations.Configuration
 			=> ConfigurationSection
 				.GetSection("Autovacuum:TargetRelationsBloatFraction")
 				.Value
-				.To(decimal.Parse);
+				.To(stringValue => decimal.Parse(stringValue, CultureInfo.InvariantCulture));
 	}
 }

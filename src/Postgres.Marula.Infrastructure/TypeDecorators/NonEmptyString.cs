@@ -9,10 +9,16 @@ namespace Postgres.Marula.Infrastructure.TypeDecorators
 	{
 		private readonly string underlyingValue;
 
-		private NonEmptyString(string stringValue)
-			=> this.underlyingValue = string.IsNullOrWhiteSpace(stringValue)
-				? throw new ArgumentException("String value can't be whitespace.", nameof(stringValue))
-				: stringValue;
+		private NonEmptyString(string underlyingValue)
+			=> this.underlyingValue = string.IsNullOrWhiteSpace(underlyingValue)
+				? throw new ArgumentException("String value can't be whitespace.", nameof(underlyingValue))
+				: underlyingValue;
+
+		/// <summary>
+		/// Replace substring <paramref name="substring"/> with value <paramref name="replaceWith"/>
+		/// and return new <see cref="NonEmptyString"/> instance. 
+		/// </summary>
+		public NonEmptyString Replace(NonEmptyString substring, string replaceWith) => underlyingValue.Replace(substring, replaceWith);
 
 		/// <inheritdoc />
 		public override string ToString() => underlyingValue;

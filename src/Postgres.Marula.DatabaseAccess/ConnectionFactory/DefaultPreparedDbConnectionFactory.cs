@@ -32,9 +32,10 @@ namespace Postgres.Marula.DatabaseAccess.ConnectionFactory
 		/// </summary>
 		private async Task<IDbConnection> PrepareConnectionAsync(IDbConnection dbConnection)
 		{
-			if (dbConnection.State != ConnectionState.Open)
+			if (!dbConnection.State.HasFlag(ConnectionState.Open))
 			{
-				await ((DbConnection) dbConnection).OpenAsync();
+				if (dbConnection is DbConnection awaitableConnection) await awaitableConnection.OpenAsync();
+				else dbConnection.Open();
 			}
 
 			await sqlScriptsExecutor.ExecuteScriptsAsync(dbConnection);
