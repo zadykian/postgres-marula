@@ -4,7 +4,7 @@ set search_path to SYSTEM_SCHEMA_NAME_TO_REPLACE;
 
 create table PARAMETERS_TABLE_NAME_TO_REPLACE
 (
-	id   serial           primary key,
+	id   smallserial      primary key,
 	name non_empty_string check ( parameter_exists(name) ) unique,
 	unit parameter_unit   not null
 );
