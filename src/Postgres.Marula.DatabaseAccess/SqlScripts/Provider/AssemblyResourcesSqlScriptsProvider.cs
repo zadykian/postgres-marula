@@ -4,7 +4,6 @@ using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Text.RegularExpressions;
 using Postgres.Marula.DatabaseAccess.Conventions;
 using Postgres.Marula.Infrastructure.Extensions;
@@ -41,6 +40,19 @@ namespace Postgres.Marula.DatabaseAccess.SqlScripts.Provider
 		/// Load resource with name <paramref name="resourceName"/> from current assembly. 
 		/// </summary>
 		private NonEmptyString GetSqlResourceFullContentByName(NonEmptyString resourceName)
+			=> typeof(INamingConventions)
+				.GetProperties()
+				.Select(propertyInfo => (
+					ScriptPlaceholder: propertyInfo.GetCustomAttribute<ScriptPlaceholderAttribute>()!.Placeholder,
+					PropertyValue:     propertyInfo.GetValue<DatabaseObjectName>(namingConventions)))
+				.Aggregate(
+					GetResourceContent(resourceName),
+					(content, tuple) => content.Replace(tuple.ScriptPlaceholder, tuple.PropertyValue));
+
+		/// <summary>
+		/// Get full content of assembly resource named <paramref name="resourceName"/>. 
+		/// </summary>
+		private static NonEmptyString GetResourceContent(NonEmptyString resourceName)
 		{
 			using var streamReader = Assembly
 				.GetExecutingAssembly()
@@ -48,18 +60,7 @@ namespace Postgres.Marula.DatabaseAccess.SqlScripts.Provider
 				.ThrowIfNull($"Failed to load resource '{resourceName}' from assembly.")
 				.To(resourceStream => new StreamReader(resourceStream));
 
-			var stringBuilder = streamReader
-				.ReadToEnd()
-				.To(stringValue => new StringBuilder(stringValue));
-
-			typeof(INamingConventions)
-				.GetProperties()
-				.Select(propertyInfo => (
-					ScriptPlaceholder: propertyInfo.GetCustomAttribute<ScriptPlaceholderAttribute>()!.Placeholder,
-					PropertyValue:     (DatabaseObjectName) propertyInfo.GetValue(namingConventions)!))
-				.ForEach(tuple => stringBuilder.Replace(tuple.ScriptPlaceholder, tuple.PropertyValue));
-
-			return stringBuilder.ToString();
+			return streamReader.ReadToEnd();
 		}
 
 		/// <summary>
