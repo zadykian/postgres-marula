@@ -2,8 +2,6 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 using Dapper;
 using Postgres.Marula.Calculations.ExternalDependencies;
@@ -126,21 +124,9 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 			var dbConnection = await GetConnectionAsync();
 			var stringRepresentation = await dbConnection.QuerySingleAsync<NonEmptyString>(commandText, new {parameterName});
 
-			parameterContext = GetFromStringRepresentation(stringRepresentation);
+			parameterContext = stringRepresentation.ByStringRepresentation<ParameterContext>();
 			contextCache[parameterName] = parameterContext;
 			return parameterContext;
 		}
-
-		/// <summary>
-		/// Get parameter context from its string representation. 
-		/// </summary>
-		private static ParameterContext GetFromStringRepresentation(NonEmptyString stringRepresentation)
-			=> typeof(ParameterContext)
-				.GetFields(BindingFlags.Public | BindingFlags.Static)
-				.Select(memberInfo => (
-					ContextValue: (ParameterContext) memberInfo.GetValue(obj: null)!,
-					StringRepresentation: memberInfo.GetCustomAttribute<StringRepresentationAttribute>()!.Value))
-				.Single(tuple => tuple.StringRepresentation == stringRepresentation)
-				.ContextValue;
 	}
 }

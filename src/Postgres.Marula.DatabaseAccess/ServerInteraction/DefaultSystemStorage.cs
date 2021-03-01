@@ -69,23 +69,10 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 				{
 					$"'{parameterValue.Value.ParameterLink.Name}'",
 					$"'{parameterValue.Value.AsString()}'",
-					$"'{GetDatabaseRepresentation(parameterValue.CalculationStatus)}'" +
+					$"'{parameterValue.CalculationStatus.StringRepresentation()}'" +
 						$"::{namingConventions.SystemSchemaName}.{namingConventions.CalculationStatusEnumName}"
 				}
 				.JoinBy(", ")
 				.To(values => $"({values})");
-
-		/// <summary>
-		/// Get database representation of <paramref name="calculationStatus"/> value.
-		/// </summary>
-		private static NonEmptyString GetDatabaseRepresentation(CalculationStatus calculationStatus)
-			=> calculationStatus switch
-			{
-				CalculationStatus.Applied =>                        "applied",
-				CalculationStatus.RequiresConfirmation =>           "requires_confirmation",
-				CalculationStatus.RequiresServerRestart =>          "requires_server_restart",
-				CalculationStatus.RequiresConfirmationAndRestart => "requires_confirmation_and_restart",
-				_ => throw new ArgumentOutOfRangeException(nameof(calculationStatus), calculationStatus, message: null)
-			};
 	}
 }

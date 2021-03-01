@@ -10,21 +10,25 @@ namespace Postgres.Marula.Calculations.ParameterProperties
 		/// <summary>
 		/// Milliseconds (interval, timeout and so on).
 		/// </summary>
+		[StringRepresentation("ms")]
 		Milliseconds = 1,
 
 		/// <summary>
 		/// Bytes (RAM, disk).
 		/// </summary>
+		[StringRepresentation("bytes")]
 		Bytes = 2,
 
 		/// <summary>
 		/// Enumeration item.
 		/// </summary>
+		[StringRepresentation("enum")]
 		Enum = 3,
 
 		/// <summary>
 		/// Without unit (for example, factor).
 		/// </summary>
+		[StringRepresentation("none")]
 		None = 4
 	}
 
