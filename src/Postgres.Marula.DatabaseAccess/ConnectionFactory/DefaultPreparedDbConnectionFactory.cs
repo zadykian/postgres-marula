@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Data;
 using System.Data.Common;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Dapper;
@@ -65,7 +66,7 @@ namespace Postgres.Marula.DatabaseAccess.ConnectionFactory
 		private async Task<bool> DatabaseIsPrepared(IDbConnection dbConnection)
 		{
 			var commandText = string.Intern($@"
-				select not exists (
+				select exists (
 					select null
 					from pg_catalog.pg_namespace
 					where nspname = @{nameof(INamingConventions.SystemSchemaName)});");
@@ -73,9 +74,22 @@ namespace Postgres.Marula.DatabaseAccess.ConnectionFactory
 			return await dbConnection.QuerySingleAsync<bool>(commandText, new {namingConventions.SystemSchemaName});
 		}
 
+		/// <summary>
+		/// Fill table <see cref="INamingConventions.ParametersTableName"/>
+		/// with all names of all parameters existing in project.
+		/// </summary>
 		private async Task FillParameterDictionaryTable(IDbConnection dbConnection)
 		{
-			// todo
+			var parameterNames = allParameterLinks
+				.Select(parameterLink => parameterLink.Name)
+				.ToImmutableArray();
+			
+			var commandText = $@"
+				insert into {namingConventions.SystemSchemaName}.{namingConventions.ParametersTableName}
+					(name)
+				select unnest(@{nameof(parameterNames)}) as parameter_name;";
+
+			await dbConnection.ExecuteAsync(commandText, new {parameterNames});
 		}
 	}
 }

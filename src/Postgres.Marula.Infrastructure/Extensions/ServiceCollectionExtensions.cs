@@ -44,6 +44,25 @@ namespace Postgres.Marula.Infrastructure.Extensions
 		}
 
 		/// <summary>
+		/// Add all registered services with service type <typeparamref name="TExisting"/>
+		/// as services of type <typeparamref name="TNew"/>.
+		/// </summary>
+		public static IServiceCollection Forward<TExisting, TNew>(this IServiceCollection serviceCollection)
+			where TExisting : TNew
+			where TNew : notnull
+		{
+			serviceCollection
+				.Where(descriptor => descriptor.ServiceType == typeof(TExisting))
+				.Select(descriptor => new ServiceDescriptor(
+					typeof(TNew),
+					provider => provider.GetRequiredService<TExisting>(),
+					descriptor.Lifetime))
+				.ForEach(serviceCollection.Add);
+
+			return serviceCollection;
+		}
+
+		/// <summary>
 		/// Add all services from component <typeparamref name="TAppComponent"/>
 		/// to collection <paramref name="serviceCollection"/>. 
 		/// </summary>
