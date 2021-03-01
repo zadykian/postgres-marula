@@ -1,7 +1,7 @@
 using System;
 using Postgres.Marula.Infrastructure.TypeDecorators;
 
-namespace Postgres.Marula.Calculations.ParameterProperties
+namespace Postgres.Marula.Calculations.ParameterProperties.StringRepresentation
 {
 	/// <summary>
 	/// Attribute to configure string representation for class member.

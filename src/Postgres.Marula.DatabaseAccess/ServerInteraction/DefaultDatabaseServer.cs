@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Dapper;
 using Postgres.Marula.Calculations.ExternalDependencies;
 using Postgres.Marula.Calculations.ParameterProperties;
+using Postgres.Marula.Calculations.ParameterProperties.StringRepresentation;
 using Postgres.Marula.Calculations.Parameters.Base;
 using Postgres.Marula.Calculations.ParameterValues;
 using Postgres.Marula.Calculations.ParameterValues.Base;

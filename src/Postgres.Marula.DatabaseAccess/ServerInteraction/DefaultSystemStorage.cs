@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
 using Postgres.Marula.Calculations.ExternalDependencies;
-using Postgres.Marula.Calculations.ParameterProperties;
+using Postgres.Marula.Calculations.ParameterProperties.StringRepresentation;
 using Postgres.Marula.Calculations.ParameterValues.Base;
 using Postgres.Marula.DatabaseAccess.ConnectionFactory;
 using Postgres.Marula.DatabaseAccess.Conventions;
@@ -58,7 +58,10 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 					parameter_values.status
 				from
 					{namingConventions.SystemSchemaName}.{namingConventions.ParametersTableName} as parameters
-				inner join
+
+				-- perform right join to fail in case when
+                -- parameters dictionary table is not consistent.
+				right join
 					parameter_values on parameters.name = parameter_values.parameter_name;";
 
 		/// <summary>

@@ -1,4 +1,5 @@
 using System;
+using Postgres.Marula.Calculations.ParameterProperties.StringRepresentation;
 
 namespace Postgres.Marula.Calculations.ParameterProperties
 {

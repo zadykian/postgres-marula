@@ -6,7 +6,7 @@ using System.Linq;
 using System.Reflection;
 using Postgres.Marula.Infrastructure.TypeDecorators;
 
-namespace Postgres.Marula.Calculations.ParameterProperties
+namespace Postgres.Marula.Calculations.ParameterProperties.StringRepresentation
 {
 	/// <summary>
 	/// Extension method for access to enum items' string representation.
