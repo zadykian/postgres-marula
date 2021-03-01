@@ -1,9 +1,12 @@
 using System;
+using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Data;
 using System.Data.Common;
 using System.Threading;
 using System.Threading.Tasks;
 using Dapper;
+using Postgres.Marula.Calculations.Parameters.Base;
 using Postgres.Marula.DatabaseAccess.Conventions;
 using Postgres.Marula.DatabaseAccess.SqlScripts.Executor;
 
@@ -15,11 +18,13 @@ namespace Postgres.Marula.DatabaseAccess.ConnectionFactory
 		private readonly Lazy<Task<IDbConnection>> lazyPreparedConnection;
 		private readonly ISqlScriptsExecutor sqlScriptsExecutor;
 		private readonly INamingConventions namingConventions;
+		private readonly IReadOnlyCollection<IParameterLink> allParameterLinks;
 
 		public DefaultPreparedDbConnectionFactory(
 			IDbConnection dbConnection,
 			ISqlScriptsExecutor sqlScriptsExecutor,
-			INamingConventions namingConventions)
+			INamingConventions namingConventions,
+			IEnumerable<IParameterLink> allParameterLinks)
 		{
 			lazyPreparedConnection = new Lazy<Task<IDbConnection>>(
 				() => PrepareConnectionAsync(dbConnection),
@@ -27,6 +32,7 @@ namespace Postgres.Marula.DatabaseAccess.ConnectionFactory
 
 			this.sqlScriptsExecutor = sqlScriptsExecutor;
 			this.namingConventions = namingConventions;
+			this.allParameterLinks = allParameterLinks.ToImmutableArray();
 		}
 
 		/// <inheritdoc />
@@ -49,6 +55,7 @@ namespace Postgres.Marula.DatabaseAccess.ConnectionFactory
 			}
 
 			await sqlScriptsExecutor.ExecuteScriptsAsync(dbConnection);
+			await FillParameterDictionaryTable(dbConnection);
 			return dbConnection;
 		}
 		
@@ -64,6 +71,11 @@ namespace Postgres.Marula.DatabaseAccess.ConnectionFactory
 					where nspname = @{nameof(INamingConventions.SystemSchemaName)});");
 
 			return await dbConnection.QuerySingleAsync<bool>(commandText, new {namingConventions.SystemSchemaName});
+		}
+
+		private async Task FillParameterDictionaryTable(IDbConnection dbConnection)
+		{
+			// todo
 		}
 	}
 }
