@@ -105,6 +105,9 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 				: new RawParameterValue(parameterValue);
 		}
 
+		/// <summary>
+		/// Cache of parameter context values.
+		/// </summary>
 		private static readonly ConcurrentDictionary<NonEmptyString, ParameterContext> contextCache = new();
 
 		/// <inheritdoc />
