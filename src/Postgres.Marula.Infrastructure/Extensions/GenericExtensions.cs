@@ -25,7 +25,7 @@ namespace Postgres.Marula.Infrastructure.Extensions
 		public static void To<TIn>(this TIn inputValue, Action<TIn> action) => action(inputValue);
 
 		/// <summary>
-		/// Perform operation <paramref name="action"/> on value <paramref name="inputValue"/> and return it unmodified.
+		/// Perform operation <paramref name="action"/> on value <paramref name="inputValue"/> and return it.
 		/// </summary>
 		public static T Then<T>(this T inputValue, Action<T> action)
 		{

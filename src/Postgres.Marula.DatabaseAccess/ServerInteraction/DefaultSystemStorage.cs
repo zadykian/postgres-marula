@@ -20,7 +20,7 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 		private readonly INamingConventions namingConventions;
 
 		public DefaultSystemStorage(
-			IPreparedDbConnectionFactory dbConnectionFactory,
+			IDbConnectionFactory dbConnectionFactory,
 			INamingConventions namingConventions) : base(dbConnectionFactory)
 			=> this.namingConventions = namingConventions;
 
@@ -66,7 +66,8 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 					parameter_values on parameters.name = parameter_values.parameter_name;";
 
 		/// <summary>
-		/// Represent <paramref name="parameterValue"/> as string '(param_name, param_value, calculation_status)'.
+		/// Represent <paramref name="parameterValue"/> as
+		/// string like '([param_name], [param_value], [unit], [calculation_status])'.
 		/// </summary>
 		private NonEmptyString ToValuesString(ParameterValueWithStatus parameterValue)
 			=> new []

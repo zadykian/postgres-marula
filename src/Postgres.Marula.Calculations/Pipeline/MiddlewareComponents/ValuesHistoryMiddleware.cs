@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Threading.Tasks;
 using PipelineNet.Middleware;
@@ -47,8 +48,8 @@ namespace Postgres.Marula.Calculations.Pipeline.MiddlewareComponents
 					await GetCalculationStatus(tuple.Parameter, tuple.Value)));
 
 			await parameterValues
-				.ToReadOnlyCollection()
-				.To(systemStorage.SaveParameterValuesAsync);
+				.ToImmutableArray()
+				.To(collection => systemStorage.SaveParameterValuesAsync(collection));
 
 			await next(context);
 		}

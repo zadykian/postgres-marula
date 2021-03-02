@@ -17,12 +17,12 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 		[Test]
 		public async Task PreparedConnectionCreationTest()
 		{
-			var connectionFactory = GetService<IPreparedDbConnectionFactory>();
+			var connectionFactory = GetService<IDbConnectionFactory>();
 
-			var firstPreparedConnection = await connectionFactory.GetPreparedConnectionAsync();
+			var firstPreparedConnection = await connectionFactory.GetConnectionAsync();
 			Assert.AreEqual(ConnectionState.Open, firstPreparedConnection.State);
 
-			var secondPreparedConnection = await connectionFactory.GetPreparedConnectionAsync();
+			var secondPreparedConnection = await connectionFactory.GetConnectionAsync();
 			Assert.AreSame(firstPreparedConnection, secondPreparedConnection);
 		}
 	}

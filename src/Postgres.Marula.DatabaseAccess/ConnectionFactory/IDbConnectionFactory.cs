@@ -3,11 +3,14 @@ using System.Threading.Tasks;
 
 namespace Postgres.Marula.DatabaseAccess.ConnectionFactory
 {
-	internal interface IPreparedDbConnectionFactory
+	/// <summary>
+	/// Database connection factory.
+	/// </summary>
+	internal interface IDbConnectionFactory
 	{
 		/// <summary>
 		/// Get connection which is prepared for future communications with server.
 		/// </summary>
-		Task<IDbConnection> GetPreparedConnectionAsync();
+		Task<IDbConnection> GetConnectionAsync();
 	}
 }

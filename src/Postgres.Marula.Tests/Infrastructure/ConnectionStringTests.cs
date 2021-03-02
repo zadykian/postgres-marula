@@ -21,7 +21,8 @@ namespace Postgres.Marula.Tests.Infrastructure
 
 		[Test]
 		public void DefaultLocalConnectionStringTest()
-			=> Assert.IsNotEmpty(new ConnectionString("server=localhost; port=5432; database=postgres; username=postgres; password=postgres;"));
+			=> Assert.IsNotEmpty(
+				new ConnectionString("server=localhost; port=5432; database=postgres; username=postgres; password=postgres;"));
 
 		[Test]
 		public void InvalidCharInKeyTest()

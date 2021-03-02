@@ -14,14 +14,15 @@ using Postgres.Marula.DatabaseAccess.SqlScripts.Executor;
 namespace Postgres.Marula.DatabaseAccess.ConnectionFactory
 {
 	/// <inheritdoc />
-	internal class DefaultPreparedDbConnectionFactory : IPreparedDbConnectionFactory
+	internal class DefaultDbConnectionFactory : IDbConnectionFactory
 	{
 		private readonly Lazy<Task<IDbConnection>> lazyPreparedConnection;
+
 		private readonly ISqlScriptsExecutor sqlScriptsExecutor;
 		private readonly INamingConventions namingConventions;
 		private readonly IReadOnlyCollection<IParameterLink> allParameterLinks;
 
-		public DefaultPreparedDbConnectionFactory(
+		public DefaultDbConnectionFactory(
 			IDbConnection dbConnection,
 			ISqlScriptsExecutor sqlScriptsExecutor,
 			INamingConventions namingConventions,
@@ -37,7 +38,7 @@ namespace Postgres.Marula.DatabaseAccess.ConnectionFactory
 		}
 
 		/// <inheritdoc />
-		Task<IDbConnection> IPreparedDbConnectionFactory.GetPreparedConnectionAsync() => lazyPreparedConnection.Value;
+		Task<IDbConnection> IDbConnectionFactory.GetConnectionAsync() => lazyPreparedConnection.Value;
 
 		/// <summary>
 		/// Prepare database connection for future communications with server.
@@ -84,10 +85,10 @@ namespace Postgres.Marula.DatabaseAccess.ConnectionFactory
 				.Select(parameterLink => (string) parameterLink.Name)
 				.ToImmutableArray();
 
-			var commandText = $@"
+			var commandText = string.Intern($@"
 				insert into {namingConventions.SystemSchemaName}.{namingConventions.ParametersTableName}
 					(name)
-				select unnest(@{nameof(parameterNames)}) as parameter_name;";
+				select unnest(@{nameof(parameterNames)}) as parameter_name;");
 
 			await dbConnection.ExecuteAsync(commandText, new {parameterNames});
 		}

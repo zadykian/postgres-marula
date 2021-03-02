@@ -22,7 +22,7 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 	/// <inheritdoc cref="IDatabaseServer" />
 	internal class DefaultDatabaseServer : DatabaseInteractionComponent, IDatabaseServer
 	{
-		public DefaultDatabaseServer(IPreparedDbConnectionFactory dbConnectionFactory) : base(dbConnectionFactory)
+		public DefaultDatabaseServer(IDbConnectionFactory dbConnectionFactory) : base(dbConnectionFactory)
 		{
 		}
 
@@ -53,7 +53,7 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 		}
 
 		/// <summary>
-		/// Get parameter value full string representation. 
+		/// Get parameter value full string representation.
 		/// </summary>
 		private async ValueTask<NonEmptyString> GetValueStringRepresentation(IParameterValue parameterValue)
 		{

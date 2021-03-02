@@ -9,14 +9,14 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction.Base
 	/// </summary>
 	internal abstract class DatabaseInteractionComponent
 	{
-		private readonly IPreparedDbConnectionFactory dbConnectionFactory;
+		private readonly IDbConnectionFactory dbConnectionFactory;
 
-		protected DatabaseInteractionComponent(IPreparedDbConnectionFactory dbConnectionFactory)
+		protected DatabaseInteractionComponent(IDbConnectionFactory dbConnectionFactory)
 			=> this.dbConnectionFactory = dbConnectionFactory;
 
 		/// <summary>
 		/// Get connection to database to interact with. 
 		/// </summary>
-		protected Task<IDbConnection> GetConnectionAsync() => dbConnectionFactory.GetPreparedConnectionAsync();
+		protected Task<IDbConnection> GetConnectionAsync() => dbConnectionFactory.GetConnectionAsync();
 	}
 }

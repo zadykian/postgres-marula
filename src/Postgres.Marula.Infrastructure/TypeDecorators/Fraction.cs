@@ -36,7 +36,7 @@ namespace Postgres.Marula.Infrastructure.TypeDecorators
 		#endregion
 
 		/// <summary>
-		/// Implicit cast operator <see cref="decimal"/> -> <see cref="Fraction"/>. 
+		/// Implicit cast operator <see cref="decimal"/> -> <see cref="Fraction"/>.
 		/// </summary>
 		public static implicit operator Fraction(decimal fraction) => new(fraction);
 
