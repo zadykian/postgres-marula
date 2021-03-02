@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 using Postgres.Marula.Infrastructure.AppComponents;
@@ -42,6 +43,22 @@ namespace Postgres.Marula.Infrastructure.Extensions
 
 			return serviceCollection;
 		}
+
+		/// <summary>
+		/// Add all registered services with service type <typeparamref name="TExisting"/>
+		/// as services of type <typeparamref name="TNew"/>.
+		/// </summary>
+		/// <remarks>
+		/// Services of <typeparamref name="TNew"/> will be resolvable only as <see cref="IEnumerable{TNew}"/>.
+		/// </remarks>
+		public static IServiceCollection Forward<TExisting, TNew>(this IServiceCollection serviceCollection)
+			where TExisting : class, TNew
+			where TNew : notnull
+			=> serviceCollection
+				.AddTransient(provider
+					=> provider
+						.GetRequiredService<IEnumerable<TExisting>>()
+						.Cast<TNew>());
 
 		/// <summary>
 		/// Add all services from component <typeparamref name="TAppComponent"/>

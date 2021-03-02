@@ -1,15 +1,13 @@
 using System;
 using System.Collections.Immutable;
 using System.Threading.Tasks;
-using Dapper;
+using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 using Postgres.Marula.Calculations.ExternalDependencies;
 using Postgres.Marula.Calculations.ParameterProperties;
 using Postgres.Marula.Calculations.Parameters.Base;
 using Postgres.Marula.Calculations.ParameterValues;
 using Postgres.Marula.Calculations.ParameterValues.Base;
-using Postgres.Marula.DatabaseAccess.ConnectionFactory;
-using Postgres.Marula.DatabaseAccess.Conventions;
 using Postgres.Marula.Infrastructure.TypeDecorators;
 using Postgres.Marula.Tests.DatabaseAccess.Base;
 
@@ -20,6 +18,17 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 	/// </summary>
 	internal class SystemStorageTests : DatabaseAccessTestFixtureBase
 	{
+		protected override void ConfigureServices(IServiceCollection serviceCollection)
+		{
+			base.ConfigureServices(serviceCollection);
+
+			serviceCollection
+				.AddSingleton<IParameterLink>(new ParameterLink("deadlock_timeout"))
+				.AddSingleton<IParameterLink>(new ParameterLink("log_rotation_size"))
+				.AddSingleton<IParameterLink>(new ParameterLink("wal_buffers"))
+				.AddSingleton<IParameterLink>(new ParameterLink("shared_buffers"));
+		}
+
 		/// <summary>
 		/// Insert empty collection of values. 
 		/// </summary>
@@ -37,8 +46,6 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 		[Test]
 		public async Task InsertCalculatedValuesTest()
 		{
-			await InsertTestParameters();
-
 			var parameterValues = new ParameterValueWithStatus[]
 			{
 				new(
@@ -69,27 +76,6 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 			var systemStorage = GetService<ISystemStorage>();
 			await systemStorage.SaveParameterValuesAsync(parameterValues);
 			Assert.Pass();
-		}
-
-		/// <summary>
-		/// Insert (if not exists) test parameters to system dictionary.
-		/// </summary>
-		private async Task InsertTestParameters()
-		{
-			var namingConventions = GetService<INamingConventions>();
-
-			var commandText = $@"
-				insert into {namingConventions.SystemSchemaName}.{namingConventions.ParametersTableName}
-					(name, unit)
-				values
-					('deadlock_timeout', 'ms'),
-					('log_rotation_size', 'bytes'),
-					('wal_buffers', 'bytes'),
-					('shared_buffers', 'bytes')
-				on conflict (name) do nothing;";
-
-			var dbConnection = await GetService<IPreparedDbConnectionFactory>().GetPreparedConnectionAsync();
-			await dbConnection.ExecuteAsync(commandText);
 		}
 	}
 }

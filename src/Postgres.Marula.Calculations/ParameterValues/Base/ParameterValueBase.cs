@@ -30,7 +30,7 @@ namespace Postgres.Marula.Calculations.ParameterValues.Base
 		public abstract NonEmptyString AsString();
 
 		/// <inheritdoc />
-		public override string ToString() => $"{ParameterLink.Name}: {AsString()}{Unit.AsString()}";
+		public override string ToString() => $"{ParameterLink.Name}: {AsString()}{Unit.NumberSuffix()}";
 
 		#region EqualityMembers
 

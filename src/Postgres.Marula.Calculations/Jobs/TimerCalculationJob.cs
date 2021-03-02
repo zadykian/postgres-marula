@@ -45,7 +45,7 @@ namespace Postgres.Marula.Calculations.Jobs
 		void IDisposable.Dispose() => timer.Dispose();
 
 		/// <summary>
-		/// <see cref="Timer.Elapsed"/> event handler. 
+		/// <see cref="Timer.Elapsed"/> event handler.
 		/// </summary>
 		private async Task OnTimerElapsed()
 		{

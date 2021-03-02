@@ -32,12 +32,12 @@ namespace Postgres.Marula.Infrastructure.TypeDecorators
 		#endregion
 
 		/// <summary>
-		/// Implicit cast operator '<see cref="string"/> -> <see cref="DatabaseObjectName"/>'. 
+		/// Implicit cast operator '<see cref="string"/> -> <see cref="DatabaseObjectName"/>'.
 		/// </summary>
 		public static implicit operator DatabaseObjectName(string stringValue) => new(stringValue);
 
 		/// <summary>
-		/// Implicit cast operator '<see cref="DatabaseObjectName"/> -> <see cref="string"/>'. 
+		/// Implicit cast operator '<see cref="DatabaseObjectName"/> -> <see cref="string"/>'.
 		/// </summary>
 		public static implicit operator string(DatabaseObjectName databaseObjectName) => databaseObjectName.underlyingValue;
 	}

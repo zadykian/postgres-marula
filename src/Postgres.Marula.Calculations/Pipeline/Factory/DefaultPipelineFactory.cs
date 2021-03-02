@@ -19,6 +19,7 @@ namespace Postgres.Marula.Calculations.Pipeline.Factory
 				.Add<ValuesHistoryMiddleware>();
 
 			var pipelineContext = pipelineScope.ServiceProvider.GetRequiredService<ParametersManagementContext>();
+
 			return new DefaultParametersPipeline(asyncPipeline, pipelineContext);
 		}
 	}

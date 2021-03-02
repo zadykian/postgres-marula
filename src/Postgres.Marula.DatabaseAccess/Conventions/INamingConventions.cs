@@ -31,6 +31,12 @@ namespace Postgres.Marula.DatabaseAccess.Conventions
 		/// </summary>
 		[ScriptPlaceholder("STATUS_ENUM_NAME_TO_REPLACE")]
 		DatabaseObjectName CalculationStatusEnumName { get; }
+
+		/// <summary>
+		/// Name of parameter unit enumeration type.
+		/// </summary>
+		[ScriptPlaceholder("UNIT_ENUM_NAME_TO_REPLACE")]
+		DatabaseObjectName ParameterUnitEnumName { get; }
 	}
 
 	/// <summary>

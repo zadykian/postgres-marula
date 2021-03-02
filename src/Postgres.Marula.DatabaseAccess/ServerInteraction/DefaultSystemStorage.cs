@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
 using Postgres.Marula.Calculations.ExternalDependencies;
-using Postgres.Marula.Calculations.ParameterProperties;
+using Postgres.Marula.Calculations.ParameterProperties.StringRepresentation;
 using Postgres.Marula.Calculations.ParameterValues.Base;
 using Postgres.Marula.DatabaseAccess.ConnectionFactory;
 using Postgres.Marula.DatabaseAccess.Conventions;
@@ -20,7 +20,7 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 		private readonly INamingConventions namingConventions;
 
 		public DefaultSystemStorage(
-			IPreparedDbConnectionFactory dbConnectionFactory,
+			IDbConnectionFactory dbConnectionFactory,
 			INamingConventions namingConventions) : base(dbConnectionFactory)
 			=> this.namingConventions = namingConventions;
 
@@ -38,11 +38,11 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 		}
 
 		/// <summary>
-		/// Get insert statement to save calculated values to <see cref="INamingConventions.ValuesHistoryTableName"/> table. 
+		/// Get insert statement to save calculated values to <see cref="INamingConventions.ValuesHistoryTableName"/> table.
 		/// </summary>
 		private string GetCommandTextToInsertValues(IEnumerable<ParameterValueWithStatus> parameterValues)
 			=> $@"
-				with parameter_values (parameter_name, calculated_value, status) as
+				with parameter_values (parameter_name, calculated_value, unit, status) as
 				(
 					select *
 					from (
@@ -51,41 +51,37 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 					) as values
 				)
 				insert into {namingConventions.SystemSchemaName}.{namingConventions.ValuesHistoryTableName}
-					(parameter_id, calculated_value, status)
+					(parameter_id, calculated_value, unit, status)
 				select
 					parameters.id,
 					parameter_values.calculated_value,
+					parameter_values.unit,
 					parameter_values.status
 				from
 					{namingConventions.SystemSchemaName}.{namingConventions.ParametersTableName} as parameters
-				inner join
+
+				-- perform right join to fail in case when
+				-- parameters dictionary table is not consistent.
+				right join
 					parameter_values on parameters.name = parameter_values.parameter_name;";
 
 		/// <summary>
-		/// Represent <paramref name="parameterValue"/> as string '(param_name, param_value, calculation_status)'.
+		/// Represent <paramref name="parameterValue"/> as
+		/// string like '([param_name], [param_value], [unit], [calculation_status])'.
 		/// </summary>
 		private NonEmptyString ToValuesString(ParameterValueWithStatus parameterValue)
 			=> new []
 				{
 					$"'{parameterValue.Value.ParameterLink.Name}'",
 					$"'{parameterValue.Value.AsString()}'",
-					$"'{GetDatabaseRepresentation(parameterValue.CalculationStatus)}'" +
+
+					$"'{parameterValue.Value.Unit.StringRepresentation()}'" +
+						$"::{namingConventions.SystemSchemaName}.{namingConventions.ParameterUnitEnumName}",
+
+					$"'{parameterValue.CalculationStatus.StringRepresentation()}'" +
 						$"::{namingConventions.SystemSchemaName}.{namingConventions.CalculationStatusEnumName}"
 				}
 				.JoinBy(", ")
 				.To(values => $"({values})");
-
-		/// <summary>
-		/// Get database representation of <paramref name="calculationStatus"/> value.
-		/// </summary>
-		private static NonEmptyString GetDatabaseRepresentation(CalculationStatus calculationStatus)
-			=> calculationStatus switch
-			{
-				CalculationStatus.Applied =>                        "applied",
-				CalculationStatus.RequiresConfirmation =>           "requires_confirmation",
-				CalculationStatus.RequiresServerRestart =>          "requires_server_restart",
-				CalculationStatus.RequiresConfirmationAndRestart => "requires_confirmation_and_restart",
-				_ => throw new ArgumentOutOfRangeException(nameof(calculationStatus), calculationStatus, message: null)
-			};
 	}
 }

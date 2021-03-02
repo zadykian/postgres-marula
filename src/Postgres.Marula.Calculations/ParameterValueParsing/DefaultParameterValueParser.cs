@@ -30,11 +30,11 @@ namespace Postgres.Marula.Calculations.ParameterValueParsing
 						.To(memory => new MemoryParameterValue(parameterLink, memory)),
 
 				{ } when decimal.TryParse(
-					         rawParameterValue.Value,
-					         NumberStyles.Number,
-					         CultureInfo.InvariantCulture,
-					         out var decimalValue)
-				         && rawParameterValue is RawRangeParameterValue rawRangeParameterValue
+							rawParameterValue.Value,
+							NumberStyles.Number,
+							CultureInfo.InvariantCulture,
+							out var decimalValue)
+						&& rawParameterValue is RawRangeParameterValue rawRangeParameterValue
 					=> ToFraction(decimalValue, rawRangeParameterValue.ValidRange)
 						.To(fraction => new FractionParameterValue(parameterLink, fraction)),
 

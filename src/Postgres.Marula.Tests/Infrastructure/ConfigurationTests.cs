@@ -13,12 +13,18 @@ namespace Postgres.Marula.Tests.Infrastructure
 	/// </summary>
 	internal class ConfigurationTests : SingleComponentTestFixtureBase<InfrastructureAppComponent>
 	{
+		/// <summary>
+		/// <see cref="IDatabaseAccessConfiguration.ConnectionString"/> test.
+		/// </summary>
 		[Test]
 		public void ConnectionStringTest()
 			=> GetService<IDatabaseAccessConfiguration>()
 				.ConnectionString()
 				.To(connectionString => Assert.IsNotEmpty(connectionString));
 
+		/// <summary>
+		/// <see cref="ICalculationsConfiguration.RecalculationInterval"/> test.
+		/// </summary>
 		[Test]
 		public void RecalculationIntervalTest()
 			=> GetService<ICalculationsConfiguration>()
@@ -27,12 +33,18 @@ namespace Postgres.Marula.Tests.Infrastructure
 					((TimeSpan) recalculationInterval).TotalSeconds > 0
 				));
 
+		/// <summary>
+		/// <see cref="ICalculationsConfiguration.AutoAdjustmentIsEnabled"/> test.
+		/// </summary>
 		[Test]
 		public void AutoAdjustmentParameterTest()
 			=> GetService<ICalculationsConfiguration>()
 				.AutoAdjustmentIsEnabled()
 				.To(_ => Assert.Pass());
 
+		/// <summary>
+		/// <see cref="ICalculationsConfiguration.TargetRelationsBloatFraction"/> test.
+		/// </summary>
 		[Test]
 		public void TargetRelationsBloatFractionTest()
 			=> GetService<ICalculationsConfiguration>()

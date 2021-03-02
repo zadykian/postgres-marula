@@ -6,7 +6,7 @@ namespace Postgres.Marula.Calculations.Jobs
 	public interface ICalculationJob
 	{
 		/// <summary>
-		/// Run parameters calculation job. 
+		/// Run parameters calculation job.
 		/// </summary>
 		void Run();
 	}

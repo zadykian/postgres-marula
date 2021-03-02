@@ -28,11 +28,11 @@ namespace Postgres.Marula.DatabaseAccess.SqlScripts.Provider
 				.Select(resourceName =>
 					GetSqlResourceFullContentByName(resourceName)
 						.To(resourceContent => (
-							Name: resourceName,
+							Name:    resourceName,
 							Content: resourceContent,
-							ExecutionOrder: GetScriptExecutionOrder(resourceContent)
+							Order:   GetScriptExecutionOrder(resourceContent)
 						)))
-				.OrderBy(tuple => tuple.ExecutionOrder)
+				.OrderBy(tuple => tuple.Order)
 				.Select(tuple => new SqlScript(tuple.Name, tuple.Content))
 				.ToImmutableArray();
 
@@ -44,7 +44,7 @@ namespace Postgres.Marula.DatabaseAccess.SqlScripts.Provider
 				.GetProperties()
 				.Select(propertyInfo => (
 					ScriptPlaceholder: propertyInfo.GetCustomAttribute<ScriptPlaceholderAttribute>()!.Placeholder,
-					PropertyValue:     propertyInfo.GetValue<DatabaseObjectName>(namingConventions)))
+					PropertyValue:     (DatabaseObjectName) propertyInfo.GetValue(namingConventions)!))
 				.Aggregate(
 					GetResourceContent(resourceName),
 					(content, tuple) => content.Replace(tuple.ScriptPlaceholder, tuple.PropertyValue));

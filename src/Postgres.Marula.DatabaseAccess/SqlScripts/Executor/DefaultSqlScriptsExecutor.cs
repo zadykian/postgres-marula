@@ -3,7 +3,6 @@ using System.Data;
 using System.Threading.Tasks;
 using Dapper;
 using Microsoft.Extensions.Logging;
-using Postgres.Marula.DatabaseAccess.Conventions;
 using Postgres.Marula.DatabaseAccess.SqlScripts.Provider;
 
 namespace Postgres.Marula.DatabaseAccess.SqlScripts.Executor
@@ -13,26 +12,18 @@ namespace Postgres.Marula.DatabaseAccess.SqlScripts.Executor
 	{
 		private readonly ISqlScriptsProvider sqlScriptsProvider;
 		private readonly ILogger<DefaultSqlScriptsExecutor> logger;
-		private readonly INamingConventions namingConventions;
 
 		public DefaultSqlScriptsExecutor(
 			ISqlScriptsProvider sqlScriptsProvider,
-			ILogger<DefaultSqlScriptsExecutor> logger,
-			INamingConventions namingConventions)
+			ILogger<DefaultSqlScriptsExecutor> logger)
 		{
 			this.sqlScriptsProvider = sqlScriptsProvider;
 			this.logger = logger;
-			this.namingConventions = namingConventions;
 		}
 
 		/// <inheritdoc />
 		async Task ISqlScriptsExecutor.ExecuteScriptsAsync(IDbConnection dbConnection)
 		{
-			if (!await ScriptsMustBeExecuted(dbConnection))
-			{
-				return;
-			}
-
 			using var dbTransaction = dbConnection.BeginTransaction();
 
 			foreach (var sqlScript in sqlScriptsProvider.GetAllOrderedByExecution())
@@ -49,20 +40,6 @@ namespace Postgres.Marula.DatabaseAccess.SqlScripts.Executor
 			}
 
 			dbTransaction.Commit();
-		}
-
-		/// <summary>
-		/// Figure out is scripts execution required.
-		/// </summary>
-		private async Task<bool> ScriptsMustBeExecuted(IDbConnection dbConnection)
-		{
-			var commandText = string.Intern($@"
-				select not exists (
-					select null
-					from pg_catalog.pg_namespace
-					where nspname = @{nameof(INamingConventions.SystemSchemaName)});");
-
-			return await dbConnection.QuerySingleAsync<bool>(commandText, new {namingConventions.SystemSchemaName});
 		}
 	}
 }

@@ -31,7 +31,7 @@ namespace Postgres.Marula.Infrastructure.TypeDecorators
 		#endregion
 
 		/// <summary>
-		/// Implicit cast operator <see cref="ulong"/> -> <see cref="Memory"/>. 
+		/// Implicit cast operator <see cref="ulong"/> -> <see cref="Memory"/>.
 		/// </summary>
 		public static implicit operator Memory(ulong bytes) => new(bytes);
 

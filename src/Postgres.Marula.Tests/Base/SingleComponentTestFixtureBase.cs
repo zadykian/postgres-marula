@@ -9,7 +9,7 @@ using Postgres.Marula.Infrastructure.AppComponents;
 namespace Postgres.Marula.Tests.Base
 {
 	/// <summary>
-	/// Base class for testing services from component <typeparamref name="TAppComponent"/>. 
+	/// Base class for testing services from component <typeparamref name="TAppComponent"/>.
 	/// </summary>
 	[TestFixture]
 	internal abstract class SingleComponentTestFixtureBase<TAppComponent>
@@ -32,7 +32,7 @@ namespace Postgres.Marula.Tests.Base
 		}
 
 		/// <summary>
-		/// Get registered implementation of service <typeparamref name="TService"/>. 
+		/// Get registered implementation of service <typeparamref name="TService"/>.
 		/// </summary>
 		protected TService GetService<TService>()
 			where TService : notnull

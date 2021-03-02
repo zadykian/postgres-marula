@@ -21,7 +21,7 @@ namespace Postgres.Marula.Infrastructure.TypeDecorators
 		}
 
 		/// <summary>
-		/// Left bound of the range. 
+		/// Left bound of the range.
 		/// </summary>
 		public T LeftBound { get; }
 
@@ -34,7 +34,7 @@ namespace Postgres.Marula.Infrastructure.TypeDecorators
 		public override string ToString() => $"[{LeftBound}, {RightBound}]";
 
 		/// <summary>
-		/// Implicit cast operator '<see cref="ValueTuple{T,T}"/> -> <see cref="Range{T}"/>'. 
+		/// Implicit cast operator '<see cref="ValueTuple{T,T}"/> -> <see cref="Range{T}"/>'.
 		/// </summary>
 		public static implicit operator Range<T>(ValueTuple<T, T> valueTuple) => new(valueTuple.Item1, valueTuple.Item2);
 	}

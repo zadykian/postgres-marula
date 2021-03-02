@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Threading.Tasks;
 using Postgres.Marula.Infrastructure.TypeDecorators;
 
@@ -29,7 +28,7 @@ namespace Postgres.Marula.Infrastructure.Extensions
 			this IEnumerable<TIn> enumerable,
 			Func<TIn, Task<TOut>> selector)
 		{
-			var resultCollection = new List<TOut>();
+			ICollection<TOut> resultCollection = new List<TOut>();
 
 			foreach (var item in enumerable)
 			{
@@ -63,10 +62,5 @@ namespace Postgres.Marula.Infrastructure.Extensions
 
 			yield return itemToAppend;
 		}
-
-		/// <summary>
-		/// Transform <paramref name="enumerable"/> to read-only collection. 
-		/// </summary>
-		public static IReadOnlyCollection<T> ToReadOnlyCollection<T>(this IEnumerable<T> enumerable) => enumerable.ToImmutableArray();
 	}
 }
