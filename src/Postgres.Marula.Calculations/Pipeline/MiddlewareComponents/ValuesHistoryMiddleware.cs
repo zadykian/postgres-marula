@@ -57,7 +57,7 @@ namespace Postgres.Marula.Calculations.Pipeline.MiddlewareComponents
 		/// <summary>
 		/// Get database parameter calculation status. 
 		/// </summary>
-		private async Task<CalculationStatus> GetCalculationStatus(IParameterLink parameterLink, IParameterValue parameterValue)
+		private async ValueTask<CalculationStatus> GetCalculationStatus(IParameterLink parameterLink, IParameterValue parameterValue)
 		{
 			var adjustmentIsAllowed = ParameterAdjustmentIsAllowed(parameterValue);
 			var parameterContext = await databaseServer.GetParameterContextAsync(parameterLink.Name);			

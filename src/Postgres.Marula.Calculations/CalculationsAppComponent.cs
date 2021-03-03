@@ -21,7 +21,7 @@ namespace Postgres.Marula.Calculations
 		void IAppComponent.RegisterServices(IServiceCollection serviceCollection)
 			=> serviceCollection
 				.AddSingleton<ICalculationsConfiguration, DefaultCalculationsConfiguration>()
-				.AddBasedOn<IParameter>(ServiceLifetime.Transient)
+				.AddBasedOn<IParameter>(ServiceLifetime.Scoped)
 				.Forward<IParameter, IParameterLink>()
 				.AddTransient<ParametersManagementContext>()
 				.AddTransient<ValueCalculationsMiddleware>()
