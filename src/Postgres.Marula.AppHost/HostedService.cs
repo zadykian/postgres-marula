@@ -24,7 +24,7 @@ namespace Postgres.Marula.AppHost
 		protected override async Task ExecuteAsync(CancellationToken stoppingToken)
 		{
 			calculationJob.Run();
-			logger.LogInformation("marula application is running.");
+			logger.LogInformation("Marula application is running.");
 			await Task.CompletedTask;
 		}
 	}
