@@ -4,7 +4,7 @@ set search_path to SYSTEM_SCHEMA_NAME_TO_REPLACE;
 
 create table VALUES_HISTORY_TABLE_NAME_TO_REPLACE
 (
-	id                    bigint                   	  primary key generated always as identity,
+	id                    int                         primary key generated always as identity,
 	parameter_id          smallint                    not null references calculated_parameters(id),
 	calculated_value      non_empty_string,
 	unit			      UNIT_ENUM_NAME_TO_REPLACE   not null,
