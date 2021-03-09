@@ -24,14 +24,17 @@ namespace Postgres.Marula.Calculations.Pipeline.MiddlewareComponents
 			=> this.databaseServer = databaseServer;
 
 		/// <inheritdoc />
-		Task IAsyncMiddleware<ParametersManagementContext>.Run(
+		async Task IAsyncMiddleware<ParametersManagementContext>.Run(
 			ParametersManagementContext context,
 			Func<ParametersManagementContext, Task> next)
-			=> context
+		{
+			await context
 				.CalculatedValues
 				.Where(ParameterAdjustmentIsAllowed)
 				.ToImmutableArray()
-				.To(parameterValues => databaseServer.ApplyToConfigurationAsync(parameterValues))
-				.ContinueWith(_ => next(context), TaskContinuationOptions.OnlyOnRanToCompletion);
+				.To(parameterValues => databaseServer.ApplyToConfigurationAsync(parameterValues));
+
+			await next(context);
+		}
 	}
 }
