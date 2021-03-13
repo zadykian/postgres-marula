@@ -14,5 +14,4 @@ Obviously, in context of automatic configuration, this parameter should be set t
 ### track_counts (boolean)
 
 Enables collection of statistics on database activity.
-
-todo
+Autovacuum launcher process uses statistics to create list of databases which had some activity. So collection of statistics is required for autovacuum.
