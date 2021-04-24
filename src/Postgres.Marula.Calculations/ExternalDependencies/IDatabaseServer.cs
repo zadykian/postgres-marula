@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Postgres.Marula.Calculations.ParameterProperties;
@@ -27,5 +28,10 @@ namespace Postgres.Marula.Calculations.ExternalDependencies
 		/// Get context of parameter named <paramref name="parameterName"/>. 
 		/// </summary>
 		ValueTask<ParameterContext> GetParameterContextAsync(NonEmptyString parameterName);
+
+		/// <summary>
+		/// Get current PostgreSQL version. 
+		/// </summary>
+		ValueTask<Version> GetPostgresVersionAsync();
 	}
 }

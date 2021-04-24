@@ -2,6 +2,8 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Dapper;
 using Postgres.Marula.Calculations.ExternalDependencies;
@@ -11,20 +13,27 @@ using Postgres.Marula.Calculations.Parameters.Base;
 using Postgres.Marula.Calculations.ParameterValues;
 using Postgres.Marula.Calculations.ParameterValues.Base;
 using Postgres.Marula.Calculations.ParameterValues.Raw;
+using Postgres.Marula.DatabaseAccess.Configuration;
 using Postgres.Marula.DatabaseAccess.ConnectionFactory;
 using Postgres.Marula.DatabaseAccess.ServerInteraction.Base;
 using Postgres.Marula.DatabaseAccess.ServerInteraction.Exceptions;
 using Postgres.Marula.Infrastructure.Extensions;
 using Postgres.Marula.Infrastructure.TypeDecorators;
 
+// Database server endpoint - IP address and TCP port.
+using Endpoint = System.ValueTuple<System.Net.IPAddress, ushort>;
+
 namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 {
 	/// <inheritdoc cref="IDatabaseServer" />
 	internal class DefaultDatabaseServer : DatabaseInteractionComponent, IDatabaseServer
 	{
-		public DefaultDatabaseServer(IDbConnectionFactory dbConnectionFactory) : base(dbConnectionFactory)
-		{
-		}
+		private readonly IDatabaseAccessConfiguration configuration;
+
+		public DefaultDatabaseServer(
+			IDbConnectionFactory dbConnectionFactory,
+			IDatabaseAccessConfiguration configuration) : base(dbConnectionFactory)
+			=> this.configuration = configuration;
 
 		/// <inheritdoc />
 		async Task IDatabaseServer.ApplyToConfigurationAsync(IReadOnlyCollection<IParameterValue> parameterValues)
@@ -127,6 +136,46 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 			parameterContext = stringRepresentation.ByStringRepresentation<ParameterContext>();
 			contextCache[parameterName] = parameterContext;
 			return parameterContext;
+		}
+
+		/// <summary>
+		/// Cache of database server versions.
+		/// </summary>
+		/// <remarks>
+		/// Keys are server endpoints - IP address and TCP port.
+		/// </remarks>
+		private static readonly ConcurrentDictionary<Endpoint, Version> versionCache = new();
+
+		/// <inheritdoc />
+		async ValueTask<Version> IDatabaseServer.GetPostgresVersionAsync()
+		{
+			var endpoint = GetCurrentEndpoint();
+
+			if (versionCache.TryGetValue(endpoint, out var version))
+			{
+				return version;
+			}
+
+			var dbConnection = await GetConnectionAsync();
+
+			version = (await dbConnection.QuerySingleAsync<string>("show server_version;"))
+				.Split()
+				.First()
+				.To(Version.Parse);
+
+			versionCache[endpoint] = version;
+			return version;
+		}
+
+		/// <summary>
+		/// Get current database server endpoint. 
+		/// </summary>
+		private Endpoint GetCurrentEndpoint()
+		{
+			var connectionString = configuration.ConnectionString();
+			var host = connectionString["server"].To(str => IPAddress.Parse(str));
+			var port = connectionString["port"].To(str => ushort.Parse(str));
+			return (host, port);	
 		}
 	}
 }

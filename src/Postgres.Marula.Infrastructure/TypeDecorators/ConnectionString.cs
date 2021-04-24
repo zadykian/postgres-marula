@@ -22,6 +22,8 @@ namespace Postgres.Marula.Infrastructure.TypeDecorators
 				.Select(pair => $"{pair.Key}={pair.Value}")
 				.JoinBy("; ");
 
+		public NonEmptyString this[NonEmptyString key] => parameters[key];
+
 		/// <summary>
 		/// Implicit cast operator <see cref="ConnectionString"/> -> <see cref="string"/>.
 		/// </summary>
