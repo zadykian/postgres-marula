@@ -45,3 +45,13 @@ Write a message to the server log if checkpoints caused by the filling of WAL se
 The default is 30 seconds.
 
 Is is calculated as **0.5 * checkpoint_timeout**
+
+
+
+### checkpoint_completion_target
+
+Specifies the target of checkpoint completion, as a fraction of total time between checkpoints.
+
+The default is 0.5.
+
+It is calculated as **(checkpoint_timeout - 2 min) / checkpoint_timeout** to evenly distribute the load produced by background WAL writer.
