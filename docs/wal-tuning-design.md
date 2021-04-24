@@ -5,28 +5,27 @@ configuration of Postgres server.
 
 ## parameters being tuned
 
-There is a list of database server parameters which are taken into account during tool development:
+There is a list of database server parameters which are taken into account during tool development
+
+
 
 ### checkpoint_timeout
 
-<p>
 Maximum time between automatic WAL checkpoints.
 Default value is 5 minutes which is too small for most modern server configurations.
-</p>
-<p>
+
 Marula tunes it to 30 minutes.
-</p>
+
+
 
 ### max_wal_size
 
-<p>
 Maximum size to let the WAL grow during automatic checkpoints.
 This is a soft limit - WAL size can exceed max_wal_size under special circumstances.
-</p>
-<p>
+
 This value is being calculated based on current workload.
 More specifically, on how much WAL is produced by server during given period of time.
-</p>
+
 Actual formula for **PG11+** looks like this:
     **{wal-traffic} * (1 + checkpoint_completion_target)**
 
@@ -36,3 +35,13 @@ For version 10 and older formula mostly identical:
 The point is that the server needs to keep WAL files starting at the moment of the last completed checkpoint plus the files accumulated during the current checkpoint. But for before Postgres 11 server also retained files from the last but one checkpoint.
 
 **wal-traffic** is calculated as difference between values retrieved with given interval by **pg_current_xlog_insert_location()** server function. The interval is taken equal to **checkpoint_timeout** parameter value.
+
+
+
+### checkpoint_warning
+
+Write a message to the server log if checkpoints caused by the filling of WAL segment files happen closer together than this amount of time.
+
+The default is 30 seconds.
+
+Is is calculated as **0.5 * checkpoint_timeout**
