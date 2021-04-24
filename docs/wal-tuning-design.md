@@ -54,4 +54,4 @@ Specifies the target of checkpoint completion, as a fraction of total time betwe
 
 The default is 0.5.
 
-It is calculated as **(checkpoint_timeout - 2 min) / checkpoint_timeout** to evenly distribute the load produced by background WAL writer.
+It is calculated as **min(0.9, (checkpoint_timeout - 2 min) / checkpoint_timeout)** to evenly distribute the load produced by background WAL writer.
