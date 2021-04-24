@@ -94,14 +94,13 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 
 			var dbConnection = await GetConnectionAsync();
 
-			var (parameterValue, minValue, maxValue) = await dbConnection.QuerySingleAsync<(NonEmptyString, decimal?, decimal?)>(
+			var (value, minValue, maxValue) = await dbConnection.QuerySingleAsync<(NonEmptyString, decimal?, decimal?)>(
 				commandText,
 				new {parameterName});
 
 			return minValue.HasValue && maxValue.HasValue
-				? new Range<decimal>(minValue.Value, maxValue.Value)
-					.To(range => new RawRangeParameterValue(parameterValue, range))
-				: new RawParameterValue(parameterValue);
+				? new RawRangeParameterValue(value, (minValue.Value, maxValue.Value))
+				: new RawParameterValue(value);
 		}
 
 		/// <summary>
