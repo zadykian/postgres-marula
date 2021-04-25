@@ -6,7 +6,7 @@ namespace Postgres.Marula.Infrastructure.TypeDecorators
 	/// <summary>
 	/// 'pg_catalog.pg_lsn' data type object representation. 
 	/// </summary>
-	public readonly struct PgLsn
+	public readonly struct LogSeqNumber
 	{
 		private readonly uint major;
 		private readonly uint minor;
@@ -17,7 +17,7 @@ namespace Postgres.Marula.Infrastructure.TypeDecorators
 		/// <param name="minor">
 		/// Minor LSN part.
 		/// </param>
-		public PgLsn(uint major, uint minor)
+		public LogSeqNumber(uint major, uint minor)
 		{
 			this.major = major;
 			this.minor = minor;
@@ -26,7 +26,7 @@ namespace Postgres.Marula.Infrastructure.TypeDecorators
 		/// <param name="stringRepresentation">
 		/// LSN string representation: '{major}/{minor}'.
 		/// </param>
-		public PgLsn(NonEmptyString stringRepresentation)
+		public LogSeqNumber(NonEmptyString stringRepresentation)
 		{
 			var (majorStr, minorStr) = stringRepresentation
 				.To(str => (string) str)
@@ -44,7 +44,7 @@ namespace Postgres.Marula.Infrastructure.TypeDecorators
 		/// Operator which calculates the difference in bytes
 		/// between two LSN values. 
 		/// </summary>
-		public static ulong operator -(PgLsn left, PgLsn right)
+		public static ulong operator -(LogSeqNumber left, LogSeqNumber right)
 		{
 			var majorDiff = (ulong) (left.major - right.major) << 32;
 			var minorDiff = left.minor - right.minor;
