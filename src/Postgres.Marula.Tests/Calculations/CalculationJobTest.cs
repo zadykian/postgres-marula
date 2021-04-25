@@ -1,7 +1,10 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using Postgres.Marula.Calculations.Configuration;
+using Postgres.Marula.Calculations.Jobs;
 using Postgres.Marula.Calculations.Jobs.Base;
 using Postgres.Marula.Tests.Calculations.Base;
 using Postgres.Marula.Tests.Calculations.FakeServices;
@@ -19,7 +22,7 @@ namespace Postgres.Marula.Tests.Calculations
 		[Test]
 		public async Task RunCalculationJob()
 		{
-			var calculationJob = GetService<IJob>();
+			var calculationJob = GetService<IEnumerable<IJob>>().Single(job => job is GeneralCalculationsJob);
 			calculationJob.Run();
 
 			var configuration = GetService<ICalculationsConfiguration>();

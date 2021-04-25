@@ -30,10 +30,10 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 		}
 
 		/// <summary>
-		/// Insert empty collection of values. 
+		/// Save empty collection of values. 
 		/// </summary>
 		[Test]
-		public async Task InsertEmptyCollectionTest()
+		public async Task SaveEmptyCollectionTest()
 		{
 			var systemStorage = GetService<ISystemStorage>();
 			await systemStorage.SaveParameterValuesAsync(ImmutableArray<ParameterValueWithStatus>.Empty);
@@ -41,10 +41,10 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 		}
 
 		/// <summary>
-		/// Insert calculated values to system table. 
+		/// Save calculated values to system storage. 
 		/// </summary>
 		[Test]
-		public async Task InsertCalculatedValuesTest()
+		public async Task SaveCalculatedValuesTest()
 		{
 			var parameterValues = new ParameterValueWithStatus[]
 			{
@@ -76,6 +76,17 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 			var systemStorage = GetService<ISystemStorage>();
 			await systemStorage.SaveParameterValuesAsync(parameterValues);
 			Assert.Pass();
+		}
+
+		/// <summary>
+		/// Insert LSN to system storage. 
+		/// </summary>
+		[Test]
+		public async Task SaveLogSeqNumberTest()
+		{
+			var logSeqNumber = new LogSeqNumber("16/1A0343D0");
+			var systemStorage = GetService<ISystemStorage>();
+			await systemStorage.SaveLogSeqNumberAsync(logSeqNumber);
 		}
 	}
 }
