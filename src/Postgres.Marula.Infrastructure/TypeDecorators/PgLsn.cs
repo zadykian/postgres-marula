@@ -1,3 +1,6 @@
+using System.Globalization;
+using Postgres.Marula.Infrastructure.Extensions;
+
 namespace Postgres.Marula.Infrastructure.TypeDecorators
 {
 	/// <summary>
@@ -18,6 +21,20 @@ namespace Postgres.Marula.Infrastructure.TypeDecorators
 		{
 			this.major = major;
 			this.minor = minor;
+		}
+
+		/// <param name="stringRepresentation">
+		/// LSN string representation: '{major}/{minor}'.
+		/// </param>
+		public PgLsn(NonEmptyString stringRepresentation)
+		{
+			var (majorStr, minorStr) = stringRepresentation
+				.To(str => (string) str)
+				.Split('/')
+				.To(tokens => (tokens[0], tokens[1]));
+
+			major = uint.Parse(majorStr, NumberStyles.HexNumber);
+			minor = uint.Parse(minorStr, NumberStyles.HexNumber);
 		}
 
 		/// <inheritdoc />
