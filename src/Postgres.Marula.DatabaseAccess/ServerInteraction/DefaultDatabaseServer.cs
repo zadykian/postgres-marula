@@ -52,7 +52,7 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 				.Add("select pg_reload_conf();")
 				.JoinBy(Environment.NewLine);
 
-			var dbConnection = await GetConnectionAsync();
+			var dbConnection = await Connection();
 			var signalWasSentSuccessfully = await dbConnection.QuerySingleAsync<bool>(commandText);
 
 			if (!signalWasSentSuccessfully)
@@ -76,7 +76,7 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 				from pg_catalog.pg_settings
 				where name = @{nameof(IParameterLink.Name)};");
 
-			var dbConnection = await GetConnectionAsync();
+			var dbConnection = await Connection();
 			var (minValue, maxValue) = await dbConnection.QuerySingleAsync<(decimal, decimal)>(
 				commandText,
 				new {parameterValue.ParameterLink.Name});
@@ -101,7 +101,7 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 				from pg_catalog.pg_settings
 				where name = @{nameof(parameterName)};");
 
-			var dbConnection = await GetConnectionAsync();
+			var dbConnection = await Connection();
 
 			var (value, minValue, maxValue) = await dbConnection.QuerySingleAsync<(NonEmptyString, decimal?, decimal?)>(
 				commandText,
@@ -130,12 +130,19 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 				from pg_catalog.pg_settings
 				where name = @{nameof(parameterName)};");
 
-			var dbConnection = await GetConnectionAsync();
+			var dbConnection = await Connection();
 			var stringRepresentation = await dbConnection.QuerySingleAsync<NonEmptyString>(commandText, new {parameterName});
 
 			parameterContext = stringRepresentation.ByStringRepresentation<ParameterContext>();
 			contextCache[parameterName] = parameterContext;
 			return parameterContext;
+		}
+
+		/// <inheritdoc />
+		async Task<LogSeqNumber> IDatabaseServer.GetCurrentLogSeqNumberAsync()
+		{
+			var dbConnection = await Connection();
+			return await dbConnection.QuerySingleAsync<LogSeqNumber>("select pg_catalog.pg_current_wal_insert_lsn();");
 		}
 
 		/// <summary>
@@ -156,7 +163,7 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 				return version;
 			}
 
-			var dbConnection = await GetConnectionAsync();
+			var dbConnection = await Connection();
 
 			version = (await dbConnection.QuerySingleAsync<string>("show server_version;"))
 				.Split()
@@ -175,7 +182,7 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 			var connectionString = configuration.ConnectionString();
 			var host = connectionString["server"].To(str => IPAddress.Parse(str));
 			var port = connectionString["port"].To(str => ushort.Parse(str));
-			return (host, port);	
+			return (host, port);
 		}
 	}
 }

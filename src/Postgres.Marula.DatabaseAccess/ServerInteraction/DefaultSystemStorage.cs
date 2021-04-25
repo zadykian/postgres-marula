@@ -33,7 +33,7 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 			}
 
 			var commandText = GetCommandTextToInsertValues(parameterValues);
-			var dbConnection = await GetConnectionAsync();
+			var dbConnection = await Connection();
 			await dbConnection.ExecuteAsync(commandText);
 		}
 

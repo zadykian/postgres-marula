@@ -30,6 +30,11 @@ namespace Postgres.Marula.Calculations.ExternalDependencies
 		ValueTask<ParameterContext> GetParameterContextAsync(NonEmptyString parameterName);
 
 		/// <summary>
+		/// Get current Write-Ahead Log insert location.
+		/// </summary>
+		Task<LogSeqNumber> GetCurrentLogSeqNumberAsync();
+
+		/// <summary>
 		/// Get current PostgreSQL version. 
 		/// </summary>
 		ValueTask<Version> GetPostgresVersionAsync();

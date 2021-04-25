@@ -17,6 +17,6 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction.Base
 		/// <summary>
 		/// Get connection to database to interact with. 
 		/// </summary>
-		protected Task<IDbConnection> GetConnectionAsync() => dbConnectionFactory.GetConnectionAsync();
+		protected Task<IDbConnection> Connection() => dbConnectionFactory.GetConnectionAsync();
 	}
 }

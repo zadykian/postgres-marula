@@ -27,6 +27,10 @@ namespace Postgres.Marula.Tests.Calculations.FakeServices
 			=> ValueTask.FromResult(ParameterContext.Sighup);
 
 		/// <inheritdoc />
+		Task<LogSeqNumber> IDatabaseServer.GetCurrentLogSeqNumberAsync()
+			=> Task.FromResult(new LogSeqNumber());
+
+		/// <inheritdoc />
 		ValueTask<Version> IDatabaseServer.GetPostgresVersionAsync()
 			=> ValueTask.FromResult(new Version(12, 5));
 

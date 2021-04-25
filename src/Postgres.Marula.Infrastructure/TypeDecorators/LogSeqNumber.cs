@@ -4,24 +4,15 @@ using Postgres.Marula.Infrastructure.Extensions;
 namespace Postgres.Marula.Infrastructure.TypeDecorators
 {
 	/// <summary>
-	/// 'pg_catalog.pg_lsn' data type object representation. 
+	/// 'pg_catalog.pg_lsn' data type object representation.
 	/// </summary>
+	/// <remarks>
+	/// Write-Ahead Log insert location.
+	/// </remarks>
 	public readonly struct LogSeqNumber
 	{
 		private readonly uint major;
 		private readonly uint minor;
-
-		/// <param name="major">
-		/// Major LSN part.
-		/// </param>
-		/// <param name="minor">
-		/// Minor LSN part.
-		/// </param>
-		public LogSeqNumber(uint major, uint minor)
-		{
-			this.major = major;
-			this.minor = minor;
-		}
 
 		/// <param name="stringRepresentation">
 		/// LSN string representation: '{major}/{minor}'.
