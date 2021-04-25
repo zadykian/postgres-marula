@@ -11,7 +11,10 @@ namespace Postgres.Marula.Calculations.Parameters.Base
 		where TValue : IEquatable<TValue>
 	{
 		/// <inheritdoc />
-		public abstract NonEmptyString Name { get; }
+		NonEmptyString IParameterLink.Name
+			=> GetType()
+				.Name
+				.ToSnakeCase();
 
 		/// <inheritdoc />
 		IParameterValue IParameter.Calculate()
