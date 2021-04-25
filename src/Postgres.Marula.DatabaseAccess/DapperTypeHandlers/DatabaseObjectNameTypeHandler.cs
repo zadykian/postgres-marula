@@ -19,6 +19,6 @@ namespace Postgres.Marula.DatabaseAccess.DapperTypeHandlers
 
 		/// <inheritdoc />
 		public override DatabaseObjectName Parse(object value)
-			=> value.ToString() ?? throw new ArgumentNullException(nameof(value));
+			=> value.ToString() ?? throw new ArgumentNullException();
 	}
 }
