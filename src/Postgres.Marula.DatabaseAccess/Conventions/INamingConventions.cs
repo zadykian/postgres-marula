@@ -37,6 +37,12 @@ namespace Postgres.Marula.DatabaseAccess.Conventions
 		/// </summary>
 		[ScriptPlaceholder("UNIT_ENUM_NAME_TO_REPLACE")]
 		DatabaseObjectName ParameterUnitEnumName { get; }
+
+		/// <summary>
+		/// Name of Write-Ahead Log insert locations table.
+		/// </summary>
+		[ScriptPlaceholder("WAL_LSN_HISTORY_TABLE_NAME_TO_REPLACE")]
+		DatabaseObjectName WalLsnHistoryTableName { get; }
 	}
 
 	/// <summary>
