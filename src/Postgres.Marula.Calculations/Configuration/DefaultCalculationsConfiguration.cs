@@ -30,12 +30,5 @@ namespace Postgres.Marula.Calculations.Configuration
 				.GetSection("General:AutoAdjustParams")
 				.Value
 				.To(bool.Parse);
-
-		/// <inheritdoc />
-		Fraction ICalculationsConfiguration.TargetRelationsBloatFraction()
-			=> ConfigurationSection
-				.GetSection("Autovacuum:TargetRelationsBloatFraction")
-				.Value
-				.To(stringValue => decimal.Parse(stringValue, CultureInfo.InvariantCulture));
 	}
 }
