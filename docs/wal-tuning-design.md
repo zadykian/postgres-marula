@@ -34,7 +34,7 @@ For version 10 and older formula mostly identical:
 
 The point is that the server needs to keep WAL files starting at the moment of the last completed checkpoint plus the files accumulated during the current checkpoint. But for before Postgres 11 server also retained files from the last but one checkpoint.
 
-**wal-traffic** is calculated as difference between values retrieved with given interval by **pg_current_xlog_insert_location()** server function. The interval is taken equal to **checkpoint_timeout** parameter value.
+**wal-traffic** is calculated as difference between values retrieved with given interval by **pg_current_wal_insert_lsn()** server function. The interval is taken equal to **checkpoint_timeout** parameter value.
 
 
 
