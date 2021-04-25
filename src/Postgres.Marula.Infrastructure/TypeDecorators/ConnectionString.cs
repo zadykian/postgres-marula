@@ -22,6 +22,9 @@ namespace Postgres.Marula.Infrastructure.TypeDecorators
 				.Select(pair => $"{pair.Key}={pair.Value}")
 				.JoinBy("; ");
 
+		/// <summary>
+		/// Connection string entries indexer. 
+		/// </summary>
 		public NonEmptyString this[NonEmptyString key] => parameters[key];
 
 		/// <summary>
