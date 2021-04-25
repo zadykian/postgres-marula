@@ -17,11 +17,10 @@ namespace Postgres.Marula.Calculations.Jobs
 		private readonly IPipelineFactory pipelineFactory;
 
 		public GeneralCalculationsJob(
-			ICalculationsConfiguration calculationsConfiguration,
+			ICalculationsConfiguration configuration,
 			IPipelineFactory pipelineFactory,
 			IServiceScopeFactory serviceScopeFactory,
-			ILogger<GeneralCalculationsJob> logger)
-			: base(calculationsConfiguration.RecalculationInterval(), serviceScopeFactory, logger)
+			ILogger<GeneralCalculationsJob> logger) : base(configuration.RecalculationInterval(), serviceScopeFactory, logger)
 			=> this.pipelineFactory = pipelineFactory;
 
 		/// <inheritdoc />

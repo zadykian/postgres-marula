@@ -30,5 +30,13 @@ namespace Postgres.Marula.Calculations.Configuration
 				.GetSection("General:AutoAdjustParams")
 				.Value
 				.To(bool.Parse);
+
+		/// <inheritdoc />
+		PositiveTimeSpan ICalculationsConfiguration.LsnTrackInterval()
+			=> ConfigurationSection
+				.GetSection("Wal:LsnTrackIntervalInSeconds")
+				.Value
+				.To(double.Parse)
+				.To(TimeSpan.FromSeconds);
 	}
 }

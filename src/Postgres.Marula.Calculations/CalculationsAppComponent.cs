@@ -30,6 +30,7 @@ namespace Postgres.Marula.Calculations
 				.AddTransient<ValuesHistoryMiddleware>()
 				.AddSingleton<IPipelineFactory, DefaultPipelineFactory>()
 				.AddSingleton<IJob, GeneralCalculationsJob>()
+				.AddSingleton<IJob, WalLsnTrackingJob>()
 				.AddSingleton<IParameterValueParser, DefaultParameterValueParser>();
 	}
 }

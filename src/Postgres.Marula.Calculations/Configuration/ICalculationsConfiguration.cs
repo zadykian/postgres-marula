@@ -16,5 +16,10 @@ namespace Postgres.Marula.Calculations.Configuration
 		/// Automatic database's parameters adjustment is enabled. 
 		/// </summary>
 		bool AutoAdjustmentIsEnabled();
+
+		/// <summary>
+		/// Interval of WAL insert location tracking. 
+		/// </summary>
+		PositiveTimeSpan LsnTrackInterval();
 	}
 }
