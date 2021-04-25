@@ -8,7 +8,7 @@ namespace Postgres.Marula.Calculations.Parameters.Autovacuum
 	/// <summary>
 	/// Controls whether the server should run the autovacuum launcher daemon.
 	/// </summary>
-	internal class AutovacuumParameter : BooleanParameterBase
+	internal class Autovacuum : BooleanParameterBase
 	{
 		/// <inheritdoc />
 		public override NonEmptyString Name => "autovacuum";
