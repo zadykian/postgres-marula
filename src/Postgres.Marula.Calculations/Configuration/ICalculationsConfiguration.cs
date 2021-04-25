@@ -20,6 +20,6 @@ namespace Postgres.Marula.Calculations.Configuration
 		/// <summary>
 		/// Interval of WAL insert location tracking. 
 		/// </summary>
-		PositiveTimeSpan LsnTrackInterval();
+		PositiveTimeSpan LsnTrackingInterval();
 	}
 }

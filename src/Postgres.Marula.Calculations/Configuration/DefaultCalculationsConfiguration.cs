@@ -32,9 +32,9 @@ namespace Postgres.Marula.Calculations.Configuration
 				.To(bool.Parse);
 
 		/// <inheritdoc />
-		PositiveTimeSpan ICalculationsConfiguration.LsnTrackInterval()
+		PositiveTimeSpan ICalculationsConfiguration.LsnTrackingInterval()
 			=> ConfigurationSection
-				.GetSection("Wal:LsnTrackIntervalInSeconds")
+				.GetSection("Wal:LsnTrackingIntervalInSeconds")
 				.Value
 				.To(double.Parse)
 				.To(TimeSpan.FromSeconds);

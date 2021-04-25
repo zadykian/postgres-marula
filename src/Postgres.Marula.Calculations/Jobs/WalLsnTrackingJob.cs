@@ -16,7 +16,7 @@ namespace Postgres.Marula.Calculations.Jobs
 		public WalLsnTrackingJob(
 			ICalculationsConfiguration configuration,
 			IServiceScopeFactory serviceScopeFactory,
-			ILogger<JobBase> logger) : base(configuration.LsnTrackInterval(), serviceScopeFactory, logger)
+			ILogger<JobBase> logger) : base(configuration.LsnTrackingInterval(), serviceScopeFactory, logger)
 		{
 		}
 
