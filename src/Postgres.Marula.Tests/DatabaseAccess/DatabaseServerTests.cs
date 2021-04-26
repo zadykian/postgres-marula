@@ -36,7 +36,7 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 		/// Test case source for <see cref="GetRawParameterValueTest"/>. 
 		/// </summary>
 		private static IEnumerable<(NonEmptyString ParameterName, bool WithRange)> ParameterNameTestCaseSource()
-			=> new(NonEmptyString, bool)[]
+			=> new (NonEmptyString, bool)[]
 			{
 				("autovacuum", false),
 				("autovacuum_vacuum_cost_delay", true),
@@ -177,6 +177,28 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 			yield return ("shared_buffers", ParameterContext.Postmaster);
 			yield return ("autovacuum_vacuum_scale_factor", ParameterContext.Sighup);
 			yield return ("track_counts", ParameterContext.Superuser);
+		}
+
+		/// <summary>
+		/// Get current Write-Ahead Log insert location.
+		/// </summary>
+		[Test]
+		public async Task GetLogSeqNumberTest()
+		{
+			var databaseServer = GetService<IDatabaseServer>();
+			var currentLogSeqNumber = await databaseServer.GetCurrentLogSeqNumberAsync();
+			Assert.AreNotEqual(default(LogSeqNumber), currentLogSeqNumber);
+		}
+
+		/// <summary>
+		/// Get Postgres server version.
+		/// </summary>
+		[Test]
+		public async Task GetPostgresVersionTest()
+		{
+			var databaseServer = GetService<IDatabaseServer>();
+			var postgresVersion = await databaseServer.GetPostgresVersionAsync();
+			Assert.IsNotNull(postgresVersion);
 		}
 	}
 }

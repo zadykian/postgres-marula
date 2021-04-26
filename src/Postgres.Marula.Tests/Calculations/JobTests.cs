@@ -14,13 +14,13 @@ namespace Postgres.Marula.Tests.Calculations
 	/// <summary>
 	/// <see cref="IJob"/> tests.
 	/// </summary>
-	internal class CalculationJobTest : CalculationsTestFixtureBase
+	internal class JobTests : CalculationsTestFixtureBase
 	{
 		/// <summary>
-		/// Run calculations job.
+		/// Run general calculations job.
 		/// </summary>
 		[Test]
-		public async Task RunCalculationJob()
+		public async Task GeneralCalculationsJobTest()
 		{
 			var calculationJob = GetService<IEnumerable<IJob>>().Single(job => job is GeneralCalculationsJob);
 			calculationJob.Run();
