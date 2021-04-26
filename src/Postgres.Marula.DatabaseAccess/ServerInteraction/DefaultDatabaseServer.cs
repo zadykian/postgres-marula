@@ -20,9 +20,6 @@ using Postgres.Marula.DatabaseAccess.ServerInteraction.Exceptions;
 using Postgres.Marula.Infrastructure.Extensions;
 using Postgres.Marula.Infrastructure.TypeDecorators;
 
-// Database server endpoint - IP address and TCP port.
-using Endpoint = System.ValueTuple<System.Net.IPAddress, ushort>;
-
 namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 {
 	/// <inheritdoc cref="IDatabaseServer" />
@@ -151,7 +148,7 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 		/// <remarks>
 		/// Keys are server endpoints - IP address and TCP port.
 		/// </remarks>
-		private static readonly ConcurrentDictionary<Endpoint, Version> versionCache = new();
+		private static readonly ConcurrentDictionary<IPEndPoint, Version> versionCache = new();
 
 		/// <inheritdoc />
 		async ValueTask<Version> IDatabaseServer.GetPostgresVersionAsync()
@@ -175,14 +172,19 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 		}
 
 		/// <summary>
-		/// Get current database server endpoint. 
+		/// Localhost <see cref="IPAddress"/> object.
 		/// </summary>
-		private Endpoint GetCurrentEndpoint()
+		private static readonly IPAddress localhost = new(new byte[] {127, 0, 0, 1});
+
+		/// <summary>
+		/// Get current database server endpoint.
+		/// </summary>
+		private IPEndPoint GetCurrentEndpoint()
 		{
 			var connectionString = configuration.ConnectionString();
-			var host = connectionString["server"].To(str => IPAddress.Parse(str));
+			var host = connectionString["server"].To(str => str == "localhost" ? localhost : IPAddress.Parse(str));
 			var port = connectionString["port"].To(str => ushort.Parse(str));
-			return (host, port);
+			return new(host, port);
 		}
 	}
 }
