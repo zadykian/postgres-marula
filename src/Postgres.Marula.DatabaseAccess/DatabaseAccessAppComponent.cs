@@ -36,7 +36,7 @@ namespace Postgres.Marula.DatabaseAccess
 				.AddSingleton<ISqlScriptsProvider, AssemblyResourcesSqlScriptsProvider>()
 				.AddSingleton<ISqlScriptsExecutor, DefaultSqlScriptsExecutor>()
 				.AddSingleton<IDatabaseAccessConfiguration, DefaultDatabaseAccessConfiguration>()
-				.AddScoped(DbConnectionFactory)
+				.AddScoped(DbConnectionFactoryMethod)
 				.AddScoped<IDbConnectionFactory, DefaultDbConnectionFactory>()
 				.AddScoped<IDatabaseServer, DefaultDatabaseServer>()
 				.AddScoped<ISystemStorage, DefaultSystemStorage>();
@@ -44,7 +44,7 @@ namespace Postgres.Marula.DatabaseAccess
 		/// <summary>
 		/// Database connection factory method. 
 		/// </summary>
-		private static IDbConnection DbConnectionFactory(IServiceProvider serviceProvider)
+		private static IDbConnection DbConnectionFactoryMethod(IServiceProvider serviceProvider)
 			=> serviceProvider
 				.GetRequiredService<IDatabaseAccessConfiguration>()
 				.ConnectionString()
