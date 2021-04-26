@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Postgres.Marula.Calculations.Configuration;
+using Postgres.Marula.Calculations.ExternalDependencies;
 using Postgres.Marula.Calculations.Jobs.Base;
 using Postgres.Marula.Infrastructure.TypeDecorators;
 
@@ -26,8 +27,15 @@ namespace Postgres.Marula.Calculations.Jobs
 		/// <inheritdoc />
 		protected override async ValueTask ExecuteAsync(IServiceScope serviceScope)
 		{
-			// todo
-			await ValueTask.CompletedTask;
+			var currentLogSeqNumber = await serviceScope
+				.ServiceProvider
+				.GetRequiredService<IDatabaseServer>()
+				.GetCurrentLogSeqNumberAsync();
+
+			await serviceScope
+				.ServiceProvider
+				.GetRequiredService<ISystemStorage>()
+				.SaveLogSeqNumberAsync(currentLogSeqNumber);
 		}
 	}
 }
