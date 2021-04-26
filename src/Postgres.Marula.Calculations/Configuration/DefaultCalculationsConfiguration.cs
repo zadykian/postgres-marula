@@ -36,7 +36,7 @@ namespace Postgres.Marula.Calculations.Configuration
 			=> ConfigurationSection
 				.GetSection("Wal:LsnTrackingIntervalInSeconds")
 				.Value
-				.To(double.Parse)
+				.To(stringValue => double.Parse(stringValue, CultureInfo.InvariantCulture))
 				.To(TimeSpan.FromSeconds);
 	}
 }
