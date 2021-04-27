@@ -1,29 +1,32 @@
+using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Postgres.Marula.Calculations.Jobs;
+using Postgres.Marula.Calculations.Jobs.Base;
+using Postgres.Marula.Infrastructure.Extensions;
 
 namespace Postgres.Marula.AppHost
 {
 	/// <inheritdoc />
 	internal class HostedService : BackgroundService
 	{
-		private readonly ICalculationJob calculationJob;
+		private readonly IReadOnlyCollection<IJob> jobs;
 		private readonly ILogger<HostedService> logger;
 
 		public HostedService(
-			ICalculationJob calculationJob,
+			IEnumerable<IJob> jobs,
 			ILogger<HostedService> logger)
 		{
-			this.calculationJob = calculationJob;
+			this.jobs = jobs.ToImmutableArray();
 			this.logger = logger;
 		}
 
 		/// <inheritdoc />
 		protected override async Task ExecuteAsync(CancellationToken stoppingToken)
 		{
-			calculationJob.Run();
+			jobs.ForEach(job => job.Run());
 			logger.LogInformation("Marula application is running.");
 			await Task.CompletedTask;
 		}

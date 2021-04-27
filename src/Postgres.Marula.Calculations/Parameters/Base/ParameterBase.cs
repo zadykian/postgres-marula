@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Postgres.Marula.Calculations.ParameterValues.Base;
 using Postgres.Marula.Infrastructure.Extensions;
 using Postgres.Marula.Infrastructure.TypeDecorators;
@@ -11,17 +12,23 @@ namespace Postgres.Marula.Calculations.Parameters.Base
 		where TValue : IEquatable<TValue>
 	{
 		/// <inheritdoc />
-		public abstract NonEmptyString Name { get; }
+		NonEmptyString IParameterLink.Name
+			=> GetType()
+				.Name
+				.ToSnakeCase();
 
 		/// <inheritdoc />
-		IParameterValue IParameter.Calculate()
+		/// <remarks>
+		/// This implementation calls <see cref="ParameterValueBase{T}(IParameterLink, T)"/> constructor.
+		/// </remarks>
+		async ValueTask<IParameterValue> IParameter.CalculateAsync()
 			=> Activator
-				.CreateInstance(typeof(TParameterValue), this.GetLink(), CalculateValue())
+				.CreateInstance(typeof(TParameterValue), this.GetLink(), await CalculateValueAsync())
 				.To(instance => (IParameterValue) instance!);
 
 		/// <summary>
 		/// Calculate parameter value. 
 		/// </summary>
-		protected abstract TValue CalculateValue();
+		protected abstract ValueTask<TValue> CalculateValueAsync();
 	}
 }

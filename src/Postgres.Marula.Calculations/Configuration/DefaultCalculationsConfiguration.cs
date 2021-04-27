@@ -32,10 +32,11 @@ namespace Postgres.Marula.Calculations.Configuration
 				.To(bool.Parse);
 
 		/// <inheritdoc />
-		Fraction ICalculationsConfiguration.TargetRelationsBloatFraction()
+		PositiveTimeSpan ICalculationsConfiguration.LsnTrackingInterval()
 			=> ConfigurationSection
-				.GetSection("Autovacuum:TargetRelationsBloatFraction")
+				.GetSection("Wal:LsnTrackingIntervalInSeconds")
 				.Value
-				.To(stringValue => decimal.Parse(stringValue, CultureInfo.InvariantCulture));
+				.To(stringValue => double.Parse(stringValue, CultureInfo.InvariantCulture))
+				.To(TimeSpan.FromSeconds);
 	}
 }

@@ -1,6 +1,5 @@
 using System;
-using System.Data;
-using Dapper;
+using Postgres.Marula.DatabaseAccess.DapperTypeHandlers.Base;
 using Postgres.Marula.Infrastructure.TypeDecorators;
 
 namespace Postgres.Marula.DatabaseAccess.DapperTypeHandlers
@@ -8,17 +7,9 @@ namespace Postgres.Marula.DatabaseAccess.DapperTypeHandlers
 	/// <summary>
 	/// <see cref="NonEmptyString"/> dapper type handler.
 	/// </summary>
-	internal class NonEmptyStringTypeHandler : SqlMapper.TypeHandler<NonEmptyString>
+	internal class NonEmptyStringTypeHandler : StringLikeTypeHandlerBase<NonEmptyString>
 	{
 		/// <inheritdoc />
-		public override void SetValue(IDbDataParameter parameter, NonEmptyString value)
-		{
-			parameter.DbType = DbType.String;
-			parameter.Value = value.ToString();
-		}
-
-		/// <inheritdoc />
-		public override NonEmptyString Parse(object value)
-			=> value.ToString() ?? throw new ArgumentNullException(nameof(value));
+		public override NonEmptyString Parse(object value) => value.ToString() ?? throw new ArgumentNullException();
 	}
 }

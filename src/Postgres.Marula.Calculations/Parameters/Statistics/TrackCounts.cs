@@ -1,20 +1,18 @@
+using System.Threading.Tasks;
 using Postgres.Marula.Calculations.Parameters.Base;
-using Postgres.Marula.Infrastructure.TypeDecorators;
 
 // ReSharper disable UnusedType.Global
 
 namespace Postgres.Marula.Calculations.Parameters.Statistics
 {
 	/// <summary>
+	/// [track_counts]
 	/// Enables collection of statistics on database activity.
 	/// This parameter affects autovacuum, because the autovacuum daemon needs the collected information.
 	/// </summary>
 	internal class TrackCountsParameter : BooleanParameterBase
 	{
 		/// <inheritdoc />
-		public override NonEmptyString Name => "track_counts";
-
-		/// <inheritdoc />
-		protected override bool CalculateValue() => true;
+		protected override ValueTask<bool> CalculateValueAsync() => ValueTask.FromResult(true);
 	}
 }

@@ -19,5 +19,8 @@ namespace Postgres.Marula.DatabaseAccess.Conventions
 
 		/// <inheritdoc />
 		DatabaseObjectName INamingConventions.ParameterUnitEnumName => "parameter_unit";
+
+		/// <inheritdoc />
+		DatabaseObjectName INamingConventions.WalLsnHistoryTableName => "wal_lsn_history";
 	}
 }

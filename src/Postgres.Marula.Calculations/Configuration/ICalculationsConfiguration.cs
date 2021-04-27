@@ -18,16 +18,8 @@ namespace Postgres.Marula.Calculations.Configuration
 		bool AutoAdjustmentIsEnabled();
 
 		/// <summary>
-		/// <para>
-		/// Average bloat factor of all relation in database server
-		/// which serves as target for internal algorithms.
-		/// </para>
-		/// <para>
-		/// For example, if average bloat fraction in database
-		/// is far more then current parameter value, autovacuum will be tuned
-		/// in more aggressive way. 
-		/// </para>
+		/// Interval of WAL insert location tracking. 
 		/// </summary>
-		Fraction TargetRelationsBloatFraction();
+		PositiveTimeSpan LsnTrackingInterval();
 	}
 }

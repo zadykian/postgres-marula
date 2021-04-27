@@ -9,7 +9,7 @@ create table VALUES_HISTORY_TABLE_NAME_TO_REPLACE
 	calculated_value      non_empty_string,
 	unit			      UNIT_ENUM_NAME_TO_REPLACE   not null,
 	status                STATUS_ENUM_NAME_TO_REPLACE not null,
-	calculation_date_time timestamp                   not null default current_timestamp
+	calculation_timestamp timestamp                   not null default current_timestamp
 );
 
 comment on table  VALUES_HISTORY_TABLE_NAME_TO_REPLACE                       is 'Parameter values calculated my marula service.';
@@ -18,4 +18,4 @@ comment on column VALUES_HISTORY_TABLE_NAME_TO_REPLACE.parameter_id          is 
 comment on column VALUES_HISTORY_TABLE_NAME_TO_REPLACE.calculated_value      is 'Calculated value.';
 comment on column VALUES_HISTORY_TABLE_NAME_TO_REPLACE.unit                  is 'Parameter unit.';
 comment on column VALUES_HISTORY_TABLE_NAME_TO_REPLACE.status                is 'Value calculation status.';
-comment on column VALUES_HISTORY_TABLE_NAME_TO_REPLACE.calculation_date_time is 'Calculation date and time.';
+comment on column VALUES_HISTORY_TABLE_NAME_TO_REPLACE.calculation_timestamp is 'Calculation date and time.';

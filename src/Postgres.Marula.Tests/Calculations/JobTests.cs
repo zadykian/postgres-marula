@@ -1,25 +1,28 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using Postgres.Marula.Calculations.Configuration;
 using Postgres.Marula.Calculations.Jobs;
+using Postgres.Marula.Calculations.Jobs.Base;
 using Postgres.Marula.Tests.Calculations.Base;
 using Postgres.Marula.Tests.Calculations.FakeServices;
 
 namespace Postgres.Marula.Tests.Calculations
 {
 	/// <summary>
-	/// <see cref="ICalculationJob"/> tests.
+	/// <see cref="IJob"/> tests.
 	/// </summary>
-	internal class CalculationJobTest : CalculationsTestFixtureBase
+	internal class JobTests : CalculationsTestFixtureBase
 	{
 		/// <summary>
-		/// Run calculations job.
+		/// Run general calculations job.
 		/// </summary>
 		[Test]
-		public async Task RunCalculationJob()
+		public async Task GeneralCalculationsJobTest()
 		{
-			var calculationJob = GetService<ICalculationJob>();
+			var calculationJob = GetService<IEnumerable<IJob>>().Single(job => job is GeneralCalculationsJob);
 			calculationJob.Run();
 
 			var configuration = GetService<ICalculationsConfiguration>();

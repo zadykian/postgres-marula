@@ -33,7 +33,7 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 			}
 
 			var commandText = GetCommandTextToInsertValues(parameterValues);
-			var dbConnection = await GetConnectionAsync();
+			var dbConnection = await Connection();
 			await dbConnection.ExecuteAsync(commandText);
 		}
 
@@ -83,5 +83,18 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 				}
 				.JoinBy(", ")
 				.To(values => $"({values})");
+
+		/// <inheritdoc />
+		async Task ISystemStorage.SaveLogSeqNumberAsync(LogSeqNumber logSeqNumber)
+		{
+			var commandText = $@"
+				insert into {namingConventions.SystemSchemaName}.{namingConventions.WalLsnHistoryTableName}
+					(wal_insert_location)
+				values
+					(@{nameof(logSeqNumber)}::pg_catalog.pg_lsn);";
+
+			var dbConnection = await Connection();
+			await dbConnection.ExecuteAsync(commandText, new {logSeqNumber});
+		}
 	}
 }
