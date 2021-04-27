@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Linq;
 using System.Threading.Tasks;
 using NUnit.Framework;
@@ -24,9 +23,10 @@ namespace Postgres.Marula.Tests.Calculations.MiddlewareComponents
 		{
 			var parametersManagementContext = GetService<ParametersManagementContext>() with
 			{
-				CalculatedValues = GetService<IEnumerable<IParameter>>()
-					.Select(parameter => parameter.Calculate())
-					.ToImmutableArray()
+				CalculatedValues = await GetService<IEnumerable<IParameter>>()
+					.ToAsyncEnumerable()
+					.SelectAwait(parameter => parameter.CalculateAsync())
+					.ToArrayAsync()
 			};
 
 			var middleware = (IAsyncMiddleware<ParametersManagementContext>) GetService<ParametersAdjustmentMiddleware>();

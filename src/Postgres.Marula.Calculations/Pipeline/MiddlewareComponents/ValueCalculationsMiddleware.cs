@@ -1,9 +1,7 @@
 using System;
-using System.Collections.Immutable;
 using System.Linq;
 using System.Threading.Tasks;
 using PipelineNet.Middleware;
-using Postgres.Marula.Infrastructure.Extensions;
 
 namespace Postgres.Marula.Calculations.Pipeline.MiddlewareComponents
 {
@@ -14,14 +12,17 @@ namespace Postgres.Marula.Calculations.Pipeline.MiddlewareComponents
 	internal class ValueCalculationsMiddleware : IAsyncMiddleware<ParametersManagementContext>
 	{
 		/// <inheritdoc />
-		Task IAsyncMiddleware<ParametersManagementContext>.Run(
+		async Task IAsyncMiddleware<ParametersManagementContext>.Run(
 			ParametersManagementContext context,
 			Func<ParametersManagementContext, Task> next)
-			=> context
+		{
+			var parameterValues = await context
 				.Parameters
-				.Select(parameter => parameter.Calculate())
-				.ToImmutableArray()
-				.To(parameterValues => context with {CalculatedValues = parameterValues})
-				.To(next);
+				.ToAsyncEnumerable()
+				.SelectAwait(parameter => parameter.CalculateAsync())
+				.ToArrayAsync();
+
+			await next(context with {CalculatedValues = parameterValues});
+		}
 	}
 }

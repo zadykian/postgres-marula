@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Postgres.Marula.Calculations.ParameterValues.Base;
 
 namespace Postgres.Marula.Calculations.Parameters.Base
@@ -10,7 +11,7 @@ namespace Postgres.Marula.Calculations.Parameters.Base
 		/// <summary>
 		/// Calculate parameter value. 
 		/// </summary>
-		IParameterValue Calculate();
+		ValueTask<IParameterValue> CalculateAsync();
 	}
 
 	/// <summary>

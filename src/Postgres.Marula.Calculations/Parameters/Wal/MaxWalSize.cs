@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Postgres.Marula.Calculations.Parameters.Base;
 using Postgres.Marula.Infrastructure.TypeDecorators;
 
@@ -13,6 +14,10 @@ namespace Postgres.Marula.Calculations.Parameters.Wal
 	internal class MaxWalSize : MemoryParameterBase
 	{
 		/// <inheritdoc />
-		protected override Memory CalculateValue() => throw new System.NotImplementedException();
+		protected override ValueTask<Memory> CalculateValueAsync()
+		{
+			// todo
+			return ValueTask.FromResult(new Memory());
+		}
 	}
 }
