@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Postgres.Marula.Infrastructure.TypeDecorators;
 
@@ -24,19 +25,13 @@ namespace Postgres.Marula.Infrastructure.Extensions
 		/// <summary>
 		/// Transform collection <paramref name="enumerable"/> by application of <paramref name="selector"/> to each item.
 		/// </summary>
-		public static async Task<IEnumerable<TOut>> SelectAsync<TIn, TOut>(
+		public static async ValueTask<IEnumerable<TOut>> SelectAsync<TIn, TOut>(
 			this IEnumerable<TIn> enumerable,
-			Func<TIn, Task<TOut>> selector)
-		{
-			ICollection<TOut> resultCollection = new List<TOut>();
-
-			foreach (var item in enumerable)
-			{
-				resultCollection.Add(await selector(item));
-			}
-
-			return resultCollection;
-		}
+			Func<TIn, ValueTask<TOut>> selector)
+			=> await enumerable
+				.ToAsyncEnumerable()
+				.SelectAwait(selector)
+				.ToArrayAsync();
 
 		/// <summary>
 		/// Join string values <paramref name="stringValues"/> with separator <paramref name="separator"/>. 
