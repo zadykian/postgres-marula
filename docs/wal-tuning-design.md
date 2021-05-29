@@ -32,15 +32,20 @@ Actual formula for **PG11+** looks like this:
 For version 10 and older formula mostly identical:
     **{wal-traffic} * (2 + checkpoint_completion_target)**
 
-The point is that the server needs to keep WAL files starting at the moment of the last completed checkpoint plus the files accumulated during the current checkpoint. But for before Postgres 11 server also retained files from the last but one checkpoint.
+The point is that the server needs to keep WAL files starting at the moment of the last completed checkpoint
+plus the files accumulated during the current checkpoint. But for before Postgres 11 server also retained 
+files from the last but one checkpoint.
 
-**wal-traffic** is calculated as difference between values retrieved with given interval by **pg_current_wal_insert_lsn()** server function. The interval is taken equal to **checkpoint_timeout** parameter value.
+**wal-traffic** is calculated as difference between values retrieved with given interval
+by **pg_current_wal_insert_lsn()** server function.
+The interval can be set via **LsnTrackingIntervalInSeconds** configuration parameter.
 
 
 
 ### checkpoint_warning
 
-Write a message to the server log if checkpoints caused by the filling of WAL segment files happen closer together than this amount of time.
+Write a message to the server log if checkpoints caused by the filling of WAL segment files
+happen closer together than this amount of time.
 
 The default is 30 seconds.
 
@@ -54,4 +59,5 @@ Specifies the target of checkpoint completion, as a fraction of total time betwe
 
 The default is 0.5.
 
-It is calculated as **min(0.9, (checkpoint_timeout - 2 min) / checkpoint_timeout)** to evenly distribute the load produced by background WAL writer.
+It is calculated as **min(0.9, (checkpoint_timeout - 2 min) / checkpoint_timeout)** to evenly
+distribute the load produced by background WAL writer.
