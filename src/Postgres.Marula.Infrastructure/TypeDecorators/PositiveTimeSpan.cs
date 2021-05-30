@@ -9,7 +9,7 @@ namespace Postgres.Marula.Infrastructure.TypeDecorators
 	{
 		private readonly TimeSpan underlyingValue;
 
-		private PositiveTimeSpan(TimeSpan underlyingValue)
+		public PositiveTimeSpan(TimeSpan underlyingValue)
 			=> this.underlyingValue = underlyingValue <= TimeSpan.Zero
 				? throw new ArgumentException("Timespan value must be positive.", nameof(underlyingValue))
 				: underlyingValue;
