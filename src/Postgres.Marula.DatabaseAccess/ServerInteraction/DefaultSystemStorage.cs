@@ -99,17 +99,19 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 		}
 
 		/// <inheritdoc />
-		async IAsyncEnumerable<LogSeqNumber> ISystemStorage.GetLogSeqNumbers(PositiveTimeSpan window)
+		async IAsyncEnumerable<LsnHistoryEntry> ISystemStorage.GetLsnHistory(PositiveTimeSpan window)
 		{
 			var commandText = string.Intern($@"
-				select wal_insert_location
+				select
+					log_timestamp       as {nameof(LsnHistoryEntry.LogTimestamp)},
+					wal_insert_location as {nameof(LsnHistoryEntry.WalInsertLocation)}
 				from {namingConventions.SystemSchemaName}.{namingConventions.WalLsnHistoryTableName}
-				where log_timestamp >= (current_timespan - @Window)
+				where log_timestamp >= (current_timestamp - @Window)
 				order by log_timestamp;");
 
 			var dbConnection = await Connection();
-			var logSeqNumbers = await dbConnection.QueryAsync<LogSeqNumber>(commandText, new {Window = (TimeSpan) window});
-			foreach (var logSeqNumber in logSeqNumbers) yield return logSeqNumber;
+			var lsnHistoryEntries = await dbConnection.QueryAsync<LsnHistoryEntry>(commandText, new {Window = (TimeSpan) window});
+			foreach (var lsnHistoryEntry in lsnHistoryEntries) yield return lsnHistoryEntry;
 		}
 	}
 }

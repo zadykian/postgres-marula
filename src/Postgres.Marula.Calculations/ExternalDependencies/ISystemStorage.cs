@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Postgres.Marula.Calculations.ParameterValues.Base;
@@ -24,6 +25,28 @@ namespace Postgres.Marula.Calculations.ExternalDependencies
 		/// Get most resent LSN values which were saved not earlier
 		/// then current time minus <paramref name="window"/>. 
 		/// </summary>
-		IAsyncEnumerable<LogSeqNumber> GetLogSeqNumbers(PositiveTimeSpan window);
+		IAsyncEnumerable<LsnHistoryEntry> GetLsnHistory(PositiveTimeSpan window);
+	}
+
+	/// <summary>
+	/// WAL insert location history single entry.
+	/// </summary>
+	public readonly struct LsnHistoryEntry
+	{
+		public LsnHistoryEntry(DateTime logTimestamp, LogSeqNumber walInsertLocation)
+		{
+			LogTimestamp = logTimestamp;
+			WalInsertLocation = walInsertLocation;
+		}
+
+		/// <summary>
+		/// LSN log timestamp.
+		/// </summary>
+		public DateTime LogTimestamp { get; }
+
+		/// <summary>
+		/// WAL insert location.
+		/// </summary>
+		public LogSeqNumber WalInsertLocation { get; }
 	}
 }

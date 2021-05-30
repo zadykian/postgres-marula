@@ -20,6 +20,7 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 	/// </summary>
 	internal class SystemStorageTests : DatabaseAccessTestFixtureBase
 	{
+		/// <inheritdoc />
 		protected override void ConfigureServices(IServiceCollection serviceCollection)
 		{
 			base.ConfigureServices(serviceCollection);
@@ -98,14 +99,36 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 		[Test]
 		public async Task GetLogSeqNumbersTest()
 		{
+			await SaveTestLsnHistoryValues();
 			var systemStorage = GetService<ISystemStorage>();
 
-			var logSeqNumbers = await systemStorage
-				.GetLogSeqNumbers(TimeSpan.FromHours(1))
+			var lsnHistoryEntries = await systemStorage
+				.GetLsnHistory(TimeSpan.FromHours(1))
 				.ToArrayAsync();
 
-			Assert.IsNotEmpty(logSeqNumbers);
-			Assert.IsTrue(logSeqNumbers.IsOrdered());
+			Assert.IsNotEmpty(lsnHistoryEntries);
+
+			lsnHistoryEntries
+				.Select(entry => entry.WalInsertLocation)
+				.IsOrdered()
+				.To(Assert.IsTrue);
+		}
+
+		/// <summary>
+		/// Save test LSN history values.
+		/// </summary>
+		private async Task SaveTestLsnHistoryValues()
+		{
+			var lsnValues = new LogSeqNumber[]
+			{
+				new("16/1A0343D0"),
+				new("16/1A0343E0"),
+				new("16/2A0393F0"),
+				new("17/00000001")
+			};
+			
+			var systemStorage = GetService<ISystemStorage>();
+			foreach (var lsn in lsnValues) await systemStorage.SaveLogSeqNumberAsync(lsn);
 		}
 	}
 }

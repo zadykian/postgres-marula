@@ -11,12 +11,15 @@ namespace Postgres.Marula.Tests.Calculations.FakeServices
 	internal class FakeSystemStorage : ISystemStorage
 	{
 		/// <inheritdoc />
-		Task ISystemStorage.SaveParameterValuesAsync(IReadOnlyCollection<ParameterValueWithStatus> parameterValues) => Task.CompletedTask;
+		Task ISystemStorage.SaveParameterValuesAsync(IReadOnlyCollection<ParameterValueWithStatus> parameterValues)
+			=> Task.CompletedTask;
 
 		/// <inheritdoc />
-		Task ISystemStorage.SaveLogSeqNumberAsync(LogSeqNumber logSeqNumber) => Task.CompletedTask;
+		Task ISystemStorage.SaveLogSeqNumberAsync(LogSeqNumber logSeqNumber)
+			=> Task.CompletedTask;
 
 		/// <inheritdoc />
-		IAsyncEnumerable<LogSeqNumber> ISystemStorage.GetLogSeqNumbers(PositiveTimeSpan window) => AsyncEnumerable.Empty<LogSeqNumber>();
+		IAsyncEnumerable<LsnHistoryEntry> ISystemStorage.GetLsnHistory(PositiveTimeSpan window)
+			=> AsyncEnumerable.Empty<LsnHistoryEntry>();
 	}
 }
