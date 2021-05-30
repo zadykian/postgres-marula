@@ -20,9 +20,7 @@ namespace Postgres.Marula.Calculations.Configuration
 		PositiveTimeSpan ICalculationsConfiguration.RecalculationInterval()
 			=> ConfigurationSection
 				.GetSection("General:RecalculationIntervalInSeconds")
-				.Value
-				.To(stringValue => double.Parse(stringValue, CultureInfo.InvariantCulture))
-				.To(TimeSpan.FromSeconds);
+				.To(ParseFromSeconds);
 
 		/// <inheritdoc />
 		bool ICalculationsConfiguration.AutoAdjustmentIsEnabled()
@@ -34,7 +32,20 @@ namespace Postgres.Marula.Calculations.Configuration
 		/// <inheritdoc />
 		PositiveTimeSpan ICalculationsConfiguration.LsnTrackingInterval()
 			=> ConfigurationSection
-				.GetSection("Wal:LsnTrackingIntervalInSeconds")
+				.GetSection("Wal:MaxWalSize:LsnTrackingIntervalInSeconds")
+				.To(ParseFromSeconds);
+
+		/// <inheritdoc />
+		PositiveTimeSpan ICalculationsConfiguration.MovingAverageWindow()
+			=> ConfigurationSection
+				.GetSection("Wal:MaxWalSize:MovingAverageWindowInSeconds")
+				.To(ParseFromSeconds);
+
+		/// <summary>
+		/// Parse value from <paramref name="configurationSection"/> to <see cref="PositiveTimeSpan"/> value. 
+		/// </summary>
+		private static PositiveTimeSpan ParseFromSeconds(IConfigurationSection configurationSection)
+			=> configurationSection
 				.Value
 				.To(stringValue => double.Parse(stringValue, CultureInfo.InvariantCulture))
 				.To(TimeSpan.FromSeconds);

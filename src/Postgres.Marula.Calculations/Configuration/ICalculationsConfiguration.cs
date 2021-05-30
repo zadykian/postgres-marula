@@ -21,5 +21,10 @@ namespace Postgres.Marula.Calculations.Configuration
 		/// Interval of WAL insert location tracking. 
 		/// </summary>
 		PositiveTimeSpan LsnTrackingInterval();
+
+		/// <summary>
+		/// Window in seconds used to calculate average WAL traffic. 
+		/// </summary>
+		PositiveTimeSpan MovingAverageWindow();
 	}
 }
