@@ -40,6 +40,8 @@ namespace Postgres.Marula.Calculations.Parameters.Wal
 				.To(systemStorage.GetLsnHistory)
 				.ToArrayAsync();
 
+			// todo: handle case when lsnHistoryEntries is empty
+
 			var walTrafficPerSecond = lsnHistoryEntries
 				.Pairwise()
 				.Select(pair => (
@@ -51,8 +53,8 @@ namespace Postgres.Marula.Calculations.Parameters.Wal
 
 			var currentServerVersion = await databaseServer.GetPostgresVersionAsync();
 			var multiplier = currentServerVersion >= new Version(11, 0) ? 1 : 2;
-
 			
+			// todo: get checkpoint_completion_target value
 		}
 	}
 }
