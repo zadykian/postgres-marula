@@ -73,13 +73,14 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 			=> new []
 				{
 					$"'{parameterValue.Value.ParameterLink.Name}'",
+
 					$"'{parameterValue.Value.AsString()}'",
 
 					$"'{parameterValue.Value.Unit.StringRepresentation()}'" +
-						$"::{namingConventions.SystemSchemaName}.{namingConventions.ParameterUnitEnumName}",
+					$"::{namingConventions.SystemSchemaName}.{namingConventions.ParameterUnitEnumName}",
 
 					$"'{parameterValue.CalculationStatus.StringRepresentation()}'" +
-						$"::{namingConventions.SystemSchemaName}.{namingConventions.CalculationStatusEnumName}"
+					$"::{namingConventions.SystemSchemaName}.{namingConventions.CalculationStatusEnumName}"
 				}
 				.JoinBy(", ")
 				.To(values => $"({values})");
@@ -87,25 +88,28 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 		/// <inheritdoc />
 		async Task ISystemStorage.SaveLogSeqNumberAsync(LogSeqNumber logSeqNumber)
 		{
-			var commandText = $@"
+			var commandText = string.Intern($@"
 				insert into {namingConventions.SystemSchemaName}.{namingConventions.WalLsnHistoryTableName}
 					(wal_insert_location)
 				values
-					(@{nameof(logSeqNumber)}::pg_catalog.pg_lsn);";
+					(@{nameof(logSeqNumber)}::pg_catalog.pg_lsn);");
 
 			var dbConnection = await Connection();
 			await dbConnection.ExecuteAsync(commandText, new {logSeqNumber});
 		}
 
 		/// <inheritdoc />
-		IAsyncEnumerable<LogSeqNumber> ISystemStorage.GetLogSeqNumbers(PositiveTimeSpan window)
+		async IAsyncEnumerable<LogSeqNumber> ISystemStorage.GetLogSeqNumbers(PositiveTimeSpan window)
 		{
-			var commandText = $@"
+			var commandText = string.Intern($@"
 				select wal_insert_location
 				from {namingConventions.SystemSchemaName}.{namingConventions.WalLsnHistoryTableName}
-				where log_timestamp >= (current_timespan - )";
+				where log_timestamp >= (current_timespan - @Window)
+				order by log_timestamp;");
 
-			throw new NotImplementedException();
+			var dbConnection = await Connection();
+			var logSeqNumbers = await dbConnection.QueryAsync<LogSeqNumber>(commandText, new {Window = (TimeSpan) window});
+			foreach (var logSeqNumber in logSeqNumbers) yield return logSeqNumber;
 		}
 	}
 }

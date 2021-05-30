@@ -23,7 +23,8 @@ namespace Postgres.Marula.Infrastructure.Extensions
 		}
 
 		/// <summary>
-		/// Transform collection <paramref name="enumerable"/> by application of <paramref name="selector"/> to each item.
+		/// Transform collection <paramref name="enumerable"/> by
+		/// application of <paramref name="selector"/> to each item.
 		/// </summary>
 		public static async ValueTask<IEnumerable<TOut>> SelectAsync<TIn, TOut>(
 			this IEnumerable<TIn> enumerable,
@@ -57,5 +58,32 @@ namespace Postgres.Marula.Infrastructure.Extensions
 
 			yield return itemToAppend;
 		}
+
+		/// <summary>
+		/// Transform <paramref name="enumerable"/> into sequence
+		/// of adjacent element pairs.
+		/// </summary>
+		/// <remarks>
+		/// Examples:
+		/// <para> [a, b, c, d] -> [(a, b), (b, c), (c, d)] </para>
+		/// <para> [a] -> [ ] </para>
+		/// <para> [ ] -> [ ] </para>
+		/// </remarks>
+		public static IEnumerable<(T Left, T Right)> Pairwise<T>(this IEnumerable<T> enumerable)
+		{
+			using var enumerator = enumerable.GetEnumerator();
+			var previous = default(T);
+			if (enumerator.MoveNext()) previous = enumerator.Current;
+			while (enumerator.MoveNext()) yield return (Left: previous!, Right: previous = enumerator.Current);
+		}
+
+		/// <summary>
+		/// Check if <paramref name="enumerable"/> is ordered. 
+		/// </summary>
+		public static bool IsOrdered<T>(this IEnumerable<T> enumerable)
+			where T : IComparable<T>
+			=> enumerable
+				.Pairwise()
+				.All(pair => pair.Left.CompareTo(pair.Right) <= 0);
 	}
 }

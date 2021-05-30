@@ -1,3 +1,4 @@
+using System;
 using System.Globalization;
 using Postgres.Marula.Infrastructure.Extensions;
 
@@ -9,7 +10,7 @@ namespace Postgres.Marula.Infrastructure.TypeDecorators
 	/// <remarks>
 	/// Write-Ahead Log insert location.
 	/// </remarks>
-	public readonly struct LogSeqNumber
+	public readonly struct LogSeqNumber : IComparable<LogSeqNumber>, IComparable
 	{
 		private readonly uint major;
 		private readonly uint minor;
@@ -30,6 +31,22 @@ namespace Postgres.Marula.Infrastructure.TypeDecorators
 
 		/// <inheritdoc />
 		public override string ToString() => $"{major:x8}/{minor:x8}";
+
+		/// <inheritdoc />
+		public int CompareTo(LogSeqNumber other)
+		{
+			var majorComparison = major.CompareTo(other.major);
+			return majorComparison != 0 ? majorComparison : minor.CompareTo(other.minor);
+		}
+
+		/// <inheritdoc />
+		public int CompareTo(object? obj)
+		{
+			if (ReferenceEquals(null, obj)) return 1;
+			return obj is LogSeqNumber other
+				? CompareTo(other)
+				: throw new ArgumentException($"Object must be of type {nameof(LogSeqNumber)}");
+		}
 
 		/// <summary>
 		/// Operator which calculates the difference in bytes

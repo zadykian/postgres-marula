@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Immutable;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
@@ -8,6 +9,7 @@ using Postgres.Marula.Calculations.ParameterProperties;
 using Postgres.Marula.Calculations.Parameters.Base;
 using Postgres.Marula.Calculations.ParameterValues;
 using Postgres.Marula.Calculations.ParameterValues.Base;
+using Postgres.Marula.Infrastructure.Extensions;
 using Postgres.Marula.Infrastructure.TypeDecorators;
 using Postgres.Marula.Tests.DatabaseAccess.Base;
 
@@ -88,6 +90,22 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 			var systemStorage = GetService<ISystemStorage>();
 			await systemStorage.SaveLogSeqNumberAsync(logSeqNumber);
 			Assert.Pass();
+		}
+
+		/// <summary>
+		/// Get most resent LSN values.
+		/// </summary>
+		[Test]
+		public async Task GetLogSeqNumbersTest()
+		{
+			var systemStorage = GetService<ISystemStorage>();
+
+			var logSeqNumbers = await systemStorage
+				.GetLogSeqNumbers(TimeSpan.FromHours(1))
+				.ToArrayAsync();
+
+			Assert.IsNotEmpty(logSeqNumbers);
+			Assert.IsTrue(logSeqNumbers.IsOrdered());
 		}
 	}
 }
