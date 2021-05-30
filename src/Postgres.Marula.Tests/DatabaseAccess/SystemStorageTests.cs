@@ -87,6 +87,7 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 			var logSeqNumber = new LogSeqNumber("16/1A0343D0");
 			var systemStorage = GetService<ISystemStorage>();
 			await systemStorage.SaveLogSeqNumberAsync(logSeqNumber);
+			Assert.Pass();
 		}
 	}
 }
