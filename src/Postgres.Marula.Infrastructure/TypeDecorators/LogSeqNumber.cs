@@ -35,11 +35,11 @@ namespace Postgres.Marula.Infrastructure.TypeDecorators
 		/// Operator which calculates the difference in bytes
 		/// between two LSN values. 
 		/// </summary>
-		public static ulong operator -(LogSeqNumber left, LogSeqNumber right)
+		public static Memory operator -(LogSeqNumber left, LogSeqNumber right)
 		{
 			var majorDiff = (ulong) (left.major - right.major) << 32;
 			var minorDiff = left.minor - right.minor;
-			return majorDiff + minorDiff;
+			return new(majorDiff + minorDiff);
 		}
 	}
 }

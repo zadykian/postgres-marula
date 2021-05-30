@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Postgres.Marula.Calculations.ExternalDependencies;
 using Postgres.Marula.Calculations.ParameterValues.Base;
@@ -14,5 +15,8 @@ namespace Postgres.Marula.Tests.Calculations.FakeServices
 
 		/// <inheritdoc />
 		Task ISystemStorage.SaveLogSeqNumberAsync(LogSeqNumber logSeqNumber) => Task.CompletedTask;
+
+		/// <inheritdoc />
+		IAsyncEnumerable<LogSeqNumber> ISystemStorage.GetLogSeqNumbers(PositiveTimeSpan window) => AsyncEnumerable.Empty<LogSeqNumber>();
 	}
 }

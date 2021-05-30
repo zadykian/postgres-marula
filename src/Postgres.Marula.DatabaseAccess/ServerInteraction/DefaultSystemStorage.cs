@@ -96,5 +96,16 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 			var dbConnection = await Connection();
 			await dbConnection.ExecuteAsync(commandText, new {logSeqNumber});
 		}
+
+		/// <inheritdoc />
+		IAsyncEnumerable<LogSeqNumber> ISystemStorage.GetLogSeqNumbers(PositiveTimeSpan window)
+		{
+			var commandText = $@"
+				select wal_insert_location
+				from {namingConventions.SystemSchemaName}.{namingConventions.WalLsnHistoryTableName}
+				where log_timestamp >= (current_timespan - )";
+
+			throw new NotImplementedException();
+		}
 	}
 }
