@@ -27,16 +27,16 @@ This value is being calculated based on current workload.
 More specifically, on how much WAL is produced by server during given period of time.
 
 Actual formula for **PG11+** looks like this:
-    **{wal-traffic} * (1 + checkpoint_completion_target)**
+    **{wal-traffic-per-second} * (1 + checkpoint_completion_target)**
 
 For version 10 and older formula mostly identical:
-    **{wal-traffic} * (2 + checkpoint_completion_target)**
+    **{wal-traffic-per-second} * (2 + checkpoint_completion_target)**
 
 The point is that the server needs to keep WAL files starting at the moment of the last completed checkpoint
 plus the files accumulated during the current checkpoint. But for before Postgres 11 server also retained 
 files from the last but one checkpoint.
 
-**wal-traffic** is calculated as difference between values retrieved with given interval
+WAL traffic is calculated as difference between values retrieved with given interval
 by **pg_current_wal_insert_lsn()** server function.
 The interval can be set via **LsnTrackingIntervalInSeconds** configuration parameter.
 
