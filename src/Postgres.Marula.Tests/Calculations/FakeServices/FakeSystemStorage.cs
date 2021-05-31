@@ -19,7 +19,7 @@ namespace Postgres.Marula.Tests.Calculations.FakeServices
 			=> Task.CompletedTask;
 
 		/// <inheritdoc />
-		IAsyncEnumerable<LsnHistoryEntry> ISystemStorage.GetLsnHistory(PositiveTimeSpan window)
+		IAsyncEnumerable<LsnHistoryEntry> ISystemStorage.GetLsnHistoryAsync(PositiveTimeSpan window)
 			=> AsyncEnumerable.Empty<LsnHistoryEntry>();
 	}
 }

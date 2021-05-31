@@ -13,6 +13,11 @@ using Postgres.Marula.Infrastructure.TypeDecorators;
 
 namespace Postgres.Marula.Calculations.Parameters.Wal
 {
+	// internal interface IDbServerParameters
+	// {
+	// 	Task<TValue> ReadAsync<TValue>(NonEmptyString parameterName);
+	// }
+
 	/// <summary>
 	/// [max_wal_size]
 	/// Maximum size to let the WAL grow during automatic checkpoints.
@@ -40,7 +45,7 @@ namespace Postgres.Marula.Calculations.Parameters.Wal
 		{
 			var lsnHistoryEntries = await configuration
 				.MovingAverageWindow()
-				.To(systemStorage.GetLsnHistory)
+				.To(systemStorage.GetLsnHistoryAsync)
 				.ToArrayAsync();
 
 			if (!lsnHistoryEntries.Any()) throw Error.NoLsnHistory();

@@ -103,7 +103,7 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 			var systemStorage = GetService<ISystemStorage>();
 
 			var lsnHistoryEntries = await systemStorage
-				.GetLsnHistory(TimeSpan.FromHours(1))
+				.GetLsnHistoryAsync(TimeSpan.FromHours(1))
 				.ToArrayAsync();
 
 			Assert.IsNotEmpty(lsnHistoryEntries);

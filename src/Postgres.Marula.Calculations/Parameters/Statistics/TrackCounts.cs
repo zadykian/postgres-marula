@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Postgres.Marula.Calculations.Parameters.Base;
 
 // ReSharper disable UnusedType.Global
@@ -12,6 +13,10 @@ namespace Postgres.Marula.Calculations.Parameters.Statistics
 	/// </summary>
 	internal class TrackCountsParameter : BooleanParameterBase
 	{
+		public TrackCountsParameter(ILogger<TrackCountsParameter> logger) : base(logger)
+		{
+		}
+
 		/// <inheritdoc />
 		protected override ValueTask<bool> CalculateValueAsync() => ValueTask.FromResult(true);
 	}

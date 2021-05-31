@@ -99,7 +99,7 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 		}
 
 		/// <inheritdoc />
-		async IAsyncEnumerable<LsnHistoryEntry> ISystemStorage.GetLsnHistory(PositiveTimeSpan window)
+		async IAsyncEnumerable<LsnHistoryEntry> ISystemStorage.GetLsnHistoryAsync(PositiveTimeSpan window)
 		{
 			var commandText = string.Intern($@"
 				select

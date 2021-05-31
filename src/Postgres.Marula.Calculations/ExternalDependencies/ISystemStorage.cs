@@ -24,6 +24,6 @@ namespace Postgres.Marula.Calculations.ExternalDependencies
 		/// Get most resent LSN values which were saved not earlier
 		/// then current time minus <paramref name="window"/>. 
 		/// </summary>
-		IAsyncEnumerable<LsnHistoryEntry> GetLsnHistory(PositiveTimeSpan window);
+		IAsyncEnumerable<LsnHistoryEntry> GetLsnHistoryAsync(PositiveTimeSpan window);
 	}
 }
