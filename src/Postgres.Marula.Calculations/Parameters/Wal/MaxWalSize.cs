@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Postgres.Marula.Calculations.Configuration;
 using Postgres.Marula.Calculations.ExternalDependencies;
 using Postgres.Marula.Calculations.Parameters.Base;
+using Postgres.Marula.Calculations.Parameters.Exceptions;
 using Postgres.Marula.Infrastructure.Extensions;
 using Postgres.Marula.Infrastructure.TypeDecorators;
 
@@ -40,7 +41,7 @@ namespace Postgres.Marula.Calculations.Parameters.Wal
 				.To(systemStorage.GetLsnHistory)
 				.ToArrayAsync();
 
-			// todo: handle case when lsnHistoryEntries is empty
+			if (!lsnHistoryEntries.Any()) throw Error.NoLsnHistory();
 
 			var walTrafficPerSecond = lsnHistoryEntries
 				.Pairwise()
