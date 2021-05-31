@@ -24,5 +24,21 @@ namespace Postgres.Marula.Calculations.ExternalDependencies
 		/// WAL insert location.
 		/// </summary>
 		public LogSeqNumber WalInsertLocation { get; }
+
+		/// <summary>
+		/// Calculate WAL traffic per second between two log entries. 
+		/// </summary>
+		public Memory TrafficPerSecondBefore(LsnHistoryEntry entryInFuture)
+		{
+			if (LogTimestamp > entryInFuture.LogTimestamp)
+			{
+				throw new ArgumentException(
+					$"'{nameof(entryInFuture)}' log entry must be captured after current entry.", nameof(entryInFuture));
+			}
+
+			var memory = WalInsertLocation - entryInFuture.WalInsertLocation;
+			var timeSpan = LogTimestamp - entryInFuture.LogTimestamp;
+			return new(memory.TotalBytes / (ulong) timeSpan.TotalSeconds);
+		}
 	}
 }
