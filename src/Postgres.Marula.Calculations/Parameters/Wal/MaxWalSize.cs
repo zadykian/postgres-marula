@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Postgres.Marula.Calculations.Configuration;
 using Postgres.Marula.Calculations.ExternalDependencies;
 using Postgres.Marula.Calculations.Parameters.Base;
@@ -26,7 +27,8 @@ namespace Postgres.Marula.Calculations.Parameters.Wal
 		public MaxWalSize(
 			ICalculationsConfiguration configuration,
 			ISystemStorage systemStorage,
-			IDatabaseServer databaseServer)
+			IDatabaseServer databaseServer,
+			ILogger<MaxWalSize> logger) : base(logger)
 		{
 			this.systemStorage = systemStorage;
 			this.databaseServer = databaseServer;

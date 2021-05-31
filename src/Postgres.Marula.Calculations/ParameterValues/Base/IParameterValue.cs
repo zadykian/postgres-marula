@@ -24,4 +24,26 @@ namespace Postgres.Marula.Calculations.ParameterValues.Base
 		/// </summary>
 		NonEmptyString AsString();
 	}
+
+	/// <summary>
+	/// Represents absence of value.
+	/// </summary>
+	public sealed class NullValue : IParameterValue
+	{
+		private NullValue()
+		{
+		}
+
+		/// <inheritdoc cref="NullValue"/>
+		public static IParameterValue Instance { get; } = new NullValue();
+
+		/// <inheritdoc />
+		IParameterLink IParameterValue.ParameterLink => new ParameterLink(nameof(NullValue));
+
+		/// <inheritdoc />
+		ParameterUnit IParameterValue.Unit => ParameterUnit.None;
+
+		/// <inheritdoc />
+		NonEmptyString IParameterValue.AsString() => string.Empty;
+	}
 }
