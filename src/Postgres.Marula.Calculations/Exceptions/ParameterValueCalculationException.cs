@@ -1,13 +1,13 @@
 using System;
 using System.Runtime.Serialization;
 
-namespace Postgres.Marula.Calculations.Parameters.Exceptions
+namespace Postgres.Marula.Calculations.Exceptions
 {
 	/// <summary>
 	/// Error related to parameters calculations.
 	/// </summary>
 	[Serializable]
-	public class ParameterValueCalculationException : ApplicationException
+	internal class ParameterValueCalculationException : ApplicationException
 	{
 		/// <inheritdoc />
 		public ParameterValueCalculationException(string message) : base(message)

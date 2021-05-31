@@ -3,13 +3,12 @@ using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Postgres.Marula.Calculations.Parameters.Base;
-using Postgres.Marula.Calculations.ParameterValues;
 using Postgres.Marula.Calculations.ParameterValues.Base;
 using Postgres.Marula.Calculations.ParameterValues.Raw;
 using Postgres.Marula.Infrastructure.Extensions;
 using Postgres.Marula.Infrastructure.TypeDecorators;
 
-namespace Postgres.Marula.Calculations.ParameterValueParsing
+namespace Postgres.Marula.Calculations.ParameterValues.Parsing
 {
 	/// <inheritdoc />
 	internal class DefaultParameterValueParser : IParameterValueParser

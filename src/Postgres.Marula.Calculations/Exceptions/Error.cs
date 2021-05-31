@@ -1,6 +1,6 @@
 using Postgres.Marula.Calculations.Configuration;
 
-namespace Postgres.Marula.Calculations.Parameters.Exceptions
+namespace Postgres.Marula.Calculations.Exceptions
 {
 	/// <summary>
 	/// Component which represents errors related to parameters calculations.

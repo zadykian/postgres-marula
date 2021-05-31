@@ -1,7 +1,7 @@
 using NUnit.Framework;
 using Postgres.Marula.Calculations.ParameterProperties;
-using Postgres.Marula.Calculations.ParameterValueParsing;
 using Postgres.Marula.Calculations.ParameterValues;
+using Postgres.Marula.Calculations.ParameterValues.Parsing;
 using Postgres.Marula.Calculations.ParameterValues.Raw;
 using Postgres.Marula.Tests.Calculations.Base;
 

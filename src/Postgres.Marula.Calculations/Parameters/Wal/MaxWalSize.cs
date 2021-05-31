@@ -3,9 +3,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Postgres.Marula.Calculations.Configuration;
+using Postgres.Marula.Calculations.Exceptions;
 using Postgres.Marula.Calculations.ExternalDependencies;
 using Postgres.Marula.Calculations.Parameters.Base;
-using Postgres.Marula.Calculations.Parameters.Exceptions;
+using Postgres.Marula.Calculations.ParametersManagement;
 using Postgres.Marula.Infrastructure.Extensions;
 using Postgres.Marula.Infrastructure.TypeDecorators;
 
@@ -13,11 +14,6 @@ using Postgres.Marula.Infrastructure.TypeDecorators;
 
 namespace Postgres.Marula.Calculations.Parameters.Wal
 {
-	// internal interface IDbServerParameters
-	// {
-	// 	Task<TValue> ReadAsync<TValue>(NonEmptyString parameterName);
-	// }
-
 	/// <summary>
 	/// [max_wal_size]
 	/// Maximum size to let the WAL grow during automatic checkpoints.
@@ -28,16 +24,19 @@ namespace Postgres.Marula.Calculations.Parameters.Wal
 		private readonly ICalculationsConfiguration configuration;
 		private readonly ISystemStorage systemStorage;
 		private readonly IDatabaseServer databaseServer;
+		private readonly IPgSettings pgSettings;
 
 		public MaxWalSize(
 			ICalculationsConfiguration configuration,
 			ISystemStorage systemStorage,
 			IDatabaseServer databaseServer,
+			IPgSettings pgSettings,
 			ILogger<MaxWalSize> logger) : base(logger)
 		{
+			this.configuration = configuration;
 			this.systemStorage = systemStorage;
 			this.databaseServer = databaseServer;
-			this.configuration = configuration;
+			this.pgSettings = pgSettings;
 		}
 
 		/// <inheritdoc />
@@ -57,8 +56,10 @@ namespace Postgres.Marula.Calculations.Parameters.Wal
 
 			var currentServerVersion = await databaseServer.GetPostgresVersionAsync();
 			var multiplier = currentServerVersion >= new Version(11, 0) ? 1 : 2;
-			
-			// todo: get checkpoint_completion_target value
+
+			var checkpointTimeout = await pgSettings.ReadAsync<PositiveTimeSpan>("checkpoint_timeout");
+			var checkpointCompletionTarget = await pgSettings.ReadAsync<Fraction>("checkpoint_completion_target");
+
 		}
 
 		/// <summary>
