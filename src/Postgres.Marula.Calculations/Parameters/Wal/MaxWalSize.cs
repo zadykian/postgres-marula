@@ -42,9 +42,14 @@ namespace Postgres.Marula.Calculations.Parameters.Wal
 
 		/// <inheritdoc />
 		/// <remarks>
+		/// <para>
+		/// Value calculated as: todo
+		/// </para>
+		/// <para>
 		/// Server needs to keep WAL files starting at the moment of the last completed checkpoint
 		/// plus the files accumulated during the current checkpoint.
 		/// But for before Postgres 11 server also retained files from the last but one checkpoint.
+		/// </para>
 		/// </remarks>
 		protected override async ValueTask<Memory> CalculateValueAsync()
 		{
