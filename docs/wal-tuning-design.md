@@ -48,6 +48,14 @@ Calculation of WAL traffic consists of two processes:
    Single selection item calculated as difference of two adjacent values in LSN log table.
    For example, let's say we have following records in LSN log, which are in moving average window:
 
+   | log_timestamp       | wal_insert_location |
+   | :-----------------: | :-----------------: |
+   | 2021-04-27 09:00:00 | 32/A0000000         |
+   | 2021-04-27 09:01:00 | 32/A0000010         |
+   | 2021-04-27 09:02:00 | 32/A0000020         |
+
+
+
 
 
 ### checkpoint_warning
