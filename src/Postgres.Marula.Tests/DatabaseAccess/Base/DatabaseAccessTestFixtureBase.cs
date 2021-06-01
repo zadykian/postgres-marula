@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Dapper;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
-using Postgres.Marula.Calculations.ParameterValueParsing;
+using Postgres.Marula.Calculations.ParameterValues.Parsing;
 using Postgres.Marula.DatabaseAccess;
 using Postgres.Marula.DatabaseAccess.Conventions;
 using Postgres.Marula.Infrastructure.TypeDecorators;

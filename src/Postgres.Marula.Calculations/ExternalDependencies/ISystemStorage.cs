@@ -19,5 +19,11 @@ namespace Postgres.Marula.Calculations.ExternalDependencies
 		/// Save current LSN value.
 		/// </summary>
 		Task SaveLogSeqNumberAsync(LogSeqNumber logSeqNumber);
+
+		/// <summary>
+		/// Get most resent LSN values which were saved not earlier
+		/// then current time minus <paramref name="window"/>. 
+		/// </summary>
+		IAsyncEnumerable<LsnHistoryEntry> GetLsnHistoryAsync(PositiveTimeSpan window);
 	}
 }

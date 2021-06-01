@@ -41,5 +41,27 @@ namespace Postgres.Marula.Tests.Infrastructure
 			=> GetService<ICalculationsConfiguration>()
 				.AutoAdjustmentIsEnabled()
 				.To(_ => Assert.Pass());
+
+		/// <summary>
+		/// <see cref="ICalculationsConfiguration.LsnTrackingInterval"/> test.
+		/// </summary>
+		[Test]
+		public void LsnTrackingIntervalTest()
+			=> GetService<ICalculationsConfiguration>()
+				.LsnTrackingInterval()
+				.To(recalculationInterval => Assert.IsTrue(
+					((TimeSpan) recalculationInterval).TotalSeconds > 0
+				));
+
+		/// <summary>
+		/// <see cref="ICalculationsConfiguration.MovingAverageWindow"/> test.
+		/// </summary>
+		[Test]
+		public void MovingAverageWindowTest()
+			=> GetService<ICalculationsConfiguration>()
+				.MovingAverageWindow()
+				.To(recalculationInterval => Assert.IsTrue(
+					((TimeSpan) recalculationInterval).TotalSeconds > 0
+				));
 	}
 }

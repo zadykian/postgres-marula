@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Reflection;
+using Postgres.Marula.Infrastructure.Extensions;
 using Postgres.Marula.Infrastructure.TypeDecorators;
 
 namespace Postgres.Marula.Calculations.ParameterProperties.StringRepresentation
@@ -35,7 +36,7 @@ namespace Postgres.Marula.Calculations.ParameterProperties.StringRepresentation
 		/// Get enum value by its string representation. 
 		/// </summary>
 		/// <remarks>
-		/// Each member of type <typeparamref name="TEnum"/> must be configured
+		/// Each member of type <typeparamref name="TEnum"/> can be configured
 		/// with <see cref="StringRepresentationAttribute"/>.
 		/// </remarks>
 		public static TEnum ByStringRepresentation<TEnum>(this NonEmptyString stringRepresentation)
@@ -54,7 +55,7 @@ namespace Postgres.Marula.Calculations.ParameterProperties.StringRepresentation
 				.GetFields(BindingFlags.Public | BindingFlags.Static)
 				.Select(fieldInfo => (
 					fieldInfo,
-					fieldInfo.GetCustomAttribute<StringRepresentationAttribute>()!.Value))
+					fieldInfo.GetCustomAttribute<StringRepresentationAttribute>()?.Value ?? fieldInfo.Name.ToSnakeCase()))
 				.ToImmutableArray();
 	}
 }

@@ -6,6 +6,8 @@ using Postgres.Marula.Calculations.Jobs.Base;
 using Postgres.Marula.Calculations.Pipeline.Factory;
 using Postgres.Marula.Infrastructure.TypeDecorators;
 
+// ReSharper disable UnusedType.Global
+
 namespace Postgres.Marula.Calculations.Jobs
 {
 	/// <inheritdoc cref="IJob"/>

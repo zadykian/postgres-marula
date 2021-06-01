@@ -3,13 +3,12 @@ using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Postgres.Marula.Calculations.Parameters.Base;
-using Postgres.Marula.Calculations.ParameterValues;
 using Postgres.Marula.Calculations.ParameterValues.Base;
 using Postgres.Marula.Calculations.ParameterValues.Raw;
 using Postgres.Marula.Infrastructure.Extensions;
 using Postgres.Marula.Infrastructure.TypeDecorators;
 
-namespace Postgres.Marula.Calculations.ParameterValueParsing
+namespace Postgres.Marula.Calculations.ParameterValues.Parsing
 {
 	/// <inheritdoc />
 	internal class DefaultParameterValueParser : IParameterValueParser
@@ -29,12 +28,8 @@ namespace Postgres.Marula.Calculations.ParameterValueParsing
 					=> ParseMemory(rawParameterValue.Value)
 						.To(memory => new MemoryParameterValue(parameterLink, memory)),
 
-				{ } when decimal.TryParse(
-							rawParameterValue.Value,
-							NumberStyles.Number,
-							CultureInfo.InvariantCulture,
-							out var decimalValue)
-						&& rawParameterValue is RawRangeParameterValue rawRangeParameterValue
+				{ } when TryParseDecimal(rawParameterValue.Value, out var decimalValue)
+				         && rawParameterValue is RawRangeParameterValue rawRangeParameterValue
 					=> ToFraction(decimalValue, rawRangeParameterValue.ValidRange)
 						.To(fraction => new FractionParameterValue(parameterLink, fraction)),
 
@@ -48,6 +43,16 @@ namespace Postgres.Marula.Calculations.ParameterValueParsing
 					$"Failed to parse value '{rawParameterValue.Value}' of parameter '{parameterName}'.")
 			};
 		}
+
+		/// <summary>
+		/// Try parse string <paramref name="input"/> to decimal value.
+		/// </summary>
+		private static bool TryParseDecimal(string input, out decimal decimalValue)
+			=> decimal.TryParse(
+				input,
+				NumberStyles.Number,
+				CultureInfo.InvariantCulture,
+				out decimalValue);
 
 		/// <summary>
 		/// Convert string <paramref name="stringToParse"/> to timespan value.

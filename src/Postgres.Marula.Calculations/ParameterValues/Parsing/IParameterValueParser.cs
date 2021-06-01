@@ -2,7 +2,7 @@ using Postgres.Marula.Calculations.ParameterValues.Base;
 using Postgres.Marula.Calculations.ParameterValues.Raw;
 using Postgres.Marula.Infrastructure.TypeDecorators;
 
-namespace Postgres.Marula.Calculations.ParameterValueParsing
+namespace Postgres.Marula.Calculations.ParameterValues.Parsing
 {
 	/// <summary>
 	/// Database parameter value parser.

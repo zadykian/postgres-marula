@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using PipelineNet.Middleware;
+using Postgres.Marula.Calculations.ParameterValues.Base;
 
 namespace Postgres.Marula.Calculations.Pipeline.MiddlewareComponents
 {
@@ -20,6 +21,7 @@ namespace Postgres.Marula.Calculations.Pipeline.MiddlewareComponents
 				.Parameters
 				.ToAsyncEnumerable()
 				.SelectAwait(parameter => parameter.CalculateAsync())
+				.Where(value => value is not NullValue)
 				.ToArrayAsync();
 
 			await next(context with {CalculatedValues = parameterValues});

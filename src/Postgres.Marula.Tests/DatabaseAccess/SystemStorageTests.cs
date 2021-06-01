@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Immutable;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
@@ -8,6 +9,7 @@ using Postgres.Marula.Calculations.ParameterProperties;
 using Postgres.Marula.Calculations.Parameters.Base;
 using Postgres.Marula.Calculations.ParameterValues;
 using Postgres.Marula.Calculations.ParameterValues.Base;
+using Postgres.Marula.Infrastructure.Extensions;
 using Postgres.Marula.Infrastructure.TypeDecorators;
 using Postgres.Marula.Tests.DatabaseAccess.Base;
 
@@ -18,6 +20,7 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 	/// </summary>
 	internal class SystemStorageTests : DatabaseAccessTestFixtureBase
 	{
+		/// <inheritdoc />
 		protected override void ConfigureServices(IServiceCollection serviceCollection)
 		{
 			base.ConfigureServices(serviceCollection);
@@ -87,6 +90,45 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 			var logSeqNumber = new LogSeqNumber("16/1A0343D0");
 			var systemStorage = GetService<ISystemStorage>();
 			await systemStorage.SaveLogSeqNumberAsync(logSeqNumber);
+			Assert.Pass();
+		}
+
+		/// <summary>
+		/// Get most resent LSN values.
+		/// </summary>
+		[Test]
+		public async Task GetLogSeqNumbersTest()
+		{
+			await SaveTestLsnHistoryValues();
+			var systemStorage = GetService<ISystemStorage>();
+
+			var lsnHistoryEntries = await systemStorage
+				.GetLsnHistoryAsync(TimeSpan.FromHours(1))
+				.ToArrayAsync();
+
+			Assert.IsNotEmpty(lsnHistoryEntries);
+
+			lsnHistoryEntries
+				.Select(entry => entry.WalInsertLocation)
+				.IsOrdered()
+				.To(Assert.IsTrue);
+		}
+
+		/// <summary>
+		/// Save test LSN history values.
+		/// </summary>
+		private async Task SaveTestLsnHistoryValues()
+		{
+			var lsnValues = new LogSeqNumber[]
+			{
+				new("16/1A0343D0"),
+				new("16/1A0343E0"),
+				new("16/2A0393F0"),
+				new("17/00000001")
+			};
+			
+			var systemStorage = GetService<ISystemStorage>();
+			foreach (var lsn in lsnValues) await systemStorage.SaveLogSeqNumberAsync(lsn);
 		}
 	}
 }

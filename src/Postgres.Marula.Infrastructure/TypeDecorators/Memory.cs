@@ -31,6 +31,11 @@ namespace Postgres.Marula.Infrastructure.TypeDecorators
 		#endregion
 
 		/// <summary>
+		/// Multiplication operator. 
+		/// </summary>
+		public static Memory operator *(Memory memory, double coefficient) => new(memory.TotalBytes *  (ulong) coefficient);
+
+		/// <summary>
 		/// Implicit cast operator <see cref="ulong"/> -> <see cref="Memory"/>.
 		/// </summary>
 		public static implicit operator Memory(ulong bytes) => new(bytes);

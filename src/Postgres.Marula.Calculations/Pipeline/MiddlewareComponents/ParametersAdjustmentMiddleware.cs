@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using PipelineNet.Middleware;
 using Postgres.Marula.Calculations.Configuration;
-using Postgres.Marula.Calculations.ExternalDependencies;
+using Postgres.Marula.Calculations.ParametersManagement;
 using Postgres.Marula.Calculations.Pipeline.MiddlewareComponents.Base;
 using Postgres.Marula.Infrastructure.Extensions;
 
@@ -16,12 +16,12 @@ namespace Postgres.Marula.Calculations.Pipeline.MiddlewareComponents
 	/// </summary>
 	internal class ParametersAdjustmentMiddleware : ParametersMiddlewareBase, IAsyncMiddleware<ParametersManagementContext>
 	{
-		private readonly IDatabaseServer databaseServer;
+		private readonly IPgSettings pgSettings;
 
 		public ParametersAdjustmentMiddleware(
-			IDatabaseServer databaseServer,
+			IPgSettings pgSettings,
 			ICalculationsConfiguration calculationsConfiguration) : base(calculationsConfiguration)
-			=> this.databaseServer = databaseServer;
+			=> this.pgSettings = pgSettings;
 
 		/// <inheritdoc />
 		async Task IAsyncMiddleware<ParametersManagementContext>.Run(
@@ -32,7 +32,7 @@ namespace Postgres.Marula.Calculations.Pipeline.MiddlewareComponents
 				.CalculatedValues
 				.Where(ParameterAdjustmentIsAllowed)
 				.ToImmutableArray()
-				.To(parameterValues => databaseServer.ApplyToConfigurationAsync(parameterValues));
+				.To(parameterValues => pgSettings.ApplyAsync(parameterValues));
 
 			await next(context);
 		}
