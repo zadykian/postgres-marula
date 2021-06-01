@@ -11,9 +11,9 @@ namespace Postgres.Marula.Calculations.Parameters.Statistics
 	/// Enables collection of statistics on database activity.
 	/// This parameter affects autovacuum, because the autovacuum daemon needs the collected information.
 	/// </summary>
-	internal class TrackCountsParameter : BooleanParameterBase
+	internal class TrackCounts : BooleanParameterBase
 	{
-		public TrackCountsParameter(ILogger<TrackCountsParameter> logger) : base(logger)
+		public TrackCounts(ILogger<TrackCounts> logger) : base(logger)
 		{
 		}
 

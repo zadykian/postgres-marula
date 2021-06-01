@@ -12,6 +12,7 @@ namespace Postgres.Marula.Tests.Calculations.FakeServices
 	/// <inheritdoc cref="IDatabaseServer"/>
 	internal class FakeDatabaseServer : IDatabaseServer, IDatabaseServerAccessTracker
 	{
+		/// <inheritdoc />
 		Task IDatabaseServer.ApplyToConfigurationAsync(IReadOnlyCollection<IParameterValue> parameterValues)
 		{
 			ApplyMethodWasCalled = true;
@@ -19,8 +20,16 @@ namespace Postgres.Marula.Tests.Calculations.FakeServices
 		}
 
 		/// <inheritdoc />
-		Task<RawParameterValue> IDatabaseServer.GetRawParameterValueAsync(NonEmptyString parameterName)
-			=> throw new NotSupportedException();
+		async Task<RawParameterValue> IDatabaseServer.GetRawParameterValueAsync(NonEmptyString parameterName)
+		{
+			await Task.CompletedTask;
+			return parameterName.ToString() switch
+			{
+				"checkpoint_timeout"           => new RawParameterValue("30min"),
+				"checkpoint_completion_target" => new RawRangeParameterValue("0.8", (0m, 1m)),
+				_ => throw new NotSupportedException()
+			};
+		}
 
 		/// <inheritdoc />
 		ValueTask<ParameterContext> IDatabaseServer.GetParameterContextAsync(NonEmptyString parameterName)
