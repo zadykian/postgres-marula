@@ -40,6 +40,12 @@ namespace Postgres.Marula.Infrastructure.TypeDecorators
 		#endregion
 
 		/// <summary>
+		/// Multiplication operator. 
+		/// </summary>
+		public static PositiveTimeSpan operator *(PositiveTimeSpan timeSpan, double coefficient)
+			=> TimeSpan.FromMilliseconds(timeSpan.TotalMilliseconds * coefficient);
+
+		/// <summary>
 		/// Implicit cast operator <see cref="TimeSpan"/> -> <see cref="PositiveTimeSpan"/>.
 		/// </summary>
 		public static implicit operator PositiveTimeSpan(TimeSpan timeSpan) => new(timeSpan);
