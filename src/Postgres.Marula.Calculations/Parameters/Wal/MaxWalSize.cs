@@ -57,11 +57,9 @@ namespace Postgres.Marula.Calculations.Parameters.Wal
 		protected override async ValueTask<Memory> CalculateValueAsync()
 		{
 			var walTrafficPerSecond = await GetWalTrafficPerSecond();
-
-			var currentServerVersion = await databaseServer.GetPostgresVersionAsync();
-			var multiplier = currentServerVersion >= new Version(11, 0) ? 1 : 2;
-
 			var checkpointTimeout = await pgSettings.ReadAsync<PositiveTimeSpan>("checkpoint_timeout");
+
+			var multiplier = await databaseServer.GetPostgresVersionAsync() >= new Version(11, 0) ? 1 : 2;
 			var checkpointCompletionTarget = await pgSettings.ReadAsync<Fraction>("checkpoint_completion_target");
 
 			var maxWalSizeInBytes = walTrafficPerSecond
