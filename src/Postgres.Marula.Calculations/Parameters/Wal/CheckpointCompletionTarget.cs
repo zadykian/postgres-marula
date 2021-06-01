@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Postgres.Marula.Calculations.Parameters.Base;
@@ -9,17 +10,17 @@ using Postgres.Marula.Infrastructure.TypeDecorators;
 namespace Postgres.Marula.Calculations.Parameters.Wal
 {
 	/// <summary>
-	/// [checkpoint_warning]
-	/// Write a message to the server log if checkpoints caused by the filling
-	/// of WAL segment files happen closer together than this amount of time.
+	/// [checkpoint_completion_target]
+	/// Specifies the target of checkpoint completion,
+	/// as a fraction of total time between checkpoints.
 	/// </summary>
-	internal class CheckpointWarning : TimeSpanParameterBase
+	internal class CheckpointCompletionTarget : FractionParameterBase
 	{
 		private readonly IPgSettings pgSettings;
 
-		public CheckpointWarning(
+		public CheckpointCompletionTarget(
 			IPgSettings pgSettings,
-			ILogger<TimeSpanParameterBase> logger) : base(logger)
+			ILogger<FractionParameterBase> logger) : base(logger)
 			=> this.pgSettings = pgSettings;
 
 		/// <inheritdoc />
@@ -28,13 +29,14 @@ namespace Postgres.Marula.Calculations.Parameters.Wal
 		/// Value calculated as:
 		/// </para>
 		/// <para>
-		/// checkpoint_warning = 0.8 * checkpoint_timeout
+		/// checkpoint_completion_target = min(0.9, (checkpoint_timeout - 2 min) / checkpoint_timeout)
 		/// </para>
 		/// </remarks>
-		protected override async ValueTask<PositiveTimeSpan> CalculateValueAsync()
+		protected override async ValueTask<Fraction> CalculateValueAsync()
 		{
 			var checkpointTimeout = await pgSettings.ReadAsync<PositiveTimeSpan>("checkpoint_timeout");
-			return checkpointTimeout * 0.8;
+			var basedOnTimeout = (checkpointTimeout - TimeSpan.FromMinutes(2)) / checkpointTimeout;
+			return (decimal) Math.Min(0.9, basedOnTimeout);
 		}
 	}
 }
