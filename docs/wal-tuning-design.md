@@ -29,7 +29,7 @@ More specifically, on how much WAL is produced by server during given period of 
 Actual formula looks like this:
 
 ```
-multiplier = (pg_version >= 11.0) ? 2 : 1
+multiplier = (pg_version >= 11.0) ? 1 : 2
 max_wal_size = {wal-traffic-per-second} * checkpoint_timeout * (multiplier + checkpoint_completion_target)
 ```
 
