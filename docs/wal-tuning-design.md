@@ -53,8 +53,13 @@ Calculation of WAL traffic consists of two processes:
    | 2021-04-27 09:00:00 | 32/A0000000         |
    | 2021-04-27 09:01:00 | 32/A0000010         |
    | 2021-04-27 09:02:00 | 32/A0000020         |
-
-
+   
+   Traffic would be calculated as:
+   ```
+   fst_selection_item = (32/A0000010 - 32/A0000000) / (2021-04-27 09:01:00 - 2021-04-27 09:00:00)
+   snd_selection_item = (32/A0000020 - 32/A0000010) / (2021-04-27 09:02:00 - 2021-04-27 09:01:00)
+   wal-traffic-per-second = average(fst_selection_item, snd_selection_item) /* bytes per second */
+   ```
 
 
 
