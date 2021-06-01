@@ -63,8 +63,8 @@ namespace Postgres.Marula.Calculations.Parameters.Wal
 			var checkpointCompletionTarget = await pgSettings.ReadAsync<Fraction>("checkpoint_completion_target");
 
 			var maxWalSizeInBytes = walTrafficPerSecond
-			                        * checkpointTimeout.TotalSeconds
-			                        * (multiplier + checkpointCompletionTarget);
+									* checkpointTimeout.TotalSeconds
+									* (multiplier + checkpointCompletionTarget);
 
 			return new((ulong) maxWalSizeInBytes);
 		}
