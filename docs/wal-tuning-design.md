@@ -45,7 +45,7 @@ Calculation of WAL traffic consists of two processes:
 2. To take into account volatility of WAL-related operations, WAL traffic is calculated as **moving average** of values retrieved from server during background logging.
    Time window is determined by **MovingAverageWindowInSeconds** app's configuration parameter. Default value is **10800 seconds** (3 hours).
 
-   Single selection item calculated as difference of two adjacent values in LSN log table.
+   Single selection item is calculated as difference of two adjacent values in LSN log table.
    For example, let's say we have following records in LSN log, which are in moving average window:
 
    | log_timestamp       | wal_insert_location |
