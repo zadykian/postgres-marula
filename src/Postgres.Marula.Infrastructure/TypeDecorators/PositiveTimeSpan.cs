@@ -17,6 +17,9 @@ namespace Postgres.Marula.Infrastructure.TypeDecorators
 		/// <inheritdoc cref="TimeSpan.TotalMilliseconds"/>
 		public double TotalMilliseconds => underlyingValue.TotalMilliseconds;
 
+		/// <inheritdoc cref="TimeSpan.TotalSeconds"/>
+		public double TotalSeconds => underlyingValue.TotalSeconds;
+
 		/// <inheritdoc />
 		public override string ToString() => underlyingValue.ToString();
 

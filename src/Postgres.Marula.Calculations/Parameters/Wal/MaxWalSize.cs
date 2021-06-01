@@ -42,7 +42,11 @@ namespace Postgres.Marula.Calculations.Parameters.Wal
 		/// <inheritdoc />
 		/// <remarks>
 		/// <para>
-		/// Value calculated as: todo
+		/// Value calculated as:
+		/// </para>
+		/// <para>
+		/// multiplier = (pg_version >= 11.0) ? 1 : 2
+		/// max_wal_size = {wal-traffic-per-second} * checkpoint_timeout * (multiplier + checkpoint_completion_target)
 		/// </para>
 		/// <para>
 		/// Server needs to keep WAL files starting at the moment of the last completed checkpoint
@@ -60,6 +64,11 @@ namespace Postgres.Marula.Calculations.Parameters.Wal
 			var checkpointTimeout = await pgSettings.ReadAsync<PositiveTimeSpan>("checkpoint_timeout");
 			var checkpointCompletionTarget = await pgSettings.ReadAsync<Fraction>("checkpoint_completion_target");
 
+			var maxWalSizeInBytes = walTrafficPerSecond
+			                        * checkpointTimeout.TotalSeconds
+			                        * (multiplier + checkpointCompletionTarget);
+
+			return new((ulong) maxWalSizeInBytes);
 		}
 
 		/// <summary>
@@ -82,7 +91,7 @@ namespace Postgres.Marula.Calculations.Parameters.Wal
 				.Pairwise()
 				.Select(pair => pair.Left.TrafficPerSecondBefore(pair.Right))
 				.Average(memory => (double) memory.TotalBytes)
-				.To(averageBytes => new Memory((ulong)averageBytes));
+				.To(averageBytes => new Memory((ulong) averageBytes));
 		}
 	}
 }
