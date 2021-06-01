@@ -9,7 +9,7 @@ namespace Postgres.Marula.Calculations.ExternalDependencies
 	public readonly struct LsnHistoryEntry
 	{
 		// ReSharper disable once UnusedMember.Local
-		private LsnHistoryEntry(DateTime logTimestamp, LogSeqNumber walInsertLocation)
+		public LsnHistoryEntry(DateTime logTimestamp, LogSeqNumber walInsertLocation)
 		{
 			LogTimestamp = logTimestamp;
 			WalInsertLocation = walInsertLocation;
@@ -36,8 +36,8 @@ namespace Postgres.Marula.Calculations.ExternalDependencies
 					$"'{nameof(entryInFuture)}' log entry must be captured after current entry.", nameof(entryInFuture));
 			}
 
-			var memory = WalInsertLocation - entryInFuture.WalInsertLocation;
-			var timeSpan = LogTimestamp - entryInFuture.LogTimestamp;
+			var memory = entryInFuture.WalInsertLocation - WalInsertLocation;
+			var timeSpan = entryInFuture.LogTimestamp - LogTimestamp;
 			return new(memory.TotalBytes / (ulong) timeSpan.TotalSeconds);
 		}
 	}
