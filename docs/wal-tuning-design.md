@@ -63,5 +63,5 @@ The default is 0.5.
 To evenly distribute the load produced by background WAL writer, is calculated as:
 
 ```
-min(0.9, (checkpoint_timeout - 2 min) / checkpoint_timeout)
+checkpoint_completion_target = min(0.9, (checkpoint_timeout - 2 min) / checkpoint_timeout)
 ```
