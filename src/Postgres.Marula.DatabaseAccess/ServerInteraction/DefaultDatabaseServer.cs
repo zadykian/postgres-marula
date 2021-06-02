@@ -91,18 +91,18 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 		}
 
 		/// <inheritdoc />
-		async Task<RawParameterValue> IDatabaseServer.GetRawParameterValueAsync(NonEmptyString parameterName)
+		async Task<RawParameterValue> IDatabaseServer.GetRawParameterValueAsync(IParameterLink parameterLink)
 		{
 			var commandText = string.Intern($@"
 				select current_setting(name), min_val, max_val
 				from pg_catalog.pg_settings
-				where name = @{nameof(parameterName)};");
+				where name = @{nameof(IParameterLink.Name)};");
 
 			var dbConnection = await Connection();
 
 			var (value, minValue, maxValue) = await dbConnection.QuerySingleAsync<(NonEmptyString, decimal?, decimal?)>(
 				commandText,
-				new {parameterName});
+				new {parameterLink.Name});
 
 			return minValue.HasValue && maxValue.HasValue
 				? new RawRangeParameterValue(value, (minValue.Value, maxValue.Value))
@@ -112,12 +112,12 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 		/// <summary>
 		/// Cache of parameter context values.
 		/// </summary>
-		private static readonly ConcurrentDictionary<NonEmptyString, ParameterContext> contextCache = new();
+		private static readonly ConcurrentDictionary<IParameterLink, ParameterContext> contextCache = new();
 
 		/// <inheritdoc />
-		async ValueTask<ParameterContext> IDatabaseServer.GetParameterContextAsync(NonEmptyString parameterName)
+		async ValueTask<ParameterContext> IDatabaseServer.GetParameterContextAsync(IParameterLink parameterLink)
 		{
-			if (contextCache.TryGetValue(parameterName, out var parameterContext))
+			if (contextCache.TryGetValue(parameterLink, out var parameterContext))
 			{
 				return parameterContext;
 			}
@@ -125,13 +125,13 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 			var commandText = string.Intern($@"
 				select context
 				from pg_catalog.pg_settings
-				where name = @{nameof(parameterName)};");
+				where name = @{nameof(IParameterLink.Name)};");
 
 			var dbConnection = await Connection();
-			var stringRepresentation = await dbConnection.QuerySingleAsync<NonEmptyString>(commandText, new {parameterName});
+			var stringRepresentation = await dbConnection.QuerySingleAsync<NonEmptyString>(commandText, new {parameterLink.Name});
 
 			parameterContext = stringRepresentation.ByStringRepresentation<ParameterContext>();
-			contextCache[parameterName] = parameterContext;
+			contextCache[parameterLink] = parameterContext;
 			return parameterContext;
 		}
 

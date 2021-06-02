@@ -32,7 +32,7 @@ namespace Postgres.Marula.Calculations.Pipeline.MiddlewareComponents
 				.CalculatedValues
 				.Where(ParameterAdjustmentIsAllowed)
 				.ToImmutableArray()
-				.To(parameterValues => pgSettings.ApplyAsync(parameterValues));
+				.To(parameterValues => pgSettings.Apply(parameterValues));
 
 			await next(context);
 		}

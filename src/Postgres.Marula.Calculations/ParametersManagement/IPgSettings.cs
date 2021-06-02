@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Postgres.Marula.Calculations.Parameters.Base;
 using Postgres.Marula.Calculations.ParameterValues.Base;
@@ -12,10 +11,9 @@ namespace Postgres.Marula.Calculations.ParametersManagement
 	internal interface IPgSettings
 	{
 		/// <summary>
-		/// Apply parameter values <paramref name="parameterValues"/>
-		/// to database server configuration.
+		/// Apply parameter value <paramref name="parameterValue"/> to settings.
 		/// </summary>
-		Task ApplyAsync(IEnumerable<IParameterValue> parameterValues);
+		void Apply(IParameterValue parameterValue);
 
 		/// <summary>
 		/// Read value of type <typeparamref name="TValue"/> of parameter <typeparamref name="TParameter"/>. 
@@ -23,5 +21,10 @@ namespace Postgres.Marula.Calculations.ParametersManagement
 		Task<TValue> ReadAsync<TParameter, TValue>()
 			where TParameter : IParameter
 			where TValue : IEquatable<TValue>;
+
+		/// <summary>
+		/// Send all applied parameter values to database server.
+		/// </summary>
+		Task FlushAsync();
 	}
 }

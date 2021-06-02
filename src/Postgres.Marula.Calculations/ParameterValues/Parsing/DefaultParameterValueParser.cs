@@ -14,11 +14,8 @@ namespace Postgres.Marula.Calculations.ParameterValues.Parsing
 	internal class DefaultParameterValueParser : IParameterValueParser
 	{
 		/// <inheritdoc />
-		IParameterValue IParameterValueParser.Parse(NonEmptyString parameterName, RawParameterValue rawParameterValue)
-		{
-			var parameterLink = new ParameterLink(parameterName);
-
-			return rawParameterValue.Value switch
+		IParameterValue IParameterValueParser.Parse(IParameterLink parameterLink, RawParameterValue rawParameterValue)
+			=> rawParameterValue.Value switch
 			{
 				{ } when Regex.IsMatch(rawParameterValue.Value, "^[0-9]+(ms|s|min|h)$")
 					=> ParseTimeSpan(rawParameterValue.Value)
@@ -40,9 +37,8 @@ namespace Postgres.Marula.Calculations.ParameterValues.Parsing
 					=> new BooleanParameterValue(parameterLink, value: false),
 
 				_ => throw new ParameterValueParseException(
-					$"Failed to parse value '{rawParameterValue.Value}' of parameter '{parameterName}'.")
+					$"Failed to parse value '{rawParameterValue.Value}' of parameter '{parameterLink.Name}'.")
 			};
-		}
 
 		/// <summary>
 		/// Try parse string <paramref name="input"/> to decimal value.

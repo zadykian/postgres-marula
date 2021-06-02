@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Postgres.Marula.Calculations.ParameterProperties;
+using Postgres.Marula.Calculations.Parameters.Base;
 using Postgres.Marula.Calculations.ParameterValues.Base;
 using Postgres.Marula.Calculations.ParameterValues.Raw;
 using Postgres.Marula.Infrastructure.TypeDecorators;
@@ -20,14 +21,14 @@ namespace Postgres.Marula.Calculations.ExternalDependencies
 		Task ApplyToConfigurationAsync(IReadOnlyCollection<IParameterValue> parameterValues);
 
 		/// <summary>
-		/// Get raw value of parameter named <paramref name="parameterName"/>.
+		/// Get raw value of parameter named <paramref name="parameterLink"/>.
 		/// </summary>
-		Task<RawParameterValue> GetRawParameterValueAsync(NonEmptyString parameterName);
+		Task<RawParameterValue> GetRawParameterValueAsync(IParameterLink parameterLink);
 
 		/// <summary>
-		/// Get context of parameter named <paramref name="parameterName"/>. 
+		/// Get context of parameter named <paramref name="parameterLink"/>. 
 		/// </summary>
-		ValueTask<ParameterContext> GetParameterContextAsync(NonEmptyString parameterName);
+		ValueTask<ParameterContext> GetParameterContextAsync(IParameterLink parameterLink);
 
 		/// <summary>
 		/// Get current Write-Ahead Log insert location.

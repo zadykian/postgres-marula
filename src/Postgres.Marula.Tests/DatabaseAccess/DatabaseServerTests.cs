@@ -25,28 +25,28 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 		[Test]
 		public async Task GetRawParameterValueTest(
 			[ValueSource(nameof(ParameterNameTestCaseSource))]
-			(NonEmptyString ParameterName, bool WithRange) testCase)
+			(IParameterLink ParameterLink, bool WithRange) testCase)
 		{
 			var databaseServer = GetService<IDatabaseServer>();
-			var rawParameterValue = await databaseServer.GetRawParameterValueAsync(testCase.ParameterName);
+			var rawParameterValue = await databaseServer.GetRawParameterValueAsync(testCase.ParameterLink);
 			Assert.AreEqual(testCase.WithRange, rawParameterValue is RawRangeParameterValue);
 		}
 
 		/// <summary>
 		/// Test case source for <see cref="GetRawParameterValueTest"/>. 
 		/// </summary>
-		private static IEnumerable<(NonEmptyString ParameterName, bool WithRange)> ParameterNameTestCaseSource()
-			=> new (NonEmptyString, bool)[]
+		private static IEnumerable<(IParameterLink ParameterLink, bool WithRange)> ParameterNameTestCaseSource()
+			=> new (IParameterLink, bool)[]
 			{
-				("autovacuum", false),
-				("autovacuum_vacuum_cost_delay", true),
-				("cursor_tuple_fraction", true),
-				("deadlock_timeout", true),
+				(new ParameterLink("autovacuum"), false),
+				(new ParameterLink("autovacuum_vacuum_cost_delay"), true),
+				(new ParameterLink("cursor_tuple_fraction"), true),
+				(new ParameterLink("deadlock_timeout"), true),
 
-				("log_rotation_age", true),
-				("checkpoint_flush_after", true),
-				("track_counts", false),
-				("autovacuum_vacuum_scale_factor", true)
+				(new ParameterLink("log_rotation_age"), true),
+				(new ParameterLink("checkpoint_flush_after"), true),
+				(new ParameterLink("track_counts"), false),
+				(new ParameterLink("autovacuum_vacuum_scale_factor"), true)
 			};
 
 		/// <summary>
@@ -74,10 +74,10 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 			// let postmaster reload configuration. 
 			await Task.Delay(millisecondsDelay: 100);
 
-			var rawParameterValue = await databaseServer.GetRawParameterValueAsync(valueToApply.ParameterLink.Name);
+			var rawParameterValue = await databaseServer.GetRawParameterValueAsync(valueToApply.ParameterLink);
 
 			var parameterValueParser = GetService<IParameterValueParser>();
-			var parsedValue = parameterValueParser.Parse(valueToApply.ParameterLink.Name, rawParameterValue);
+			var parsedValue = parameterValueParser.Parse(valueToApply.ParameterLink, rawParameterValue);
 			Assert.AreEqual(valueToApply, parsedValue);
 		}
 
@@ -143,11 +143,11 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 			var parameterValueParser = GetService<IParameterValueParser>();
 
 			var valuesFromServer = await parameterValues
-				.Select(parameterValue => parameterValue.ParameterLink.Name)
-				.SelectAsync(async parameterName =>
+				.Select(parameterValue => parameterValue.ParameterLink)
+				.SelectAsync(async parameterLink =>
 				{
-					var rawParameterValue = await databaseServer.GetRawParameterValueAsync(parameterName);
-					return parameterValueParser.Parse(parameterName, rawParameterValue);
+					var rawParameterValue = await databaseServer.GetRawParameterValueAsync(parameterLink);
+					return parameterValueParser.Parse(parameterLink, rawParameterValue);
 				});
 
 			parameterValues
@@ -161,22 +161,22 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 		[Test]
 		public async Task GetParameterContextTest(
 			[ValueSource(nameof(ContextTestCaseSource))]
-			(NonEmptyString ParameterName, ParameterContext ExpectedContext) testCase)
+			(IParameterLink ParameterLink, ParameterContext ExpectedContext) testCase)
 		{
 			var databaseServer = GetService<IDatabaseServer>();
-			var parameterContext = await databaseServer.GetParameterContextAsync(testCase.ParameterName);
+			var parameterContext = await databaseServer.GetParameterContextAsync(testCase.ParameterLink);
 			Assert.AreEqual(testCase.ExpectedContext, parameterContext);
 		}
 
 		/// <summary>
 		/// Test case source for <see cref="GetParameterContextTest"/>. 
 		/// </summary>
-		private static IEnumerable<(NonEmptyString ParameterName, ParameterContext ExpectedContext)> ContextTestCaseSource()
+		private static IEnumerable<(IParameterLink ParameterLink, ParameterContext ExpectedContext)> ContextTestCaseSource()
 		{
-			yield return ("autovacuum", ParameterContext.Sighup);
-			yield return ("shared_buffers", ParameterContext.Postmaster);
-			yield return ("autovacuum_vacuum_scale_factor", ParameterContext.Sighup);
-			yield return ("track_counts", ParameterContext.Superuser);
+			yield return (new ParameterLink("autovacuum"), ParameterContext.Sighup);
+			yield return (new ParameterLink("shared_buffers"), ParameterContext.Postmaster);
+			yield return (new ParameterLink("autovacuum_vacuum_scale_factor"), ParameterContext.Sighup);
+			yield return (new ParameterLink("track_counts"), ParameterContext.Superuser);
 		}
 
 		/// <summary>

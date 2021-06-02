@@ -19,10 +19,7 @@ namespace Postgres.Marula.Calculations.Parameters.Base
 		protected ParameterBase(ILogger<ParameterBase<TParameterValue, TValue>> logger) => this.logger = logger;
 
 		/// <inheritdoc />
-		NonEmptyString IParameterLink.Name
-			=> GetType()
-				.Name
-				.ToSnakeCase();
+		NonEmptyString IParameterLink.Name => new ParameterLink(GetType()).Name;
 
 		/// <inheritdoc />
 		/// <remarks>
