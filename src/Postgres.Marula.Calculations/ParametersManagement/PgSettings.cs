@@ -6,7 +6,6 @@ using Postgres.Marula.Calculations.ExternalDependencies;
 using Postgres.Marula.Calculations.ParameterValues.Base;
 using Postgres.Marula.Calculations.ParameterValues.Parsing;
 using Postgres.Marula.Infrastructure.Extensions;
-using Postgres.Marula.Infrastructure.TypeDecorators;
 
 namespace Postgres.Marula.Calculations.ParametersManagement
 {
@@ -29,8 +28,9 @@ namespace Postgres.Marula.Calculations.ParametersManagement
 				.To(values => databaseServer.ApplyToConfigurationAsync(values));
 
 		/// <inheritdoc />
-		async Task<TValue> IPgSettings.ReadAsync<TValue>(NonEmptyString parameterName)
+		async Task<TValue> IPgSettings.ReadAsync<TParameter, TValue>()
 		{
+			var parameterName = typeof(TParameter).Name.ToSnakeCase();
 			var rawParameterValue = await databaseServer.GetRawParameterValueAsync(parameterName);
 			var parameterValue = parameterValueParser.Parse(parameterName, rawParameterValue);
 			return parameterValue is ParameterValueBase<TValue> value

@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Postgres.Marula.Calculations.Parameters.Base;
 using Postgres.Marula.Calculations.ParameterValues.Base;
-using Postgres.Marula.Infrastructure.TypeDecorators;
 
 namespace Postgres.Marula.Calculations.ParametersManagement
 {
@@ -18,9 +18,10 @@ namespace Postgres.Marula.Calculations.ParametersManagement
 		Task ApplyAsync(IEnumerable<IParameterValue> parameterValues);
 
 		/// <summary>
-		/// Read value of type <typeparamref name="TValue"/>
-		/// of parameter named <paramref name="parameterName"/>. 
+		/// Read value of type <typeparamref name="TValue"/> of parameter <typeparamref name="TParameter"/>. 
 		/// </summary>
-		Task<TValue> ReadAsync<TValue>(NonEmptyString parameterName) where TValue : IEquatable<TValue>;
+		Task<TValue> ReadAsync<TParameter, TValue>()
+			where TParameter : IParameter
+			where TValue : IEquatable<TValue>;
 	}
 }

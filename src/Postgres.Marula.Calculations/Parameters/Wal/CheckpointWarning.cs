@@ -33,7 +33,7 @@ namespace Postgres.Marula.Calculations.Parameters.Wal
 		/// </remarks>
 		protected override async ValueTask<PositiveTimeSpan> CalculateValueAsync()
 		{
-			var checkpointTimeout = await pgSettings.ReadAsync<PositiveTimeSpan>("checkpoint_timeout");
+			var checkpointTimeout = await pgSettings.ReadAsync<CheckpointTimeout, PositiveTimeSpan>();
 			return checkpointTimeout * 0.8;
 		}
 	}

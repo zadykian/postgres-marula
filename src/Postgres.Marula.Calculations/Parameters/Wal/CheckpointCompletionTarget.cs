@@ -41,7 +41,7 @@ namespace Postgres.Marula.Calculations.Parameters.Wal
 		/// </remarks>
 		protected override async ValueTask<Fraction> CalculateValueAsync()
 		{
-			var checkpointTimeout = await pgSettings.ReadAsync<PositiveTimeSpan>("checkpoint_timeout");
+			var checkpointTimeout = await pgSettings.ReadAsync<CheckpointTimeout, PositiveTimeSpan>();
 			var basedOnTimeout = (checkpointTimeout - TimeSpan.FromMinutes(2)) / checkpointTimeout;
 			return (decimal) Math.Min(0.9, basedOnTimeout);
 		}
