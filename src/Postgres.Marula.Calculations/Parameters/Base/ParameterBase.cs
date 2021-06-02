@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Postgres.Marula.Calculations.Exceptions;
+using Postgres.Marula.Calculations.Parameters.Base.Dependencies;
 using Postgres.Marula.Calculations.ParameterValues.Base;
 using Postgres.Marula.Infrastructure.Extensions;
 using Postgres.Marula.Infrastructure.TypeDecorators;
@@ -45,6 +46,9 @@ namespace Postgres.Marula.Calculations.Parameters.Base
 				.CreateInstance(typeof(TParameterValue), this.GetLink(), parameterValue)
 				.To(instance => (IParameterValue) instance!);
 		}
+
+		/// <inheritdoc />
+		public virtual IParameterDependencies Dependencies() => Base.Dependencies.ParameterDependencies.Empty;
 
 		/// <summary>
 		/// Calculate parameter value. 

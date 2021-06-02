@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Postgres.Marula.Calculations.Parameters.Base.Dependencies;
 using Postgres.Marula.Calculations.ParameterValues.Base;
 
 namespace Postgres.Marula.Calculations.Parameters.Base
@@ -12,6 +13,12 @@ namespace Postgres.Marula.Calculations.Parameters.Base
 		/// Calculate parameter value. 
 		/// </summary>
 		ValueTask<IParameterValue> CalculateAsync();
+
+		/// <summary>
+		/// Dependencies of parameter.
+		/// All parameters which are configured as dependencies must be calculated before current one.
+		/// </summary>
+		IParameterDependencies Dependencies();
 	}
 
 	/// <summary>
