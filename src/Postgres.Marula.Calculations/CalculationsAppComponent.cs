@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Postgres.Marula.Calculations.Configuration;
 using Postgres.Marula.Calculations.Jobs.Base;
 using Postgres.Marula.Calculations.Parameters.Base;
+using Postgres.Marula.Calculations.Parameters.Wal.LsnHistory;
 using Postgres.Marula.Calculations.ParametersManagement;
 using Postgres.Marula.Calculations.ParameterValues.Parsing;
 using Postgres.Marula.Calculations.Pipeline;
@@ -24,6 +25,7 @@ namespace Postgres.Marula.Calculations
 				.AddSingleton<ICalculationsConfiguration, DefaultCalculationsConfiguration>()
 				.AddSingleton<IParameterValueParser, DefaultParameterValueParser>()
 				.AddScoped<IPgSettings, PgSettings>()
+				.AddScoped<IWalLsnHistory, WalLsnHistory>()
 				.AddBasedOn<IParameter>(ServiceLifetime.Scoped)
 				.Forward<IParameter, IParameterLink>()
 				.To(RegisterPipelineServices)
