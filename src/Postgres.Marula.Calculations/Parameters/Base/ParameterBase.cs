@@ -48,7 +48,7 @@ namespace Postgres.Marula.Calculations.Parameters.Base
 		}
 
 		/// <inheritdoc />
-		public virtual IParameterDependencies Dependencies() => Base.Dependencies.ParameterDependencies.Empty;
+		public virtual IParameterDependencies Dependencies() => ParameterDependencies.Empty;
 
 		/// <summary>
 		/// Calculate parameter value. 

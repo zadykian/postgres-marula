@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using Postgres.Marula.Calculations.Exceptions;
 using Postgres.Marula.Calculations.ExternalDependencies;
 using Postgres.Marula.Calculations.Parameters.Base;
+using Postgres.Marula.Calculations.Parameters.Base.Dependencies;
 using Postgres.Marula.Calculations.Parameters.Wal.LsnHistory;
 using Postgres.Marula.Calculations.ParametersManagement;
 using Postgres.Marula.Infrastructure.Extensions;
@@ -35,6 +36,13 @@ namespace Postgres.Marula.Calculations.Parameters.Wal
 			this.databaseServer = databaseServer;
 			this.pgSettings = pgSettings;
 		}
+
+		/// <inheritdoc />
+		public override IParameterDependencies Dependencies()
+			=> ParameterDependencies
+				.Empty
+				.DependsOn<CheckpointTimeout>()
+				.DependsOn<CheckpointCompletionTarget>();
 
 		/// <inheritdoc />
 		/// <remarks>
