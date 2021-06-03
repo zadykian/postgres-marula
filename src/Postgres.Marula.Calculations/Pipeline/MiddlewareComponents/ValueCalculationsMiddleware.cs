@@ -22,15 +22,6 @@ namespace Postgres.Marula.Calculations.Pipeline.MiddlewareComponents
 			ParametersManagementContext context,
 			Func<ParametersManagementContext, Task> next)
 		{
-			
-
-			var parameterValues = await context
-				.Parameters
-				.ToAsyncEnumerable()
-				.SelectAwait(parameter => parameter.CalculateAsync())
-				.Where(value => value is not NullValue)
-				.ToArrayAsync();
-
 			await next(context);
 		}
 	}

@@ -20,6 +20,7 @@ namespace Postgres.Marula.Calculations.ParametersManagement
 		private readonly IDatabaseServer databaseServer;
 		private readonly IParameterValueParser parameterValueParser;
 		private readonly ICalculationsConfiguration configuration;
+
 		private readonly ConcurrentDictionary<IParameterLink, CacheEntry> valuesCache;
 
 		public PgSettings(
