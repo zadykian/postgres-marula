@@ -5,11 +5,6 @@ using Postgres.Marula.Calculations.ParametersManagement;
 
 namespace Postgres.Marula.Calculations.Pipeline.MiddlewareComponents
 {
-	internal interface ICalculationsStep
-	{
-		
-	}
-
 	/// <summary>
 	/// Pipeline component which is responsible
 	/// for database server parameters adjustment.
