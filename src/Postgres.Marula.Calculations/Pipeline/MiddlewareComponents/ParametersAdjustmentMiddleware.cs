@@ -1,12 +1,9 @@
 using System;
-using System.Collections.Immutable;
-using System.Linq;
 using System.Threading.Tasks;
 using PipelineNet.Middleware;
 using Postgres.Marula.Calculations.Configuration;
 using Postgres.Marula.Calculations.ParametersManagement;
 using Postgres.Marula.Calculations.Pipeline.MiddlewareComponents.Base;
-using Postgres.Marula.Infrastructure.Extensions;
 
 namespace Postgres.Marula.Calculations.Pipeline.MiddlewareComponents
 {
@@ -28,12 +25,7 @@ namespace Postgres.Marula.Calculations.Pipeline.MiddlewareComponents
 			ParametersManagementContext context,
 			Func<ParametersManagementContext, Task> next)
 		{
-			await context
-				.CalculatedValues
-				.Where(ParameterAdjustmentIsAllowed)
-				.ToImmutableArray()
-				.To(parameterValues => pgSettings.Apply(parameterValues));
-
+			await pgSettings.FlushAsync();
 			await next(context);
 		}
 	}
