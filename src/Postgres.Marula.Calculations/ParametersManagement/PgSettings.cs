@@ -1,9 +1,12 @@
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Threading.Tasks;
+using Postgres.Marula.Calculations.Configuration;
 using Postgres.Marula.Calculations.ExternalDependencies;
+using Postgres.Marula.Calculations.ParameterProperties;
 using Postgres.Marula.Calculations.Parameters.Base;
 using Postgres.Marula.Calculations.ParameterValues.Base;
 using Postgres.Marula.Calculations.ParameterValues.Parsing;
@@ -16,18 +19,48 @@ namespace Postgres.Marula.Calculations.ParametersManagement
 	{
 		private readonly IDatabaseServer databaseServer;
 		private readonly IParameterValueParser parameterValueParser;
+		private readonly ICalculationsConfiguration configuration;
 		private readonly ConcurrentDictionary<IParameterLink, CacheEntry> valuesCache;
 
-		public PgSettings(IDatabaseServer databaseServer, IParameterValueParser parameterValueParser)
+		public PgSettings(
+			IDatabaseServer databaseServer,
+			IParameterValueParser parameterValueParser,
+			ICalculationsConfiguration configuration)
 		{
 			this.databaseServer = databaseServer;
 			this.parameterValueParser = parameterValueParser;
+			this.configuration = configuration;
 			valuesCache = new();
 		}
 
 		/// <inheritdoc />
 		void IPgSettings.Apply(IParameterValue parameterValue)
 			=> valuesCache[parameterValue.ParameterLink] = new(parameterValue, Updated: true);
+
+		/// <inheritdoc />
+		IAsyncEnumerable<ParameterValueWithStatus> IPgSettings.AllAppliedAsync()
+			=> valuesCache
+				.Values
+				.Where(entry => entry.Updated)
+				.ToAsyncEnumerable()
+				.SelectAwait(async entry => new ParameterValueWithStatus(entry.Value, await GetCalculationStatus(entry.Value)));
+
+		/// <summary>
+		/// Get database parameter calculation status. 
+		/// </summary>
+		private async ValueTask<CalculationStatus> GetCalculationStatus(IParameterValue parameterValue)
+		{
+			var adjustmentIsAllowed = configuration.AutoAdjustmentIsEnabled();
+			var parameterContext = await databaseServer.GetParameterContextAsync(parameterValue.ParameterLink);
+
+			return (adjustmentIsAllowed, parameterContext.RestartIsRequired()) switch
+			{
+				( false, false ) => CalculationStatus.RequiresConfirmation,
+				( false, true  ) => CalculationStatus.RequiresConfirmationAndRestart,
+				( true,  false ) => CalculationStatus.Applied,
+				( true,  true  ) => CalculationStatus.RequiresServerRestart
+			};
+		}
 
 		/// <inheritdoc />
 		async Task<TValue> IPgSettings.ReadAsync<TParameter, TValue>()
@@ -52,13 +85,20 @@ namespace Postgres.Marula.Calculations.ParametersManagement
 		}
 
 		/// <inheritdoc />
-		Task IPgSettings.FlushAsync()
-			=> valuesCache
+		async Task IPgSettings.FlushAsync()
+		{
+			if (!configuration.AutoAdjustmentIsEnabled())
+			{
+				return;
+			}
+
+			await valuesCache
 				.Values
 				.Where(entry => entry.Updated)
 				.Select(entry => entry.Value)
 				.ToImmutableArray()
 				.To(updatedValues => databaseServer.ApplyToConfigurationAsync(updatedValues));
+		}
 
 		/// <summary>
 		/// Parameter values cache entry.

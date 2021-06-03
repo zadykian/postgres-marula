@@ -1,9 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using PipelineNet.Middleware;
-using Postgres.Marula.Calculations.Configuration;
 using Postgres.Marula.Calculations.ParametersManagement;
-using Postgres.Marula.Calculations.Pipeline.MiddlewareComponents.Base;
 
 namespace Postgres.Marula.Calculations.Pipeline.MiddlewareComponents
 {
@@ -11,14 +9,11 @@ namespace Postgres.Marula.Calculations.Pipeline.MiddlewareComponents
 	/// Pipeline component which is responsible
 	/// for database server parameters adjustment.
 	/// </summary>
-	internal class ParametersAdjustmentMiddleware : ParametersMiddlewareBase, IAsyncMiddleware<ParametersManagementContext>
+	internal class ParametersAdjustmentMiddleware : IAsyncMiddleware<ParametersManagementContext>
 	{
 		private readonly IPgSettings pgSettings;
 
-		public ParametersAdjustmentMiddleware(
-			IPgSettings pgSettings,
-			ICalculationsConfiguration calculationsConfiguration) : base(calculationsConfiguration)
-			=> this.pgSettings = pgSettings;
+		public ParametersAdjustmentMiddleware(IPgSettings pgSettings) => this.pgSettings = pgSettings;
 
 		/// <inheritdoc />
 		async Task IAsyncMiddleware<ParametersManagementContext>.Run(

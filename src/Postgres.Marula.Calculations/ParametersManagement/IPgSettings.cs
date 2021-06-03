@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Postgres.Marula.Calculations.Parameters.Base;
 using Postgres.Marula.Calculations.ParameterValues.Base;
@@ -14,6 +15,11 @@ namespace Postgres.Marula.Calculations.ParametersManagement
 		/// Apply parameter value <paramref name="parameterValue"/> to settings.
 		/// </summary>
 		void Apply(IParameterValue parameterValue);
+
+		/// <summary>
+		/// Get all applied parameter values.
+		/// </summary>
+		IAsyncEnumerable<ParameterValueWithStatus> AllAppliedAsync();
 
 		/// <summary>
 		/// Read value of type <typeparamref name="TValue"/> of parameter <typeparamref name="TParameter"/>. 
