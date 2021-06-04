@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using PipelineNet.Middleware;
 using Postgres.Marula.Calculations.Parameters.Base;
 using Postgres.Marula.Calculations.ParametersManagement;
-using Postgres.Marula.Infrastructure.Extensions;
 
 namespace Postgres.Marula.Calculations.Pipeline.MiddlewareComponents
 {
@@ -36,14 +35,26 @@ namespace Postgres.Marula.Calculations.Pipeline.MiddlewareComponents
 			await next(context);
 		}
 
-		private async ValueTask CalculateWithDependencies(IParameter parameter)
+		/// <summary>
+		/// Calculate parameter <paramref name="parameterToCalculate"/> with all its' dependencies. 
+		/// </summary>
+		private async ValueTask CalculateWithDependencies(IParameter parameterToCalculate)
 		{
-			await Task.CompletedTask;
-
-			parameter
+			await parameterToCalculate
 				.Dependencies()
 				.All()
-				.ForEach(parameterType => { });
+				.ToAsyncEnumerable()
+				.ForEachAwaitAsync(async parameterType =>
+				{
+					var valueOfDependency = await parameters
+						.Single(parameter => parameter.GetType() == parameterType)
+						.CalculateAsync();
+
+					pgSettings.Apply(valueOfDependency);
+				});
+
+			var parameterValue = await parameterToCalculate.CalculateAsync();
+			pgSettings.Apply(parameterValue);
 		}
 	}
 }
