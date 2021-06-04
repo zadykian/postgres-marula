@@ -38,11 +38,11 @@ namespace Postgres.Marula.Calculations.Parameters.Base
 		/// </remarks>
 		private async Task<IParameterValue> CalculateInternalAsync()
 		{
-			TValue parameterValue;
+			TValue value;
 
 			try
 			{
-				parameterValue = await CalculateValueAsync();
+				value = await CalculateValueAsync();
 			}
 			catch (ParameterValueCalculationException exception)
 			{
@@ -51,7 +51,7 @@ namespace Postgres.Marula.Calculations.Parameters.Base
 			}
 
 			return Activator
-				.CreateInstance(typeof(TParameterValue), this.GetLink(), parameterValue)
+				.CreateInstance(typeof(TParameterValue), this.GetLink(), value)
 				.To(instance => (IParameterValue) instance!);
 		}
 
