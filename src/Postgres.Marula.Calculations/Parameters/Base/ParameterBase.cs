@@ -24,7 +24,7 @@ namespace Postgres.Marula.Calculations.Parameters.Base
 		}
 
 		/// <inheritdoc />
-		NonEmptyString IParameterLink.Name => new ParameterLink(GetType()).Name;
+		public NonEmptyString Name => new ParameterLink(GetType()).Name;
 
 		/// <inheritdoc />
 		public virtual IParameterDependencies Dependencies() => ParameterDependencies.Empty;
@@ -46,7 +46,7 @@ namespace Postgres.Marula.Calculations.Parameters.Base
 			}
 			catch (ParameterValueCalculationException exception)
 			{
-				logger.LogError("Failed to calculate parameter value.", exception);
+				logger.LogError($"Failed to calculate value of parameter '{Name}'.", exception);
 				return NullValue.Instance;
 			}
 
