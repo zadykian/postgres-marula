@@ -1,5 +1,4 @@
 using System;
-using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Postgres.Marula.Calculations.Exceptions;
@@ -16,12 +15,12 @@ namespace Postgres.Marula.Calculations.Parameters.Base
 		where TValue : IEquatable<TValue>
 	{
 		private readonly ILogger<ParameterBase<TParameterValue, TValue>> logger;
-		private readonly Lazy<Task<IParameterValue>> valueAsyncCache;
+		private readonly AsyncLazy<IParameterValue> valueAsyncCache;
 
 		protected ParameterBase(ILogger<ParameterBase<TParameterValue, TValue>> logger)
 		{
 			this.logger = logger;
-			valueAsyncCache = new(CalculateInternalAsync, LazyThreadSafetyMode.ExecutionAndPublication);
+			valueAsyncCache = new(CalculateInternalAsync);
 		}
 
 		/// <inheritdoc />

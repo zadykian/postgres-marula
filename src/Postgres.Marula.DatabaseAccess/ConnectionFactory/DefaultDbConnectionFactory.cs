@@ -1,22 +1,21 @@
-using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Data;
 using System.Data.Common;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using Dapper;
 using Postgres.Marula.Calculations.Parameters.Base;
 using Postgres.Marula.DatabaseAccess.Conventions;
 using Postgres.Marula.DatabaseAccess.SqlScripts.Executor;
+using Postgres.Marula.Infrastructure.TypeDecorators;
 
 namespace Postgres.Marula.DatabaseAccess.ConnectionFactory
 {
 	/// <inheritdoc />
 	internal class DefaultDbConnectionFactory : IDbConnectionFactory
 	{
-		private readonly Lazy<Task<IDbConnection>> lazyPreparedConnection;
+		private readonly AsyncLazy<IDbConnection> lazyPreparedConnection;
 
 		private readonly ISqlScriptsExecutor sqlScriptsExecutor;
 		private readonly INamingConventions namingConventions;
@@ -28,10 +27,7 @@ namespace Postgres.Marula.DatabaseAccess.ConnectionFactory
 			INamingConventions namingConventions,
 			IEnumerable<IParameterLink> allParameterLinks)
 		{
-			lazyPreparedConnection = new Lazy<Task<IDbConnection>>(
-				() => PrepareConnectionAsync(dbConnection),
-				LazyThreadSafetyMode.PublicationOnly);
-
+			lazyPreparedConnection = new(() => PrepareConnectionAsync(dbConnection));
 			this.sqlScriptsExecutor = sqlScriptsExecutor;
 			this.namingConventions = namingConventions;
 			this.allParameterLinks = allParameterLinks.ToImmutableArray();
@@ -60,7 +56,7 @@ namespace Postgres.Marula.DatabaseAccess.ConnectionFactory
 			await FillParameterDictionaryTable(dbConnection);
 			return dbConnection;
 		}
-		
+
 		/// <summary>
 		/// Figure out is database is prepared already.
 		/// </summary>
