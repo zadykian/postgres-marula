@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Postgres.Marula.Calculations.Exceptions;
@@ -15,17 +16,28 @@ namespace Postgres.Marula.Calculations.Parameters.Base
 		where TValue : IEquatable<TValue>
 	{
 		private readonly ILogger<ParameterBase<TParameterValue, TValue>> logger;
+		private readonly Lazy<Task<IParameterValue>> valueAsyncCache;
 
-		protected ParameterBase(ILogger<ParameterBase<TParameterValue, TValue>> logger) => this.logger = logger;
+		protected ParameterBase(ILogger<ParameterBase<TParameterValue, TValue>> logger)
+		{
+			this.logger = logger;
+			valueAsyncCache = new(CalculateInternalAsync, LazyThreadSafetyMode.ExecutionAndPublication);
+		}
 
 		/// <inheritdoc />
 		NonEmptyString IParameterLink.Name => new ParameterLink(GetType()).Name;
 
 		/// <inheritdoc />
+		public virtual IParameterDependencies Dependencies() => ParameterDependencies.Empty;
+
+		/// <inheritdoc />
+		Task<IParameterValue> IParameter.CalculateAsync() => valueAsyncCache.Value;
+
+		/// <inheritdoc cref="IParameter.CalculateAsync"/>
 		/// <remarks>
 		/// This implementation calls <see cref="ParameterValueBase{T}(IParameterLink, T)"/> constructor.
 		/// </remarks>
-		async ValueTask<IParameterValue> IParameter.CalculateAsync()
+		private async Task<IParameterValue> CalculateInternalAsync()
 		{
 			TValue parameterValue;
 
@@ -43,9 +55,6 @@ namespace Postgres.Marula.Calculations.Parameters.Base
 				.CreateInstance(typeof(TParameterValue), this.GetLink(), parameterValue)
 				.To(instance => (IParameterValue) instance!);
 		}
-
-		/// <inheritdoc />
-		public virtual IParameterDependencies Dependencies() => ParameterDependencies.Empty;
 
 		/// <summary>
 		/// Calculate parameter value. 

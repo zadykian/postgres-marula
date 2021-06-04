@@ -10,15 +10,15 @@ namespace Postgres.Marula.Calculations.Parameters.Base
 	internal interface IParameter : IParameterLink
 	{
 		/// <summary>
-		/// Calculate parameter value. 
-		/// </summary>
-		ValueTask<IParameterValue> CalculateAsync();
-
-		/// <summary>
 		/// Dependencies of parameter.
 		/// All parameters which are configured as dependencies must be calculated before current one.
 		/// </summary>
 		IParameterDependencies Dependencies();
+
+		/// <summary>
+		/// Calculate parameter value. 
+		/// </summary>
+		Task<IParameterValue> CalculateAsync();
 	}
 
 	/// <summary>
