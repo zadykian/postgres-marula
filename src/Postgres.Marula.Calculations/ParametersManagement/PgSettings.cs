@@ -36,7 +36,10 @@ namespace Postgres.Marula.Calculations.ParametersManagement
 
 		/// <inheritdoc />
 		void IPgSettings.Apply(IParameterValue parameterValue)
-			=> valuesCache[parameterValue.ParameterLink] = new(parameterValue, Updated: true);
+		{
+			if (parameterValue is NullValue) return;
+			valuesCache[parameterValue.ParameterLink] = new(parameterValue, Updated: true);
+		}
 
 		/// <inheritdoc />
 		IAsyncEnumerable<ParameterValueWithStatus> IPgSettings.AllAppliedAsync()
