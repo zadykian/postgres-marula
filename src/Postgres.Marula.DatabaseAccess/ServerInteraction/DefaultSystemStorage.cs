@@ -33,7 +33,7 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 			}
 
 			var commandText = GetCommandTextToInsertValues(parameterValues);
-			var dbConnection = await GetConnectionAsync();
+			var dbConnection = await Connection();
 			await dbConnection.ExecuteAsync(commandText);
 		}
 
@@ -73,15 +73,45 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 			=> new []
 				{
 					$"'{parameterValue.Value.ParameterLink.Name}'",
+
 					$"'{parameterValue.Value.AsString()}'",
 
 					$"'{parameterValue.Value.Unit.StringRepresentation()}'" +
-						$"::{namingConventions.SystemSchemaName}.{namingConventions.ParameterUnitEnumName}",
+					$"::{namingConventions.SystemSchemaName}.{namingConventions.ParameterUnitEnumName}",
 
 					$"'{parameterValue.CalculationStatus.StringRepresentation()}'" +
-						$"::{namingConventions.SystemSchemaName}.{namingConventions.CalculationStatusEnumName}"
+					$"::{namingConventions.SystemSchemaName}.{namingConventions.CalculationStatusEnumName}"
 				}
 				.JoinBy(", ")
 				.To(values => $"({values})");
+
+		/// <inheritdoc />
+		async Task ISystemStorage.SaveLogSeqNumberAsync(LogSeqNumber logSeqNumber)
+		{
+			var commandText = string.Intern($@"
+				insert into {namingConventions.SystemSchemaName}.{namingConventions.WalLsnHistoryTableName}
+					(wal_insert_location)
+				values
+					(@{nameof(logSeqNumber)}::pg_catalog.pg_lsn);");
+
+			var dbConnection = await Connection();
+			await dbConnection.ExecuteAsync(commandText, new {logSeqNumber});
+		}
+
+		/// <inheritdoc />
+		async IAsyncEnumerable<LsnHistoryEntry> ISystemStorage.GetLsnHistoryAsync(PositiveTimeSpan window)
+		{
+			var commandText = string.Intern($@"
+				select
+					log_timestamp       as {nameof(LsnHistoryEntry.LogTimestamp)},
+					wal_insert_location as {nameof(LsnHistoryEntry.WalInsertLocation)}
+				from {namingConventions.SystemSchemaName}.{namingConventions.WalLsnHistoryTableName}
+				where log_timestamp >= (current_timestamp - @Window)
+				order by log_timestamp;");
+
+			var dbConnection = await Connection();
+			var lsnHistoryEntries = await dbConnection.QueryAsync<LsnHistoryEntry>(commandText, new {Window = (TimeSpan) window});
+			foreach (var lsnHistoryEntry in lsnHistoryEntries) yield return lsnHistoryEntry;
+		}
 	}
 }

@@ -22,10 +22,11 @@ namespace Postgres.Marula.Infrastructure.Extensions
 		public static IServiceCollection AddBasedOn<TInterface>(
 			this IServiceCollection serviceCollection,
 			ServiceLifetime servicesLifetime = ServiceLifetime.Singleton)
+			where TInterface : class
 		{
 			if (!typeof(TInterface).IsInterface)
 			{
-				throw new ArgumentException($"Type '{nameof(TInterface)}' must be interface.", nameof(TInterface));
+				throw new ArgumentException($"Type '{typeof(TInterface).Name}' must be interface.", typeof(TInterface).Name);
 			}
 
 			static bool TypePredicate(Type type)

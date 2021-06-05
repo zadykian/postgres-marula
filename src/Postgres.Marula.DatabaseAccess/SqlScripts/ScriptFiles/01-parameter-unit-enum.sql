@@ -4,7 +4,7 @@ set search_path to SYSTEM_SCHEMA_NAME_TO_REPLACE;
 
 create type UNIT_ENUM_NAME_TO_REPLACE as enum
 (
-	'ms',
+	'milliseconds',
 	'bytes',
 	'enum',
 	'none'

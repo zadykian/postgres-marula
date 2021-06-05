@@ -23,6 +23,11 @@ namespace Postgres.Marula.Infrastructure.TypeDecorators
 				.JoinBy("; ");
 
 		/// <summary>
+		/// Connection string entries indexer. 
+		/// </summary>
+		public NonEmptyString this[NonEmptyString key] => parameters[key];
+
+		/// <summary>
 		/// Implicit cast operator <see cref="ConnectionString"/> -> <see cref="string"/>.
 		/// </summary>
 		public static implicit operator string(ConnectionString connectionString) => connectionString.ToString();

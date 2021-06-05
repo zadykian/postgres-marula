@@ -1,9 +1,11 @@
 using System.Runtime.CompilerServices;
 using Microsoft.Extensions.DependencyInjection;
 using Postgres.Marula.Calculations.Configuration;
-using Postgres.Marula.Calculations.Jobs;
+using Postgres.Marula.Calculations.Jobs.Base;
 using Postgres.Marula.Calculations.Parameters.Base;
-using Postgres.Marula.Calculations.ParameterValueParsing;
+using Postgres.Marula.Calculations.Parameters.Wal.LsnHistory;
+using Postgres.Marula.Calculations.ParametersManagement;
+using Postgres.Marula.Calculations.ParameterValues.Parsing;
 using Postgres.Marula.Calculations.Pipeline;
 using Postgres.Marula.Calculations.Pipeline.Factory;
 using Postgres.Marula.Calculations.Pipeline.MiddlewareComponents;
@@ -21,14 +23,23 @@ namespace Postgres.Marula.Calculations
 		void IAppComponent.RegisterServices(IServiceCollection serviceCollection)
 			=> serviceCollection
 				.AddSingleton<ICalculationsConfiguration, DefaultCalculationsConfiguration>()
+				.AddSingleton<IParameterValueParser, DefaultParameterValueParser>()
+				.AddScoped<IPgSettings, PgSettings>()
+				.AddScoped<IWalLsnHistory, WalLsnHistory>()
 				.AddBasedOn<IParameter>(ServiceLifetime.Scoped)
 				.Forward<IParameter, IParameterLink>()
+				.To(RegisterPipelineServices)
+				.AddBasedOn<IJob>();
+
+		/// <summary>
+		/// Register services related to calculations pipeline.
+		/// </summary>
+		private static IServiceCollection RegisterPipelineServices(IServiceCollection serviceCollection)
+			=> serviceCollection
 				.AddTransient<ParametersManagementContext>()
 				.AddTransient<ValueCalculationsMiddleware>()
 				.AddTransient<ParametersAdjustmentMiddleware>()
 				.AddTransient<ValuesHistoryMiddleware>()
-				.AddSingleton<IPipelineFactory, DefaultPipelineFactory>()
-				.AddSingleton<ICalculationJob, TimerCalculationJob>()
-				.AddSingleton<IParameterValueParser, DefaultParameterValueParser>();
+				.AddSingleton<IPipelineFactory, DefaultPipelineFactory>();
 	}
 }

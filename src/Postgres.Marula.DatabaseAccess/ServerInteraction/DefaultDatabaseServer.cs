@@ -2,6 +2,8 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Dapper;
 using Postgres.Marula.Calculations.ExternalDependencies;
@@ -11,6 +13,7 @@ using Postgres.Marula.Calculations.Parameters.Base;
 using Postgres.Marula.Calculations.ParameterValues;
 using Postgres.Marula.Calculations.ParameterValues.Base;
 using Postgres.Marula.Calculations.ParameterValues.Raw;
+using Postgres.Marula.DatabaseAccess.Configuration;
 using Postgres.Marula.DatabaseAccess.ConnectionFactory;
 using Postgres.Marula.DatabaseAccess.ServerInteraction.Base;
 using Postgres.Marula.DatabaseAccess.ServerInteraction.Exceptions;
@@ -22,9 +25,12 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 	/// <inheritdoc cref="IDatabaseServer" />
 	internal class DefaultDatabaseServer : DatabaseInteractionComponent, IDatabaseServer
 	{
-		public DefaultDatabaseServer(IDbConnectionFactory dbConnectionFactory) : base(dbConnectionFactory)
-		{
-		}
+		private readonly IDatabaseAccessConfiguration configuration;
+
+		public DefaultDatabaseServer(
+			IDbConnectionFactory dbConnectionFactory,
+			IDatabaseAccessConfiguration configuration) : base(dbConnectionFactory)
+			=> this.configuration = configuration;
 
 		/// <inheritdoc />
 		async Task IDatabaseServer.ApplyToConfigurationAsync(IReadOnlyCollection<IParameterValue> parameterValues)
@@ -43,7 +49,7 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 				.Add("select pg_reload_conf();")
 				.JoinBy(Environment.NewLine);
 
-			var dbConnection = await GetConnectionAsync();
+			var dbConnection = await Connection();
 			var signalWasSentSuccessfully = await dbConnection.QuerySingleAsync<bool>(commandText);
 
 			if (!signalWasSentSuccessfully)
@@ -67,7 +73,7 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 				from pg_catalog.pg_settings
 				where name = @{nameof(IParameterLink.Name)};");
 
-			var dbConnection = await GetConnectionAsync();
+			var dbConnection = await Connection();
 			var (minValue, maxValue) = await dbConnection.QuerySingleAsync<(decimal, decimal)>(
 				commandText,
 				new {parameterValue.ParameterLink.Name});
@@ -85,34 +91,33 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 		}
 
 		/// <inheritdoc />
-		async Task<RawParameterValue> IDatabaseServer.GetRawParameterValueAsync(NonEmptyString parameterName)
+		async Task<RawParameterValue> IDatabaseServer.GetRawParameterValueAsync(IParameterLink parameterLink)
 		{
 			var commandText = string.Intern($@"
 				select current_setting(name), min_val, max_val
 				from pg_catalog.pg_settings
-				where name = @{nameof(parameterName)};");
+				where name = @{nameof(IParameterLink.Name)};");
 
-			var dbConnection = await GetConnectionAsync();
+			var dbConnection = await Connection();
 
-			var (parameterValue, minValue, maxValue) = await dbConnection.QuerySingleAsync<(NonEmptyString, decimal?, decimal?)>(
+			var (value, minValue, maxValue) = await dbConnection.QuerySingleAsync<(NonEmptyString, decimal?, decimal?)>(
 				commandText,
-				new {parameterName});
+				new {parameterLink.Name});
 
 			return minValue.HasValue && maxValue.HasValue
-				? new Range<decimal>(minValue.Value, maxValue.Value)
-					.To(range => new RawRangeParameterValue(parameterValue, range))
-				: new RawParameterValue(parameterValue);
+				? new RawRangeParameterValue(value, (minValue.Value, maxValue.Value))
+				: new RawParameterValue(value);
 		}
 
 		/// <summary>
 		/// Cache of parameter context values.
 		/// </summary>
-		private static readonly ConcurrentDictionary<NonEmptyString, ParameterContext> contextCache = new();
+		private static readonly ConcurrentDictionary<IParameterLink, ParameterContext> contextCache = new();
 
 		/// <inheritdoc />
-		async ValueTask<ParameterContext> IDatabaseServer.GetParameterContextAsync(NonEmptyString parameterName)
+		async ValueTask<ParameterContext> IDatabaseServer.GetParameterContextAsync(IParameterLink parameterLink)
 		{
-			if (contextCache.TryGetValue(parameterName, out var parameterContext))
+			if (contextCache.TryGetValue(parameterLink, out var parameterContext))
 			{
 				return parameterContext;
 			}
@@ -120,14 +125,66 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 			var commandText = string.Intern($@"
 				select context
 				from pg_catalog.pg_settings
-				where name = @{nameof(parameterName)};");
+				where name = @{nameof(IParameterLink.Name)};");
 
-			var dbConnection = await GetConnectionAsync();
-			var stringRepresentation = await dbConnection.QuerySingleAsync<NonEmptyString>(commandText, new {parameterName});
+			var dbConnection = await Connection();
+			var stringRepresentation = await dbConnection.QuerySingleAsync<NonEmptyString>(commandText, new {parameterLink.Name});
 
 			parameterContext = stringRepresentation.ByStringRepresentation<ParameterContext>();
-			contextCache[parameterName] = parameterContext;
+			contextCache[parameterLink] = parameterContext;
 			return parameterContext;
+		}
+
+		/// <inheritdoc />
+		async Task<LogSeqNumber> IDatabaseServer.GetCurrentLogSeqNumberAsync()
+		{
+			var dbConnection = await Connection();
+			return await dbConnection.QuerySingleAsync<LogSeqNumber>("select pg_catalog.pg_current_wal_insert_lsn();");
+		}
+
+		/// <summary>
+		/// Cache of database server versions.
+		/// </summary>
+		/// <remarks>
+		/// Keys are server endpoints - IP address and TCP port.
+		/// </remarks>
+		private static readonly ConcurrentDictionary<IPEndPoint, Version> versionCache = new();
+
+		/// <inheritdoc />
+		async ValueTask<Version> IDatabaseServer.GetPostgresVersionAsync()
+		{
+			var endpoint = GetCurrentEndpoint();
+
+			if (versionCache.TryGetValue(endpoint, out var version))
+			{
+				return version;
+			}
+
+			var dbConnection = await Connection();
+
+			version = (await dbConnection.QuerySingleAsync<string>("show server_version;"))
+				.Split()
+				.First()
+				.To(Version.Parse);
+
+			versionCache[endpoint] = version;
+			return version;
+		}
+
+		/// <summary>
+		/// Localhost <see cref="IPAddress"/> object.
+		/// </summary>
+		private static readonly IPAddress localhost = new(new byte[] {127, 0, 0, 1});
+
+		/// <summary>
+		/// Get current database server endpoint.
+		/// </summary>
+		private IPEndPoint GetCurrentEndpoint()
+		{
+			var connectionString = configuration.ConnectionString();
+			var host = connectionString["server"].To(str => str == "localhost" ? localhost : IPAddress.Parse(str));
+			var port = connectionString["port"].To(str => ushort.Parse(str));
+			return new(host, port);
 		}
 	}
 }

@@ -1,10 +1,6 @@
-using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Linq;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using PipelineNet.Middleware;
-using Postgres.Marula.Calculations.Parameters.Base;
 using Postgres.Marula.Calculations.Pipeline;
 using Postgres.Marula.Calculations.Pipeline.MiddlewareComponents;
 using Postgres.Marula.Tests.Calculations.Base;
@@ -22,13 +18,7 @@ namespace Postgres.Marula.Tests.Calculations.MiddlewareComponents
 		[Test]
 		public async Task RunMiddlewareTest()
 		{
-			var parametersManagementContext = GetService<ParametersManagementContext>() with
-			{
-				CalculatedValues = GetService<IEnumerable<IParameter>>()
-					.Select(parameter => parameter.Calculate())
-					.ToImmutableArray()
-			};
-
+			var parametersManagementContext = GetService<ParametersManagementContext>();
 			var middleware = (IAsyncMiddleware<ParametersManagementContext>) GetService<ValuesHistoryMiddleware>();
 
 			await middleware.Run(parametersManagementContext, async context =>

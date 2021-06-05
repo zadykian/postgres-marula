@@ -1,8 +1,8 @@
+using Postgres.Marula.Calculations.Parameters.Base;
 using Postgres.Marula.Calculations.ParameterValues.Base;
 using Postgres.Marula.Calculations.ParameterValues.Raw;
-using Postgres.Marula.Infrastructure.TypeDecorators;
 
-namespace Postgres.Marula.Calculations.ParameterValueParsing
+namespace Postgres.Marula.Calculations.ParameterValues.Parsing
 {
 	/// <summary>
 	/// Database parameter value parser.
@@ -12,6 +12,6 @@ namespace Postgres.Marula.Calculations.ParameterValueParsing
 		/// <summary>
 		/// Parse raw parameter representation into strongly typed value instance. 
 		/// </summary>
-		IParameterValue Parse(NonEmptyString parameterName, RawParameterValue rawParameterValue);
+		IParameterValue Parse(IParameterLink parameterLink, RawParameterValue rawParameterValue);
 	}
 }

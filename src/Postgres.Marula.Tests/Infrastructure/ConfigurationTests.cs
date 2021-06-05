@@ -43,12 +43,25 @@ namespace Postgres.Marula.Tests.Infrastructure
 				.To(_ => Assert.Pass());
 
 		/// <summary>
-		/// <see cref="ICalculationsConfiguration.TargetRelationsBloatFraction"/> test.
+		/// <see cref="ICalculationsConfiguration.LsnTrackingInterval"/> test.
 		/// </summary>
 		[Test]
-		public void TargetRelationsBloatFractionTest()
+		public void LsnTrackingIntervalTest()
 			=> GetService<ICalculationsConfiguration>()
-				.TargetRelationsBloatFraction()
-				.To(_ => Assert.Pass());
+				.LsnTrackingInterval()
+				.To(recalculationInterval => Assert.IsTrue(
+					((TimeSpan) recalculationInterval).TotalSeconds > 0
+				));
+
+		/// <summary>
+		/// <see cref="ICalculationsConfiguration.MovingAverageWindow"/> test.
+		/// </summary>
+		[Test]
+		public void MovingAverageWindowTest()
+			=> GetService<ICalculationsConfiguration>()
+				.MovingAverageWindow()
+				.To(recalculationInterval => Assert.IsTrue(
+					((TimeSpan) recalculationInterval).TotalSeconds > 0
+				));
 	}
 }
