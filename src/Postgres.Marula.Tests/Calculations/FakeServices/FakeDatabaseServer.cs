@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Postgres.Marula.Calculations.ExternalDependencies;
 using Postgres.Marula.Calculations.ParameterProperties;
+using Postgres.Marula.Calculations.Parameters.Base;
 using Postgres.Marula.Calculations.ParameterValues.Base;
 using Postgres.Marula.Calculations.ParameterValues.Raw;
 using Postgres.Marula.Infrastructure.TypeDecorators;
@@ -20,19 +21,11 @@ namespace Postgres.Marula.Tests.Calculations.FakeServices
 		}
 
 		/// <inheritdoc />
-		async Task<RawParameterValue> IDatabaseServer.GetRawParameterValueAsync(NonEmptyString parameterName)
-		{
-			await Task.CompletedTask;
-			return parameterName.ToString() switch
-			{
-				"checkpoint_timeout"           => new RawParameterValue("30min"),
-				"checkpoint_completion_target" => new RawRangeParameterValue("0.8", (0m, 1m)),
-				_ => throw new NotSupportedException()
-			};
-		}
+		Task<RawParameterValue> IDatabaseServer.GetRawParameterValueAsync(IParameterLink parameterLink)
+			=> throw new InvalidOperationException();
 
 		/// <inheritdoc />
-		ValueTask<ParameterContext> IDatabaseServer.GetParameterContextAsync(NonEmptyString parameterName)
+		ValueTask<ParameterContext> IDatabaseServer.GetParameterContextAsync(IParameterLink parameterLink)
 			=> ValueTask.FromResult(ParameterContext.Sighup);
 
 		/// <inheritdoc />

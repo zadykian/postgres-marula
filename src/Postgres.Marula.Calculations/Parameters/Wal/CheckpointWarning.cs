@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Postgres.Marula.Calculations.Parameters.Base;
+using Postgres.Marula.Calculations.Parameters.Base.Dependencies;
 using Postgres.Marula.Calculations.ParametersManagement;
 using Postgres.Marula.Infrastructure.TypeDecorators;
 
@@ -23,6 +24,12 @@ namespace Postgres.Marula.Calculations.Parameters.Wal
 			=> this.pgSettings = pgSettings;
 
 		/// <inheritdoc />
+		public override IParameterDependencies Dependencies()
+			=> ParameterDependencies
+				.Empty
+				.DependsOn<CheckpointTimeout>();
+
+		/// <inheritdoc />
 		/// <remarks>
 		/// <para>
 		/// Value calculated as:
@@ -33,7 +40,7 @@ namespace Postgres.Marula.Calculations.Parameters.Wal
 		/// </remarks>
 		protected override async ValueTask<PositiveTimeSpan> CalculateValueAsync()
 		{
-			var checkpointTimeout = await pgSettings.ReadAsync<PositiveTimeSpan>("checkpoint_timeout");
+			var checkpointTimeout = await pgSettings.ReadAsync<CheckpointTimeout, PositiveTimeSpan>();
 			return checkpointTimeout * 0.8;
 		}
 	}
