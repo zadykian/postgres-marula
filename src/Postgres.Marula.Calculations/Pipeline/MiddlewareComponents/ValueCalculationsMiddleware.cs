@@ -37,38 +37,41 @@ namespace Postgres.Marula.Calculations.Pipeline.MiddlewareComponents
 			ParametersManagementContext context,
 			Func<ParametersManagementContext, Task> next)
 		{
-			foreach (var parameter in parameters) await CalculateWithDependencies(parameter);
+			await parameters
+				.ToAsyncEnumerable()
+				.SelectAwait(CalculateWithDependencies)
+				.ForEachAsync(pgSettings.Apply);
+
 			await next(context);
 		}
 
 		/// <summary>
 		/// Calculate parameter <paramref name="parameterToCalculate"/> with all its' dependencies. 
 		/// </summary>
-		private async ValueTask CalculateWithDependencies(IParameter parameterToCalculate)
+		private async ValueTask<IParameterValue> CalculateWithDependencies(IParameter parameterToCalculate)
 		{
 			var dependenciesValues = await DependenciesValues(parameterToCalculate).ToArrayAsync();
-			dependenciesValues.ForEach(pgSettings.Apply);
 
 			var notCalculated = dependenciesValues
 				.OfType<NullValue>()
 				.Cast<IParameterValue>()
 				.ToImmutableArray();
 
-			if (notCalculated.Any())
+			if (!notCalculated.Any())
 			{
-				var parameterNames = notCalculated.Select(value => value.ParameterLink.Name);
-				logger.LogWarning(
-					$"Unable to calculate value of parameter '{parameterToCalculate.Name}' " +
-					$"because it has dependencies which are not calculated: [{parameterNames.JoinBy(", ")}].");
-				return;
+				dependenciesValues.ForEach(pgSettings.Apply);
+				return await parameterToCalculate.CalculateAsync();
 			}
 
-			var parameterValue = await parameterToCalculate.CalculateAsync();
-			pgSettings.Apply(parameterValue);
+			var parameterNames = notCalculated.Select(value => value.ParameterLink.Name);
+			logger.LogWarning(
+				$"Unable to calculate value of parameter '{parameterToCalculate.Name}' " +
+				$"because it has dependencies which are not calculated: [{parameterNames.JoinBy(", ")}].");
+			return NullValue.Instance;
 		}
 
 		/// <summary>
-		/// Calculate values of all parameters which are required
+		/// Recursively calculate values of all parameters which are required
 		/// to calculate value of <paramref name="parameterToCalculate"/>. 
 		/// </summary>
 		private IAsyncEnumerable<IParameterValue> DependenciesValues(IParameter parameterToCalculate)
@@ -78,6 +81,6 @@ namespace Postgres.Marula.Calculations.Pipeline.MiddlewareComponents
 				.ToAsyncEnumerable()
 				.SelectAwait(async parameterType => await parameters
 					.Single(parameter => parameter.GetType() == parameterType)
-					.CalculateAsync());
+					.To(CalculateWithDependencies));
 	}
 }
