@@ -21,12 +21,12 @@ namespace Postgres.Marula.Calculations.ExternalDependencies
 		Task ApplyToConfigurationAsync(IReadOnlyCollection<IParameterValue> parameterValues);
 
 		/// <summary>
-		/// Get raw value of parameter named <paramref name="parameterLink"/>.
+		/// Get raw value of parameter <paramref name="parameterLink"/>.
 		/// </summary>
 		Task<RawParameterValue> GetRawParameterValueAsync(IParameterLink parameterLink);
 
 		/// <summary>
-		/// Get context of parameter named <paramref name="parameterLink"/>. 
+		/// Get context of parameter <paramref name="parameterLink"/>. 
 		/// </summary>
 		ValueTask<ParameterContext> GetParameterContextAsync(IParameterLink parameterLink);
 
