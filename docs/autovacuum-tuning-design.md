@@ -25,5 +25,6 @@ This process consists of several steps:
 
 1. Background periodic logging of average bloat factor into system storage table.
    Value is retrieved based on data from system view **pg_catalog.pg_stat_all_tables** and calculated for each table as **[n_live_tup] / [n_dead_tup]**.
-2. 
-
+2. Selection of bloat values. To take into account impermanence of modifying operations intensity (insert, update, delete), only resent bloat factor values are included into selection.
+   Left time bound of selection can be configured via **Autovacuum.MovingAverageWindowInSeconds** application's parameter. The default is 10800 seconds (3 hours).
+3. 

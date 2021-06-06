@@ -43,7 +43,7 @@ Calculation of WAL traffic consists of two processes:
    The interval of logging can be set via **LsnTrackingIntervalInSeconds** configuration parameter. The default is **60 seconds**.
 
 2. To take into account volatility of WAL-related operations, WAL traffic is calculated as **moving average** of values retrieved from server during background logging.
-   Time window is determined by **MovingAverageWindowInSeconds** app's configuration parameter. Default value is **10800 seconds** (3 hours).
+   Time window is determined by **Wal.MaxWalSize.MovingAverageWindowInSeconds** app's configuration parameter. Default value is **10800 seconds** (3 hours).
 
    Single selection item is calculated as difference of two adjacent values in LSN log table.
    For example, let's say we have following records in LSN log, which are in moving average window:
