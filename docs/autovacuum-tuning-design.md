@@ -42,4 +42,5 @@ Analysis consists of several steps:
 As a result, we get two values to calculate autovacuum-related parameters:
 
 * [A] trend coefficient, which can be equal to any rational number;
-* [B] bloat constant, which theoretically takes values in range [0..1]. 
+* [B] bloat constant, which theoretically takes values in range [0..1].
+
