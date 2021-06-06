@@ -32,4 +32,6 @@ Analysis consists of several steps:
 3. Linear regression.
    Selection retrieved at previous step can be approximated to linear function to simplify further calculations. This process is based on Least Squares Method (LSM).
 4. Bloat fraction trend analysis.
-   As a measure of bloat trend used a **derivative of linear function** obtained at previous step, which is equal to tangent of angle between function's line and abscissa.
+   **Derivative of linear function** obtained at previous step is used as a measure of bloat trend.
+   It's equal to tangent of angle between function's line and abscissa.
+
