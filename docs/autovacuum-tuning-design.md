@@ -20,11 +20,13 @@ Autovacuum launcher process uses statistics to create list of databases which ha
 
 ## table size expected value (EV)
 
-todo
+
 
 ### autovacuum_vacuum_scale_factor
 
-Specifies a fraction of the table size to add to autovacuum_vacuum_threshold when deciding whether to trigger a vacuum. The default is **0.2** (20% of table size). 
+Specifies a fraction of the table size to add to autovacuum_vacuum_threshold when deciding whether to trigger a vacuum. The default is **0.2** (20% of table size).
+
+
 
 ### autovacuum_vacuum_threshold
 
