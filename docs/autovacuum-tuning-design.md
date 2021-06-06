@@ -18,17 +18,18 @@ Autovacuum launcher process uses statistics to create list of databases which ha
 
 
 
-## bloat factor statistic collection
+## bloat factor analysis
 
 Tuning of parameters mentioned below is based on statistic values of average bloat fraction of all tables and indexes in database server.
-This process consists of several steps:
+Analysis consists of several steps:
 
 1. Background periodic logging of average bloat factor into system storage table.
    Value is retrieved based on data from system view **pg_catalog.pg_stat_all_tables** and calculated for each table as **[n_live_tup] / [n_dead_tup]**.
    The interval of logging can be set via **Autovacuum.BloatTrackingIntervalInSeconds** configuration parameter. The default is **600 seconds** (10 minutes).
 2. Selection of bloat values.
-   To take into account impermanence of modifying operations intensity (insert, update, delete), only resent bloat factor values are included into selection.
+   To take into account impermanence of modifying operations intensity (updates  and deletions), only resent bloat factor values are included into selection.
    Left time bound of selection can be configured via **Autovacuum.MovingAverageWindowInSeconds** application's parameter. The default is 10800 seconds (3 hours).
 3. Linear regression.
    Selection retrieved at previous step can be approximated to linear function to simplify further calculations. This process is based on Least Squares Method (LSM).
 4. Bloat fraction trend analysis.
+   As a measure of bloat trend used a **derivative of linear function** obtained at previous step, which is equal to tangent of angle between function's line and abscissa.
