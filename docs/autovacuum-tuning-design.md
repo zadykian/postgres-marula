@@ -16,6 +16,12 @@ Obviously, in context of automatic configuration, this parameter should be set t
 Enables collection of statistics on database activity.
 Autovacuum launcher process uses statistics to create list of databases which had some activity. So collection of statistics is required for autovacuum, and this parameter is always set to **true**.
 
+
+
+## table size expected value (EV)
+
+To understand 
+
 ### autovacuum_vacuum_scale_factor
 
 Specifies a fraction of the table size to add to autovacuum_vacuum_threshold when deciding whether to trigger a vacuum. The default is **0.2** (20% of table size). 
@@ -56,6 +62,22 @@ As a result, we get two values to calculate autovacuum-related parameters:
 
 ### autovacuum_vacuum_cost_delay
 
+Specifies the cost delay value that will be used in automatic vacuum operations.
+The default value is **2 milliseconds**.
+
 ### autovacuum_vacuum_cost_limit
 
+Specifies the cost limit value that will be used in automatic vacuum operations.
+If there are no table bloat stats in system storage - for example, when application analyzes database server for the first time - the value is caculated as:
+
+```
+autovacuum_vacuum_cost_limit = 500 * autovacuum_max_workers
+```
+
+Otherwise, if statistics are collected already, it is calculated based on its' current value and values mentioned above - **trend coefficient** and **bloat constant**.
+
 ### autovacuum_naptime
+
+Specifies the minimum delay between autovacuum runs on any given database.
+The default is one minute (1min).
+Marula tunes it to **30 seconds**.
