@@ -20,7 +20,7 @@ Autovacuum launcher process uses statistics to create list of databases which ha
 
 ## table size expected value (EV)
 
-To understand 
+todo
 
 ### autovacuum_vacuum_scale_factor
 
@@ -63,7 +63,8 @@ As a result, we get two values to calculate autovacuum-related parameters:
 ### autovacuum_vacuum_cost_delay
 
 Specifies the cost delay value that will be used in automatic vacuum operations.
-The default value is **2 milliseconds**.
+For PG12+ the default value is **2 milliseconds**, but for PG11 and ealier versions it's set to 20 milliseconds by default.
+It's always being tuned to **2 milliseconds**.
 
 ### autovacuum_vacuum_cost_limit
 
@@ -81,3 +82,14 @@ Otherwise, if statistics are collected already, it is calculated based on its' c
 Specifies the minimum delay between autovacuum runs on any given database.
 The default is one minute (1min).
 Marula tunes it to **30 seconds**.
+
+### autovacuum_max_workers
+
+Specifies the maximum number of autovacuum processes (other than the autovacuum launcher) that may be running at any one time. The default is **three**.
+
+To tune this value, information about server hardware is required. HW into is retrieved from machine by agent http service.
+After HW info is received, value is calculated as:
+
+```
+autovacuum_max_workers = 0.5 * {number_of_cpu_cores}
+```
