@@ -32,6 +32,10 @@ Analysis consists of several steps:
 3. Linear regression.
    Selection retrieved at previous step can be approximated to linear function to simplify further calculations. This process is based on Least Squares Method (LSM).
 4. Bloat fraction trend analysis.
-   **Derivative of linear function** obtained at previous step is used as a measure of bloat trend.
+   **Derivative of linear function** obtained at previous step is used as a **measure of bloat trend**.
    It's equal to tangent of angle between function's line and abscissa.
+   So, if the derivative is positive, it means that percent of dead tuples in database is increasing, otherwise - it's decreasing.
+   Besides derivative, **constant part** of approximated linear function is considered as a measure of **dead tuples proportion** in all selection range.
+   Accordingly, even if derivative is equal or close to zero (it means that fraction of dead tuples is almost permanent),
+   but constant part is high, autovacuum daemon should be tuned more aggressively.
 
