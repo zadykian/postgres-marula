@@ -15,3 +15,15 @@ Obviously, in context of automatic configuration, this parameter should be set t
 
 Enables collection of statistics on database activity.
 Autovacuum launcher process uses statistics to create list of databases which had some activity. So collection of statistics is required for autovacuum.
+
+
+
+## bloat factor statistic collection
+
+Tuning of parameters mentioned below is based on statistic values of average bloat fraction of all tables and indexes in database server.
+This process consists of several steps:
+
+1. Background periodic logging of average bloat factor into system storage table.
+   Value is retrieved based on data from system view **pg_catalog.pg_stat_all_tables** and calculated for each table as **[n_live_tup] / [n_dead_tup]**.
+2. 
+
