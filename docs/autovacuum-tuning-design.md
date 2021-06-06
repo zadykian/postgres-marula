@@ -29,5 +29,6 @@ This process consists of several steps:
 2. Selection of bloat values.
    To take into account impermanence of modifying operations intensity (insert, update, delete), only resent bloat factor values are included into selection.
    Left time bound of selection can be configured via **Autovacuum.MovingAverageWindowInSeconds** application's parameter. The default is 10800 seconds (3 hours).
-3. Linear approximation.
-   Selection retrieved at previous step can be approximated to linear function to simplify further calculations. 
+3. Linear regression.
+   Selection retrieved at previous step can be approximated to linear function to simplify further calculations. This process is based on Least Squares Method (LSM).
+4. Bloat fraction trend analysis.
