@@ -3,6 +3,8 @@ using Microsoft.Extensions.Logging;
 using Postgres.Marula.Calculations.Parameters.Base;
 
 // ReSharper disable UnusedType.Global
+// ReSharper disable BuiltInTypeReferenceStyle
+using TuplesCount = System.UInt32;
 
 namespace Postgres.Marula.Calculations.Parameters.Autovacuum
 {
@@ -19,6 +21,6 @@ namespace Postgres.Marula.Calculations.Parameters.Autovacuum
 		}
 
 		/// <inheritdoc />
-		protected override async ValueTask<uint> CalculateValueAsync() => throw new System.NotImplementedException();
+		protected override async ValueTask<TuplesCount> CalculateValueAsync() => throw new System.NotImplementedException();
 	}
 }

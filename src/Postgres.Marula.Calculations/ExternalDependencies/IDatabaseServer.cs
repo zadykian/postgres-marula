@@ -7,6 +7,9 @@ using Postgres.Marula.Calculations.ParameterValues.Base;
 using Postgres.Marula.Calculations.ParameterValues.Raw;
 using Postgres.Marula.Infrastructure.TypeDecorators;
 
+// ReSharper disable BuiltInTypeReferenceStyle
+using TuplesCount = System.UInt32;
+
 namespace Postgres.Marula.Calculations.ExternalDependencies
 {
 	/// <summary>
@@ -39,5 +42,10 @@ namespace Postgres.Marula.Calculations.ExternalDependencies
 		/// Get current PostgreSQL version. 
 		/// </summary>
 		ValueTask<Version> GetPostgresVersionAsync();
+
+		/// <summary>
+		/// Get average table size (in tuples) among non-empty tables.
+		/// </summary>
+		Task<TuplesCount> GetAverageTableSizeAsync();
 	}
 }
