@@ -33,6 +33,11 @@ namespace Postgres.Marula.Calculations.Jobs
 				.ServiceProvider
 				.GetRequiredService<IDatabaseServer>()
 				.GetAverageBloatFractionAsync();
+
+			await serviceScope
+				.ServiceProvider
+				.GetRequiredService<ISystemStorage>()
+				.SaveBloatFractionAsync(averageBloatFraction);
 		}
 	}
 }
