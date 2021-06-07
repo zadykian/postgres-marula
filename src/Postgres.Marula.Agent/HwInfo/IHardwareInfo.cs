@@ -1,6 +1,9 @@
 using System.Threading.Tasks;
 using Postgres.Marula.Infrastructure.TypeDecorators;
 
+// ReSharper disable BuiltInTypeReferenceStyle
+using CoresCount = System.Byte;
+
 namespace Postgres.Marula.Agent.HwInfo
 {
 	/// <summary>
@@ -16,6 +19,6 @@ namespace Postgres.Marula.Agent.HwInfo
 		/// <summary>
 		/// Number of CPU cores. 
 		/// </summary>
-		byte CpuCoresCount();
+		Task<CoresCount> CpuCoresCount();
 	}
 }

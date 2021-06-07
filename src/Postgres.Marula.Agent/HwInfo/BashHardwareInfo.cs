@@ -4,6 +4,9 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Postgres.Marula.Infrastructure.TypeDecorators;
 
+// ReSharper disable BuiltInTypeReferenceStyle
+using CoresCount = System.Byte;
+
 namespace Postgres.Marula.Agent.HwInfo
 {
 	/// <inheritdoc />
@@ -26,7 +29,11 @@ namespace Postgres.Marula.Agent.HwInfo
 		}
 
 		/// <inheritdoc />
-		byte IHardwareInfo.CpuCoresCount() => throw new System.NotImplementedException();
+		async Task<CoresCount> IHardwareInfo.CpuCoresCount()
+		{
+			var coresCountString = await ExecuteBashCommandAsync("nproc");
+			return CoresCount.Parse(coresCountString);
+		}
 
 		/// <summary>
 		/// Execute command <paramref name="command"/> via bash and return received output. 
