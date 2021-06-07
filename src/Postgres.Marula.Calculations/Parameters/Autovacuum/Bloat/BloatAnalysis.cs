@@ -1,6 +1,8 @@
+using System.Linq;
 using System.Threading.Tasks;
 using Postgres.Marula.Calculations.Configuration;
 using Postgres.Marula.Calculations.ExternalDependencies;
+using Postgres.Marula.Infrastructure.Extensions;
 
 namespace Postgres.Marula.Calculations.Parameters.Autovacuum.Bloat
 {
@@ -21,7 +23,11 @@ namespace Postgres.Marula.Calculations.Parameters.Autovacuum.Bloat
 		/// <inheritdoc />
 		async Task<BloatCoefficients> IBloatAnalysis.ExecuteAsync()
 		{
-			
+			var averageBloatHistory = configuration
+				.Autovacuum()
+				.MovingAverageWindow()
+				.To(systemStorage.GetBloatFractionHistory)
+				.ToArrayAsync();
 		}
 	}
 }

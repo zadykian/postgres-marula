@@ -110,8 +110,8 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 				order by log_timestamp;");
 
 			var dbConnection = await Connection();
-			var lsnHistoryEntries = await dbConnection.QueryAsync<LsnHistoryEntry>(commandText, new {Window = (TimeSpan) window});
-			foreach (var lsnHistoryEntry in lsnHistoryEntries) yield return lsnHistoryEntry;
+			var historyEntries = await dbConnection.QueryAsync<LsnHistoryEntry>(commandText, new {Window = (TimeSpan) window});
+			foreach (var lsnHistoryEntry in historyEntries) yield return lsnHistoryEntry;
 		}
 
 		/// <inheritdoc />
@@ -125,6 +125,22 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 
 			var dbConnection = await Connection();
 			await dbConnection.ExecuteAsync(commandText, new {averageBloatFraction});
+		}
+
+		/// <inheritdoc />
+		async IAsyncEnumerable<BloatFractionHistoryEntry> ISystemStorage.GetBloatFractionHistory(PositiveTimeSpan window)
+		{
+			var commandText = string.Intern($@"
+				select
+					log_timestamp          as {nameof(BloatFractionHistoryEntry.LogTimestamp)},
+					average_bloat_fraction as {nameof(BloatFractionHistoryEntry.AverageBloatFraction)}
+				from {namingConventions.SystemSchemaName}.{namingConventions.BloatFractionHistoryTableName}
+				where log_timestamp >= (current_timestamp - @Window)
+				order by log_timestamp;");
+
+			var dbConnection = await Connection();
+			var historyEntries = await dbConnection.QueryAsync<BloatFractionHistoryEntry>(commandText, new {Window = (TimeSpan) window});
+			foreach (var bloatFractionHistoryEntry in historyEntries) yield return bloatFractionHistoryEntry;
 		}
 	}
 }
