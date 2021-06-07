@@ -33,7 +33,7 @@ Specifies a fraction of the table size to add to autovacuum_vacuum_threshold whe
 Factor calculated based on **table size EV**:
 
 ```
-autovacuum_vacuum_scale_factor = min(0.2, 10^4 / {table-size-expected-value})
+autovacuum_vacuum_scale_factor = min(0.2, 10^4 / {table_size_expected_value})
 ```
 
 ### autovacuum_vacuum_threshold
@@ -42,7 +42,7 @@ Specifies the minimum number of updated or deleted tuples needed to trigger a va
 
 Value calculated based on **table size EV** and can be represented by formula:
 ```
-autovacuum_vacuum_threshold = 0.01 * {table-size-expected-value}
+autovacuum_vacuum_threshold = 0.01 * {table_size_expected_value}
 ```
 
 
