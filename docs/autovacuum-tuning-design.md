@@ -30,13 +30,17 @@ Empty tables are not taken into account.
 
 Specifies a fraction of the table size to add to autovacuum_vacuum_threshold when deciding whether to trigger a vacuum. The default is **0.2** (20% of table size).
 
+Factor calculated based on **table size EV**:
 
+```
+autovacuum_vacuum_scale_factor = min(0.2, 10^4 / {table-size-expected-value})
+```
 
 ### autovacuum_vacuum_threshold
 
 Specifies the minimum number of updated or deleted tuples needed to trigger a vacuum in any one table. The default is **50** tuples.
 
-Value calculated as:
+Value calculated based on **table size EV** and can be represented by formula:
 ```
 autovacuum_vacuum_threshold = 0.01 * {table-size-expected-value}
 ```
