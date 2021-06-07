@@ -27,7 +27,7 @@ namespace Postgres.Marula.Calculations.ParameterValues.Base
 		public abstract ParameterUnit Unit { get; }
 
 		/// <inheritdoc />
-		public abstract NonEmptyString AsString();
+		public virtual NonEmptyString AsString() => Value.ToString()!;
 
 		/// <inheritdoc />
 		public override string ToString() => $"{ParameterLink.Name}: {AsString()}{Unit.NumberSuffix()}";
