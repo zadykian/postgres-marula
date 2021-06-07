@@ -15,12 +15,24 @@ namespace Postgres.Marula.Agent.HwInfo
 	/// </remarks>
 	internal class BashHardwareInfo : IHardwareInfo
 	{
+		private readonly AsyncLazy<Memory> ramSizeAsyncCache;
+		private readonly AsyncLazy<CoresCount> coresCountAsyncCache;
 		private readonly ILogger<BashHardwareInfo> logger;
 
-		public BashHardwareInfo(ILogger<BashHardwareInfo> logger) => this.logger = logger;
+		public BashHardwareInfo(ILogger<BashHardwareInfo> logger)
+		{
+			ramSizeAsyncCache = new(GetTotalRamAsync);
+			coresCountAsyncCache = new(GetCpuCoresCountAsync);
+			this.logger = logger;
+		}
 
 		/// <inheritdoc />
-		async Task<Memory> IHardwareInfo.TotalRam()
+		Task<Memory> IHardwareInfo.TotalRam() => ramSizeAsyncCache.Value;
+
+		/// <summary>
+		/// <see cref="IHardwareInfo.TotalRam"/> bash-based implementation. 
+		/// </summary>
+		private async Task<Memory> GetTotalRamAsync()
 		{
 			const string fieldName = "MemTotal";
 			var memTotalString = await ExecuteBashCommandAsync($"grep {fieldName} /proc/meminfo");
@@ -29,7 +41,12 @@ namespace Postgres.Marula.Agent.HwInfo
 		}
 
 		/// <inheritdoc />
-		async Task<CoresCount> IHardwareInfo.CpuCoresCount()
+		Task<CoresCount> IHardwareInfo.CpuCoresCount() => coresCountAsyncCache.Value;
+
+		/// <summary>
+		/// <see cref="IHardwareInfo.CpuCoresCount"/> bash-based implementation. 
+		/// </summary>
+		async Task<CoresCount> GetCpuCoresCountAsync()
 		{
 			var coresCountString = await ExecuteBashCommandAsync("nproc");
 			return CoresCount.Parse(coresCountString);
