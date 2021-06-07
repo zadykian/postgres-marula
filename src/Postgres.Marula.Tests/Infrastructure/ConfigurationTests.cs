@@ -67,5 +67,29 @@ namespace Postgres.Marula.Tests.Infrastructure
 				.To(recalculationInterval => Assert.IsTrue(
 					((TimeSpan) recalculationInterval).TotalSeconds > 0
 				));
+
+		/// <summary>
+		/// <see cref="IPeriodicLoggingConfiguration.Interval"/> test.
+		/// </summary>
+		[Test]
+		public void WalIntervalTest()
+			=> GetService<ICalculationsConfiguration>()
+				.Wal()
+				.Interval()
+				.To(recalculationInterval => Assert.IsTrue(
+					((TimeSpan) recalculationInterval).TotalSeconds > 0
+				));
+
+		/// <summary>
+		/// <see cref="IPeriodicLoggingConfiguration.MovingAverageWindow"/> test.
+		/// </summary>
+		[Test]
+		public void WalMovingAverageWindowTest()
+			=> GetService<ICalculationsConfiguration>()
+				.Wal()
+				.MovingAverageWindow()
+				.To(recalculationInterval => Assert.IsTrue(
+					((TimeSpan) recalculationInterval).TotalSeconds > 0
+				));
 	}
 }

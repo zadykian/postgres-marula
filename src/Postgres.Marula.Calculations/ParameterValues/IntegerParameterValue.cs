@@ -9,7 +9,7 @@ namespace Postgres.Marula.Calculations.ParameterValues
 	/// </summary>
 	public class IntegerParameterValue : ParameterValueBase<uint>
 	{
-		internal IntegerParameterValue(IParameterLink parameterLink, uint value)
+		public IntegerParameterValue(IParameterLink parameterLink, uint value)
 			: base(parameterLink, value)
 		{
 		}
