@@ -195,11 +195,23 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 		{
 			var queryText = @"
 				select avg(n_live_tup + n_dead_tup)
-				from pg_catalog.pg_stat_user_tables
+				from pg_catalog.pg_stat_all_tables
 				where n_live_tup + n_dead_tup != 0;";
 
 			var connection = await Connection();
 			return await connection.ExecuteScalarAsync<TuplesCount>(queryText);
+		}
+
+		/// <inheritdoc />
+		async Task<Fraction> IDatabaseServer.GetAverageBloatFractionAsync()
+		{
+			var queryText = @"
+				select avg(n_dead_tup / n_live_tup)
+				from pg_catalog.pg_stat_all_tables
+				where n_live_tup + n_dead_tup != 0;";
+
+			var connection = await Connection();
+			return await connection.ExecuteScalarAsync<Fraction>(queryText);
 		}
 	}
 }

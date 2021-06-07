@@ -42,6 +42,9 @@ namespace Postgres.Marula.Tests.Calculations.FakeServices
 		/// <inheritdoc />
 		Task<TuplesCount> IDatabaseServer.GetAverageTableSizeAsync() => Task.FromResult(10_240U);
 
+		/// <inheritdoc />
+		Task<Fraction> IDatabaseServer.GetAverageBloatFractionAsync() => Task.FromResult((Fraction) 0.5M);
+
 		public bool ApplyMethodWasCalled { get; private set; }
 	}
 

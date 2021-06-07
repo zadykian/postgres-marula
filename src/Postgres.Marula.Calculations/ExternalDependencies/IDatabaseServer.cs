@@ -47,5 +47,10 @@ namespace Postgres.Marula.Calculations.ExternalDependencies
 		/// Get average table size (in tuples) among non-empty tables.
 		/// </summary>
 		Task<TuplesCount> GetAverageTableSizeAsync();
+
+		/// <summary>
+		/// Get average bloat fraction among non-empty tables. 
+		/// </summary>
+		Task<Fraction> GetAverageBloatFractionAsync();
 	}
 }
