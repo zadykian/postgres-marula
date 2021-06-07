@@ -92,6 +92,8 @@ autovacuum_vacuum_cost_limit = 500 * autovacuum_max_workers
 
 Otherwise, if statistics are collected already, it is calculated based on its' current value and values mentioned above - **trend coefficient** and **bloat constant**.
 
+todo
+
 ### autovacuum_naptime
 
 Specifies the minimum delay between autovacuum runs on any given database.
