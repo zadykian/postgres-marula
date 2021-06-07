@@ -14,7 +14,7 @@ Empty tables are not taken into account.
 
 ## bloat factor analysis
 
-Tuning of parameters mentioned below is based on statistic values of average bloat fraction of all tables and indexes in database server.
+Tuning of some parameters mentioned below is based on statistic values of average bloat fraction of all tables and indexes in database server.
 Analysis consists of several steps:
 
 1. Background periodic logging of average bloat factor into system storage table.
