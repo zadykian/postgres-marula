@@ -39,6 +39,7 @@ namespace Postgres.Marula.Calculations.Parameters.Autovacuum.Bloat
 				.Select(entry => (double) (decimal) entry.AverageBloatFraction)
 				.ToArray();
 
+			// approximate bloat fraction selection to linear function.
 			var (linearMember, freeMember) = Fit.Line(abscissaValues, ordinateValues);
 			return new BloatCoefficients(linearMember, (decimal) freeMember);
 		}
