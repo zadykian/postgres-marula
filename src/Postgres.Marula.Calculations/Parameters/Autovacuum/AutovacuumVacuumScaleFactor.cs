@@ -1,5 +1,7 @@
+using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Postgres.Marula.Calculations.ExternalDependencies;
 using Postgres.Marula.Calculations.Parameters.Base;
 using Postgres.Marula.Infrastructure.TypeDecorators;
 
@@ -14,12 +16,18 @@ namespace Postgres.Marula.Calculations.Parameters.Autovacuum
 	/// </summary>
 	internal class AutovacuumVacuumScaleFactor : FractionParameterBase
 	{
+		private readonly IDatabaseServer databaseServer;
+
 		public AutovacuumVacuumScaleFactor(
+			IDatabaseServer databaseServer,
 			ILogger<AutovacuumVacuumScaleFactor> logger) : base(logger)
-		{
-		}
+			=> this.databaseServer = databaseServer;
 
 		/// <inheritdoc />
-		protected override async ValueTask<Fraction> CalculateValueAsync() => throw new System.NotImplementedException();
+		protected override async ValueTask<Fraction> CalculateValueAsync()
+		{
+			var averageTableSize = await databaseServer.GetAverageTableSizeAsync();
+			return Math.Min(0.2M, 10_000M / averageTableSize);
+		}
 	}
 }
