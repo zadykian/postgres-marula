@@ -126,9 +126,20 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 				new("16/2A0393F0"),
 				new("17/00000001")
 			};
-			
+
 			var systemStorage = GetService<ISystemStorage>();
 			foreach (var lsn in lsnValues) await systemStorage.SaveLogSeqNumberAsync(lsn);
+		}
+
+		/// <summary>
+		/// Save bloat fraction value.
+		/// </summary>
+		[Test]
+		public async Task SaveBloatFractionTest()
+		{
+			var systemStorage = GetService<ISystemStorage>();
+			await systemStorage.SaveBloatFractionAsync(0.5M);
+			Assert.Pass();
 		}
 	}
 }

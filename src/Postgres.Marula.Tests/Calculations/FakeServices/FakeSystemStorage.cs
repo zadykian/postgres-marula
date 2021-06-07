@@ -26,5 +26,9 @@ namespace Postgres.Marula.Tests.Calculations.FakeServices
 			yield return new(new(2021, 05, 1, 9, 2, 0), new("32/A0010000"));
 			yield return new(new(2021, 05, 1, 9, 3, 0), new("32/A0100000"));
 		}
+
+		/// <inheritdoc />
+		Task ISystemStorage.SaveBloatFractionAsync(Fraction averageBloatFraction)
+			=> Task.CompletedTask;
 	}
 }

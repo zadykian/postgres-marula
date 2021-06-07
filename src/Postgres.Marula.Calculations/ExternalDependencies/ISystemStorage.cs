@@ -25,5 +25,10 @@ namespace Postgres.Marula.Calculations.ExternalDependencies
 		/// then current time minus <paramref name="window"/>. 
 		/// </summary>
 		IAsyncEnumerable<LsnHistoryEntry> GetLsnHistoryAsync(PositiveTimeSpan window);
+
+		/// <summary>
+		/// Save current average bloat fraction. 
+		/// </summary>
+		Task SaveBloatFractionAsync(Fraction averageBloatFraction);
 	}
 }

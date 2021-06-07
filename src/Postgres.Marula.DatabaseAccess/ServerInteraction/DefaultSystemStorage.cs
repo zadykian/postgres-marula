@@ -113,5 +113,18 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 			var lsnHistoryEntries = await dbConnection.QueryAsync<LsnHistoryEntry>(commandText, new {Window = (TimeSpan) window});
 			foreach (var lsnHistoryEntry in lsnHistoryEntries) yield return lsnHistoryEntry;
 		}
+
+		/// <inheritdoc />
+		async Task ISystemStorage.SaveBloatFractionAsync(Fraction averageBloatFraction)
+		{
+			var commandText = $@"
+				insert into {namingConventions.SystemSchemaName}.{namingConventions.BloatFractionHistoryTableName}
+					(average_bloat_fraction)
+				values
+					(@{nameof(averageBloatFraction)});";
+
+			var dbConnection = await Connection();
+			await dbConnection.ExecuteAsync(commandText, new {averageBloatFraction});
+		}
 	}
 }

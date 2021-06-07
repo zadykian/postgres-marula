@@ -1,3 +1,4 @@
+using System;
 using System.Data;
 using Dapper;
 using Postgres.Marula.Infrastructure.TypeDecorators;
@@ -17,6 +18,7 @@ namespace Postgres.Marula.DatabaseAccess.DapperTypeHandlers
 		}
 
 		/// <inheritdoc />
-		public override Fraction Parse(object value) => (decimal) value;
+		public override Fraction Parse(object value)
+			=> decimal.Round((decimal) value, decimals: 4, MidpointRounding.AwayFromZero);
 	}
 }
