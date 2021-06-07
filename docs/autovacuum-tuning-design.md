@@ -2,20 +2,6 @@
 
 This document provides detailed explanation of Marula's internal processes aimed to provide optimized configuration of Postgres autovacuum daemon.
 
-## parameters being tuned
-
-There is a list of database server parameters which affect autovacuum process and which are taken into account during tool development:
-
-### autovacuum
-
-Controls whether the server should run the autovacuum daemon.
-Obviously, in context of automatic configuration, this parameter should be set to **true**.
-
-### track_counts
-
-Enables collection of statistics on database activity.
-Autovacuum launcher process uses statistics to create list of databases which had some activity. So collection of statistics is required for autovacuum, and this parameter is always set to **true**.
-
 
 
 ## table size expected value (EV)
@@ -23,27 +9,6 @@ Autovacuum launcher process uses statistics to create list of databases which ha
 To configure parameters related to deciding should table be vacuumed or not,
 Marula performs calculations of table size expected value. Calculation is based on data in **pg_catalog.pg_stat_user_tables** system view.
 Empty tables are not taken into account.
-
-
-
-### autovacuum_vacuum_scale_factor
-
-Specifies a fraction of the table size to add to autovacuum_vacuum_threshold when deciding whether to trigger a vacuum. The default is **0.2** (20% of table size).
-
-Factor calculated based on **table size EV**:
-
-```
-autovacuum_vacuum_scale_factor = min(0.2, 10^4 / {table_size_expected_value})
-```
-
-### autovacuum_vacuum_threshold
-
-Specifies the minimum number of updated or deleted tuples needed to trigger a vacuum in any one table. The default is **50** tuples.
-
-Value calculated based on **table size EV** and can be represented by formula:
-```
-autovacuum_vacuum_threshold = 0.01 * {table_size_expected_value}
-```
 
 
 
@@ -74,6 +39,39 @@ As a result, we get two values to calculate autovacuum-related parameters:
 * [B] bloat constant, which theoretically takes values in range [0..1].
 
 
+
+## parameters being tuned
+
+There is a list of database server parameters which affect autovacuum process and which are taken into account during tool development:
+
+### autovacuum
+
+Controls whether the server should run the autovacuum daemon.
+Obviously, in context of automatic configuration, this parameter should be set to **true**.
+
+### track_counts
+
+Enables collection of statistics on database activity.
+Autovacuum launcher process uses statistics to create list of databases which had some activity. So collection of statistics is required for autovacuum, and this parameter is always set to **true**.
+
+### autovacuum_vacuum_scale_factor
+
+Specifies a fraction of the table size to add to autovacuum_vacuum_threshold when deciding whether to trigger a vacuum. The default is **0.2** (20% of table size).
+
+Factor calculated based on **table size EV**:
+
+```
+autovacuum_vacuum_scale_factor = min(0.2, 10^4 / {table_size_expected_value})
+```
+
+### autovacuum_vacuum_threshold
+
+Specifies the minimum number of updated or deleted tuples needed to trigger a vacuum in any one table. The default is **50** tuples.
+
+Value calculated based on **table size EV** and can be represented by formula:
+```
+autovacuum_vacuum_threshold = 0.01 * {table_size_expected_value}
+```
 
 ### autovacuum_vacuum_cost_delay
 
