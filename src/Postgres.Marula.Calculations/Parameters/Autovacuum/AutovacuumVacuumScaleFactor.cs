@@ -24,6 +24,10 @@ namespace Postgres.Marula.Calculations.Parameters.Autovacuum
 			=> this.databaseServer = databaseServer;
 
 		/// <inheritdoc />
+		/// <remarks>
+		/// Fraction calculated based on table size EV:
+		/// autovacuum_vacuum_scale_factor = min(0.2, 10^4 / {table_size_expected_value})
+		/// </remarks>
 		protected override async ValueTask<Fraction> CalculateValueAsync()
 		{
 			var averageTableSize = await databaseServer.GetAverageTableSizeAsync();
