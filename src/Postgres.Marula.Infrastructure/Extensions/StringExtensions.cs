@@ -29,7 +29,7 @@ namespace Postgres.Marula.Infrastructure.Extensions
 				.To(ulong.Parse);
 
 			var unit = ((string) stringToParse)
-				.SkipWhile(char.IsDigit)
+				.SkipWhile(c => char.IsDigit(c) || char.IsWhiteSpace(c))
 				.ToArray()
 				.To(charArray => new string(charArray));
 

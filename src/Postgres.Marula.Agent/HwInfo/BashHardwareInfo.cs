@@ -34,7 +34,7 @@ namespace Postgres.Marula.Agent.HwInfo
 		/// </summary>
 		private async Task<Memory> GetTotalRamAsync()
 		{
-			const string fieldName = "MemTotal";
+			const string fieldName = "MemTotal:";
 			var memTotalString = await ExecuteBashCommandAsync($"grep {fieldName} /proc/meminfo");
 			var refined = memTotalString.Replace(fieldName, string.Empty).Trim();
 			return Memory.Parse(refined);
@@ -46,7 +46,7 @@ namespace Postgres.Marula.Agent.HwInfo
 		/// <summary>
 		/// <see cref="IHardwareInfo.CpuCoresCount"/> bash-based implementation. 
 		/// </summary>
-		async Task<CoresCount> GetCpuCoresCountAsync()
+		private async Task<CoresCount> GetCpuCoresCountAsync()
 		{
 			var coresCountString = await ExecuteBashCommandAsync("nproc");
 			return CoresCount.Parse(coresCountString);

@@ -1,4 +1,5 @@
 using System;
+using System.Text.RegularExpressions;
 using Postgres.Marula.Infrastructure.Extensions;
 
 namespace Postgres.Marula.Infrastructure.TypeDecorators
@@ -48,6 +49,11 @@ namespace Postgres.Marula.Infrastructure.TypeDecorators
 		/// </exception>
 		public static PositiveTimeSpan Parse(NonEmptyString stringToParse)
 		{
+			if (!Regex.IsMatch(stringToParse, @"^[0-9]+\s*(ms|s|min|h)$"))
+			{
+				throw new ArgumentException($"Input string '{stringToParse}' has invalid format.", nameof(stringToParse));
+			}
+
 			var (totalMilliseconds, unit) = stringToParse.ParseToTokens();
 
 			var multiplier = unit switch

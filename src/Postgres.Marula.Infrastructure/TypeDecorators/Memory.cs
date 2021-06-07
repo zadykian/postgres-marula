@@ -40,7 +40,7 @@ namespace Postgres.Marula.Infrastructure.TypeDecorators
 		/// </exception>
 		public static Memory Parse(NonEmptyString stringToParse)
 		{
-			if (!Regex.IsMatch(stringToParse, "^[0-9]+(B|kB|MB|GB)$"))
+			if (!Regex.IsMatch(stringToParse, @"^[0-9]+\s*(B|kB|MB|GB)$"))
 			{
 				throw new ArgumentException($"Input string '{stringToParse}' has invalid format.", nameof(stringToParse));
 			}
