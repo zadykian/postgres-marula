@@ -12,11 +12,11 @@ namespace Postgres.Marula.Calculations.Jobs
 {
 	/// <inheritdoc cref="IJob"/>
 	/// <remarks>
-	/// This implementation is responsible for WAL insert location tracking.
+	/// This implementation is responsible for WAL insert location logging.
 	/// </remarks>
-	internal class WalLsnTrackingJob : JobBase
+	internal class WalLsnLoggingJob : JobBase
 	{
-		public WalLsnTrackingJob(
+		public WalLsnLoggingJob(
 			ICalculationsConfiguration configuration,
 			IServiceScopeFactory serviceScopeFactory,
 			ILogger<JobBase> logger) : base(configuration.Wal().Interval(), serviceScopeFactory, logger)
@@ -24,7 +24,7 @@ namespace Postgres.Marula.Calculations.Jobs
 		}
 
 		/// <inheritdoc />
-		protected override NonEmptyString Description => "wal insert location tracking";
+		protected override NonEmptyString Description => "wal insert location logging";
 
 		/// <inheritdoc />
 		protected override async ValueTask ExecuteAsync(IServiceScope serviceScope)

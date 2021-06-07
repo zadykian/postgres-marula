@@ -40,7 +40,7 @@ files from the last but one checkpoint.
 Calculation of WAL traffic consists of two processes:
 
 1. Background periodic logging of server's LSN into system storage table. To get current LSN **pg_catalog.pg_current_wal_insert_lsn()** function is used.
-   The interval of logging can be set via **LsnTrackingIntervalInSeconds** configuration parameter. The default is **60 seconds**.
+   The interval of logging can be set via **LsnLoggingIntervalInSeconds** configuration parameter. The default is **60 seconds**.
 
 2. To take into account volatility of WAL-related operations, WAL traffic is calculated as **moving average** of values retrieved from server during background logging.
    Time window is determined by **Wal.MaxWalSize.MovingAverageWindowInSeconds** app's configuration parameter. Default value is **10800 seconds** (3 hours).
