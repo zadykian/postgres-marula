@@ -1,4 +1,5 @@
 using System;
+using Postgres.Marula.Infrastructure.Extensions;
 
 namespace Postgres.Marula.Infrastructure.TypeDecorators
 {
@@ -38,6 +39,28 @@ namespace Postgres.Marula.Infrastructure.TypeDecorators
 		public override int GetHashCode() => underlyingValue.GetHashCode();
 
 		#endregion
+
+		/// <summary>
+		/// Convert string <paramref name="stringToParse"/> to timespan value.
+		/// </summary>
+		/// <exception cref="ArgumentException">
+		/// Occurs when <paramref name="stringToParse"/> has invalid format.
+		/// </exception>
+		public static PositiveTimeSpan Parse(NonEmptyString stringToParse)
+		{
+			var (totalMilliseconds, unit) = stringToParse.ParseToTokens();
+
+			var multiplier = unit switch
+			{
+				"ms"  => 1,
+				"s"   => 1000,
+				"min" => 60 * 1000,
+				"h"   => 60 * 60 * 1000,
+				_     => throw new ArgumentOutOfRangeException(nameof(stringToParse), stringToParse, message: null)
+			};
+
+			return TimeSpan.FromMilliseconds(totalMilliseconds * (ulong) multiplier);
+		}
 
 		/// <summary>
 		/// Multiplication operator. 

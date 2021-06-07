@@ -1,4 +1,5 @@
 using System.Linq;
+using Postgres.Marula.Infrastructure.TypeDecorators;
 
 namespace Postgres.Marula.Infrastructure.Extensions
 {
@@ -15,5 +16,24 @@ namespace Postgres.Marula.Infrastructure.Extensions
 				.Select((c, index) => char.IsUpper(c) && index > 0 ? $"_{c}" : c.ToString())
 				.To(string.Concat)
 				.ToLower();
+
+		/// <summary>
+		/// Parse string <paramref name="stringToParse"/> to number and unit tokens.
+		/// </summary>
+		internal static (ulong Value, string Unit) ParseToTokens(this NonEmptyString stringToParse)
+		{
+			var value = ((string) stringToParse)
+				.TakeWhile(char.IsDigit)
+				.ToArray()
+				.To(charArray => new string(charArray))
+				.To(ulong.Parse);
+
+			var unit = ((string) stringToParse)
+				.SkipWhile(char.IsDigit)
+				.ToArray()
+				.To(charArray => new string(charArray));
+
+			return (Value: value, Unit: unit);
+		}
 	}
 }

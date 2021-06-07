@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Postgres.Marula.Infrastructure.TypeDecorators;
 
 namespace Postgres.Marula.Agent.HwInfo
@@ -10,7 +11,7 @@ namespace Postgres.Marula.Agent.HwInfo
 		/// <summary>
 		/// Total size of RAM.
 		/// </summary>
-		Memory TotalRam();
+		Task<Memory> TotalRam();
 
 		/// <summary>
 		/// Number of CPU cores. 

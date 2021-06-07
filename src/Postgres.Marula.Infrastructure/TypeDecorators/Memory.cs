@@ -1,4 +1,6 @@
 using System;
+using System.Text.RegularExpressions;
+using Postgres.Marula.Infrastructure.Extensions;
 
 namespace Postgres.Marula.Infrastructure.TypeDecorators
 {
@@ -29,6 +31,33 @@ namespace Postgres.Marula.Infrastructure.TypeDecorators
 		public override int GetHashCode() => TotalBytes.GetHashCode();
 
 		#endregion
+
+		/// <summary>
+		/// Parse string <paramref name="stringToParse"/> to memory value.
+		/// </summary>
+		/// <exception cref="ArgumentException">
+		/// Occurs when <paramref name="stringToParse"/> has invalid format.
+		/// </exception>
+		public static Memory Parse(NonEmptyString stringToParse)
+		{
+			if (!Regex.IsMatch(stringToParse, "^[0-9]+(B|kB|MB|GB)$"))
+			{
+				throw new ArgumentException($"Input string '{stringToParse}' has invalid format.", nameof(stringToParse));
+			}
+
+			var (totalBytes, unit) = stringToParse.ParseToTokens();
+
+	        var multiplier = unit switch
+	        {
+	            "B"  => 1,
+	            "kB" => 1024,
+	            "MB" => 1024 * 1024,
+	            "GB" => 1024 * 1024 * 1024,
+	            _    => throw new ArgumentOutOfRangeException(nameof(stringToParse), stringToParse, message: null)
+	        };
+
+	        return new Memory(totalBytes * (ulong) multiplier);
+		}
 
 		/// <summary>
 		/// Multiplication operator. 
