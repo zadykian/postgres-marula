@@ -206,7 +206,7 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 		async Task<Fraction> IDatabaseServer.GetAverageBloatFractionAsync()
 		{
 			var queryText = @"
-				select avg(n_dead_tup / n_live_tup)
+				select avg(n_dead_tup / (n_dead_tup + n_live_tup))
 				from pg_catalog.pg_stat_all_tables
 				where n_live_tup + n_dead_tup != 0;";
 
