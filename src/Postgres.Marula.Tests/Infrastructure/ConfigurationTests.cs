@@ -23,42 +23,46 @@ namespace Postgres.Marula.Tests.Infrastructure
 				.To(connectionString => Assert.IsNotEmpty(connectionString));
 
 		/// <summary>
-		/// <see cref="ICalculationsConfiguration.RecalculationInterval"/> test.
+		/// <see cref="IGeneralConfiguration.RecalculationInterval"/> test.
 		/// </summary>
 		[Test]
 		public void RecalculationIntervalTest()
 			=> GetService<ICalculationsConfiguration>()
+				.General()
 				.RecalculationInterval()
 				.To(recalculationInterval => Assert.IsTrue(
 					((TimeSpan) recalculationInterval).TotalSeconds > 0
 				));
 
 		/// <summary>
-		/// <see cref="ICalculationsConfiguration.AutoAdjustmentIsEnabled"/> test.
+		/// <see cref="IGeneralConfiguration.AutoAdjustmentIsEnabled"/> test.
 		/// </summary>
 		[Test]
 		public void AutoAdjustmentParameterTest()
 			=> GetService<ICalculationsConfiguration>()
+				.General()
 				.AutoAdjustmentIsEnabled()
 				.To(_ => Assert.Pass());
 
 		/// <summary>
-		/// <see cref="ICalculationsConfiguration.LsnTrackingInterval"/> test.
+		/// <see cref="IPeriodicLoggingConfiguration.Interval"/> test.
 		/// </summary>
 		[Test]
-		public void LsnTrackingIntervalTest()
+		public void AutovacuumIntervalTest()
 			=> GetService<ICalculationsConfiguration>()
-				.LsnTrackingInterval()
+				.Autovacuum()
+				.Interval()
 				.To(recalculationInterval => Assert.IsTrue(
 					((TimeSpan) recalculationInterval).TotalSeconds > 0
 				));
 
 		/// <summary>
-		/// <see cref="ICalculationsConfiguration.MovingAverageWindow"/> test.
+		/// <see cref="IPeriodicLoggingConfiguration.MovingAverageWindow"/> test.
 		/// </summary>
 		[Test]
-		public void MovingAverageWindowTest()
+		public void AutovacuumMovingAverageWindowTest()
 			=> GetService<ICalculationsConfiguration>()
+				.Autovacuum()
 				.MovingAverageWindow()
 				.To(recalculationInterval => Assert.IsTrue(
 					((TimeSpan) recalculationInterval).TotalSeconds > 0

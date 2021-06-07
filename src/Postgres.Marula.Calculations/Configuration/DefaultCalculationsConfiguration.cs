@@ -1,5 +1,6 @@
 using System;
 using System.Globalization;
+using System.Linq;
 using Microsoft.Extensions.Configuration;
 using Postgres.Marula.Infrastructure.Configuration;
 using Postgres.Marula.Infrastructure.Extensions;
@@ -17,29 +18,22 @@ namespace Postgres.Marula.Calculations.Configuration
 		}
 
 		/// <inheritdoc />
-		PositiveTimeSpan ICalculationsConfiguration.RecalculationInterval()
+		IGeneralConfiguration ICalculationsConfiguration.General()
 			=> ConfigurationSection
-				.GetSection("General:RecalculationIntervalInSeconds")
-				.To(ParseFromSeconds);
+				.GetSection("General")
+				.To(subSection => new GeneralConfiguration(subSection));
 
 		/// <inheritdoc />
-		bool ICalculationsConfiguration.AutoAdjustmentIsEnabled()
+		IPeriodicLoggingConfiguration ICalculationsConfiguration.Autovacuum()
 			=> ConfigurationSection
-				.GetSection("General:AutoAdjustParams")
-				.Value
-				.To(bool.Parse);
+				.GetSection("Autovacuum")
+				.To(subSection => new PeriodicLoggingConfiguration(subSection));
 
 		/// <inheritdoc />
-		PositiveTimeSpan ICalculationsConfiguration.LsnTrackingInterval()
+		IPeriodicLoggingConfiguration ICalculationsConfiguration.Wal()
 			=> ConfigurationSection
-				.GetSection("Wal:MaxWalSize:LsnTrackingIntervalInSeconds")
-				.To(ParseFromSeconds);
-
-		/// <inheritdoc />
-		PositiveTimeSpan ICalculationsConfiguration.MovingAverageWindow()
-			=> ConfigurationSection
-				.GetSection("Wal:MaxWalSize:MovingAverageWindowInSeconds")
-				.To(ParseFromSeconds);
+				.GetSection("Wal")
+				.To(subSection => new PeriodicLoggingConfiguration(subSection));
 
 		/// <summary>
 		/// Parse value from <paramref name="configurationSection"/> to <see cref="PositiveTimeSpan"/> value. 
@@ -49,5 +43,49 @@ namespace Postgres.Marula.Calculations.Configuration
 				.Value
 				.To(stringValue => double.Parse(stringValue, CultureInfo.InvariantCulture))
 				.To(TimeSpan.FromSeconds);
+
+		/// <inheritdoc />
+		private sealed class GeneralConfiguration : IGeneralConfiguration
+		{
+			private readonly IConfigurationSection configurationSection;
+
+			public GeneralConfiguration(IConfigurationSection configurationSection)
+				=> this.configurationSection = configurationSection;
+
+			/// <inheritdoc />
+			PositiveTimeSpan IGeneralConfiguration.RecalculationInterval()
+				=> configurationSection
+					.GetSection("RecalculationIntervalInSeconds")
+					.To(ParseFromSeconds);
+
+			/// <inheritdoc />
+			bool IGeneralConfiguration.AutoAdjustmentIsEnabled()
+				=> configurationSection
+					.GetSection("AutoAdjustParams")
+					.Value
+					.To(bool.Parse);
+		}
+
+		/// <inheritdoc />
+		private sealed class PeriodicLoggingConfiguration : IPeriodicLoggingConfiguration
+		{
+			private readonly IConfigurationSection configurationSection;
+
+			public PeriodicLoggingConfiguration(IConfigurationSection configurationSection)
+				=> this.configurationSection = configurationSection;
+
+			/// <inheritdoc />
+			PositiveTimeSpan IPeriodicLoggingConfiguration.Interval()
+				=> configurationSection
+					.GetChildren()
+					.Single(section => section.Key.Contains("IntervalInSeconds"))
+					.To(ParseFromSeconds);
+
+			/// <inheritdoc />
+			PositiveTimeSpan IPeriodicLoggingConfiguration.MovingAverageWindow()
+				=> configurationSection
+					.GetSection("MovingAverageWindowInSeconds")
+					.To(ParseFromSeconds);
+		}
 	}
 }
