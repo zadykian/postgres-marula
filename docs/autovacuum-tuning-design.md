@@ -20,6 +20,10 @@ Autovacuum launcher process uses statistics to create list of databases which ha
 
 ## table size expected value (EV)
 
+To configure parameters related to deciding should table be vacuumed or not,
+Marula performs calculations of table size expected value. Calculation is based on data in **pg_catalog.pg_stat_user_tables** system view.
+Empty tables are not taken into account.
+
 
 
 ### autovacuum_vacuum_scale_factor
@@ -31,6 +35,11 @@ Specifies a fraction of the table size to add to autovacuum_vacuum_threshold whe
 ### autovacuum_vacuum_threshold
 
 Specifies the minimum number of updated or deleted tuples needed to trigger a vacuum in any one table. The default is **50** tuples.
+
+Value calculated as:
+```
+autovacuum_vacuum_threshold = 0.01 * {table-size-expected-value}
+```
 
 
 
@@ -65,13 +74,13 @@ As a result, we get two values to calculate autovacuum-related parameters:
 ### autovacuum_vacuum_cost_delay
 
 Specifies the cost delay value that will be used in automatic vacuum operations.
-For PG12+ the default value is **2 milliseconds**, but for PG11 and ealier versions it's set to 20 milliseconds by default.
+For PG12+ the default value is **2 milliseconds**, but for PG11 and earlier versions it's set to 20 milliseconds by default.
 It's always being tuned to **2 milliseconds**.
 
 ### autovacuum_vacuum_cost_limit
 
 Specifies the cost limit value that will be used in automatic vacuum operations.
-If there are no table bloat stats in system storage - for example, when application analyzes database server for the first time - the value is caculated as:
+If there are no table bloat stats in system storage - for example, when application analyzes database server for the first time - the value is calculated as:
 
 ```
 autovacuum_vacuum_cost_limit = 500 * autovacuum_max_workers
