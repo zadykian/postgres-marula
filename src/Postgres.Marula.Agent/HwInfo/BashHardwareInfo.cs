@@ -1,7 +1,5 @@
 using System;
 using System.Diagnostics;
-using System.Text.Json;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Postgres.Marula.Infrastructure.TypeDecorators;
@@ -21,8 +19,10 @@ namespace Postgres.Marula.Agent.HwInfo
 		/// <inheritdoc />
 		async Task<Memory> IHardwareInfo.TotalRam()
 		{
-			var memTotalString = await ExecuteBashCommandAsync("grep MemTotal /proc/meminfo");
-			var refined = Regex.Replace()
+			const string fieldName = "MemTotal";
+			var memTotalString = await ExecuteBashCommandAsync($"grep {fieldName} /proc/meminfo");
+			var refined = memTotalString.Replace(fieldName, string.Empty).Trim();
+			return Memory.Parse(refined);
 		}
 
 		/// <inheritdoc />
