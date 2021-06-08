@@ -9,11 +9,11 @@ using Postgres.Marula.Infrastructure.TypeDecorators;
 namespace Postgres.Marula.Calculations.Configuration
 {
 	/// <inheritdoc cref="ICalculationsConfiguration"/>
-	internal class DefaultCalculationsConfiguration :
+	internal class CalculationsConfiguration :
 		ConfigurationBase<CalculationsAppComponent>,
 		ICalculationsConfiguration
 	{
-		public DefaultCalculationsConfiguration(IConfiguration configuration) : base(configuration)
+		public CalculationsConfiguration(IConfiguration configuration) : base(configuration)
 		{
 		}
 
@@ -64,6 +64,13 @@ namespace Postgres.Marula.Calculations.Configuration
 					.GetSection("AutoAdjustParams")
 					.Value
 					.To(bool.Parse);
+
+			/// <inheritdoc />
+			Uri IGeneralConfiguration.AgentApiUri()
+				=> configurationSection
+					.GetSection("AgentEndpoint")
+					.Value
+					.To(uriString => new Uri(uriString));
 		}
 
 		/// <inheritdoc />

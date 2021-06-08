@@ -1,11 +1,10 @@
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
-using Postgres.Marula.Calculations;
-using Postgres.Marula.DatabaseAccess;
-using Postgres.Marula.Infrastructure;
+using Postgres.Marula.HwInfo;
 using Postgres.Marula.Infrastructure.Extensions;
 
-namespace Postgres.Marula.AppHost
+namespace Postgres.Marula.Agent
 {
 	/// <summary>
 	/// Application entry point. 
@@ -18,17 +17,14 @@ namespace Postgres.Marula.AppHost
 		private static Task Main(string[] args)
 			=> Host
 				.CreateDefaultBuilder(args)
-				.AddJsonConfig("marula-app-config")
+				.AddJsonConfig("marula-agent-config")
 				.UseDefaultServiceProvider(options =>
 				{
 					options.ValidateScopes = true;
 					options.ValidateOnBuild = true;
 				})
-				.ConfigureServices(services => services
-					.AddComponent<InfrastructureAppComponent>()
-					.AddComponent<DatabaseAccessAppComponent>()
-					.AddComponent<CalculationsAppComponent>()
-					.AddComponent<AppHostAppComponent>())
+				.ConfigureWebHostDefaults(builder => builder.UseStartup<Startup>())
+				.ConfigureServices(services => services.AddComponent<HwInfoAppComponent>())
 				.Build()
 				.RunAsync();
 	}

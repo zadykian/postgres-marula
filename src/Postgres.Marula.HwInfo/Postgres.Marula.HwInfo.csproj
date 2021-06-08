@@ -3,13 +3,7 @@
 	<Import Project="$(MSBuildThisFileDirectory)\..\common.props" />
 
 	<ItemGroup>
-		<ProjectReference Include="..\Postgres.Marula.HwInfo\Postgres.Marula.HwInfo.csproj" />
 		<ProjectReference Include="..\Postgres.Marula.Infrastructure\Postgres.Marula.Infrastructure.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<PackageReference Include="MathNet.Numerics" Version="4.15.0" />
-		<PackageReference Include="PipelineNet" Version="0.9.0" />
 	</ItemGroup>
 
 </Project>

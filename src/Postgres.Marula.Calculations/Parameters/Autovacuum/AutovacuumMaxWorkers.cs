@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Postgres.Marula.Calculations.Parameters.Base;
+using Postgres.Marula.HwInfo;
 
 // ReSharper disable UnusedType.Global
 // ReSharper disable BuiltInTypeReferenceStyle
@@ -15,14 +16,17 @@ namespace Postgres.Marula.Calculations.Parameters.Autovacuum
 	/// </summary>
 	internal class AutovacuumMaxWorkers : IntegerParameterBase
 	{
-		public AutovacuumMaxWorkers(ILogger<IntegerParameterBase> logger) : base(logger)
-		{
-		}
+		private readonly IHardwareInfo hardwareInfo;
 
-		protected override ValueTask<WorkersCount> CalculateValueAsync()
+		public AutovacuumMaxWorkers(
+			IHardwareInfo hardwareInfo,
+			ILogger<IntegerParameterBase> logger) : base(logger)
+			=> this.hardwareInfo = hardwareInfo;
+
+		protected override async ValueTask<WorkersCount> CalculateValueAsync()
 		{
-			// todo
-			return ValueTask.FromResult<uint>(4);
+			var cpuCoresCount = await hardwareInfo.CpuCoresCount();
+			return (WorkersCount) (0.5 * cpuCoresCount);
 		}
 	}
 }

@@ -1,3 +1,4 @@
+using System;
 using Postgres.Marula.Infrastructure.TypeDecorators;
 
 namespace Postgres.Marula.Calculations.Configuration
@@ -35,6 +36,11 @@ namespace Postgres.Marula.Calculations.Configuration
 		/// Automatic database's parameters adjustment is enabled. 
 		/// </summary>
 		bool AutoAdjustmentIsEnabled();
+
+		/// <summary>
+		/// Remote agent API address. 
+		/// </summary>
+		Uri AgentApiUri();
 	}
 
 	/// <summary>

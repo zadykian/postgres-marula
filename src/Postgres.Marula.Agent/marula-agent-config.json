@@ -1,0 +1,14 @@
+{
+	"Logging": {
+		"LogLevel": {
+			"Default": "Information"
+		}
+	},
+	"Kestrel": {
+		"Endpoints": {
+			"Http": {
+				"Url": "http://localhost:5000"
+			}
+		}
+	}
+}

@@ -30,5 +30,13 @@ namespace Postgres.Marula.AppHost
 			logger.LogInformation("Marula application is running.");
 			await Task.CompletedTask;
 		}
+
+		/// <inheritdoc />
+		public override async Task StopAsync(CancellationToken cancellationToken)
+		{
+			logger.LogInformation("Marula application is stopping.");
+			jobs.ForEach(job => job.Stop());
+			await base.StopAsync(cancellationToken);
+		}
 	}
 }

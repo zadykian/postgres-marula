@@ -36,7 +36,7 @@ namespace Postgres.Marula.DatabaseAccess
 				.AddSingleton<INamingConventions, DefaultNamingConventions>()
 				.AddSingleton<ISqlScriptsProvider, AssemblyResourcesSqlScriptsProvider>()
 				.AddSingleton<ISqlScriptsExecutor, DefaultSqlScriptsExecutor>()
-				.AddSingleton<IDatabaseAccessConfiguration, DefaultDatabaseAccessConfiguration>()
+				.AddSingleton<IDatabaseAccessConfiguration, DatabaseAccessConfiguration>()
 				.AddScoped(DbConnectionFactoryMethod)
 				.AddScoped<IDbConnectionFactory, DefaultDbConnectionFactory>()
 				.AddScoped<IDatabaseServer, DefaultDatabaseServer>()

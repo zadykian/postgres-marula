@@ -18,7 +18,12 @@ namespace Postgres.Marula.Infrastructure.TypeDecorators
 		/// Replace substring <paramref name="substring"/> with value <paramref name="replaceWith"/>
 		/// and return new <see cref="NonEmptyString"/> instance. 
 		/// </summary>
-		public NonEmptyString Replace(NonEmptyString substring, string replaceWith)=> underlyingValue.Replace(substring, replaceWith);
+		public NonEmptyString Replace(NonEmptyString substring, string replaceWith) => underlyingValue.Replace(substring, replaceWith);
+
+		/// <summary>
+		/// Remove all leading and trailing whitespace characters from string. 
+		/// </summary>
+		public NonEmptyString Trim() => new(underlyingValue.Trim());
 
 		/// <inheritdoc />
 		public override string ToString() => underlyingValue;

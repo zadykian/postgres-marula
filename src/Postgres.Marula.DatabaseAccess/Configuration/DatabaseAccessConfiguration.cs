@@ -6,11 +6,11 @@ using Postgres.Marula.Infrastructure.TypeDecorators;
 namespace Postgres.Marula.DatabaseAccess.Configuration
 {
 	/// <inheritdoc cref="IDatabaseAccessConfiguration"/>
-	internal class DefaultDatabaseAccessConfiguration :
+	internal class DatabaseAccessConfiguration :
 		ConfigurationBase<DatabaseAccessAppComponent>,
 		IDatabaseAccessConfiguration
 	{
-		public DefaultDatabaseAccessConfiguration(IConfiguration configuration) : base(configuration)
+		public DatabaseAccessConfiguration(IConfiguration configuration) : base(configuration)
 		{
 		}
 
