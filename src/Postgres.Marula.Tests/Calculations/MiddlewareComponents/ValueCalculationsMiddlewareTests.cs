@@ -10,6 +10,7 @@ namespace Postgres.Marula.Tests.Calculations.MiddlewareComponents
 	/// <summary>
 	/// <see cref="ValueCalculationsMiddleware"/> middleware tests.
 	/// </summary>
+	[Ignore("")]
 	internal class ValueCalculationsMiddlewareTests : CalculationsTestFixtureBase
 	{
 		/// <summary>
