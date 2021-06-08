@@ -12,16 +12,10 @@ namespace Postgres.Marula.Agent
 		/// Entry point method. 
 		/// </summary>
 		private static void Main(string[] args)
-			=> CreateHostBuilder(args)
-				.Build()
-				.Run();
-
-		/// <summary>
-		/// Create <see cref="IHostBuilder"/>. 
-		/// </summary>
-		public static IHostBuilder CreateHostBuilder(string[] args)
 			=> Host
 				.CreateDefaultBuilder(args)
-				.ConfigureWebHostDefaults(webBuilder => webBuilder.UseStartup<Startup>());
+				.ConfigureWebHostDefaults(webBuilder => webBuilder.UseStartup<Startup>())
+				.Build()
+				.Run();
 	}
 }
