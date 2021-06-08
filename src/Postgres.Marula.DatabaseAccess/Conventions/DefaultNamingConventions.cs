@@ -22,5 +22,8 @@ namespace Postgres.Marula.DatabaseAccess.Conventions
 
 		/// <inheritdoc />
 		DatabaseObjectName INamingConventions.WalLsnHistoryTableName => "wal_lsn_history";
+
+		/// <inheritdoc />
+		DatabaseObjectName INamingConventions.BloatFractionHistoryTableName => "bloat_fraction_history";
 	}
 }

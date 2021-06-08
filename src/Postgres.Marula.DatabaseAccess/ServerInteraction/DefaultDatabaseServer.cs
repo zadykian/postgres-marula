@@ -20,6 +20,9 @@ using Postgres.Marula.DatabaseAccess.ServerInteraction.Exceptions;
 using Postgres.Marula.Infrastructure.Extensions;
 using Postgres.Marula.Infrastructure.TypeDecorators;
 
+// ReSharper disable BuiltInTypeReferenceStyle
+using TuplesCount = System.UInt32;
+
 namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 {
 	/// <inheritdoc cref="IDatabaseServer" />
@@ -185,6 +188,30 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 			var host = connectionString["server"].To(str => str == "localhost" ? localhost : IPAddress.Parse(str));
 			var port = connectionString["port"].To(str => ushort.Parse(str));
 			return new(host, port);
+		}
+
+		/// <inheritdoc />
+		async Task<TuplesCount> IDatabaseServer.GetAverageTableSizeAsync()
+		{
+			var queryText = @"
+				select avg(n_live_tup + n_dead_tup)
+				from pg_catalog.pg_stat_all_tables
+				where n_live_tup + n_dead_tup != 0;";
+
+			var connection = await Connection();
+			return await connection.ExecuteScalarAsync<TuplesCount>(queryText);
+		}
+
+		/// <inheritdoc />
+		async Task<Fraction> IDatabaseServer.GetAverageBloatFractionAsync()
+		{
+			var queryText = @"
+				select avg(n_dead_tup / (n_dead_tup + n_live_tup))
+				from pg_catalog.pg_stat_all_tables
+				where n_live_tup + n_dead_tup != 0;";
+
+			var connection = await Connection();
+			return await connection.ExecuteScalarAsync<Fraction>(queryText);
 		}
 	}
 }

@@ -200,5 +200,27 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 			var postgresVersion = await databaseServer.GetPostgresVersionAsync();
 			Assert.IsNotNull(postgresVersion);
 		}
+
+		/// <summary>
+		/// Get average table size.
+		/// </summary>
+		[Test]
+		public async Task GetAverageTableSizeTest()
+		{
+			var databaseServer = GetService<IDatabaseServer>();
+			var averageTableSize = await databaseServer.GetAverageTableSizeAsync();
+			Assert.AreNotEqual(0, averageTableSize);
+		}
+
+		/// <summary>
+		/// Get average bloat fraction.
+		/// </summary>
+		[Test]
+		public async Task GetAverageBloatFractionTest()
+		{
+			var databaseServer = GetService<IDatabaseServer>();
+			var averageBloatFraction = await databaseServer.GetAverageBloatFractionAsync();
+			Assert.That(averageBloatFraction >= decimal.Zero && averageBloatFraction < decimal.One);
+		}
 	}
 }

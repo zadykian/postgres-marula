@@ -22,7 +22,7 @@ namespace Postgres.Marula.Calculations.Jobs
 			ICalculationsConfiguration configuration,
 			IPipelineFactory pipelineFactory,
 			IServiceScopeFactory serviceScopeFactory,
-			ILogger<GeneralCalculationsJob> logger) : base(configuration.RecalculationInterval(), serviceScopeFactory, logger)
+			ILogger<GeneralCalculationsJob> logger) : base(configuration.General().RecalculationInterval(), serviceScopeFactory, logger)
 			=> this.pipelineFactory = pipelineFactory;
 
 		/// <inheritdoc />

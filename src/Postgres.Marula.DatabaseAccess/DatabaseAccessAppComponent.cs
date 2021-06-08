@@ -27,6 +27,7 @@ namespace Postgres.Marula.DatabaseAccess
 			SqlMapper.AddTypeHandler(new NonEmptyStringTypeHandler());
 			SqlMapper.AddTypeHandler(new DatabaseObjectNameTypeHandler());
 			SqlMapper.AddTypeHandler(new LogSeqNumberTypeHandler());
+			SqlMapper.AddTypeHandler(new FractionTypeHandler());
 		}
 
 		/// <inheritdoc />

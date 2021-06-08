@@ -18,8 +18,9 @@ Tuning of some parameters mentioned below is based on statistic values of averag
 Analysis consists of several steps:
 
 1. Background periodic logging of average bloat factor into system storage table.
-   Value is retrieved based on data from system view **pg_catalog.pg_stat_all_tables** and calculated for each table as **[n_live_tup] / [n_dead_tup]**.
-   The interval of logging can be set via **Autovacuum.BloatTrackingIntervalInSeconds** configuration parameter. The default is **600 seconds** (10 minutes).
+   Value is retrieved based on data from system view **pg_catalog.pg_stat_all_tables** and calculated for each table as **n_dead_tup / (n_dead_tup + n_live_tup)**.
+   Empty tables are not taken into account.
+   The interval of logging can be set via **Autovacuum.BloatLoggingIntervalInSeconds** configuration parameter. The default is **600 seconds** (10 minutes).
 2. Selection of bloat values.
    To take into account impermanence of modifying operations intensity (updates  and deletions), only resent bloat factor values are included into selection.
    Left time bound of selection can be configured via **Autovacuum.MovingAverageWindowInSeconds** application's parameter. The default is 10800 seconds (3 hours).
