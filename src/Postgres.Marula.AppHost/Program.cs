@@ -23,7 +23,7 @@ namespace Postgres.Marula.AppHost
 					options.ValidateScopes = true;
 					options.ValidateOnBuild = true;
 				})
-				.ConfigureServices((_, services) => services
+				.ConfigureServices(services => services
 					.AddComponent<InfrastructureAppComponent>()
 					.AddComponent<DatabaseAccessAppComponent>()
 					.AddComponent<CalculationsAppComponent>()
