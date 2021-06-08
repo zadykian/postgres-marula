@@ -1,6 +1,7 @@
 using System;
 using System.Globalization;
 using System.Linq;
+using System.Net;
 using Microsoft.Extensions.Configuration;
 using Postgres.Marula.Infrastructure.Configuration;
 using Postgres.Marula.Infrastructure.Extensions;
@@ -64,6 +65,13 @@ namespace Postgres.Marula.Calculations.Configuration
 					.GetSection("AutoAdjustParams")
 					.Value
 					.To(bool.Parse);
+
+			/// <inheritdoc />
+			IPEndPoint IGeneralConfiguration.AgentEndpoint()
+				=> configurationSection
+					.GetSection("AgentEndpoint")
+					.Value
+					.To(IPEndPoint.Parse);
 		}
 
 		/// <inheritdoc />
