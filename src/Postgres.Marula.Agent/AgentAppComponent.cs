@@ -10,6 +10,6 @@ namespace Postgres.Marula.Agent
 		/// <inheritdoc />
 		void IAppComponent.RegisterServices(IServiceCollection serviceCollection)
 			=> serviceCollection
-				.AddSingleton<IStartup, AgentStartup>();
+				.AddSingleton<IStartup, Startup>();
 	}
 }
