@@ -19,6 +19,10 @@ namespace Postgres.Marula.Calculations.Parameters.Autovacuum
 		{
 		}
 
-		protected override ValueTask<WorkersCount> CalculateValueAsync() => throw new System.NotImplementedException();
+		protected override ValueTask<WorkersCount> CalculateValueAsync()
+		{
+			// todo
+			return ValueTask.FromResult<uint>(4);
+		}
 	}
 }
