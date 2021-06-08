@@ -13,9 +13,15 @@ namespace Postgres.Marula.Agent
 			=> services
 				.AddControllers()
 				.Services
+				.AddSwaggerGen()
 				.BuildServiceProvider();
 
 		/// <inheritdoc />
-		void IStartup.Configure(IApplicationBuilder builder) => builder.UseRouting();
+		void IStartup.Configure(IApplicationBuilder builder)
+			=> builder
+				.UseRouting()
+				.UseEndpoints(endpointBuilder => endpointBuilder.MapControllers())
+				.UseSwagger()
+				.UseSwaggerUI();
 	}
 }

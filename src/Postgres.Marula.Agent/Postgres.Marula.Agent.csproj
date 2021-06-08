@@ -3,6 +3,7 @@
 	<Import Project="$(MSBuildThisFileDirectory)\..\common.props" />
 
 	<PropertyGroup>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 		<NoDefaultLaunchSettingsFile>true</NoDefaultLaunchSettingsFile>
 	</PropertyGroup>
 

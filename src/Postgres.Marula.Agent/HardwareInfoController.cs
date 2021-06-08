@@ -17,6 +17,9 @@ namespace Postgres.Marula.Agent
 	{
 		private readonly IHardwareInfo hardwareInfo;
 
+		/// <param name="hardwareInfo">
+		/// Hosting machine hardware info.
+		/// </param>
 		public HardwareInfoController(IHardwareInfo hardwareInfo) => this.hardwareInfo = hardwareInfo;
 
 		/// <summary>
