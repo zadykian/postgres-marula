@@ -54,7 +54,7 @@ namespace Postgres.Marula.Calculations.ParametersManagement
 		/// </summary>
 		private async ValueTask<CalculationStatus> GetCalculationStatus(IParameterValue parameterValue)
 		{
-			var adjustmentIsAllowed = configuration.AutoAdjustmentIsEnabled();
+			var adjustmentIsAllowed = configuration.General().AutoAdjustmentIsEnabled();
 			var parameterContext = await databaseServer.GetParameterContextAsync(parameterValue.ParameterLink);
 
 			return (adjustmentIsAllowed, parameterContext.RestartIsRequired()) switch
@@ -91,7 +91,7 @@ namespace Postgres.Marula.Calculations.ParametersManagement
 		/// <inheritdoc />
 		async Task IPgSettings.FlushAsync()
 		{
-			if (!configuration.AutoAdjustmentIsEnabled())
+			if (!configuration.General().AutoAdjustmentIsEnabled())
 			{
 				return;
 			}

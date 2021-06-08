@@ -10,7 +10,7 @@ namespace Postgres.Marula.Calculations.Exceptions
 		/// <summary>
 		/// Get exception object which is thrown when
 		/// there are no any LSN history entries
-		/// in window <see cref="ICalculationsConfiguration.MovingAverageWindow"/>.
+		/// in window <see cref="IPeriodicLoggingConfiguration.MovingAverageWindow"/>.
 		/// </summary>
 		public static ParameterValueCalculationException NoLsnHistory()
 			=> new("There are no any LSN history entries in configured window.");

@@ -2,6 +2,7 @@ using System.Runtime.CompilerServices;
 using Microsoft.Extensions.DependencyInjection;
 using Postgres.Marula.Calculations.Configuration;
 using Postgres.Marula.Calculations.Jobs.Base;
+using Postgres.Marula.Calculations.Parameters.Autovacuum.Bloat;
 using Postgres.Marula.Calculations.Parameters.Base;
 using Postgres.Marula.Calculations.Parameters.Wal.LsnHistory;
 using Postgres.Marula.Calculations.ParametersManagement;
@@ -26,6 +27,7 @@ namespace Postgres.Marula.Calculations
 				.AddSingleton<IParameterValueParser, DefaultParameterValueParser>()
 				.AddScoped<IPgSettings, PgSettings>()
 				.AddScoped<IWalLsnHistory, WalLsnHistory>()
+				.AddScoped<IBloatAnalysis, BloatAnalysis>()
 				.AddBasedOn<IParameter>(ServiceLifetime.Scoped)
 				.Forward<IParameter, IParameterLink>()
 				.To(RegisterPipelineServices)

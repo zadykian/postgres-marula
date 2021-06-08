@@ -8,6 +8,9 @@ using Postgres.Marula.Calculations.ParameterValues.Base;
 using Postgres.Marula.Calculations.ParameterValues.Raw;
 using Postgres.Marula.Infrastructure.TypeDecorators;
 
+// ReSharper disable BuiltInTypeReferenceStyle
+using TuplesCount = System.UInt32;
+
 namespace Postgres.Marula.Tests.Calculations.FakeServices
 {
 	/// <inheritdoc cref="IDatabaseServer"/>
@@ -35,6 +38,12 @@ namespace Postgres.Marula.Tests.Calculations.FakeServices
 		/// <inheritdoc />
 		ValueTask<Version> IDatabaseServer.GetPostgresVersionAsync()
 			=> ValueTask.FromResult(new Version(12, 5));
+
+		/// <inheritdoc />
+		Task<TuplesCount> IDatabaseServer.GetAverageTableSizeAsync() => Task.FromResult(10_240U);
+
+		/// <inheritdoc />
+		Task<Fraction> IDatabaseServer.GetAverageBloatFractionAsync() => Task.FromResult((Fraction) 0.5M);
 
 		public bool ApplyMethodWasCalled { get; private set; }
 	}

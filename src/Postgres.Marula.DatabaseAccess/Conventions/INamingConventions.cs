@@ -43,6 +43,12 @@ namespace Postgres.Marula.DatabaseAccess.Conventions
 		/// </summary>
 		[ScriptPlaceholder("WAL_LSN_HISTORY_TABLE_NAME_TO_REPLACE")]
 		DatabaseObjectName WalLsnHistoryTableName { get; }
+
+		/// <summary>
+		/// Name of average bloat fraction history table.
+		/// </summary>
+		[ScriptPlaceholder("BLOAT_FRACTION_HISTORY_TABLE_NAME_TO_REPLACE")]
+		DatabaseObjectName BloatFractionHistoryTableName { get; }
 	}
 
 	/// <summary>
