@@ -22,8 +22,8 @@ namespace Postgres.Marula.Calculations.HardwareInfo
 		public RemoteHardwareInfo(ICalculationsConfiguration configuration)
 			=> httpClient = configuration
 				.General()
-				.AgentEndpoint()
-				.To(endpoint => new HttpClient {BaseAddress = new(endpoint.ToString())});
+				.AgentApiUri()
+				.To(endpoint => new HttpClient {BaseAddress = endpoint});
 
 		/// <inheritdoc />
 		async Task<Memory> IHardwareInfo.TotalRam()

@@ -1,7 +1,6 @@
 using System;
 using System.Globalization;
 using System.Linq;
-using System.Net;
 using Microsoft.Extensions.Configuration;
 using Postgres.Marula.Infrastructure.Configuration;
 using Postgres.Marula.Infrastructure.Extensions;
@@ -67,11 +66,11 @@ namespace Postgres.Marula.Calculations.Configuration
 					.To(bool.Parse);
 
 			/// <inheritdoc />
-			IPEndPoint IGeneralConfiguration.AgentEndpoint()
+			Uri IGeneralConfiguration.AgentApiUri()
 				=> configurationSection
 					.GetSection("AgentEndpoint")
 					.Value
-					.To(IPEndPoint.Parse);
+					.To(uriString => new Uri(uriString));
 		}
 
 		/// <inheritdoc />

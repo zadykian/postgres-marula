@@ -1,4 +1,4 @@
-using System.Net;
+using System;
 using Postgres.Marula.Infrastructure.TypeDecorators;
 
 namespace Postgres.Marula.Calculations.Configuration
@@ -38,9 +38,9 @@ namespace Postgres.Marula.Calculations.Configuration
 		bool AutoAdjustmentIsEnabled();
 
 		/// <summary>
-		/// Remote agent IP endpoint. 
+		/// Remote agent API address. 
 		/// </summary>
-		IPEndPoint AgentEndpoint();
+		Uri AgentApiUri();
 	}
 
 	/// <summary>

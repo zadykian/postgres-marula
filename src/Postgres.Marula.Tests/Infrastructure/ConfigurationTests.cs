@@ -45,6 +45,16 @@ namespace Postgres.Marula.Tests.Infrastructure
 				.To(_ => Assert.Pass());
 
 		/// <summary>
+		/// <see cref="IGeneralConfiguration.AgentApiUri"/> test.
+		/// </summary>
+		[Test]
+		public void AgentEndpointTest()
+			=> GetService<ICalculationsConfiguration>()
+				.General()
+				.AgentApiUri()
+				.To(_ => Assert.Pass());
+
+		/// <summary>
 		/// <see cref="IPeriodicLoggingConfiguration.Interval"/> test.
 		/// </summary>
 		[Test]
