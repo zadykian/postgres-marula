@@ -16,9 +16,6 @@ namespace Postgres.Marula.Agent
 				.BuildServiceProvider();
 
 		/// <inheritdoc />
-		void IStartup.Configure(IApplicationBuilder builder)
-		{
-			builder.UseRouting();
-		}
+		void IStartup.Configure(IApplicationBuilder builder) => builder.UseRouting();
 	}
 }
