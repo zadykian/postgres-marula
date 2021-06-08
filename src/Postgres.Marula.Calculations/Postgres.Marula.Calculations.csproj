@@ -3,6 +3,7 @@
 	<Import Project="$(MSBuildThisFileDirectory)\..\common.props" />
 
 	<ItemGroup>
+		<ProjectReference Include="..\Postgres.Marula.HwInfo\Postgres.Marula.HwInfo.csproj" />
 		<ProjectReference Include="..\Postgres.Marula.Infrastructure\Postgres.Marula.Infrastructure.csproj" />
 	</ItemGroup>
 
