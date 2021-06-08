@@ -19,7 +19,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Content Include="marula-config.json">
+		<Content Include="marula-app-config.json">
 			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Content>
