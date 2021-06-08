@@ -4,7 +4,7 @@ using Postgres.Marula.Infrastructure.TypeDecorators;
 // ReSharper disable BuiltInTypeReferenceStyle
 using CoresCount = System.Byte;
 
-namespace Postgres.Marula.Agent.HwInfo
+namespace Postgres.Marula.HwInfo
 {
 	/// <summary>
 	/// Hosting machine hardware info.

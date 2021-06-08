@@ -1,11 +1,10 @@
 using Microsoft.Extensions.DependencyInjection;
-using Postgres.Marula.Agent.HwInfo;
 using Postgres.Marula.Infrastructure.AppComponents;
 
-namespace Postgres.Marula.Agent
+namespace Postgres.Marula.HwInfo
 {
 	/// <inheritdoc />
-	public class AgentAppComponent : IAppComponent
+	public class HwInfoAppComponent : IAppComponent
 	{
 		/// <inheritdoc />
 		void IAppComponent.RegisterServices(IServiceCollection serviceCollection)

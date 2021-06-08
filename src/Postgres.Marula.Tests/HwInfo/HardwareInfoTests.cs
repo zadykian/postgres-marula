@@ -1,15 +1,14 @@
 using System.Threading.Tasks;
 using NUnit.Framework;
-using Postgres.Marula.Agent;
-using Postgres.Marula.Agent.HwInfo;
+using Postgres.Marula.HwInfo;
 using Postgres.Marula.Tests.Base;
 
-namespace Postgres.Marula.Tests.Agent
+namespace Postgres.Marula.Tests.HwInfo
 {
 	/// <summary>
 	/// Hardware agent tests
 	/// </summary>
-	internal class HardwareInfoTests : SingleComponentTestFixtureBase<AgentAppComponent>
+	internal class HardwareInfoTests : SingleComponentTestFixtureBase<HwInfoAppComponent>
 	{
 		/// <summary>
 		/// Get total RAM size.
