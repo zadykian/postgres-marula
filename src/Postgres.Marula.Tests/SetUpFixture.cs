@@ -22,7 +22,19 @@ namespace Postgres.Marula.Tests
 		/// Start agent process.
 		/// </summary>
 		[OneTimeSetUp]
-		public void OneTimeSetUp() => agentApiProcess.Start();
+		public void OneTimeSetUp()
+		{
+			agentApiProcess.Start();
+
+			agentApiProcess
+				.StandardError
+				.ReadToEndAsync()
+				.ContinueWith(task =>
+				{
+					if (string.IsNullOrWhiteSpace(task.Result)) return;
+					TestContext.Error.WriteLine(task.Result);
+				});
+		}
 
 		/// <summary>
 		/// Kill agent process.
@@ -39,7 +51,7 @@ namespace Postgres.Marula.Tests
 				StartInfo = new()
 				{
 					FileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, AgentExecutableName()),
-					RedirectStandardOutput = true,
+					RedirectStandardError = true,
 					UseShellExecute = false,
 					CreateNoWindow = true,
 				}

@@ -12,7 +12,6 @@ namespace Postgres.Marula.Tests.Calculations
 	/// <summary>
 	/// <see cref="IJob"/> tests.
 	/// </summary>
-	[Ignore("")]
 	internal class JobTests : CalculationsTestFixtureBase
 	{
 		/// <summary>
