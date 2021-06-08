@@ -8,11 +8,11 @@ using Postgres.Marula.Infrastructure.TypeDecorators;
 namespace Postgres.Marula.Calculations.Configuration
 {
 	/// <inheritdoc cref="ICalculationsConfiguration"/>
-	internal class DefaultCalculationsConfiguration :
+	internal class CalculationsConfiguration :
 		ConfigurationBase<CalculationsAppComponent>,
 		ICalculationsConfiguration
 	{
-		public DefaultCalculationsConfiguration(IConfiguration configuration) : base(configuration)
+		public CalculationsConfiguration(IConfiguration configuration) : base(configuration)
 		{
 		}
 

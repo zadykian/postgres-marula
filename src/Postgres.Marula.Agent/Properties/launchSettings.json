@@ -1,7 +1,0 @@
-﻿{
-	"Postgres.Marula.Agent": {
-		"commandName": "Project",
-		"dotnetRunMessages": "true",
-		"applicationUrl": "https://localhost:5001;http://localhost:5000"
-	}
-}

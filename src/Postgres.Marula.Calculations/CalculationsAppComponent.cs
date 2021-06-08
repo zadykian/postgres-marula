@@ -22,7 +22,7 @@ namespace Postgres.Marula.Calculations
 		/// <inheritdoc />
 		void IAppComponent.RegisterServices(IServiceCollection serviceCollection)
 			=> serviceCollection
-				.AddSingleton<ICalculationsConfiguration, DefaultCalculationsConfiguration>()
+				.AddSingleton<ICalculationsConfiguration, CalculationsConfiguration>()
 				.AddSingleton<IParameterValueParser, DefaultParameterValueParser>()
 				.AddScoped<IPgSettings, PgSettings>()
 				.AddScoped<IWalLsnHistory, WalLsnHistory>()

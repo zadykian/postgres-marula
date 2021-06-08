@@ -49,7 +49,7 @@ namespace Postgres.Marula.Tests.Base
 						.AddJsonFile("appsettings.json")
 						.AddJsonFile("appsettings.local.json", optional: true)
 						.Build())
-				.AddSingleton<ICalculationsConfiguration, DefaultCalculationsConfiguration>()
-				.AddSingleton<IDatabaseAccessConfiguration, DefaultDatabaseAccessConfiguration>();
+				.AddSingleton<ICalculationsConfiguration, CalculationsConfiguration>()
+				.AddSingleton<IDatabaseAccessConfiguration, DatabaseAccessConfiguration>();
 	}
 }
