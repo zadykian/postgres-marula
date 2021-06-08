@@ -1,4 +1,6 @@
 using System;
+using System.IO;
+using System.Reflection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,7 +15,12 @@ namespace Postgres.Marula.Agent
 			=> services
 				.AddControllers()
 				.Services
-				.AddSwaggerGen()
+				.AddSwaggerGen(options =>
+				{
+					var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+					var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+					options.IncludeXmlComments(xmlPath);
+				})
 				.BuildServiceProvider();
 
 		/// <inheritdoc />
