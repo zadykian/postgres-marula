@@ -46,8 +46,8 @@ namespace Postgres.Marula.Tests.Base
 				.AddLogging()
 				.AddSingleton<IConfiguration>(_
 					=> new ConfigurationBuilder()
-						.AddJsonFile("appsettings.json")
-						.AddJsonFile("appsettings.local.json", optional: true)
+						.AddJsonFile("marula-config.json")
+						.AddJsonFile("marula-config.local.json", optional: true)
 						.Build())
 				.AddSingleton<ICalculationsConfiguration, CalculationsConfiguration>()
 				.AddSingleton<IDatabaseAccessConfiguration, DatabaseAccessConfiguration>();

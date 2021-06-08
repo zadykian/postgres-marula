@@ -18,6 +18,7 @@ namespace Postgres.Marula.AppHost
 		private static Task Main(string[] args)
 			=> Host
 				.CreateDefaultBuilder(args)
+				.AddJsonConfig("marula-config")
 				.UseDefaultServiceProvider(options =>
 				{
 					options.ValidateScopes = true;
