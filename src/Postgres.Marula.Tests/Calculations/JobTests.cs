@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using NUnit.Framework;
-using Postgres.Marula.Calculations.Configuration;
 using Postgres.Marula.Calculations.Jobs.Base;
 using Postgres.Marula.Infrastructure.Extensions;
 using Postgres.Marula.Tests.Calculations.Base;
@@ -23,8 +22,7 @@ namespace Postgres.Marula.Tests.Calculations
 		{
 			GetService<IEnumerable<IJob>>().ForEach(job => job.Run());
 
-			var configuration = GetService<ICalculationsConfiguration>();
-			await Task.Delay(configuration.General().RecalculationInterval() + TimeSpan.FromMilliseconds(value: 500));
+			await Task.Delay(TimeSpan.FromSeconds(5));
 
 			var databaseTracker = GetService<IDatabaseServerAccessTracker>();
 			Assert.IsTrue(databaseTracker.ApplyMethodWasCalled);
