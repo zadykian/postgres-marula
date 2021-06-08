@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using Postgres.Marula.Calculations.Jobs.Base;
@@ -20,12 +21,16 @@ namespace Postgres.Marula.Tests.Calculations
 		[Test]
 		public async Task RunAllJobsTest()
 		{
-			GetService<IEnumerable<IJob>>().ForEach(job => job.Run());
+			var allJobs = GetService<IEnumerable<IJob>>().ToImmutableArray();
+
+			allJobs.ForEach(job => job.Run());
 
 			await Task.Delay(TimeSpan.FromSeconds(5));
 
 			var databaseTracker = GetService<IDatabaseServerAccessTracker>();
 			Assert.IsTrue(databaseTracker.ApplyMethodWasCalled);
+
+			allJobs.ForEach(job => job.Stop());
 		}
 	}
 }

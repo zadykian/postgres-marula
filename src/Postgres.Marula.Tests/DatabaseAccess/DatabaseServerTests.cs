@@ -220,7 +220,9 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 		{
 			var databaseServer = GetService<IDatabaseServer>();
 			var averageBloatFraction = await databaseServer.GetAverageBloatFractionAsync();
-			Assert.That(averageBloatFraction >= decimal.Zero && averageBloatFraction < decimal.One);
+			Assert.IsTrue(
+				averageBloatFraction >= decimal.Zero && averageBloatFraction < decimal.One,
+				$"actual averageBloatFraction value: {averageBloatFraction}");
 		}
 	}
 }

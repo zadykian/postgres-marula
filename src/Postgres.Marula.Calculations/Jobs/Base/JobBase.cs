@@ -76,6 +76,9 @@ namespace Postgres.Marula.Calculations.Jobs.Base
 		void IJob.Run() => timer.Start();
 
 		/// <inheritdoc />
+		void IJob.Stop() => timer.Stop();
+
+		/// <inheritdoc />
 		void IDisposable.Dispose() => timer.Dispose();
 	}
 }

@@ -9,5 +9,10 @@ namespace Postgres.Marula.Calculations.Jobs.Base
 		/// Run job.
 		/// </summary>
 		void Run();
+
+		/// <summary>
+		/// Stop job.
+		/// </summary>
+		void Stop();
 	}
 }
