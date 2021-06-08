@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Postgres.Marula.HwInfo;
@@ -13,7 +14,7 @@ namespace Postgres.Marula.Agent
 		/// <summary>
 		/// Entry point method. 
 		/// </summary>
-		private static void Main(string[] args)
+		private static Task Main(string[] args)
 			=> WebHost
 				.CreateDefaultBuilder(args)
 				.UseDefaultServiceProvider(options =>
@@ -25,6 +26,6 @@ namespace Postgres.Marula.Agent
 					.AddComponent<HwInfoAppComponent>()
 					.AddComponent<AgentAppComponent>())
 				.Build()
-				.Run();
+				.RunAsync();
 	}
 }
