@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Postgres.Marula.Infrastructure.TypeDecorators;
@@ -31,8 +32,8 @@ namespace Postgres.Marula.HwInfo
 		/// <inheritdoc />
 		protected override async Task<CoresCount> GetCpuCoresCountAsync()
 		{
-			const string command = "%NUMBER_OF_PROCESSORS%";
-			var coresCountString = await ExecuteCommandAsync(command);
+			await Task.CompletedTask;
+			var coresCountString = Environment.GetEnvironmentVariable("NUMBER_OF_PROCESSORS")!;
 			return CoresCount.Parse(coresCountString);
 		}
 	}
