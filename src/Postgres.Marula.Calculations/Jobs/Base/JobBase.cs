@@ -73,7 +73,7 @@ namespace Postgres.Marula.Calculations.Jobs.Base
 				.Then(intervalTimer => intervalTimer.Elapsed += async (_, _) => await OnTimerElapsed());
 
 		/// <inheritdoc />
-		void IJob.Run() => timer.Start();
+		void IJob.Start() => timer.Start();
 
 		/// <inheritdoc />
 		void IJob.Stop() => timer.Stop();

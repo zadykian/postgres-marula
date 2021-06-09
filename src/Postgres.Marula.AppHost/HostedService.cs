@@ -26,7 +26,7 @@ namespace Postgres.Marula.AppHost
 		/// <inheritdoc />
 		protected override async Task ExecuteAsync(CancellationToken stoppingToken)
 		{
-			jobs.ForEach(job => job.Run());
+			jobs.ForEach(job => job.Start());
 			logger.LogInformation("Marula application is running.");
 			await Task.CompletedTask;
 		}

@@ -6,9 +6,9 @@ namespace Postgres.Marula.Calculations.Jobs.Base
 	public interface IJob
 	{
 		/// <summary>
-		/// Run job.
+		/// Start job.
 		/// </summary>
-		void Run();
+		void Start();
 
 		/// <summary>
 		/// Stop job.
