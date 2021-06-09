@@ -47,22 +47,31 @@ namespace Postgres.Marula.Infrastructure.TypeDecorators
 
 			var (totalBytes, unit) = stringToParse.ParseToTokens();
 
-	        var multiplier = unit switch
-	        {
-	            "B"  => 1,
-	            "kB" => 1024,
-	            "MB" => 1024 * 1024,
-	            "GB" => 1024 * 1024 * 1024,
-	            _    => throw new ArgumentOutOfRangeException(nameof(stringToParse), stringToParse, message: null)
-	        };
+			var multiplier = unit switch
+			{
+				"B"  => 1,
+				"kB" => 1024,
+				"MB" => 1024 * 1024,
+				"GB" => 1024 * 1024 * 1024,
+				_    => throw new ArgumentOutOfRangeException(nameof(stringToParse), stringToParse, message: null)
+			};
 
-	        return new Memory(totalBytes * (ulong) multiplier);
+			return new Memory(totalBytes * (ulong) multiplier);
 		}
 
 		/// <summary>
-		/// Multiplication operator. 
+		/// Multiplication operator.
 		/// </summary>
 		public static Memory operator *(Memory memory, double coefficient) => new(memory.TotalBytes *  (ulong) coefficient);
+
+
+		/// <inheritdoc cref="op_Multiply(Memory,double)"/>
+		public static Memory operator *(double coefficient, Memory memory) => memory * coefficient;
+		
+		/// <summary>
+		/// Division operator.
+		/// </summary>
+		public static Memory operator /(Memory memory, double coefficient) => new(memory.TotalBytes /  (ulong) coefficient);
 
 		/// <summary>
 		/// Implicit cast operator <see cref="ulong"/> -> <see cref="Memory"/>.
