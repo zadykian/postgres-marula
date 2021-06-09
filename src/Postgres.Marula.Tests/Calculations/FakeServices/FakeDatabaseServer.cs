@@ -24,8 +24,15 @@ namespace Postgres.Marula.Tests.Calculations.FakeServices
 		}
 
 		/// <inheritdoc />
-		Task<RawParameterValue> IDatabaseServer.GetRawParameterValueAsync(IParameterLink parameterLink)
-			=> throw new InvalidOperationException();
+		async Task<RawParameterValue> IDatabaseServer.GetRawParameterValueAsync(IParameterLink parameterLink)
+		{
+			await Task.CompletedTask;
+			return parameterLink.Name.ToString() switch
+			{
+				"max_connections" => new RawParameterValue("100"),
+				_ => throw new NotSupportedException($"Parameter '{parameterLink.Name}' can't be handled by fake service.")
+			};
+		}
 
 		/// <inheritdoc />
 		ValueTask<ParameterContext> IDatabaseServer.GetParameterContextAsync(IParameterLink parameterLink)
