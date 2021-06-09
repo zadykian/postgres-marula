@@ -46,11 +46,3 @@ Value depends on total RAM size and current value of **autovacuum_max_workers** 
 ```
 autovacuum_work_mem = 0.1 * {total_ram_size} / {autovacuum_max_workers}
 ```
-
-### effective_cache_size
-
-Sets the planner's assumption about the effective size of the disk cache that is available to a single query.
-
-```
-shared_buffers = 0.75 * {total_ram_size}
-```
