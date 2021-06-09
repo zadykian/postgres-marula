@@ -34,7 +34,7 @@ namespace Postgres.Marula.DatabaseAccess.ConnectionFactory
 		}
 
 		/// <inheritdoc />
-		Task<IDbConnection> IDbConnectionFactory.GetConnectionAsync() => lazyPreparedConnection.Value;
+		async Task<IDbConnection> IDbConnectionFactory.GetConnectionAsync() => await lazyPreparedConnection;
 
 		/// <summary>
 		/// Prepare database connection for future communications with server.

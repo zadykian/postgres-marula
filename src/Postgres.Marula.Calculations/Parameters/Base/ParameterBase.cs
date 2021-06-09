@@ -30,7 +30,7 @@ namespace Postgres.Marula.Calculations.Parameters.Base
 		public virtual IParameterDependencies Dependencies() => ParameterDependencies.Empty;
 
 		/// <inheritdoc />
-		Task<IParameterValue> IParameter.CalculateAsync() => valueAsyncCache.Value;
+		async Task<IParameterValue> IParameter.CalculateAsync() => await valueAsyncCache;
 
 		/// <inheritdoc cref="IParameter.CalculateAsync"/>
 		/// <remarks>
