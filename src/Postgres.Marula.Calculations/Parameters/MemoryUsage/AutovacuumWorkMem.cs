@@ -1,39 +1,49 @@
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Postgres.Marula.Calculations.Parameters.Autovacuum;
 using Postgres.Marula.Calculations.Parameters.Base;
+using Postgres.Marula.Calculations.Parameters.Base.Dependencies;
 using Postgres.Marula.Calculations.ParametersManagement;
 using Postgres.Marula.HwInfo;
 using Postgres.Marula.Infrastructure.TypeDecorators;
 
 // ReSharper disable UnusedType.Global
+// ReSharper disable BuiltInTypeReferenceStyle
+using WorkersCount = System.UInt32;
 
 namespace Postgres.Marula.Calculations.Parameters.MemoryUsage
 {
 	/// <summary>
-	/// [work_mem]
-	/// Sets the base maximum amount of memory to be used by a query operation 
-	/// (such as a sort or hash table) before writing to temporary disk files.
+	/// [autovacuum_work_mem]
+	/// Specifies the maximum amount of memory
+	/// to be used by each autovacuum worker process.
 	/// </summary>
-	internal class WorkMem : MemoryParameterBase
+	internal class AutovacuumWorkMem : MemoryParameterBase
 	{
 		private readonly IHardwareInfo hardwareInfo;
 		private readonly IPgSettings pgSettings;
 
-		public WorkMem(
+		public AutovacuumWorkMem(
 			IHardwareInfo hardwareInfo,
 			IPgSettings pgSettings,
-			ILogger<WorkMem> logger) : base(logger)
+			ILogger<AutovacuumWorkMem> logger) : base(logger)
 		{
 			this.hardwareInfo = hardwareInfo;
 			this.pgSettings = pgSettings;
 		}
 
 		/// <inheritdoc />
+		public override IParameterDependencies Dependencies()
+			=> ParameterDependencies
+				.Empty
+				.DependsOn<AutovacuumMaxWorkers>();
+
+		/// <inheritdoc />
 		protected override async ValueTask<Memory> CalculateValueAsync()
 		{
 			var totalRamSize = await hardwareInfo.TotalRam();
-			var maxConnections = await pgSettings.ReadAsync<uint>("max_connections");
-			return 0.25 * totalRamSize / maxConnections;
+			var autovacuumMaxWorkers = await pgSettings.ReadAsync<AutovacuumMaxWorkers, WorkersCount>();
+			return 0.1 * totalRamSize / autovacuumMaxWorkers;
 		}
 	}
 }

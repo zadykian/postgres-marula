@@ -18,7 +18,7 @@ namespace Postgres.Marula.Calculations.Parameters.MemoryUsage
 
 		public SharedBuffers(
 			IHardwareInfo hardwareInfo,
-			ILogger<MemoryParameterBase> logger) : base(logger)
+			ILogger<SharedBuffers> logger) : base(logger)
 			=> this.hardwareInfo = hardwareInfo;
 
 		/// <inheritdoc />

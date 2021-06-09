@@ -19,7 +19,7 @@ namespace Postgres.Marula.Calculations.Parameters.MemoryUsage
 
 		public MaintenanceWorkMem(
 			IHardwareInfo hardwareInfo,
-			ILogger<MemoryParameterBase> logger) : base(logger)
+			ILogger<MaintenanceWorkMem> logger) : base(logger)
 			=> this.hardwareInfo = hardwareInfo;
 
 		/// <inheritdoc />
