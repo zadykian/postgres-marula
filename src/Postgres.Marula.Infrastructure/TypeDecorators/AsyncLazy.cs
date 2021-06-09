@@ -18,7 +18,9 @@ namespace Postgres.Marula.Infrastructure.TypeDecorators
 		private readonly Func<Task<T>> factoryWithRetry;
 		private Lazy<Task<T>> instance;
 
-		/// <inheritdoc cref="Lazy{T}(Func{T}, LazyThreadSafetyMode)"/>
+		/// <summary>
+		/// Create new instance of <see cref="AsyncLazy{T}"/> which uses <paramref name="factory"/>. 
+		/// </summary>
 		public AsyncLazy(Func<Task<T>> factory)
 		{
 			lockObject = new();
