@@ -16,5 +16,5 @@ Calculation is based on maximum count of child partitions among all partitioned 
 Data is retrieved from **pg_catalog.pg_inherits** system catalog.
 
 ```
-max_locks_per_transaction = 1.1 *
+max_locks_per_transaction = 1.1 * {max_partitions_count}
 ```
