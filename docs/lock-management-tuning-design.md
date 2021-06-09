@@ -14,7 +14,7 @@ This parameter controls the average number of object locks allocated for each tr
 It has **postmaster** context, so it can't be adjusted without server restart.
 
 Calculation is based on maximum count of child partitions among all partitioned and inherited tables.
-Data is retrieved from **pg_catalog.pg_inherits** system catalog; sub-partitions are also taken into account.
+Data is being retrieved from **pg_catalog.pg_inherits** system catalog; sub-partitions are also taken into account.
 
 ```
 max_locks_per_transaction = 1.2 * {max_partitions_count}
