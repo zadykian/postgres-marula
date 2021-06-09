@@ -11,19 +11,11 @@ There is a list of database server parameters which are taken into account durin
 ### shared_buffers
 
 Sets the amount of memory the database server uses for shared memory buffers.
-This parameter has **postmaster** context, so it can't be adjusted without server restart. Value calculated as:
+This parameter has **postmaster** context, so it can't be adjusted without server restart.
+Value is calculated as:
 
 ```
 shared_buffers = 0.25 * {total_ram_size}
-```
-
-### temp_buffers
-
-Sets the maximum amount of memory used for temporary buffers within each database session.
-These are session-local buffers used only for access to temporary tables.
-
-```
-temp_buffers = 
 ```
 
 ### work_mem
@@ -40,6 +32,7 @@ work_mem = 0.25 * {total_ram_size} / max_connections
 
 Specifies the maximum amount of memory to be used by maintenance operations,
 such as VACUUM, CREATE INDEX, and ALTER TABLE ADD FOREIGN KEY.
+Value is calculated as:
 
 ```
 maintenance_work_mem = 0.05 * {total_ram_size}
@@ -48,4 +41,16 @@ maintenance_work_mem = 0.05 * {total_ram_size}
 ### autovacuum_work_mem
 
 Specifies the maximum amount of memory to be used by each autovacuum worker process.
+Value depends on total RAM size and current value of **autovacuum_max_workers** parameter:
 
+```
+autovacuum_work_mem = 0.1 * {total_ram_size} / {autovacuum_max_workers}
+```
+
+### effective_cache_size
+
+Sets the planner's assumption about the effective size of the disk cache that is available to a single query.
+
+```
+shared_buffers = 0.75 * {total_ram_size}
+```
