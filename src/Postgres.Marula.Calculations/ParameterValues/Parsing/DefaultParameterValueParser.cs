@@ -31,6 +31,9 @@ namespace Postgres.Marula.Calculations.ParameterValues.Parsing
 					=> ToFraction(decimalValue, rawRangeParameterValue.ValidRange)
 						.To(fraction => new FractionParameterValue(parameterLink, fraction)),
 
+				{ } when uint.TryParse(rawParameterValue.Value, out var integerValue)
+					=> new IntegerParameterValue(parameterLink, integerValue),
+
 				{ } when rawParameterValue.Value == "on"
 					=> new BooleanParameterValue(parameterLink, value: true),
 

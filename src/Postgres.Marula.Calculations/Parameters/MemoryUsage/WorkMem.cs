@@ -31,6 +31,9 @@ namespace Postgres.Marula.Calculations.Parameters.MemoryUsage
 		/// <inheritdoc />
 		protected override async ValueTask<Memory> CalculateValueAsync()
 		{
+			var totalRamSize = await hardwareInfo.TotalRam();
+			var maxConnections = await pgSettings.ReadAsync<uint>("max_connections");
+			return 0.25 * totalRamSize / maxConnections;
 		}
 	}
 }
