@@ -11,6 +11,7 @@ using Postgres.Marula.Calculations.Parameters.Base;
 using Postgres.Marula.Calculations.ParameterValues.Base;
 using Postgres.Marula.Calculations.ParameterValues.Parsing;
 using Postgres.Marula.Infrastructure.Extensions;
+using Postgres.Marula.Infrastructure.TypeDecorators;
 
 namespace Postgres.Marula.Calculations.ParametersManagement
 {
@@ -68,9 +69,15 @@ namespace Postgres.Marula.Calculations.ParametersManagement
 
 		/// <inheritdoc />
 		async Task<TValue> IPgSettings.ReadAsync<TParameter, TValue>()
-		{
-			var parameterLink = new ParameterLink(typeof(TParameter));
+			=> await ReadAsyncInternal<TValue>(new ParameterLink(typeof(TParameter)));
 
+		/// <inheritdoc />
+		async Task<TValue> IPgSettings.ReadAsync<TValue>(NonEmptyString parameterName)
+			=> await ReadAsyncInternal<TValue>(new ParameterLink(parameterName));
+
+		private async Task<TValue> ReadAsyncInternal<TValue>(IParameterLink parameterLink)
+			where TValue : IEquatable<TValue>
+		{
 			if (valuesCache.TryGetValue(parameterLink, out var cacheEntry))
 			{
 				return ((ParameterValueBase<TValue>) cacheEntry.Value).Value;
@@ -93,6 +100,7 @@ namespace Postgres.Marula.Calculations.ParametersManagement
 		{
 			if (!configuration.General().AutoAdjustmentIsEnabled())
 			{
+				valuesCache.Clear();
 				return;
 			}
 
@@ -102,6 +110,8 @@ namespace Postgres.Marula.Calculations.ParametersManagement
 				.Select(entry => entry.Value)
 				.ToImmutableArray()
 				.To(updatedValues => databaseServer.ApplyToConfigurationAsync(updatedValues));
+
+			valuesCache.Clear();
 		}
 
 		/// <summary>
