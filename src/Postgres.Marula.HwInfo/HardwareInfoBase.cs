@@ -26,10 +26,10 @@ namespace Postgres.Marula.HwInfo
 		}
 
 		/// <inheritdoc />
-		Task<Memory> IHardwareInfo.TotalRam() => ramSizeAsyncCache.Value;
+		async Task<Memory> IHardwareInfo.TotalRam() => await ramSizeAsyncCache;
 
 		/// <inheritdoc />
-		Task<CoresCount> IHardwareInfo.CpuCoresCount() => coresCountAsyncCache.Value;
+		async Task<CoresCount> IHardwareInfo.CpuCoresCount() => await coresCountAsyncCache;
 
 		/// <summary>
 		/// Path to executable.

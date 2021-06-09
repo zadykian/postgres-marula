@@ -53,7 +53,7 @@ namespace Postgres.Marula.Tests
 					FileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, AgentExecutableName()),
 					RedirectStandardError = true,
 					UseShellExecute = false,
-					CreateNoWindow = true,
+					CreateNoWindow = true
 				}
 			};
 

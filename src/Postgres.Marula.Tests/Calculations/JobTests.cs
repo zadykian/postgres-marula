@@ -23,7 +23,7 @@ namespace Postgres.Marula.Tests.Calculations
 		{
 			var allJobs = GetService<IEnumerable<IJob>>().ToImmutableArray();
 
-			allJobs.ForEach(job => job.Run());
+			allJobs.ForEach(job => job.Start());
 
 			await Task.Delay(TimeSpan.FromSeconds(5));
 
