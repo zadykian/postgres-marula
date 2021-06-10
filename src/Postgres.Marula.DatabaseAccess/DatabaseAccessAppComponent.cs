@@ -23,14 +23,7 @@ namespace Postgres.Marula.DatabaseAccess
 	/// <inheritdoc />
 	public class DatabaseAccessAppComponent : IAppComponent
 	{
-		public DatabaseAccessAppComponent()
-			=> Assembly
-				.GetExecutingAssembly()
-				.GetTypes()
-				.Where(type => !type.IsAbstract && type.IsAssignableTo(typeof(SqlMapper.ITypeHandler)))
-				.Select(Activator.CreateInstance)
-				.Cast<dynamic>()
-				.ForEach(typeHandler => SqlMapper.AddTypeHandler(typeHandler));
+		public DatabaseAccessAppComponent() => RegisterDapperTypeHandlers();
 
 		/// <inheritdoc />
 		void IAppComponent.RegisterServices(IServiceCollection serviceCollection)
@@ -43,6 +36,18 @@ namespace Postgres.Marula.DatabaseAccess
 				.AddScoped<IDbConnectionFactory, DefaultDbConnectionFactory>()
 				.AddScoped<IDatabaseServer, DefaultDatabaseServer>()
 				.AddScoped<ISystemStorage, DefaultSystemStorage>();
+
+		/// <summary>
+		/// Register all implementations of <see cref="SqlMapper.ITypeHandler"/> defined in current assembly.
+		/// </summary>
+		private static void RegisterDapperTypeHandlers()
+			=> Assembly
+				.GetExecutingAssembly()
+				.GetTypes()
+				.Where(type => !type.IsAbstract && type.IsAssignableTo(typeof(SqlMapper.ITypeHandler)))
+				.Select(Activator.CreateInstance)
+				.Cast<dynamic>()
+				.ForEach(typeHandler => SqlMapper.AddTypeHandler(typeHandler));
 
 		/// <summary>
 		/// Database connection factory method. 
