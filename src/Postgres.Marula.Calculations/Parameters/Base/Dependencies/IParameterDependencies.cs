@@ -8,7 +8,7 @@ namespace Postgres.Marula.Calculations.Parameters.Base.Dependencies
 	/// <summary>
 	/// Dependencies of parameter.
 	/// </summary>
-	internal interface IParameterDependencies
+	public interface IParameterDependencies
 	{
 		/// <summary>
 		/// Set that current parameter depends on value of parameter <typeparamref name="TParameter"/>.

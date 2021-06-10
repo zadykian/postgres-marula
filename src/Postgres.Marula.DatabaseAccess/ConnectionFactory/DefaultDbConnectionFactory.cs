@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Data;
@@ -19,18 +20,15 @@ namespace Postgres.Marula.DatabaseAccess.ConnectionFactory
 
 		private readonly ISqlScriptsExecutor sqlScriptsExecutor;
 		private readonly INamingConventions namingConventions;
-		private readonly IReadOnlyCollection<IParameterLink> allParameterLinks;
 
 		public DefaultDbConnectionFactory(
 			IDbConnection dbConnection,
 			ISqlScriptsExecutor sqlScriptsExecutor,
-			INamingConventions namingConventions,
-			IEnumerable<IParameterLink> allParameterLinks)
+			INamingConventions namingConventions)
 		{
 			lazyPreparedConnection = new(() => PrepareConnectionAsync(dbConnection));
 			this.sqlScriptsExecutor = sqlScriptsExecutor;
 			this.namingConventions = namingConventions;
-			this.allParameterLinks = allParameterLinks.ToImmutableArray();
 		}
 
 		/// <inheritdoc />
@@ -47,20 +45,19 @@ namespace Postgres.Marula.DatabaseAccess.ConnectionFactory
 				else dbConnection.Open();
 			}
 
-			if (await DatabaseIsPrepared(dbConnection))
+			if (!await DatabaseStructureIsPrepared(dbConnection))
 			{
-				return dbConnection;
+				await sqlScriptsExecutor.ExecuteScriptsAsync(dbConnection);
 			}
 
-			await sqlScriptsExecutor.ExecuteScriptsAsync(dbConnection);
 			await FillParameterDictionaryTable(dbConnection);
 			return dbConnection;
 		}
 
 		/// <summary>
-		/// Figure out is database is prepared already.
+		/// Figure out if database structure is prepared already.
 		/// </summary>
-		private async Task<bool> DatabaseIsPrepared(IDbConnection dbConnection)
+		private async Task<bool> DatabaseStructureIsPrepared(IDbConnection dbConnection)
 		{
 			var commandText = string.Intern($@"
 				select exists (
@@ -77,16 +74,29 @@ namespace Postgres.Marula.DatabaseAccess.ConnectionFactory
 		/// </summary>
 		private async Task FillParameterDictionaryTable(IDbConnection dbConnection)
 		{
-			var parameterNames = allParameterLinks
-				.Select(parameterLink => (string) parameterLink.Name)
-				.ToImmutableArray();
+			var parameterNames = AllParameterNames();
 
 			var commandText = string.Intern($@"
 				insert into {namingConventions.SystemSchemaName}.{namingConventions.ParametersTableName}
 					(name)
-				select unnest(@{nameof(parameterNames)}) as parameter_name;");
+				select unnest(@{nameof(parameterNames)}) as parameter_name
+				on conflict (name) do nothing;");
 
 			await dbConnection.ExecuteAsync(commandText, new {parameterNames});
 		}
+
+		/// <summary>
+		/// Get names of all parameters defined in application. 
+		/// </summary>
+		private static IEnumerable<string> AllParameterNames()
+			=> AppDomain
+				.CurrentDomain
+				.GetAssemblies()
+				.SelectMany(assembly => assembly.GetTypes())
+				.Where(type => !type.IsAbstract && type.IsAssignableTo(typeof(IParameter)))
+				.Select(parameterType => new ParameterLink(parameterType))
+				.Select(link => (string) link.Name)
+				.OrderBy(parameterName => parameterName)
+				.ToImmutableArray();
 	}
 }
