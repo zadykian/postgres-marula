@@ -19,7 +19,7 @@ namespace Postgres.Marula.Calculations.Jobs
 		public BloatFractionLoggingJob(
 			ICalculationsConfiguration configuration,
 			IServiceScopeFactory serviceScopeFactory,
-			ILogger<JobBase> logger) : base(configuration.Autovacuum().Interval(), serviceScopeFactory, logger)
+			ILogger<BloatFractionLoggingJob> logger) : base(configuration.Autovacuum().Interval(), serviceScopeFactory, logger)
 		{
 		}
 
