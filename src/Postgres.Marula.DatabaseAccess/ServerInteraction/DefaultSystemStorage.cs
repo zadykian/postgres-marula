@@ -74,9 +74,9 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 				{
 					$"'{parameterValue.Value.ParameterLink.Name}'",
 
-					$"'{parameterValue.Value.AsString()}'",
+					$"'{parameterValue.Value}'",
 
-					$"'{parameterValue.Value.Unit.StringRepresentation()}'" +
+					$"'{parameterValue.Value.Unit}'" +
 					$"::{namingConventions.SystemSchemaName}.{namingConventions.ParameterUnitEnumName}",
 
 					$"'{parameterValue.CalculationStatus.StringRepresentation()}'" +

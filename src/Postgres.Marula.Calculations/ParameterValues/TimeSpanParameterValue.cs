@@ -16,9 +16,9 @@ namespace Postgres.Marula.Calculations.ParameterValues
 		}
 
 		/// <inheritdoc />
-		public override ParameterUnit Unit => ParameterUnit.Milliseconds;
+		public override IUnit Unit => new IUnit.Milliseconds();
 
-		/// <inheritdoc />
-		public override NonEmptyString AsString() => ((ulong) Value.TotalMilliseconds).ToString();
+		// /// <inheritdoc />
+		// public override NonEmptyString AsString() => ((ulong) Value.TotalMilliseconds).ToString();
 	}
 }

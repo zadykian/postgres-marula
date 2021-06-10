@@ -18,12 +18,12 @@ namespace Postgres.Marula.Calculations.ParameterValues.Base
 		/// <summary>
 		/// Parameter unit.
 		/// </summary>
-		ParameterUnit Unit { get; }
+		IUnit Unit { get; }
 
-		/// <summary>
-		/// Represent parameter value as string without unit. 
-		/// </summary>
-		NonEmptyString AsString();
+		// /// <summary>
+		// /// Represent parameter value as string without unit. 
+		// /// </summary>
+		// NonEmptyString AsString();
 	}
 
 	/// <summary>
@@ -42,10 +42,10 @@ namespace Postgres.Marula.Calculations.ParameterValues.Base
 		IParameterLink IParameterValue.ParameterLink => throw AccessError();
 
 		/// <inheritdoc />
-		ParameterUnit IParameterValue.Unit => throw AccessError();
+		IUnit IParameterValue.Unit => throw AccessError();
 
-		/// <inheritdoc />
-		NonEmptyString IParameterValue.AsString() => throw AccessError();
+		// /// <inheritdoc />
+		// NonEmptyString IParameterValue.AsString() => throw AccessError();
 
 		/// <summary>
 		/// Get exception object to throw on any member access. 

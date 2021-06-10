@@ -9,6 +9,30 @@ namespace Postgres.Marula.Infrastructure.TypeDecorators
 	/// </summary>
 	public readonly struct Memory : IEquatable<Memory>
 	{
+		public enum Unit
+		{
+			Bytes,
+
+			Kilobytes,
+
+			Megabytes,
+
+			Gigabytes,
+
+			Terabytes
+		}
+
+		public (ulong Value, Unit Unit) Normalized()
+			=> TotalBytes switch
+			{
+				< 10UL * 1024                      => (TotalBytes, Unit.Bytes),
+				< 10UL * 1024 * 1024               => (TotalBytes / Kilobyte, Unit.Kilobytes),
+				< 10UL * 1024 * 1024 * 1024        => (TotalBytes / Megabyte, Unit.Megabytes),
+				< 10UL * 1024 * 1024 * 1024 * 1024 => (TotalBytes / Gigabyte, Unit.Gigabytes),
+				_                                  => (TotalBytes / Terabyte, Unit.Terabytes)
+			};
+
+
 		public Memory(ulong totalBytes) => TotalBytes = totalBytes;
 
 		/// <summary>

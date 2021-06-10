@@ -23,7 +23,7 @@ namespace Postgres.Marula.Infrastructure.TypeDecorators
 		public double TotalSeconds => underlyingValue.TotalSeconds;
 
 		/// <inheritdoc />
-		public override string ToString() => underlyingValue.ToString();
+		public override string ToString() => $"{(ulong) TotalMilliseconds}ms";
 
 		/// <inheritdoc />
 		public string ToString(string? format, IFormatProvider? formatProvider) => underlyingValue.ToString(format, formatProvider);
