@@ -18,11 +18,6 @@ namespace Postgres.Marula.Calculations.ParameterValues.Base
 		/// Parameter unit.
 		/// </summary>
 		IUnit Unit { get; }
-
-		// /// <summary>
-		// /// Represent parameter value as string without unit. 
-		// /// </summary>
-		// NonEmptyString AsString();
 	}
 
 	/// <summary>
@@ -42,9 +37,6 @@ namespace Postgres.Marula.Calculations.ParameterValues.Base
 
 		/// <inheritdoc />
 		IUnit IParameterValue.Unit => throw AccessError();
-
-		// /// <inheritdoc />
-		// NonEmptyString IParameterValue.AsString() => throw AccessError();
 
 		/// <summary>
 		/// Get exception object to throw on any member access. 
