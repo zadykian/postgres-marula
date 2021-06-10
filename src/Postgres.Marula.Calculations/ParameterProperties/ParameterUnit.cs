@@ -1,4 +1,3 @@
-using System;
 using Postgres.Marula.Calculations.ParameterProperties.StringRepresentation;
 using Postgres.Marula.Infrastructure.Extensions;
 using Postgres.Marula.Infrastructure.TypeDecorators;
@@ -13,36 +12,32 @@ namespace Postgres.Marula.Calculations.ParameterProperties
 		/// <summary>
 		/// Memory (RAM, disk).
 		/// </summary>
-		record Mem(Memory.Unit Unit) : Unit;
+		record Mem(Memory.Unit Unit) : IUnit;
 
 		/// <summary>
 		/// Milliseconds (interval, timeout and so on).
 		/// </summary>
-		record Milliseconds : Unit;
+		record Milliseconds : IUnit;
 
 		/// <summary>
 		/// Enumeration item.
 		/// </summary>
-		record Enum : Unit;
+		record Enum : IUnit;
 
 		/// <summary>
 		/// Without unit (fraction, integer, etc).
 		/// </summary>
-		record None : Unit;
+		record None : IUnit;
+	}
 
-		/// <summary>
-		/// Base unit type.
-		/// </summary>
-		abstract record Unit : IUnit
-		{
-			/// <inheritdoc />
-			public override string ToString()
-				=> this switch
-				{
-					Mem mem => mem.Unit.StringRepresentation(),
-					_ => GetType().Name.ToSnakeCase()
-				};
-		}
+	public static class UnitExtensions
+	{
+		public static NonEmptyString AsString(this IUnit unit)
+			=> unit switch
+			{
+				IUnit.Mem mem => mem.Unit.StringRepresentation(),
+				_ => unit.GetType().Name.ToSnakeCase()
+			};
 	}
 
 	// /// <summary>

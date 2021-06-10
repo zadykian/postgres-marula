@@ -127,11 +127,7 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 
 				new MemoryParameterValue(
 					new ParameterLink("work_mem"),
-					new Memory(8 * 1024 * 1024)),
-
-				new MemoryParameterValue(
-					new ParameterLink("shared_buffers"),
-					new Memory(2 * 1024 * 1024 * 1024UL))
+					new Memory(8 * 1024 * 1024))
 			};
 
 			var databaseServer = GetService<IDatabaseServer>();

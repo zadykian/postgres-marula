@@ -4,6 +4,7 @@ using Postgres.Marula.Calculations.Parameters.Base;
 using Postgres.Marula.Calculations.ParameterValues;
 using Postgres.Marula.Calculations.ParameterValues.Parsing;
 using Postgres.Marula.Calculations.ParameterValues.Raw;
+using Postgres.Marula.Infrastructure.TypeDecorators;
 using Postgres.Marula.Tests.Calculations.Base;
 
 namespace Postgres.Marula.Tests.Calculations
@@ -26,7 +27,7 @@ namespace Postgres.Marula.Tests.Calculations
 			var parameterValue = parameterValueParser.Parse(parameterLink, rawParameterValue);
 
 			Assert.IsInstanceOf<TimeSpanParameterValue>(parameterValue);
-			Assert.AreEqual(ParameterUnit.Milliseconds, parameterValue.Unit);
+			Assert.AreEqual(new IUnit.Milliseconds(), parameterValue.Unit);
 			Assert.AreEqual(parameterLink, parameterValue.ParameterLink);
 		}
 
@@ -43,7 +44,8 @@ namespace Postgres.Marula.Tests.Calculations
 			var parameterValue = parameterValueParser.Parse(parameterLink, rawParameterValue);
 
 			Assert.IsInstanceOf<MemoryParameterValue>(parameterValue);
-			Assert.AreEqual(ParameterUnit.Bytes, parameterValue.Unit);
+			// 4GB is less then 10GB, so it's normalized to megabytes.
+			Assert.AreEqual(new IUnit.Mem(Memory.Unit.Megabytes), parameterValue.Unit);
 			Assert.AreEqual(parameterLink, parameterValue.ParameterLink);
 		}
 
@@ -60,7 +62,7 @@ namespace Postgres.Marula.Tests.Calculations
 			var parameterValue = parameterValueParser.Parse(parameterLink, rawParameterValue);
 
 			Assert.IsInstanceOf<FractionParameterValue>(parameterValue);
-			Assert.AreEqual(ParameterUnit.None, parameterValue.Unit);
+			Assert.AreEqual(new IUnit.None(), parameterValue.Unit);
 			Assert.AreEqual(parameterLink, parameterValue.ParameterLink);
 		}
 
@@ -77,7 +79,7 @@ namespace Postgres.Marula.Tests.Calculations
 			var parameterValue = parameterValueParser.Parse(parameterLink, rawParameterValue);
 
 			Assert.IsInstanceOf<FractionParameterValue>(parameterValue);
-			Assert.AreEqual(ParameterUnit.None, parameterValue.Unit);
+			Assert.AreEqual(new IUnit.None(), parameterValue.Unit);
 			Assert.AreEqual(parameterLink, parameterValue.ParameterLink);
 		}
 
@@ -94,7 +96,7 @@ namespace Postgres.Marula.Tests.Calculations
 			var parameterValue = parameterValueParser.Parse(parameterLink, rawParameterValue);
 
 			Assert.IsInstanceOf<BooleanParameterValue>(parameterValue);
-			Assert.AreEqual(ParameterUnit.None, parameterValue.Unit);
+			Assert.AreEqual(new IUnit.None(), parameterValue.Unit);
 			Assert.AreEqual(parameterLink, parameterValue.ParameterLink);
 			Assert.AreEqual(underlyingValue, ((BooleanParameterValue) parameterValue).Value);
 		}
@@ -113,7 +115,7 @@ namespace Postgres.Marula.Tests.Calculations
 			var parameterValue = parameterValueParser.Parse(parameterLink, rawParameterValue);
 
 			Assert.IsInstanceOf<IntegerParameterValue>(parameterValue);
-			Assert.AreEqual(ParameterUnit.None, parameterValue.Unit);
+			Assert.AreEqual(new IUnit.None(), parameterValue.Unit);
 			Assert.AreEqual(parameterLink, parameterValue.ParameterLink);
 			Assert.AreEqual(underlyingValue, ((IntegerParameterValue) parameterValue).Value);
 		}
