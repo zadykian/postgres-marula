@@ -19,7 +19,7 @@ namespace Postgres.Marula.Calculations.Parameters.QueryPlanning
 
 		public EffectiveCacheSize(
 			IHardwareInfo hardwareInfo,
-			ILogger<MemoryParameterBase> logger) : base(logger)
+			ILogger<EffectiveCacheSize> logger) : base(logger)
 			=> this.hardwareInfo = hardwareInfo;
 
 		/// <inheritdoc />

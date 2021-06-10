@@ -1,5 +1,7 @@
 using System;
 using System.Data;
+using System.Linq;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using Dapper;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,7 +10,6 @@ using Postgres.Marula.Calculations.ExternalDependencies;
 using Postgres.Marula.DatabaseAccess.Configuration;
 using Postgres.Marula.DatabaseAccess.ConnectionFactory;
 using Postgres.Marula.DatabaseAccess.Conventions;
-using Postgres.Marula.DatabaseAccess.DapperTypeHandlers;
 using Postgres.Marula.DatabaseAccess.ServerInteraction;
 using Postgres.Marula.DatabaseAccess.SqlScripts.Executor;
 using Postgres.Marula.DatabaseAccess.SqlScripts.Provider;
@@ -22,13 +23,7 @@ namespace Postgres.Marula.DatabaseAccess
 	/// <inheritdoc />
 	public class DatabaseAccessAppComponent : IAppComponent
 	{
-		public DatabaseAccessAppComponent()
-		{
-			SqlMapper.AddTypeHandler(new NonEmptyStringTypeHandler());
-			SqlMapper.AddTypeHandler(new DatabaseObjectNameTypeHandler());
-			SqlMapper.AddTypeHandler(new LogSeqNumberTypeHandler());
-			SqlMapper.AddTypeHandler(new FractionTypeHandler());
-		}
+		public DatabaseAccessAppComponent() => RegisterDapperTypeHandlers();
 
 		/// <inheritdoc />
 		void IAppComponent.RegisterServices(IServiceCollection serviceCollection)
@@ -41,6 +36,18 @@ namespace Postgres.Marula.DatabaseAccess
 				.AddScoped<IDbConnectionFactory, DefaultDbConnectionFactory>()
 				.AddScoped<IDatabaseServer, DefaultDatabaseServer>()
 				.AddScoped<ISystemStorage, DefaultSystemStorage>();
+
+		/// <summary>
+		/// Register all implementations of <see cref="SqlMapper.ITypeHandler"/> defined in current assembly.
+		/// </summary>
+		private static void RegisterDapperTypeHandlers()
+			=> Assembly
+				.GetExecutingAssembly()
+				.GetTypes()
+				.Where(type => !type.IsAbstract && type.IsAssignableTo(typeof(SqlMapper.ITypeHandler)))
+				.Select(Activator.CreateInstance)
+				.Cast<dynamic>()
+				.ForEach(typeHandler => SqlMapper.AddTypeHandler(typeHandler));
 
 		/// <summary>
 		/// Database connection factory method. 

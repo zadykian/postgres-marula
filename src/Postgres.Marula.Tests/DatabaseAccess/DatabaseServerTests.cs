@@ -224,5 +224,21 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 				averageBloatFraction >= decimal.Zero && averageBloatFraction <= decimal.One,
 				$"actual averageBloatFraction value: {averageBloatFraction}");
 		}
+
+		/// <summary>
+		/// Get all parent to child links between tables in database.
+		/// </summary>
+		[Test]
+		public async Task GetAllHierarchicalLinksTest()
+		{
+			var databaseServer = GetService<IDatabaseServer>();
+			var parentToChildLinks = await databaseServer.GetAllHierarchicalLinks().ToArrayAsync();
+
+			Assert.AreNotEqual(0, parentToChildLinks.Length);
+
+			parentToChildLinks
+				.All(link => !link.Equals(default(ParentToChild)))
+				.To(Assert.IsTrue);
+		}
 	}
 }

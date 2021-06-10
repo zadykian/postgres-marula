@@ -52,5 +52,10 @@ namespace Postgres.Marula.Calculations.ExternalDependencies
 		/// Get average bloat fraction among non-empty tables. 
 		/// </summary>
 		Task<Fraction> GetAverageBloatFractionAsync();
+
+		/// <summary>
+		/// Get all parent to child links between tables in database.
+		/// </summary>
+		IAsyncEnumerable<ParentToChild> GetAllHierarchicalLinks();
 	}
 }
