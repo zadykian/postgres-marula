@@ -32,7 +32,6 @@ namespace Postgres.Marula.Calculations
 				.AddScoped<IBloatAnalysis, BloatAnalysis>()
 				.AddSingleton<IHardwareInfo, RemoteHardwareInfo>()
 				.AddBasedOn<IParameter>(ServiceLifetime.Scoped)
-				.Forward<IParameter, IParameterLink>()
 				.To(RegisterPipelineServices)
 				.AddBasedOn<IJob>();
 

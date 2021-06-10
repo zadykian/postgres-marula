@@ -1,7 +1,6 @@
 using Postgres.Marula.Calculations.ParameterProperties;
 using Postgres.Marula.Calculations.Parameters.Base;
 using Postgres.Marula.Calculations.ParameterValues.Base;
-using Postgres.Marula.Infrastructure.TypeDecorators;
 
 namespace Postgres.Marula.Calculations.ParameterValues
 {
@@ -16,9 +15,6 @@ namespace Postgres.Marula.Calculations.ParameterValues
 		}
 
 		/// <inheritdoc />
-		public override ParameterUnit Unit => ParameterUnit.None;
-
-		/// <inheritdoc />
-		public override NonEmptyString AsString() => Value.ToString().ToLower();
+		public override IUnit Unit => new IUnit.None();
 	}
 }

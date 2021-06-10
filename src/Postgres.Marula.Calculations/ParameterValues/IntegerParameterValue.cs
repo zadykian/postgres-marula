@@ -15,6 +15,6 @@ namespace Postgres.Marula.Calculations.ParameterValues
 		}
 
 		/// <inheritdoc />
-		public override ParameterUnit Unit => ParameterUnit.None;
+		public override IUnit Unit => new IUnit.None();
 	}
 }

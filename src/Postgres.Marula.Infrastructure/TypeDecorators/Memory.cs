@@ -16,8 +16,36 @@ namespace Postgres.Marula.Infrastructure.TypeDecorators
 		/// </summary>
 		public ulong TotalBytes { get; }
 
+		/// <summary>
+		/// Normalize memory value based on its' size. 
+		/// </summary>
+		public (ulong Value, Unit Unit) Normalized()
+			=> TotalBytes switch
+			{
+				< 10UL * 1024                      => (TotalBytes, Unit.Bytes),
+				< 10UL * 1024 * 1024               => (TotalBytes / Kilobyte, Unit.Kilobytes),
+				< 10UL * 1024 * 1024 * 1024        => (TotalBytes / Megabyte, Unit.Megabytes),
+				< 10UL * 1024 * 1024 * 1024 * 1024 => (TotalBytes / Gigabyte, Unit.Gigabytes),
+				_                                  => (TotalBytes / Terabyte, Unit.Terabytes)
+			};
+
 		/// <inheritdoc />
-		public override string ToString() => $"{TotalBytes} bytes";
+		public override string ToString()
+		{
+			var (value, unit) = Normalized();
+
+			var unitString = unit switch
+			{
+				Unit.Bytes     => "B",
+				Unit.Kilobytes => "kB",
+				Unit.Megabytes => "MB",
+				Unit.Gigabytes => "GB",
+				Unit.Terabytes => "TB",
+				_ => throw new ArgumentOutOfRangeException()
+			};
+
+			return $"{value}{unitString}";
+		}
 
 		#region EqualityMembers
 
@@ -30,6 +58,45 @@ namespace Postgres.Marula.Infrastructure.TypeDecorators
 		/// <inheritdoc />
 		public override int GetHashCode() => TotalBytes.GetHashCode();
 
+		/// <summary>
+		/// Equality operator. 
+		/// </summary>
+		public static bool operator ==(Memory left, Memory right) => left.Equals(right);
+
+		/// <summary>
+		/// Inequality operator. 
+		/// </summary>
+		public static bool operator !=(Memory left, Memory right) => !(left == right);
+
+		#endregion
+
+		#region Constants
+
+		/// <summary>
+		/// One byte - 1B.
+		/// </summary>
+		public static Memory Byte => new(1);
+
+		/// <summary>
+		/// One kilobyte - 1024B.
+		/// </summary>
+		public static Memory Kilobyte => new(1024);
+
+		/// <summary>
+		/// One megabyte - 1024kB.
+		/// </summary>
+		public static Memory Megabyte => new(1024D * Kilobyte);
+
+		/// <summary>
+		/// One gigabyte - 1024MB.
+		/// </summary>
+		public static Memory Gigabyte => new(1024D * Megabyte);
+
+		/// <summary>
+		/// One terabyte - 1024GB.
+		/// </summary>
+		public static Memory Terabyte => new(1024D * Gigabyte);
+
 		#endregion
 
 		/// <summary>
@@ -40,23 +107,27 @@ namespace Postgres.Marula.Infrastructure.TypeDecorators
 		/// </exception>
 		public static Memory Parse(NonEmptyString stringToParse)
 		{
-			if (!Regex.IsMatch(stringToParse, @"^[0-9]+\s*(B|kB|MB|GB)$"))
+			ArgumentException InvalidFormat()
+				=> new($"Input string '{stringToParse}' has invalid format.", nameof(stringToParse));
+
+			if (!Regex.IsMatch(stringToParse, @"^[0-9]+\s*(B|kB|MB|GB|TB)$"))
 			{
-				throw new ArgumentException($"Input string '{stringToParse}' has invalid format.", nameof(stringToParse));
+				throw InvalidFormat();
 			}
 
-			var (totalBytes, unit) = stringToParse.ParseToTokens();
+			var (numericValue, unit) = stringToParse.ParseToTokens();
 
 			var multiplier = unit switch
 			{
-				"B"  => 1,
-				"kB" => 1024,
-				"MB" => 1024 * 1024,
-				"GB" => 1024 * 1024 * 1024,
-				_    => throw new ArgumentOutOfRangeException(nameof(stringToParse), stringToParse, message: null)
+				"B"  => Byte,
+				"kB" => Kilobyte,
+				"MB" => Megabyte,
+				"GB" => Gigabyte,
+				"TB" => Terabyte,
+				_    => throw InvalidFormat()
 			};
 
-			return new Memory(totalBytes * (ulong) multiplier);
+			return new Memory(numericValue * (ulong) multiplier);
 		}
 
 		/// <summary>
@@ -67,7 +138,7 @@ namespace Postgres.Marula.Infrastructure.TypeDecorators
 
 		/// <inheritdoc cref="op_Multiply(Memory,double)"/>
 		public static Memory operator *(double coefficient, Memory memory) => memory * coefficient;
-		
+
 		/// <summary>
 		/// Division operator.
 		/// </summary>
@@ -82,5 +153,36 @@ namespace Postgres.Marula.Infrastructure.TypeDecorators
 		/// Implicit cast operator <see cref="Memory"/> -> <see cref="ulong"/>.
 		/// </summary>
 		public static implicit operator ulong(Memory memory) => memory.TotalBytes;
+
+		/// <summary>
+		/// Memory unit.
+		/// </summary>
+		public enum Unit
+		{
+			/// <summary>
+			/// Bytes.
+			/// </summary>
+			Bytes,
+
+			/// <summary>
+			/// Kilobytes.
+			/// </summary>
+			Kilobytes,
+
+			/// <summary>
+			/// Megabytes.
+			/// </summary>
+			Megabytes,
+
+			/// <summary>
+			/// Gigabytes.
+			/// </summary>
+			Gigabytes,
+
+			/// <summary>
+			/// Terabytes.
+			/// </summary>
+			Terabytes
+		}
 	}
 }

@@ -7,7 +7,7 @@ namespace Postgres.Marula.Calculations.Parameters.Base
 	/// <summary>
 	/// Database server parameter.
 	/// </summary>
-	internal interface IParameter : IParameterLink
+	public interface IParameter : IParameterLink
 	{
 		/// <summary>
 		/// Dependencies of parameter.

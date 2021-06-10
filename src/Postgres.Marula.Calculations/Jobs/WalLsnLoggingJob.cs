@@ -19,7 +19,7 @@ namespace Postgres.Marula.Calculations.Jobs
 		public WalLsnLoggingJob(
 			ICalculationsConfiguration configuration,
 			IServiceScopeFactory serviceScopeFactory,
-			ILogger<JobBase> logger) : base(configuration.Wal().Interval(), serviceScopeFactory, logger)
+			ILogger<WalLsnLoggingJob> logger) : base(configuration.Wal().Interval(), serviceScopeFactory, logger)
 		{
 		}
 

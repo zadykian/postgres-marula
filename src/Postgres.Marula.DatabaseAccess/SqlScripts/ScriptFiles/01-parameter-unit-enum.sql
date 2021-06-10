@@ -4,8 +4,12 @@ set search_path to SYSTEM_SCHEMA_NAME_TO_REPLACE;
 
 create type UNIT_ENUM_NAME_TO_REPLACE as enum
 (
-	'milliseconds',
 	'bytes',
+	'kilobytes',
+	'megabytes',
+	'gigabytes',
+	'terabytes',
+	'milliseconds',
 	'enum',
 	'none'
 );

@@ -1,7 +1,6 @@
 using System;
 using Postgres.Marula.Calculations.ParameterProperties;
 using Postgres.Marula.Calculations.Parameters.Base;
-using Postgres.Marula.Infrastructure.TypeDecorators;
 
 namespace Postgres.Marula.Calculations.ParameterValues.Base
 {
@@ -18,12 +17,7 @@ namespace Postgres.Marula.Calculations.ParameterValues.Base
 		/// <summary>
 		/// Parameter unit.
 		/// </summary>
-		ParameterUnit Unit { get; }
-
-		/// <summary>
-		/// Represent parameter value as string without unit. 
-		/// </summary>
-		NonEmptyString AsString();
+		IUnit Unit { get; }
 	}
 
 	/// <summary>
@@ -42,10 +36,7 @@ namespace Postgres.Marula.Calculations.ParameterValues.Base
 		IParameterLink IParameterValue.ParameterLink => throw AccessError();
 
 		/// <inheritdoc />
-		ParameterUnit IParameterValue.Unit => throw AccessError();
-
-		/// <inheritdoc />
-		NonEmptyString IParameterValue.AsString() => throw AccessError();
+		IUnit IParameterValue.Unit => throw AccessError();
 
 		/// <summary>
 		/// Get exception object to throw on any member access. 

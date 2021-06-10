@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
 using Postgres.Marula.Calculations.ExternalDependencies;
+using Postgres.Marula.Calculations.ParameterProperties;
 using Postgres.Marula.Calculations.ParameterProperties.StringRepresentation;
 using Postgres.Marula.Calculations.ParameterValues.Base;
 using Postgres.Marula.DatabaseAccess.ConnectionFactory;
@@ -74,9 +75,9 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 				{
 					$"'{parameterValue.Value.ParameterLink.Name}'",
 
-					$"'{parameterValue.Value.AsString()}'",
+					$"'{parameterValue.Value}'",
 
-					$"'{parameterValue.Value.Unit.StringRepresentation()}'" +
+					$"'{parameterValue.Value.Unit.AsString()}'" +
 					$"::{namingConventions.SystemSchemaName}.{namingConventions.ParameterUnitEnumName}",
 
 					$"'{parameterValue.CalculationStatus.StringRepresentation()}'" +

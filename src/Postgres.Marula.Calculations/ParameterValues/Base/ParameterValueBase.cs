@@ -1,7 +1,6 @@
 using System;
 using Postgres.Marula.Calculations.ParameterProperties;
 using Postgres.Marula.Calculations.Parameters.Base;
-using Postgres.Marula.Infrastructure.TypeDecorators;
 
 namespace Postgres.Marula.Calculations.ParameterValues.Base
 {
@@ -24,13 +23,10 @@ namespace Postgres.Marula.Calculations.ParameterValues.Base
 		public IParameterLink ParameterLink { get; }
 
 		/// <inheritdoc />
-		public abstract ParameterUnit Unit { get; }
+		public abstract IUnit Unit { get; }
 
 		/// <inheritdoc />
-		public virtual NonEmptyString AsString() => Value.ToString()!;
-
-		/// <inheritdoc />
-		public override string ToString() => $"{ParameterLink.Name}: {AsString()}{Unit.NumberSuffix()}";
+		public override string ToString() => Value.ToString()!;
 
 		#region EqualityMembers
 
@@ -39,7 +35,7 @@ namespace Postgres.Marula.Calculations.ParameterValues.Base
 		{
 			if (ReferenceEquals(null, other)) return false;
 			if (ReferenceEquals(this, other)) return true;
-			return Value.Equals(other.Value) && ParameterLink.Equals(other.ParameterLink) && Unit == other.Unit;
+			return Value.Equals(other.Value) && ParameterLink.Equals(other.ParameterLink) && Unit.Equals(other.Unit);
 		}
 
 		/// <inheritdoc />
@@ -52,7 +48,7 @@ namespace Postgres.Marula.Calculations.ParameterValues.Base
 		}
 
 		/// <inheritdoc />
-		public override int GetHashCode() => HashCode.Combine(Value, ParameterLink, (int) Unit);
+		public override int GetHashCode() => HashCode.Combine(Value, ParameterLink, Unit);
 
 		#endregion
 	}

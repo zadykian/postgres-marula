@@ -2,7 +2,6 @@ using System;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 using Postgres.Marula.Calculations.ExternalDependencies;
 using Postgres.Marula.Calculations.ParameterProperties;
@@ -20,18 +19,6 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 	/// </summary>
 	internal class SystemStorageTests : DatabaseAccessTestFixtureBase
 	{
-		/// <inheritdoc />
-		protected override void ConfigureServices(IServiceCollection serviceCollection)
-		{
-			base.ConfigureServices(serviceCollection);
-
-			serviceCollection
-				.AddSingleton<IParameterLink>(new ParameterLink("deadlock_timeout"))
-				.AddSingleton<IParameterLink>(new ParameterLink("log_rotation_size"))
-				.AddSingleton<IParameterLink>(new ParameterLink("wal_buffers"))
-				.AddSingleton<IParameterLink>(new ParameterLink("shared_buffers"));
-		}
-
 		/// <summary>
 		/// Save empty collection of values. 
 		/// </summary>
@@ -53,19 +40,19 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 			{
 				new(
 					new TimeSpanParameterValue(
-						new ParameterLink("deadlock_timeout"),
+						new ParameterLink("autovacuum_naptime"),
 						TimeSpan.FromMilliseconds(value: 800)),
 					CalculationStatus.Applied),
 
 				new(
 					new MemoryParameterValue(
-						new ParameterLink("log_rotation_size"),
-						new Memory(16 * 1024 * 1024)),
+						new ParameterLink("effective_cache_size"),
+						new Memory(4 * 1024 * 1024 * 1024UL)),
 					CalculationStatus.RequiresConfirmation),
 
 				new(
 					new MemoryParameterValue(
-						new ParameterLink("wal_buffers"),
+						new ParameterLink("work_mem"),
 						new Memory(8 * 1024 * 1024)),
 					CalculationStatus.RequiresServerRestart),
 

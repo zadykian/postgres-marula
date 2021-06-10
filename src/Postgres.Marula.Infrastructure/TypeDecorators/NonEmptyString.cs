@@ -5,7 +5,7 @@ namespace Postgres.Marula.Infrastructure.TypeDecorators
 	/// <summary>
 	/// Non-empty string.
 	/// </summary>
-	public readonly struct NonEmptyString : IEquatable<NonEmptyString>
+	public readonly struct NonEmptyString : IEquatable<NonEmptyString>, IComparable<NonEmptyString>, IComparable
 	{
 		private readonly string underlyingValue;
 
@@ -38,6 +38,29 @@ namespace Postgres.Marula.Infrastructure.TypeDecorators
 
 		/// <inheritdoc />
 		public override int GetHashCode() => underlyingValue.GetHashCode();
+
+		/// <inheritdoc />
+		public int CompareTo(NonEmptyString other)
+			=> string.Compare(underlyingValue, other.underlyingValue, StringComparison.InvariantCulture);
+
+		/// <inheritdoc />
+		public int CompareTo(object? obj)
+		{
+			if (ReferenceEquals(null, obj)) return 1;
+			return obj is NonEmptyString other
+				? CompareTo(other)
+				: throw new ArgumentException($"Object must be of type {nameof(NonEmptyString)}");
+		}
+
+		/// <summary>
+		/// Equality operator.
+		/// </summary>
+		public static bool operator ==(NonEmptyString left, NonEmptyString right) => left.Equals(right);
+
+		/// <summary>
+		/// Inequality operator.
+		/// </summary>
+		public static bool operator !=(NonEmptyString left, NonEmptyString right) => !(left == right);
 
 		#endregion
 

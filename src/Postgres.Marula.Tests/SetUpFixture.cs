@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Threading.Tasks;
 using NUnit.Framework;
 using Postgres.Marula.Agent;
 using Postgres.Marula.Infrastructure.Extensions;
@@ -40,7 +41,12 @@ namespace Postgres.Marula.Tests
 		/// Kill agent process.
 		/// </summary>
 		[OneTimeTearDown]
-		public void OneTimeTearDown() => agentApiProcess.Kill();
+		public async Task OneTimeTearDown()
+		{
+			// let already running jobs to finish
+			await Task.Delay(millisecondsDelay: 5000);
+			agentApiProcess.Kill();
+		}
 
 		/// <summary>
 		/// Create agent web api process. 
