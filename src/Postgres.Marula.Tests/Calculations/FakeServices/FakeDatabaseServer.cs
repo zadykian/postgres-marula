@@ -29,8 +29,8 @@ namespace Postgres.Marula.Tests.Calculations.FakeServices
 			await Task.CompletedTask;
 			return parameterLink.Name.ToString() switch
 			{
-				"max_connections"           => new RawParameterValue("100"),
-				"max_locks_per_transaction" => new RawParameterValue("8"),
+				"max_connections"           => new RawParameterValue("100", RawValueType.Integer),
+				"max_locks_per_transaction" => new RawParameterValue("8", RawValueType.Integer),
 				_ => throw new NotSupportedException($"Parameter '{parameterLink.Name}' can't be handled by fake service.")
 			};
 		}

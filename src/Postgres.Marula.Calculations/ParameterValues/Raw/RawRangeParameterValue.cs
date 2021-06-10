@@ -5,7 +5,10 @@ namespace Postgres.Marula.Calculations.ParameterValues.Raw
 	/// <inheritdoc />
 	public class RawRangeParameterValue : RawParameterValue
 	{
-		public RawRangeParameterValue(NonEmptyString value, Range<decimal> validRange) : base(value)
+		public RawRangeParameterValue(
+			NonEmptyString value,
+			RawValueType type,
+			Range<decimal> validRange) : base(value, type)
 			=> ValidRange = validRange;
 
 		/// <summary>

@@ -97,19 +97,26 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 		async Task<RawParameterValue> IDatabaseServer.GetRawParameterValueAsync(IParameterLink parameterLink)
 		{
 			var commandText = string.Intern($@"
-				select current_setting(name), min_val, max_val
+				select
+					current_setting(name),
+					vartype,
+					min_val,
+					max_val
 				from pg_catalog.pg_settings
 				where name = @{nameof(IParameterLink.Name)};");
 
 			var connection = await Connection();
 
-			var (value, minValue, maxValue) = await connection.QuerySingleAsync<(NonEmptyString, decimal?, decimal?)>(
-				commandText,
-				new {parameterLink.Name});
+			var (value, typeString, minValue, maxValue) = await connection
+				.QuerySingleAsync<(NonEmptyString, NonEmptyString, decimal?, decimal?)>(
+					commandText,
+					new {parameterLink.Name});
+
+			var rawType = typeString.ByStringRepresentation<RawValueType>();
 
 			return minValue.HasValue && maxValue.HasValue
-				? new RawRangeParameterValue(value, (minValue.Value, maxValue.Value))
-				: new RawParameterValue(value);
+				? new RawRangeParameterValue(value, rawType, (minValue.Value, maxValue.Value))
+				: new RawParameterValue(value, rawType);
 		}
 
 		/// <summary>
