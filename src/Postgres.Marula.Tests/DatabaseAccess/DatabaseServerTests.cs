@@ -41,12 +41,14 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 				(new ParameterLink("autovacuum"), false),
 				(new ParameterLink("autovacuum_vacuum_cost_delay"), true),
 				(new ParameterLink("cursor_tuple_fraction"), true),
-				(new ParameterLink("deadlock_timeout"), true),
 
+				(new ParameterLink("deadlock_timeout"), true),
 				(new ParameterLink("log_rotation_age"), true),
 				(new ParameterLink("checkpoint_flush_after"), true),
+
 				(new ParameterLink("track_counts"), false),
-				(new ParameterLink("autovacuum_vacuum_scale_factor"), true)
+				(new ParameterLink("autovacuum_vacuum_scale_factor"), true),
+				(new ParameterLink("max_connections"), true)
 			};
 
 		/// <summary>
