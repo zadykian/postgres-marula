@@ -52,6 +52,16 @@ namespace Postgres.Marula.Infrastructure.TypeDecorators
 				: throw new ArgumentException($"Object must be of type {nameof(NonEmptyString)}");
 		}
 
+		/// <summary>
+		/// Equality operator.
+		/// </summary>
+		public static bool operator ==(NonEmptyString left, NonEmptyString right) => left.Equals(right);
+
+		/// <summary>
+		/// Inequality operator.
+		/// </summary>
+		public static bool operator !=(NonEmptyString left, NonEmptyString right) => !(left == right);
+
 		#endregion
 
 		/// <summary>
