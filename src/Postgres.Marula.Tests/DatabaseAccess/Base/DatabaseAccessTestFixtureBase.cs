@@ -30,7 +30,32 @@ namespace Postgres.Marula.Tests.DatabaseAccess.Base
 			var dbConnection = GetService<IDbConnection>();
 			dbConnection.Open();
 			await dbConnection.ExecuteAsync(commandText);
+			await dbConnection.ExecuteAsync(TestDdlScript());
 		}
+
+		/// <summary>
+		/// DDL script to create test objects in separate schema.
+		/// </summary>
+		private static NonEmptyString TestDdlScript()
+			=> @"
+				drop schema if exists marula_tool_unit_tests_data cascade;
+				create schema marula_tool_unit_tests_data;
+				set search_path to marula_tool_unit_tests_data;
+
+				create table parent_table
+				(
+					id int primary key generated always as identity,
+					name text
+				)
+				partition by hash(id);
+
+				create table partition_0
+				partition of parent_table
+				for values with (modulus 2, remainder 0);
+
+				create table partition_1
+				partition of parent_table
+				for values with (modulus 2, remainder 1);";
 
 		/// <inheritdoc />
 		protected override void ConfigureServices(IServiceCollection serviceCollection)

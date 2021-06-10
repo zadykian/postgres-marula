@@ -25,5 +25,7 @@ namespace Postgres.Marula.Calculations.ExternalDependencies
 		/// Child table fill name.
 		/// </summary>
 		public SchemaQualifiedObjectName Child { get; }
+
+		public override string ToString() => $"{Parent} <- {Child}";
 	}
 }
