@@ -26,18 +26,22 @@ namespace Postgres.Marula.Calculations.ParameterValues.Parsing
 						.Parse(rawParameterValue.Value)
 						.To(memory => new MemoryParameterValue(parameterLink, memory)),
 
-				{ } when TryParseDecimal(rawParameterValue.Value, out var decimalValue)
+				{ } when rawParameterValue.Type == RawValueType.Real
+				         && TryParseDecimal(rawParameterValue.Value, out var decimalValue)
 				         && rawParameterValue is RawRangeParameterValue rawRangeParameterValue
 					=> ToFraction(decimalValue, rawRangeParameterValue.ValidRange)
 						.To(fraction => new FractionParameterValue(parameterLink, fraction)),
 
-				{ } when uint.TryParse(rawParameterValue.Value, out var integerValue)
+				{ } when rawParameterValue.Type == RawValueType.Integer
+				         && uint.TryParse(rawParameterValue.Value, out var integerValue)
 					=> new IntegerParameterValue(parameterLink, integerValue),
 
-				{ } when rawParameterValue.Value == "on"
+				{ } when rawParameterValue.Type == RawValueType.Bool
+				         && rawParameterValue.Value == "on"
 					=> new BooleanParameterValue(parameterLink, value: true),
 
-				{ } when rawParameterValue.Value == "off"
+				{ } when rawParameterValue.Type == RawValueType.Bool
+				         && rawParameterValue.Value == "off"
 					=> new BooleanParameterValue(parameterLink, value: false),
 
 				_ => throw new ParameterValueParseException(
