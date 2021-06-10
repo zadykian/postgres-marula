@@ -23,7 +23,7 @@ namespace Postgres.Marula.Calculations.ParameterProperties
 		Enum = 3,
 
 		/// <summary>
-		/// Without unit (for example, factor).
+		/// Without unit (fraction, integer, etc).
 		/// </summary>
 		None = 4
 	}

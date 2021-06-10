@@ -48,7 +48,7 @@ namespace Postgres.Marula.Tests.Calculations
 		}
 
 		/// <summary>
-		/// Parse value of parameter represented as fraction in range [0..1]. 
+		/// Parse value of parameter represented as fraction in range [0..1].
 		/// </summary>
 		[Test]
 		public void ParseFactionParameterValueTest()
@@ -65,7 +65,7 @@ namespace Postgres.Marula.Tests.Calculations
 		}
 
 		/// <summary>
-		/// Parse value of parameter represented as percents in range [0..100]. 
+		/// Parse value of parameter represented as percents in range [0..100].
 		/// </summary>
 		[Test]
 		public void ParsePercentsFactionParameterValueTest()
@@ -82,7 +82,7 @@ namespace Postgres.Marula.Tests.Calculations
 		}
 
 		/// <summary>
-		/// Parse boolean parameter value. 
+		/// Parse boolean parameter value.
 		/// </summary>
 		[Test]
 		public void ParseBooleanParameterValueTest([Values(true, false)] bool underlyingValue)
@@ -97,6 +97,25 @@ namespace Postgres.Marula.Tests.Calculations
 			Assert.AreEqual(ParameterUnit.None, parameterValue.Unit);
 			Assert.AreEqual(parameterLink, parameterValue.ParameterLink);
 			Assert.AreEqual(underlyingValue, ((BooleanParameterValue) parameterValue).Value);
+		}
+
+		/// <summary>
+		/// Parse integer parameter value with range.
+		/// </summary>
+		[Test]
+		public void ParseIntegerParameterValueWithRangeTest()
+		{
+			const int underlyingValue = 100;
+			var parameterLink = new ParameterLink("max_connections");
+			var rawParameterValue = new RawParameterValue(underlyingValue.ToString());
+
+			var parameterValueParser = GetService<IParameterValueParser>();
+			var parameterValue = parameterValueParser.Parse(parameterLink, rawParameterValue);
+
+			Assert.IsInstanceOf<IntegerParameterValue>(parameterValue);
+			Assert.AreEqual(ParameterUnit.None, parameterValue.Unit);
+			Assert.AreEqual(parameterLink, parameterValue.ParameterLink);
+			Assert.AreEqual(underlyingValue, ((IntegerParameterValue) parameterValue).Value);
 		}
 	}
 }

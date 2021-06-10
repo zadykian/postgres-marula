@@ -118,20 +118,20 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 			var parameterValues = new IParameterValue[]
 			{
 				new TimeSpanParameterValue(
-					new ParameterLink("deadlock_timeout"),
-					TimeSpan.FromMilliseconds(value: 800)),
+					new ParameterLink("autovacuum_naptime"),
+					TimeSpan.FromSeconds(value: 12)),
 
 				new MemoryParameterValue(
-					new ParameterLink("log_rotation_size"),
-					new Memory(16 * 1024 * 1024)),
+					new ParameterLink("effective_cache_size"),
+					new Memory(4 * 1024 * 1024 * 1024UL)),
 
-				new TimeSpanParameterValue(
-					new ParameterLink("log_rotation_age"),
-					TimeSpan.FromHours(value: 12)),
+				new MemoryParameterValue(
+					new ParameterLink("work_mem"),
+					new Memory(8 * 1024 * 1024)),
 
-				new FractionParameterValue(
-					new ParameterLink("autovacuum_vacuum_scale_factor"),
-					value: 0.008M)
+				new MemoryParameterValue(
+					new ParameterLink("shared_buffers"),
+					new Memory(2 * 1024 * 1024 * 1024UL))
 			};
 
 			var databaseServer = GetService<IDatabaseServer>();
