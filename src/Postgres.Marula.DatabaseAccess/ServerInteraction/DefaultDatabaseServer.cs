@@ -224,13 +224,13 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 						parent_class.relname) as {nameof(ParentToChild.Parent)},
 					concat_ws('.',
 						child_class.relnamespace::regnamespace,
-						child_class.relname) as {nameof(ParentToChild.Child)}
+						child_class.relname)  as {nameof(ParentToChild.Child)}
 				from pg_catalog.pg_inherits
 				inner join pg_catalog.pg_class parent_class
 					on pg_inherits.inhparent = parent_class.oid
 				inner join pg_catalog.pg_class child_class
 					on pg_inherits.inhrelid = child_class.oid
-				where parent_class.relkind = 'p';";
+				where parent_class.relkind in ('p', 'r');";
 
 			var connection = await Connection();
 			var parentToChildLinks = await connection.QueryAsync<ParentToChild>(queryText);

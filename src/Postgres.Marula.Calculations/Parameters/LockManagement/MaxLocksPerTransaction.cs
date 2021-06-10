@@ -1,5 +1,7 @@
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Postgres.Marula.Calculations.ExternalDependencies;
 using Postgres.Marula.Calculations.Parameters.Base;
 
 // ReSharper disable UnusedType.Global
@@ -16,11 +18,28 @@ namespace Postgres.Marula.Calculations.Parameters.LockManagement
 	/// </summary>
 	internal class MaxLocksPerTransaction : IntegerParameterBase
 	{
-		public MaxLocksPerTransaction(ILogger<MaxLocksPerTransaction> logger) : base(logger)
-		{
-		}
+		private readonly IDatabaseServer databaseServer;
+
+		public MaxLocksPerTransaction(
+			IDatabaseServer databaseServer,
+			ILogger<MaxLocksPerTransaction> logger) : base(logger)
+			=> this.databaseServer = databaseServer;
 
 		/// <inheritdoc />
-		protected override ValueTask<LocksCount> CalculateValueAsync() => ValueTask.FromResult<uint>(128);
+		protected override async ValueTask<LocksCount> CalculateValueAsync()
+		{
+			var maxPartitionsCount = await MaxPartitionsCount();
+			return (LocksCount) 1.2 * maxPartitionsCount;
+		}
+
+		private async Task<uint> MaxPartitionsCount()
+		{
+			await Task.CompletedTask;
+			
+			var res = databaseServer
+				.GetAllHierarchicalLinks()
+				.GroupBy(parentToChild => parentToChild.Parent)
+				.MaxAsync()
+		}
 	}
 }
