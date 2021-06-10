@@ -9,19 +9,16 @@ namespace Postgres.Marula.Infrastructure.TypeDecorators
 	/// </summary>
 	public readonly struct Memory : IEquatable<Memory>
 	{
-		public enum Unit
-		{
-			Bytes,
+		public Memory(ulong totalBytes) => TotalBytes = totalBytes;
 
-			Kilobytes,
+		/// <summary>
+		/// Memory value in bytes.
+		/// </summary>
+		public ulong TotalBytes { get; }
 
-			Megabytes,
-
-			Gigabytes,
-
-			Terabytes
-		}
-
+		/// <summary>
+		/// Normalize memory value based on its' size. 
+		/// </summary>
 		public (ulong Value, Unit Unit) Normalized()
 			=> TotalBytes switch
 			{
@@ -32,24 +29,23 @@ namespace Postgres.Marula.Infrastructure.TypeDecorators
 				_                                  => (TotalBytes / Terabyte, Unit.Terabytes)
 			};
 
-
-		public Memory(ulong totalBytes) => TotalBytes = totalBytes;
-
-		/// <summary>
-		/// Memory value in bytes.
-		/// </summary>
-		public ulong TotalBytes { get; }
-
 		/// <inheritdoc />
 		public override string ToString()
-			=> TotalBytes switch
+		{
+			var (value, unit) = Normalized();
+
+			var unitString = unit switch
 			{
-				< 10UL * 1024                      => $"{TotalBytes}B",
-				< 10UL * 1024 * 1024               => $"{TotalBytes / Kilobyte}kB",
-				< 10UL * 1024 * 1024 * 1024        => $"{TotalBytes / Megabyte}MB",
-				< 10UL * 1024 * 1024 * 1024 * 1024 => $"{TotalBytes / Gigabyte}GB",
-				_                                  => $"{TotalBytes / Terabyte}TB"
+				Unit.Bytes     => "B",
+				Unit.Kilobytes => "kB",
+				Unit.Megabytes => "MB",
+				Unit.Gigabytes => "GB",
+				Unit.Terabytes => "TB",
+				_ => throw new ArgumentOutOfRangeException()
 			};
+
+			return $"{value}{unitString}";
+		}
 
 		#region EqualityMembers
 
@@ -157,5 +153,36 @@ namespace Postgres.Marula.Infrastructure.TypeDecorators
 		/// Implicit cast operator <see cref="Memory"/> -> <see cref="ulong"/>.
 		/// </summary>
 		public static implicit operator ulong(Memory memory) => memory.TotalBytes;
+
+		/// <summary>
+		/// Memory unit.
+		/// </summary>
+		public enum Unit
+		{
+			/// <summary>
+			/// Bytes.
+			/// </summary>
+			Bytes,
+
+			/// <summary>
+			/// Kilobytes.
+			/// </summary>
+			Kilobytes,
+
+			/// <summary>
+			/// Megabytes.
+			/// </summary>
+			Megabytes,
+
+			/// <summary>
+			/// Gigabytes.
+			/// </summary>
+			Gigabytes,
+
+			/// <summary>
+			/// Terabytes.
+			/// </summary>
+			Terabytes
+		}
 	}
 }
