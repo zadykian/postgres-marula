@@ -36,6 +36,10 @@ namespace Postgres.Marula.Calculations.Parameters.LockManagement
 		}
 
 		/// <inheritdoc />
+		/// <remarks>
+		/// If current value is more then calculated one, it stays untouched, because it could be adjusted manually
+		/// on the assumption of some other aspects which didn't relate to tables partitioning.
+		/// </remarks>
 		protected override async ValueTask<LocksCount> CalculateValueAsync()
 		{
 			var maxPartitionsCount = await MaxPartitionsCount();
