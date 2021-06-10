@@ -21,6 +21,6 @@ namespace Postgres.Marula.Calculations.Parameters.LockManagement
 		}
 
 		/// <inheritdoc />
-		protected override ValueTask<LocksCount> CalculateValueAsync() => throw new System.NotImplementedException();
+		protected override ValueTask<LocksCount> CalculateValueAsync() => ValueTask.FromResult<uint>(128);
 	}
 }

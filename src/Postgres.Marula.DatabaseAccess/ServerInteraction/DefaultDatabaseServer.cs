@@ -52,8 +52,8 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 				.Add("select pg_reload_conf();")
 				.JoinBy(Environment.NewLine);
 
-			var dbConnection = await Connection();
-			var signalWasSentSuccessfully = await dbConnection.QuerySingleAsync<bool>(commandText);
+			var connection = await Connection();
+			var signalWasSentSuccessfully = await connection.QuerySingleAsync<bool>(commandText);
 
 			if (!signalWasSentSuccessfully)
 			{
@@ -76,8 +76,8 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 				from pg_catalog.pg_settings
 				where name = @{nameof(IParameterLink.Name)};");
 
-			var dbConnection = await Connection();
-			var (minValue, maxValue) = await dbConnection.QuerySingleAsync<(decimal, decimal)>(
+			var connection = await Connection();
+			var (minValue, maxValue) = await connection.QuerySingleAsync<(decimal, decimal)>(
 				commandText,
 				new {parameterValue.ParameterLink.Name});
 
@@ -101,9 +101,9 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 				from pg_catalog.pg_settings
 				where name = @{nameof(IParameterLink.Name)};");
 
-			var dbConnection = await Connection();
+			var connection = await Connection();
 
-			var (value, minValue, maxValue) = await dbConnection.QuerySingleAsync<(NonEmptyString, decimal?, decimal?)>(
+			var (value, minValue, maxValue) = await connection.QuerySingleAsync<(NonEmptyString, decimal?, decimal?)>(
 				commandText,
 				new {parameterLink.Name});
 
@@ -130,8 +130,8 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 				from pg_catalog.pg_settings
 				where name = @{nameof(IParameterLink.Name)};");
 
-			var dbConnection = await Connection();
-			var stringRepresentation = await dbConnection.QuerySingleAsync<NonEmptyString>(commandText, new {parameterLink.Name});
+			var connection = await Connection();
+			var stringRepresentation = await connection.QuerySingleAsync<NonEmptyString>(commandText, new {parameterLink.Name});
 
 			parameterContext = stringRepresentation.ByStringRepresentation<ParameterContext>();
 			contextCache[parameterLink] = parameterContext;
@@ -141,8 +141,8 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 		/// <inheritdoc />
 		async Task<LogSeqNumber> IDatabaseServer.GetCurrentLogSeqNumberAsync()
 		{
-			var dbConnection = await Connection();
-			return await dbConnection.QuerySingleAsync<LogSeqNumber>("select pg_catalog.pg_current_wal_insert_lsn();");
+			var connection = await Connection();
+			return await connection.QuerySingleAsync<LogSeqNumber>("select pg_catalog.pg_current_wal_insert_lsn();");
 		}
 
 		/// <summary>
@@ -212,6 +212,29 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 
 			var connection = await Connection();
 			return await connection.ExecuteScalarAsync<Fraction>(queryText);
+		}
+
+		/// <inheritdoc />
+		async IAsyncEnumerable<ParentToChild> IDatabaseServer.GetAllHierarchicalLinks()
+		{
+			var queryText = $@"
+				select
+					concat_ws('.',
+						parent_class.relnamespace::regnamespace,
+						parent_class.relname) as {nameof(ParentToChild.Parent)},
+					concat_ws('.',
+						child_class.relnamespace::regnamespace,
+						child_class.relname) as {nameof(ParentToChild.Child)}
+				from pg_catalog.pg_inherits
+				inner join pg_catalog.pg_class parent_class
+					on pg_inherits.inhparent = parent_class.oid
+				inner join pg_catalog.pg_class child_class
+					on pg_inherits.inhrelid = child_class.oid
+				where parent_class.relkind = 'p';";
+
+			var connection = await Connection();
+			var parentToChildLinks = await connection.QueryAsync<ParentToChild>(queryText);
+			foreach (var parentToChild in parentToChildLinks) yield return parentToChild;
 		}
 	}
 }

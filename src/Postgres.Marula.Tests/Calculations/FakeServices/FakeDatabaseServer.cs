@@ -52,6 +52,17 @@ namespace Postgres.Marula.Tests.Calculations.FakeServices
 		/// <inheritdoc />
 		Task<Fraction> IDatabaseServer.GetAverageBloatFractionAsync() => Task.FromResult((Fraction) 0.5M);
 
+		/// <inheritdoc />
+		async IAsyncEnumerable<ParentToChild> IDatabaseServer.GetAllHierarchicalLinks()
+		{
+			await Task.CompletedTask;
+			yield return new("public.test_table", "public.partition_0");
+			yield return new("public.test_table", "public.partition_1");
+			yield return new("public.test_table", "public.partition_2");
+			yield return new("public.test_table", "other_schema.partition_3");
+			yield return new("public.partition_0", "public.partition_0_0");
+		}
+
 		public bool ApplyMethodWasCalled { get; private set; }
 	}
 

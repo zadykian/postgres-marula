@@ -2,6 +2,8 @@ using System;
 using Postgres.Marula.DatabaseAccess.DapperTypeHandlers.Base;
 using Postgres.Marula.Infrastructure.TypeDecorators;
 
+// ReSharper disable UnusedType.Global
+
 namespace Postgres.Marula.DatabaseAccess.DapperTypeHandlers
 {
 	/// <summary>
