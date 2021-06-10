@@ -1,9 +1,11 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Postgres.Marula.Calculations.ExternalDependencies;
 using Postgres.Marula.Calculations.Parameters.Base;
+using Postgres.Marula.Calculations.ParametersManagement;
 using Postgres.Marula.Infrastructure.Extensions;
 
 // ReSharper disable UnusedType.Global
@@ -22,17 +24,24 @@ namespace Postgres.Marula.Calculations.Parameters.LockManagement
 	internal class MaxLocksPerTransaction : IntegerParameterBase
 	{
 		private readonly IDatabaseServer databaseServer;
+		private readonly IPgSettings pgSettings;
 
 		public MaxLocksPerTransaction(
 			IDatabaseServer databaseServer,
+			IPgSettings pgSettings,
 			ILogger<MaxLocksPerTransaction> logger) : base(logger)
-			=> this.databaseServer = databaseServer;
+		{
+			this.databaseServer = databaseServer;
+			this.pgSettings = pgSettings;
+		}
 
 		/// <inheritdoc />
 		protected override async ValueTask<LocksCount> CalculateValueAsync()
 		{
 			var maxPartitionsCount = await MaxPartitionsCount();
-			return (LocksCount) 1.2 * maxPartitionsCount;
+			var calculatedValue = (LocksCount) 1.2 * maxPartitionsCount;
+			var currentValue = await pgSettings.ReadAsync<MaxLocksPerTransaction, LocksCount>();
+			return Math.Max(calculatedValue, currentValue);
 		}
 
 		/// <summary>
@@ -45,7 +54,7 @@ namespace Postgres.Marula.Calculations.Parameters.LockManagement
 			if (!allLinks.Any()) return default;
 
 			IEnumerable<Table> AllInheritorsOf(Table parent)
-				=> allLinks!
+				=> allLinks
 					.Where(link => link.Parent.Equals(parent))
 					.Select(link => link.Child)
 					.SelectMany(child => AllInheritorsOf(child).Add(child));
