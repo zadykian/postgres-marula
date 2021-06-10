@@ -39,30 +39,4 @@ namespace Postgres.Marula.Calculations.ParameterProperties
 				_ => unit.GetType().Name.ToSnakeCase()
 			};
 	}
-
-	// /// <summary>
-	// /// Unit of database server parameter.
-	// /// </summary>
-	// public enum ParameterUnit : byte
-	// {
-	// 	/// <summary>
-	// 	/// Milliseconds (interval, timeout and so on).
-	// 	/// </summary>
-	// 	Milliseconds = 1,
-	//
-	// 	/// <summary>
-	// 	/// Bytes (RAM, disk).
-	// 	/// </summary>
-	// 	Bytes = 2,
-	//
-	// 	/// <summary>
-	// 	/// Enumeration item.
-	// 	/// </summary>
-	// 	Enum = 3,
-	//
-	// 	/// <summary>
-	// 	/// Without unit (fraction, integer, etc).
-	// 	/// </summary>
-	// 	None = 4
-	// }
 }

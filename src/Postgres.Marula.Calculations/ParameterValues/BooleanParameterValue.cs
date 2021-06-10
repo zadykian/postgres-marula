@@ -16,8 +16,5 @@ namespace Postgres.Marula.Calculations.ParameterValues
 
 		/// <inheritdoc />
 		public override IUnit Unit => new IUnit.None();
-		//
-		// /// <inheritdoc />
-		// public override NonEmptyString AsString() => Value.ToString().ToLower();
 	}
 }
