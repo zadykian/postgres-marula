@@ -26,7 +26,7 @@ namespace Postgres.Marula.HwInfo
 		{
 			const string command = "(Get-CimInstance Win32_PhysicalMemory | Measure-Object -Property capacity -Sum).Sum";
 			var totalRamInBytesString = await ExecuteCommandAsync(command);
-			return ulong.Parse(totalRamInBytesString);
+			return new(ulong.Parse(totalRamInBytesString));
 		}
 
 		/// <inheritdoc />

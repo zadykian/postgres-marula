@@ -67,11 +67,9 @@ namespace Postgres.Marula.Calculations.Parameters.Wal
 			var multiplier = await databaseServer.GetPostgresVersionAsync() >= new Version(11, 0) ? 1 : 2;
 			var checkpointCompletionTarget = await pgSettings.ReadAsync<CheckpointCompletionTarget, Fraction>();
 
-			var maxWalSizeInBytes = walTrafficPerSecond
-									* checkpointTimeout.TotalSeconds
-									* (multiplier + checkpointCompletionTarget);
-
-			return new((ulong) maxWalSizeInBytes);
+			return walTrafficPerSecond
+			       * checkpointTimeout.TotalSeconds
+			       * (multiplier + checkpointCompletionTarget);
 		}
 
 		/// <summary>
