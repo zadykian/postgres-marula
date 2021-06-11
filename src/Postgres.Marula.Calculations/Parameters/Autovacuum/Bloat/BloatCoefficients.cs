@@ -7,7 +7,7 @@ namespace Postgres.Marula.Calculations.Parameters.Autovacuum.Bloat
 	/// </summary>
 	public readonly struct BloatCoefficients
 	{
-		public BloatCoefficients(double trendCoefficient, Fraction bloatConstant)
+		public BloatCoefficients(double trendCoefficient, double bloatConstant)
 		{
 			TrendCoefficient = trendCoefficient;
 			BloatConstant = bloatConstant;
@@ -22,6 +22,6 @@ namespace Postgres.Marula.Calculations.Parameters.Autovacuum.Bloat
 		/// <summary>
 		/// Constant part of approximated linear function. 
 		/// </summary>
-		public Fraction BloatConstant { get; }
+		public double BloatConstant { get; }
 	}
 }

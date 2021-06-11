@@ -46,7 +46,7 @@ namespace Postgres.Marula.Calculations.Parameters.Base
 			}
 			catch (ParameterValueCalculationException exception)
 			{
-				logger.LogError($"Failed to calculate value of parameter '{Name}'.", exception);
+				logger.LogError(exception, $"Failed to calculate value of parameter '{Name}'.");
 				return NullValue.Instance;
 			}
 

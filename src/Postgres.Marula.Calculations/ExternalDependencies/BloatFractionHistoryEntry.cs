@@ -23,5 +23,8 @@ namespace Postgres.Marula.Calculations.ExternalDependencies
 		/// Value of average bloat fraction.
 		/// </summary>
 		public Fraction AverageBloatFraction { get; }
+
+		/// <inheritdoc />
+		public override string ToString() => $"{LogTimestamp:s} -> {AverageBloatFraction}";
 	}
 }

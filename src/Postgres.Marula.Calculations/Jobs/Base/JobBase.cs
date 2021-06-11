@@ -49,19 +49,17 @@ namespace Postgres.Marula.Calculations.Jobs.Base
 			try
 			{
 				await ExecuteAsync(serviceScope);
+				logger.LogInformation($"[{Description}] iteration completed successfully.");
 			}
 			catch (Exception exception)
 			{
-				logger.LogError(exception, $"[{Description}] occured error during iteration.");
-				throw;
+				logger.LogError(exception, $"[{Description}] error occured during iteration.");
 			}
 			finally
 			{
 				serviceScope.Dispose();
 				timer.Start();
 			}
-
-			logger.LogInformation($"[{Description}] iteration completed successfully.");
 		}
 
 		/// <summary>
