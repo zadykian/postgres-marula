@@ -10,6 +10,8 @@ using Postgres.Marula.HwInfo;
 using Postgres.Marula.Infrastructure.Extensions;
 using Postgres.Marula.Infrastructure.TypeDecorators;
 
+// ReSharper disable SwitchExpressionHandlesSomeKnownEnumValuesWithExceptionInDefault
+
 namespace Postgres.Marula.Tests.HwInfo
 {
 	/// <summary>
@@ -30,18 +32,23 @@ namespace Postgres.Marula.Tests.HwInfo
 		/// Start agent process.
 		/// </summary>
 		[OneTimeSetUp]
-		public void OneTimeSetUp()
+		public async Task OneTimeSetUp()
 		{
-			remoteAgentApiProcess.Start();
+			TestContext.WriteLine("agent process is starting.");
 
-			remoteAgentApiProcess
-				.StandardError
-				.ReadToEndAsync()
-				.ContinueWith(task =>
-				{
-					if (string.IsNullOrWhiteSpace(task.Result)) return;
-					TestContext.Error.WriteLine(task.Result);
-				});
+			remoteAgentApiProcess.Start();
+			var errorOutputTask = remoteAgentApiProcess.StandardError.ReadToEndAsync();
+
+			// check if agent process hadn't started successfully.
+			if (await Task.WhenAny(
+				errorOutputTask,
+				Task.Delay(millisecondsDelay: 5000)) == errorOutputTask)
+			{
+				await TestContext.Error.WriteLineAsync(errorOutputTask.Result);
+				Assert.Fail("failed to start agent process.");
+			}
+
+			TestContext.WriteLine("agent process is started.");
 		}
 
 		/// <inheritdoc cref="HardwareInfoTestBase.GetTotalMemoryTestImpl"/>
@@ -56,7 +63,11 @@ namespace Postgres.Marula.Tests.HwInfo
 		/// Kill agent process.
 		/// </summary>
 		[OneTimeTearDown]
-		public void OneTimeTearDown() => remoteAgentApiProcess.Kill();
+		public void OneTimeTearDown()
+		{
+			remoteAgentApiProcess.Kill();
+			TestContext.WriteLine("agent process is killed.");
+		}
 
 		/// <summary>
 		/// Create agent web api process. 
