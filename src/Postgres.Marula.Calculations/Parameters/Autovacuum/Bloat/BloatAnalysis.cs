@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using MathNet.Numerics;
 using Postgres.Marula.Calculations.Configuration;
+using Postgres.Marula.Calculations.Exceptions;
 using Postgres.Marula.Calculations.ExternalDependencies;
 using Postgres.Marula.Infrastructure.Extensions;
 
@@ -28,6 +29,9 @@ namespace Postgres.Marula.Calculations.Parameters.Autovacuum.Bloat
 		{
 			var averageBloatHistory = await LoadHistory().ToArrayAsync();
 
+			// At least two values are required to build approximated linear function.
+			if (averageBloatHistory.Length < 2) throw Error.NoBloatHistory();
+
 			var leftTimeBound = averageBloatHistory
 				.First()
 				.LogTimestamp;
@@ -43,8 +47,8 @@ namespace Postgres.Marula.Calculations.Parameters.Autovacuum.Bloat
 				.ToArray();
 
 			// approximate bloat fraction selection to linear function.
-			var (linearMember, freeMember) = Fit.Line(abscissaValues, ordinateValues);
-			return new BloatCoefficients(linearMember, freeMember);
+			var (intercept, slope) = Fit.Line(abscissaValues, ordinateValues);
+			return new BloatCoefficients(intercept, slope);
 		}
 
 		/// <summary>
