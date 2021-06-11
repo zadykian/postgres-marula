@@ -49,19 +49,17 @@ namespace Postgres.Marula.Calculations.Jobs.Base
 			try
 			{
 				await ExecuteAsync(serviceScope);
+				logger.LogInformation($"[{Description}] iteration completed successfully.");
 			}
 			catch (Exception exception)
 			{
-				logger.LogError(exception, $"[{Description}] occured error during iteration.");
-				throw;
+				logger.LogError(exception, $"[{Description}] error occured during iteration.");
 			}
 			finally
 			{
 				serviceScope.Dispose();
 				timer.Start();
 			}
-
-			logger.LogInformation($"[{Description}] iteration completed successfully.");
 		}
 
 		/// <summary>
@@ -73,10 +71,18 @@ namespace Postgres.Marula.Calculations.Jobs.Base
 				.Then(intervalTimer => intervalTimer.Elapsed += async (_, _) => await OnTimerElapsed());
 
 		/// <inheritdoc />
-		void IJob.Start() => timer.Start();
+		void IJob.Start()
+		{
+			timer.Start();
+			logger.LogInformation($"[{Description}] job is started.");
+		}
 
 		/// <inheritdoc />
-		void IJob.Stop() => timer.Stop();
+		void IJob.Stop()
+		{
+			timer.Stop();
+			logger.LogInformation($"[{Description}] job is stopped.");
+		}
 
 		/// <inheritdoc />
 		void IDisposable.Dispose() => timer.Dispose();

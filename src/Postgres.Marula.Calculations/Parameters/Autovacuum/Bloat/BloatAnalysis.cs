@@ -44,7 +44,7 @@ namespace Postgres.Marula.Calculations.Parameters.Autovacuum.Bloat
 
 			// approximate bloat fraction selection to linear function.
 			var (linearMember, freeMember) = Fit.Line(abscissaValues, ordinateValues);
-			return new BloatCoefficients(linearMember, (decimal) freeMember);
+			return new BloatCoefficients(linearMember, freeMember);
 		}
 
 		/// <summary>

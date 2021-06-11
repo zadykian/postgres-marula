@@ -30,8 +30,14 @@ namespace Postgres.Marula.Calculations.ParameterProperties
 		record None : IUnit;
 	}
 
+	/// <summary>
+	/// Extension methods for <see cref="IUnit"/> type.
+	/// </summary>
 	public static class UnitExtensions
 	{
+		/// <summary>
+		/// Get string representation of <paramref name="unit"/>. 
+		/// </summary>
 		public static NonEmptyString AsString(this IUnit unit)
 			=> unit switch
 			{
