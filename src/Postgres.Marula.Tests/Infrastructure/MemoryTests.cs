@@ -61,7 +61,7 @@ namespace Postgres.Marula.Tests.Infrastructure
 		private static IEnumerable<OperatorTestCase> OperatorTestCases()
 			=> new OperatorTestCase[]
 			{
-				new(() => 0.25 * Memory.Gigabyte, 256 * Memory.Megabyte)
+				new(() => 0.25 * Memory.Gigabyte, Memory.Parse("256MB"))
 			};
 
 		/// <summary>
