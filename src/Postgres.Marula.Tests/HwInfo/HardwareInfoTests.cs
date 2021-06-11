@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using NUnit.Framework;
 using Postgres.Marula.HwInfo;
+using Postgres.Marula.Infrastructure.TypeDecorators;
 using Postgres.Marula.Tests.Base;
 
 namespace Postgres.Marula.Tests.HwInfo
@@ -18,7 +19,7 @@ namespace Postgres.Marula.Tests.HwInfo
 		{
 			var hardwareInfo = GetService<IHardwareInfo>();
 			var totalMemory = await hardwareInfo.TotalRam();
-			Assert.AreNotEqual(0, totalMemory.TotalBytes);
+			Assert.AreNotEqual(Memory.Zero, totalMemory);
 		}
 
 		/// <summary>

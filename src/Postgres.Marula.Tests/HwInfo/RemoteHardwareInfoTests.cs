@@ -2,22 +2,29 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 using Postgres.Marula.Agent;
+using Postgres.Marula.Calculations.HardwareInfo;
+using Postgres.Marula.HwInfo;
 using Postgres.Marula.Infrastructure.Extensions;
 using Postgres.Marula.Infrastructure.TypeDecorators;
 
-// ReSharper disable SwitchExpressionHandlesSomeKnownEnumValuesWithExceptionInDefault
-
-namespace Postgres.Marula.Tests
+namespace Postgres.Marula.Tests.HwInfo
 {
 	/// <summary>
-	/// Tests initialisation.
+	/// <see cref="RemoteHardwareInfo"/> tests.
 	/// </summary>
-	[SetUpFixture]
-	internal class SetUpFixture
+	internal class RemoteHardwareInfoTests : HardwareInfoTests
 	{
 		private readonly Process agentApiProcess = CreateAgentProcess();
+
+		/// <inheritdoc/>
+		protected override void ConfigureServices(IServiceCollection serviceCollection)
+		{
+			base.ConfigureServices(serviceCollection);
+			serviceCollection.AddSingleton<IHardwareInfo, RemoteHardwareInfo>();
+		}
 
 		/// <summary>
 		/// Start agent process.
@@ -37,16 +44,19 @@ namespace Postgres.Marula.Tests
 				});
 		}
 
+		/// <inheritdoc cref="HardwareInfoTests.GetTotalMemoryTest"/>
+		[Test]
+		public new async Task GetTotalMemoryTest() => await base.GetTotalMemoryTest();
+
+		/// <inheritdoc cref="HardwareInfoTests.GetCpuCoresCountTest"/>
+		[Test]
+		public new async Task GetCpuCoresCountTest() => await base.GetCpuCoresCountTest();
+
 		/// <summary>
 		/// Kill agent process.
 		/// </summary>
 		[OneTimeTearDown]
-		public async Task OneTimeTearDown()
-		{
-			// let already running jobs to finish
-			await Task.Delay(millisecondsDelay: 5000);
-			agentApiProcess.Kill();
-		}
+		public void OneTimeTearDown() => agentApiProcess.Kill();
 
 		/// <summary>
 		/// Create agent web api process. 

@@ -73,6 +73,11 @@ namespace Postgres.Marula.Infrastructure.TypeDecorators
 		#region Constants
 
 		/// <summary>
+		/// Zero memory size - 0B.
+		/// </summary>
+		public static Memory Zero => new(0);
+
+		/// <summary>
 		/// One byte - 1B.
 		/// </summary>
 		public static Memory Byte => new(1);
