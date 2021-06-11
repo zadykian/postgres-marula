@@ -34,6 +34,8 @@ namespace Postgres.Marula.Tests.HwInfo
 		[OneTimeSetUp]
 		public async Task OneTimeSetUp()
 		{
+			TestContext.WriteLine("agent process is starting.");
+
 			remoteAgentApiProcess.Start();
 			var errorOutputTask = remoteAgentApiProcess.StandardError.ReadToEndAsync();
 
@@ -45,6 +47,8 @@ namespace Postgres.Marula.Tests.HwInfo
 				await TestContext.Error.WriteLineAsync(errorOutputTask.Result);
 				Assert.Fail("failed to start agent process.");
 			}
+
+			TestContext.WriteLine("agent process is started.");
 		}
 
 		/// <inheritdoc cref="HardwareInfoTestBase.GetTotalMemoryTestImpl"/>
@@ -59,7 +63,11 @@ namespace Postgres.Marula.Tests.HwInfo
 		/// Kill agent process.
 		/// </summary>
 		[OneTimeTearDown]
-		public void OneTimeTearDown() => remoteAgentApiProcess.Kill();
+		public void OneTimeTearDown()
+		{
+			remoteAgentApiProcess.Kill();
+			TestContext.WriteLine("agent process is killed.");
+		}
 
 		/// <summary>
 		/// Create agent web api process. 
