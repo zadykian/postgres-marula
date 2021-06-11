@@ -37,7 +37,7 @@ namespace Postgres.Marula.Tests.HwInfo
 			remoteAgentApiProcess.Start();
 			var errorOutputTask = remoteAgentApiProcess.StandardError.ReadToEndAsync();
 
-			// check if agent process started successfully.
+			// check if agent process hadn't started successfully.
 			if (await Task.WhenAny(
 				errorOutputTask,
 				Task.Delay(millisecondsDelay: 5000)) == errorOutputTask)
