@@ -1,6 +1,7 @@
 using System;
 using Postgres.Marula.Calculations.ParameterProperties;
 using Postgres.Marula.Calculations.Parameters.Base;
+using Postgres.Marula.Infrastructure.TypeDecorators;
 
 namespace Postgres.Marula.Calculations.ParameterValues.Base
 {
@@ -25,15 +26,17 @@ namespace Postgres.Marula.Calculations.ParameterValues.Base
 	/// </summary>
 	public sealed class NullValue : IParameterValue
 	{
-		private NullValue()
-		{
-		}
+		private NullValue(NonEmptyString parameterName)
+			=> ParameterLink = new ParameterLink(parameterName);
 
-		/// <inheritdoc cref="NullValue"/>
-		public static IParameterValue Instance { get; } = new NullValue();
+		/// <summary>
+		/// Create new instance of <see cref="NullValue"/> related to <paramref name="parameter"/>. 
+		/// </summary>
+		public static IParameterValue OfParameter(IParameter parameter)
+			=> new NullValue(parameter.Name);
 
 		/// <inheritdoc />
-		IParameterLink IParameterValue.ParameterLink => throw AccessError();
+		public IParameterLink ParameterLink { get; }
 
 		/// <inheritdoc />
 		IUnit IParameterValue.Unit => throw AccessError();

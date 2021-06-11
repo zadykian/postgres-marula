@@ -44,10 +44,13 @@ namespace Postgres.Marula.Calculations.Parameters.Base
 			{
 				value = await CalculateValueAsync();
 			}
-			catch (ParameterValueCalculationException exception)
+			catch (Exception exception)
+				when (exception
+					is ParameterValueCalculationException
+					or RemoteAgentAccessException)
 			{
 				logger.LogError(exception, $"Failed to calculate value of parameter '{Name}'.");
-				return NullValue.Instance;
+				return NullValue.OfParameter(this);
 			}
 
 			return Activator

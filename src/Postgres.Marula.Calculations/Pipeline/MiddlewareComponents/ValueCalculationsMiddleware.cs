@@ -67,7 +67,7 @@ namespace Postgres.Marula.Calculations.Pipeline.MiddlewareComponents
 			logger.LogWarning(
 				$"Unable to calculate value of parameter '{parameterToCalculate.Name}' " +
 				$"because it has dependencies which are not calculated: [{parameterNames.JoinBy(", ")}].");
-			return NullValue.Instance;
+			return NullValue.OfParameter(parameterToCalculate);
 		}
 
 		/// <summary>
