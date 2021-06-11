@@ -1,4 +1,5 @@
 using Postgres.Marula.Calculations.ParameterProperties;
+using Postgres.Marula.Calculations.ParameterProperties.StringRepresentation;
 
 namespace Postgres.Marula.Calculations.ParameterValues.Base
 {
@@ -22,5 +23,9 @@ namespace Postgres.Marula.Calculations.ParameterValues.Base
 		/// Parameter calculation status.
 		/// </summary>
 		public CalculationStatus CalculationStatus { get; }
+
+		/// <inheritdoc />
+		public override string ToString()
+			=> $"{Value.Link.Name}: {Value} ({CalculationStatus.StringRepresentation()})";
 	}
 }

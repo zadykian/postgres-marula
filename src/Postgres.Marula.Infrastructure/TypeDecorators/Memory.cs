@@ -23,10 +23,10 @@ namespace Postgres.Marula.Infrastructure.TypeDecorators
 			=> TotalBytes switch
 			{
 				< 10UL * 1024                      => (TotalBytes, Unit.Bytes),
-				< 10UL * 1024 * 1024               => (TotalBytes / Kilobyte, Unit.Kilobytes),
-				< 10UL * 1024 * 1024 * 1024        => (TotalBytes / Megabyte, Unit.Megabytes),
-				< 10UL * 1024 * 1024 * 1024 * 1024 => (TotalBytes / Gigabyte, Unit.Gigabytes),
-				_                                  => (TotalBytes / Terabyte, Unit.Terabytes)
+				< 10UL * 1024 * 1024               => (TotalBytes / Kilobyte.TotalBytes, Unit.Kilobytes),
+				< 10UL * 1024 * 1024 * 1024        => (TotalBytes / Megabyte.TotalBytes, Unit.Megabytes),
+				< 10UL * 1024 * 1024 * 1024 * 1024 => (TotalBytes / Gigabyte.TotalBytes, Unit.Gigabytes),
+				_                                  => (TotalBytes / Terabyte.TotalBytes, Unit.Terabytes)
 			};
 
 		/// <inheritdoc />
@@ -73,6 +73,11 @@ namespace Postgres.Marula.Infrastructure.TypeDecorators
 		#region Constants
 
 		/// <summary>
+		/// Zero memory size - 0B.
+		/// </summary>
+		public static Memory Zero => new(0);
+
+		/// <summary>
 		/// One byte - 1B.
 		/// </summary>
 		public static Memory Byte => new(1);
@@ -80,22 +85,22 @@ namespace Postgres.Marula.Infrastructure.TypeDecorators
 		/// <summary>
 		/// One kilobyte - 1024B.
 		/// </summary>
-		public static Memory Kilobyte => new(1024);
+		public static Memory Kilobyte => 1024 * Byte;
 
 		/// <summary>
 		/// One megabyte - 1024kB.
 		/// </summary>
-		public static Memory Megabyte => new(1024D * Kilobyte);
+		public static Memory Megabyte => 1024 * Kilobyte;
 
 		/// <summary>
 		/// One gigabyte - 1024MB.
 		/// </summary>
-		public static Memory Gigabyte => new(1024D * Megabyte);
+		public static Memory Gigabyte => 1024 * Megabyte;
 
 		/// <summary>
 		/// One terabyte - 1024GB.
 		/// </summary>
-		public static Memory Terabyte => new(1024D * Gigabyte);
+		public static Memory Terabyte => 1024 * Gigabyte;
 
 		#endregion
 
@@ -127,32 +132,43 @@ namespace Postgres.Marula.Infrastructure.TypeDecorators
 				_    => throw InvalidFormat()
 			};
 
-			return new Memory(numericValue * (ulong) multiplier);
+			return numericValue * multiplier;
 		}
+
+		#region Operators
 
 		/// <summary>
 		/// Multiplication operator.
 		/// </summary>
-		public static Memory operator *(Memory memory, double coefficient) => new(memory.TotalBytes *  (ulong) coefficient);
+		public static Memory operator *(Memory memory, ulong coefficient) => new(memory.TotalBytes * coefficient);
 
+		/// <inheritdoc cref="op_Multiply(Memory,ulong)"/>
+		public static Memory operator *(ulong coefficient, Memory memory) => memory * coefficient;
 
-		/// <inheritdoc cref="op_Multiply(Memory,double)"/>
+		/// <inheritdoc cref="op_Multiply(Memory,ulong)"/>
+		public static Memory operator *(Memory memory, double coefficient) => new((ulong) (memory.TotalBytes * coefficient));
+
+		/// <inheritdoc cref="op_Multiply(Memory,ulong)"/>
 		public static Memory operator *(double coefficient, Memory memory) => memory * coefficient;
+
+		/// <inheritdoc cref="op_Multiply(Memory,ulong)"/>
+		public static Memory operator *(Memory memory, decimal coefficient) => new((ulong) (memory.TotalBytes * coefficient));
+
+		/// <inheritdoc cref="op_Multiply(Memory,ulong)"/>
+		public static Memory operator *(decimal coefficient, Memory memory) => memory * coefficient;
 
 		/// <summary>
 		/// Division operator.
 		/// </summary>
-		public static Memory operator /(Memory memory, double coefficient) => new(memory.TotalBytes /  (ulong) coefficient);
+		public static Memory operator /(Memory memory, ulong coefficient) => new(memory.TotalBytes / coefficient);
 
-		/// <summary>
-		/// Implicit cast operator <see cref="ulong"/> -> <see cref="Memory"/>.
-		/// </summary>
-		public static implicit operator Memory(ulong bytes) => new(bytes);
+		/// <inheritdoc cref="op_Division(Memory,ulong)"/>
+		public static Memory operator /(Memory memory, double coefficient) => new((ulong) (memory.TotalBytes / coefficient));
 
-		/// <summary>
-		/// Implicit cast operator <see cref="Memory"/> -> <see cref="ulong"/>.
-		/// </summary>
-		public static implicit operator ulong(Memory memory) => memory.TotalBytes;
+		/// <inheritdoc cref="op_Division(Memory,ulong)"/>
+		public static Memory operator /(Memory memory, decimal coefficient) => new((ulong) (memory.TotalBytes / coefficient));
+
+		#endregion
 
 		/// <summary>
 		/// Memory unit.

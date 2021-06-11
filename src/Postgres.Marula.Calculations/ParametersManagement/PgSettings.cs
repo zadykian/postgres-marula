@@ -8,6 +8,7 @@ using Postgres.Marula.Calculations.Configuration;
 using Postgres.Marula.Calculations.ExternalDependencies;
 using Postgres.Marula.Calculations.ParameterProperties;
 using Postgres.Marula.Calculations.Parameters.Base;
+using Postgres.Marula.Calculations.ParameterValues;
 using Postgres.Marula.Calculations.ParameterValues.Base;
 using Postgres.Marula.Calculations.ParameterValues.Parsing;
 using Postgres.Marula.Infrastructure.Extensions;
@@ -39,7 +40,7 @@ namespace Postgres.Marula.Calculations.ParametersManagement
 		void IPgSettings.Apply(IParameterValue parameterValue)
 		{
 			if (parameterValue is NullValue) return;
-			valuesCache[parameterValue.ParameterLink] = new(parameterValue, Updated: true);
+			valuesCache[parameterValue.Link] = new(parameterValue, Updated: true);
 		}
 
 		/// <inheritdoc />
@@ -56,7 +57,7 @@ namespace Postgres.Marula.Calculations.ParametersManagement
 		private async ValueTask<CalculationStatus> GetCalculationStatus(IParameterValue parameterValue)
 		{
 			var adjustmentIsAllowed = configuration.General().AutoAdjustmentIsEnabled();
-			var parameterContext = await databaseServer.GetParameterContextAsync(parameterValue.ParameterLink);
+			var parameterContext = await databaseServer.GetParameterContextAsync(parameterValue.Link);
 
 			return (adjustmentIsAllowed, parameterContext.RestartIsRequired()) switch
 			{

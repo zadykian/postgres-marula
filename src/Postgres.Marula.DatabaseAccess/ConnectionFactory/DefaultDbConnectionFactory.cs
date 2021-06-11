@@ -17,7 +17,6 @@ namespace Postgres.Marula.DatabaseAccess.ConnectionFactory
 	internal class DefaultDbConnectionFactory : IDbConnectionFactory
 	{
 		private readonly AsyncLazy<IDbConnection> lazyPreparedConnection;
-
 		private readonly ISqlScriptsExecutor sqlScriptsExecutor;
 		private readonly INamingConventions namingConventions;
 
@@ -44,6 +43,9 @@ namespace Postgres.Marula.DatabaseAccess.ConnectionFactory
 				if (dbConnection is DbConnection awaitableConnection) await awaitableConnection.OpenAsync();
 				else dbConnection.Open();
 			}
+
+			// Acquire lock to prevent multiple threads from parallel scripts execution.
+			using var _ = await Lock.AcquireAsync(lockTimeout: TimeSpan.FromMinutes(1));
 
 			if (!await DatabaseStructureIsPrepared(dbConnection))
 			{

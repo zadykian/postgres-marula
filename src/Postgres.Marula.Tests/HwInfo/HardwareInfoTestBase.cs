@@ -1,31 +1,30 @@
 using System.Threading.Tasks;
 using NUnit.Framework;
 using Postgres.Marula.HwInfo;
+using Postgres.Marula.Infrastructure.TypeDecorators;
 using Postgres.Marula.Tests.Base;
 
 namespace Postgres.Marula.Tests.HwInfo
 {
 	/// <summary>
-	/// Hardware agent tests
+	/// Base class for <see cref="IHardwareInfo"/> implementations.
 	/// </summary>
-	internal class HardwareInfoTests : SingleComponentTestFixtureBase<HwInfoAppComponent>
+	internal abstract class HardwareInfoTestBase : SingleComponentTestFixtureBase<HwInfoAppComponent>
 	{
 		/// <summary>
 		/// Get total RAM size.
 		/// </summary>
-		[Test]
-		public async Task GetTotalMemoryTest()
+		protected async Task GetTotalMemoryTestImpl()
 		{
 			var hardwareInfo = GetService<IHardwareInfo>();
 			var totalMemory = await hardwareInfo.TotalRam();
-			Assert.AreNotEqual(0, totalMemory.TotalBytes);
+			Assert.AreNotEqual(Memory.Zero, totalMemory);
 		}
 
 		/// <summary>
 		/// Get CPU cores count.
 		/// </summary>
-		[Test]
-		public async Task GetCpuCoresCountTest()
+		protected async Task GetCpuCoresCountTestImpl()
 		{
 			var hardwareInfo = GetService<IHardwareInfo>();
 			var coresCount = await hardwareInfo.CpuCoresCount();

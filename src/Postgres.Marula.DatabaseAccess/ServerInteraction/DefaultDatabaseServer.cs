@@ -45,7 +45,7 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 
 			var alterSystemCommands = await parameterValues
 				.SelectAsync(async value =>
-					$"alter system set {value.ParameterLink.Name} = " +
+					$"alter system set {value.Link.Name} = " +
 					$"'{await GetValueStringRepresentation(value)}';");
 
 			var commandText = alterSystemCommands
@@ -79,7 +79,7 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 			var connection = await Connection();
 			var (minValue, maxValue) = await connection.QuerySingleAsync<(decimal, decimal)>(
 				commandText,
-				new {parameterValue.ParameterLink.Name});
+				new {parameterValue.Link.Name});
 
 			var multiplier = (minValue, maxValue) switch
 			{
@@ -87,7 +87,7 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 				(decimal.Zero, 100)         => 100,
 				_ => throw new NotSupportedException(
 					$"Fraction parameter range [{minValue} .. {maxValue}] is not " +
-					$"supported (parameter '{parameterValue.ParameterLink.Name}').")
+					$"supported (parameter '{parameterValue.Link.Name}').")
 			};
 
 			return (fractionParameterValue.Value * multiplier).ToString(CultureInfo.InvariantCulture);

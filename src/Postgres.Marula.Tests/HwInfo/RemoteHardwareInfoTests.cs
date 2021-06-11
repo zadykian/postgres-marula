@@ -2,22 +2,29 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 using Postgres.Marula.Agent;
+using Postgres.Marula.Calculations.HardwareInfo;
+using Postgres.Marula.HwInfo;
 using Postgres.Marula.Infrastructure.Extensions;
 using Postgres.Marula.Infrastructure.TypeDecorators;
 
-// ReSharper disable SwitchExpressionHandlesSomeKnownEnumValuesWithExceptionInDefault
-
-namespace Postgres.Marula.Tests
+namespace Postgres.Marula.Tests.HwInfo
 {
 	/// <summary>
-	/// Tests initialisation.
+	/// Tests of <see cref="RemoteHardwareInfo"/> which performs HTTP requests to remote agent's API.
 	/// </summary>
-	[SetUpFixture]
-	internal class SetUpFixture
+	internal class RemoteHardwareInfoTests : HardwareInfoTestBase
 	{
-		private readonly Process agentApiProcess = CreateAgentProcess();
+		private readonly Process remoteAgentApiProcess = CreateAgentProcess();
+
+		/// <inheritdoc/>
+		protected override void ConfigureServices(IServiceCollection serviceCollection)
+		{
+			base.ConfigureServices(serviceCollection);
+			serviceCollection.AddSingleton<IHardwareInfo, RemoteHardwareInfo>();
+		}
 
 		/// <summary>
 		/// Start agent process.
@@ -25,9 +32,9 @@ namespace Postgres.Marula.Tests
 		[OneTimeSetUp]
 		public void OneTimeSetUp()
 		{
-			agentApiProcess.Start();
+			remoteAgentApiProcess.Start();
 
-			agentApiProcess
+			remoteAgentApiProcess
 				.StandardError
 				.ReadToEndAsync()
 				.ContinueWith(task =>
@@ -37,16 +44,19 @@ namespace Postgres.Marula.Tests
 				});
 		}
 
+		/// <inheritdoc cref="HardwareInfoTestBase.GetTotalMemoryTestImpl"/>
+		[Test]
+		public async Task GetRemoteTotalMemoryTest() => await GetTotalMemoryTestImpl();
+
+		/// <inheritdoc cref="HardwareInfoTestBase.GetCpuCoresCountTestImpl"/>
+		[Test]
+		public async Task GetRemoteCpuCoresCountTest() => await GetCpuCoresCountTestImpl();
+
 		/// <summary>
 		/// Kill agent process.
 		/// </summary>
 		[OneTimeTearDown]
-		public async Task OneTimeTearDown()
-		{
-			// let already running jobs to finish
-			await Task.Delay(millisecondsDelay: 5000);
-			agentApiProcess.Kill();
-		}
+		public void OneTimeTearDown() => remoteAgentApiProcess.Kill();
 
 		/// <summary>
 		/// Create agent web api process. 

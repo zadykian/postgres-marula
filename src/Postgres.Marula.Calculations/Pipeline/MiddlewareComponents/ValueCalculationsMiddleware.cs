@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using PipelineNet.Middleware;
 using Postgres.Marula.Calculations.Parameters.Base;
 using Postgres.Marula.Calculations.ParametersManagement;
+using Postgres.Marula.Calculations.ParameterValues;
 using Postgres.Marula.Calculations.ParameterValues.Base;
 using Postgres.Marula.Infrastructure.Extensions;
 
@@ -63,11 +64,11 @@ namespace Postgres.Marula.Calculations.Pipeline.MiddlewareComponents
 				return await parameterToCalculate.CalculateAsync();
 			}
 
-			var parameterNames = notCalculated.Select(value => value.ParameterLink.Name);
+			var parameterNames = notCalculated.Select(value => value.Link.Name);
 			logger.LogWarning(
 				$"Unable to calculate value of parameter '{parameterToCalculate.Name}' " +
 				$"because it has dependencies which are not calculated: [{parameterNames.JoinBy(", ")}].");
-			return NullValue.Instance;
+			return NullValue.OfParameter(parameterToCalculate);
 		}
 
 		/// <summary>

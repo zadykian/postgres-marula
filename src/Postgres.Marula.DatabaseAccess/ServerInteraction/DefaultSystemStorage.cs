@@ -73,7 +73,7 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 		private NonEmptyString ToValuesString(ParameterValueWithStatus parameterValue)
 			=> new []
 				{
-					$"'{parameterValue.Value.ParameterLink.Name}'",
+					$"'{parameterValue.Value.Link.Name}'",
 
 					$"'{parameterValue.Value}'",
 

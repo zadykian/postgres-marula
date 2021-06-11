@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Postgres.Marula.Calculations.Exceptions;
 using Postgres.Marula.Calculations.Parameters.Base.Dependencies;
+using Postgres.Marula.Calculations.ParameterValues;
 using Postgres.Marula.Calculations.ParameterValues.Base;
 using Postgres.Marula.Infrastructure.Extensions;
 using Postgres.Marula.Infrastructure.TypeDecorators;
@@ -44,10 +45,13 @@ namespace Postgres.Marula.Calculations.Parameters.Base
 			{
 				value = await CalculateValueAsync();
 			}
-			catch (ParameterValueCalculationException exception)
+			catch (Exception exception)
+				when (exception
+					is ParameterValueCalculationException
+					or RemoteAgentAccessException)
 			{
 				logger.LogError(exception, $"Failed to calculate value of parameter '{Name}'.");
-				return NullValue.Instance;
+				return NullValue.OfParameter(this);
 			}
 
 			return Activator

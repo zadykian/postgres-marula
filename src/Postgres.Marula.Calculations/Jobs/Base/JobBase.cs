@@ -49,11 +49,11 @@ namespace Postgres.Marula.Calculations.Jobs.Base
 			try
 			{
 				await ExecuteAsync(serviceScope);
-				logger.LogInformation($"[{Description}] iteration completed successfully.");
+				logger.LogInformation($"[{Description}] iteration is completed.");
 			}
 			catch (Exception exception)
 			{
-				logger.LogError(exception, $"[{Description}] error occured during iteration.");
+				logger.LogError(exception, $"[{Description}] iteration is failed.");
 			}
 			finally
 			{

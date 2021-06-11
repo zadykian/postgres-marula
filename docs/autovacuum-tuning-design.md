@@ -71,7 +71,7 @@ Specifies the minimum number of updated or deleted tuples needed to trigger a va
 
 Value calculated based on **table size EV** and can be represented by formula:
 ```
-autovacuum_vacuum_threshold = 0.01 * {table_size_expected_value}
+autovacuum_vacuum_threshold = max(50, 0.01 * {table_size_expected_value})
 ```
 
 ### autovacuum_vacuum_cost_delay

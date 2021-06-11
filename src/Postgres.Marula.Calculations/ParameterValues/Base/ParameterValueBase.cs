@@ -10,7 +10,7 @@ namespace Postgres.Marula.Calculations.ParameterValues.Base
 	{
 		private protected ParameterValueBase(IParameterLink parameterLink, T value)
 		{
-			ParameterLink = parameterLink;
+			Link = parameterLink;
 			Value = value;
 		}
 
@@ -20,7 +20,7 @@ namespace Postgres.Marula.Calculations.ParameterValues.Base
 		public T Value { get; }
 
 		/// <inheritdoc />
-		public IParameterLink ParameterLink { get; }
+		public IParameterLink Link { get; }
 
 		/// <inheritdoc />
 		public abstract IUnit Unit { get; }
@@ -35,7 +35,7 @@ namespace Postgres.Marula.Calculations.ParameterValues.Base
 		{
 			if (ReferenceEquals(null, other)) return false;
 			if (ReferenceEquals(this, other)) return true;
-			return Value.Equals(other.Value) && ParameterLink.Equals(other.ParameterLink) && Unit.Equals(other.Unit);
+			return Value.Equals(other.Value) && Link.Equals(other.Link) && Unit.Equals(other.Unit);
 		}
 
 		/// <inheritdoc />
@@ -48,7 +48,7 @@ namespace Postgres.Marula.Calculations.ParameterValues.Base
 		}
 
 		/// <inheritdoc />
-		public override int GetHashCode() => HashCode.Combine(Value, ParameterLink, Unit);
+		public override int GetHashCode() => HashCode.Combine(Value, Link, Unit);
 
 		#endregion
 	}

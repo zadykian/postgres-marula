@@ -15,8 +15,8 @@ namespace Postgres.Marula.Calculations.Pipeline.Factory
 				.To(scope => new ServiceScopeMiddlewareResolver(scope))
 				.To(resolver => new AsyncPipeline<ParametersManagementContext>(resolver))
 				.Add<ValueCalculationsMiddleware>()
-				.Add<ParametersAdjustmentMiddleware>()
-				.Add<ValuesHistoryMiddleware>();
+				.Add<ValuesHistoryMiddleware>()
+				.Add<ParametersAdjustmentMiddleware>();
 
 			var pipelineContext = pipelineScope.ServiceProvider.GetRequiredService<ParametersManagementContext>();
 
