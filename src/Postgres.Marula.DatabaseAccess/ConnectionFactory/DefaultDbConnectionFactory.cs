@@ -45,7 +45,7 @@ namespace Postgres.Marula.DatabaseAccess.ConnectionFactory
 			}
 
 			// Acquire lock to prevent multiple threads from parallel scripts execution.
-			using var _ = new Lock(lockTimeout: TimeSpan.FromMinutes(1));
+			using var _ = await Lock.AcquireAsync(lockTimeout: TimeSpan.FromMinutes(1));
 
 			if (!await DatabaseStructureIsPrepared(dbConnection))
 			{

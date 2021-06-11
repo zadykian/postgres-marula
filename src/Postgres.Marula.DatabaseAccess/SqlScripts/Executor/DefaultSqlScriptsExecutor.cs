@@ -24,6 +24,7 @@ namespace Postgres.Marula.DatabaseAccess.SqlScripts.Executor
 		/// <inheritdoc />
 		async Task ISqlScriptsExecutor.ExecuteScriptsAsync(IDbConnection dbConnection)
 		{
+			logger.LogInformation("Scripts execution is started.");
 			using var dbTransaction = dbConnection.BeginTransaction();
 
 			foreach (var sqlScript in sqlScriptsProvider.GetAllOrderedByExecution())
@@ -40,6 +41,7 @@ namespace Postgres.Marula.DatabaseAccess.SqlScripts.Executor
 			}
 
 			dbTransaction.Commit();
+			logger.LogInformation("Scripts execution completed successfully.");
 		}
 	}
 }
