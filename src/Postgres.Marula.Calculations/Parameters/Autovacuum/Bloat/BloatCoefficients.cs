@@ -1,5 +1,3 @@
-using Postgres.Marula.Infrastructure.TypeDecorators;
-
 namespace Postgres.Marula.Calculations.Parameters.Autovacuum.Bloat
 {
 	/// <summary>
