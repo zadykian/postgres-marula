@@ -9,7 +9,7 @@ namespace Postgres.Marula.Tests.Infrastructure
 	/// Database connection string tests.
 	/// </summary>
 	[TestFixture]
-	public class ConnectionStringTests
+	internal class ConnectionStringTests
 	{
 		[Test]
 		public void SingleKeyValueTest()
