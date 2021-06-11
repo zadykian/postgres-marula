@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Postgres.Marula.Calculations.ExternalDependencies;
@@ -26,12 +27,12 @@ namespace Postgres.Marula.Calculations.Parameters.Autovacuum
 		/// <inheritdoc />
 		/// <remarks>
 		/// Value calculated based on table size EV and can be represented by formula:
-		/// autovacuum_vacuum_threshold = 0.01 * {table_size_expected_value}
+		/// autovacuum_vacuum_threshold = max(50, 0.01 * {table_size_expected_value})
 		/// </remarks>
 		protected override async ValueTask<TuplesCount> CalculateValueAsync()
 		{
 			var averageTableSize = await databaseServer.GetAverageTableSizeAsync();
-			return (TuplesCount) 0.01 * averageTableSize;
+			return Math.Max(50, (TuplesCount) 0.01 * averageTableSize);
 		}
 	}
 }
