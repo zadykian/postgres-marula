@@ -13,11 +13,11 @@ using Postgres.Marula.Infrastructure.TypeDecorators;
 namespace Postgres.Marula.Tests.HwInfo
 {
 	/// <summary>
-	/// <see cref="RemoteHardwareInfo"/> tests.
+	/// Tests of <see cref="RemoteHardwareInfo"/> which performs HTTP requests to remote agent's API.
 	/// </summary>
-	internal class RemoteHardwareInfoTests : HardwareInfoTests
+	internal class RemoteHardwareInfoTests : HardwareInfoTestBase
 	{
-		private readonly Process agentApiProcess = CreateAgentProcess();
+		private readonly Process remoteAgentApiProcess = CreateAgentProcess();
 
 		/// <inheritdoc/>
 		protected override void ConfigureServices(IServiceCollection serviceCollection)
@@ -32,9 +32,9 @@ namespace Postgres.Marula.Tests.HwInfo
 		[OneTimeSetUp]
 		public void OneTimeSetUp()
 		{
-			agentApiProcess.Start();
+			remoteAgentApiProcess.Start();
 
-			agentApiProcess
+			remoteAgentApiProcess
 				.StandardError
 				.ReadToEndAsync()
 				.ContinueWith(task =>
@@ -44,19 +44,19 @@ namespace Postgres.Marula.Tests.HwInfo
 				});
 		}
 
-		/// <inheritdoc cref="HardwareInfoTests.GetTotalMemoryTest"/>
+		/// <inheritdoc cref="HardwareInfoTestBase.GetTotalMemoryTestImpl"/>
 		[Test]
-		public new async Task GetTotalMemoryTest() => await base.GetTotalMemoryTest();
+		public async Task GetRemoteTotalMemoryTest() => await GetTotalMemoryTestImpl();
 
-		/// <inheritdoc cref="HardwareInfoTests.GetCpuCoresCountTest"/>
+		/// <inheritdoc cref="HardwareInfoTestBase.GetCpuCoresCountTestImpl"/>
 		[Test]
-		public new async Task GetCpuCoresCountTest() => await base.GetCpuCoresCountTest();
+		public async Task GetRemoteCpuCoresCountTest() => await GetCpuCoresCountTestImpl();
 
 		/// <summary>
 		/// Kill agent process.
 		/// </summary>
 		[OneTimeTearDown]
-		public void OneTimeTearDown() => agentApiProcess.Kill();
+		public void OneTimeTearDown() => remoteAgentApiProcess.Kill();
 
 		/// <summary>
 		/// Create agent web api process. 
