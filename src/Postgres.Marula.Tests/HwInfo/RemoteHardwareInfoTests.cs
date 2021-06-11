@@ -10,6 +10,8 @@ using Postgres.Marula.HwInfo;
 using Postgres.Marula.Infrastructure.Extensions;
 using Postgres.Marula.Infrastructure.TypeDecorators;
 
+// ReSharper disable SwitchExpressionHandlesSomeKnownEnumValuesWithExceptionInDefault
+
 namespace Postgres.Marula.Tests.HwInfo
 {
 	/// <summary>
@@ -30,18 +32,19 @@ namespace Postgres.Marula.Tests.HwInfo
 		/// Start agent process.
 		/// </summary>
 		[OneTimeSetUp]
-		public void OneTimeSetUp()
+		public async Task OneTimeSetUp()
 		{
 			remoteAgentApiProcess.Start();
+			var errorOutputTask = remoteAgentApiProcess.StandardError.ReadToEndAsync();
 
-			remoteAgentApiProcess
-				.StandardError
-				.ReadToEndAsync()
-				.ContinueWith(task =>
-				{
-					if (string.IsNullOrWhiteSpace(task.Result)) return;
-					TestContext.Error.WriteLine(task.Result);
-				});
+			// check if agent process started successfully.
+			if (await Task.WhenAny(
+				errorOutputTask,
+				Task.Delay(millisecondsDelay: 5000)) == errorOutputTask)
+			{
+				await TestContext.Error.WriteLineAsync(errorOutputTask.Result);
+				Assert.Fail("failed to start agent process.");
+			}
 		}
 
 		/// <inheritdoc cref="HardwareInfoTestBase.GetTotalMemoryTestImpl"/>
