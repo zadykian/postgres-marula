@@ -146,13 +146,13 @@ namespace Postgres.Marula.Infrastructure.TypeDecorators
 		public static Memory operator *(ulong coefficient, Memory memory) => memory * coefficient;
 
 		/// <inheritdoc cref="op_Multiply(Memory,ulong)"/>
-		public static Memory operator *(Memory memory, double coefficient) => new(memory.TotalBytes *  (ulong) coefficient);
+		public static Memory operator *(Memory memory, double coefficient) => new((ulong) (memory.TotalBytes * coefficient));
 
 		/// <inheritdoc cref="op_Multiply(Memory,ulong)"/>
 		public static Memory operator *(double coefficient, Memory memory) => memory * coefficient;
 
 		/// <inheritdoc cref="op_Multiply(Memory,ulong)"/>
-		public static Memory operator *(Memory memory, decimal coefficient) => new(memory.TotalBytes *  (ulong) coefficient);
+		public static Memory operator *(Memory memory, decimal coefficient) => new((ulong) (memory.TotalBytes * coefficient));
 
 		/// <inheritdoc cref="op_Multiply(Memory,ulong)"/>
 		public static Memory operator *(decimal coefficient, Memory memory) => memory * coefficient;
@@ -163,10 +163,10 @@ namespace Postgres.Marula.Infrastructure.TypeDecorators
 		public static Memory operator /(Memory memory, ulong coefficient) => new(memory.TotalBytes / coefficient);
 
 		/// <inheritdoc cref="op_Division(Memory,ulong)"/>
-		public static Memory operator /(Memory memory, double coefficient) => new(memory.TotalBytes /  (ulong) coefficient);
+		public static Memory operator /(Memory memory, double coefficient) => new((ulong) (memory.TotalBytes / coefficient));
 
 		/// <inheritdoc cref="op_Division(Memory,ulong)"/>
-		public static Memory operator /(Memory memory, decimal coefficient) => new(memory.TotalBytes /  (ulong) coefficient);
+		public static Memory operator /(Memory memory, decimal coefficient) => new((ulong) (memory.TotalBytes / coefficient));
 
 		#endregion
 

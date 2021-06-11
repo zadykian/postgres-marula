@@ -29,12 +29,12 @@ namespace Postgres.Marula.Tests.Infrastructure
 		private static IEnumerable<ParseTestCase> ParseTestCases() =>
 			new ParseTestCase[]
 			{
-				new("0B", Memory.Zero),
-				new("1B", Memory.Byte),
-				new("1kB", Memory.Kilobyte),
-				new("1MB", Memory.Megabyte),
-				new("1GB", Memory.Gigabyte),
-				new("1TB", Memory.Terabyte),
+				new("0B",    Memory.Zero),
+				new("1B",    Memory.Byte),
+				new("1kB",   Memory.Kilobyte),
+				new("1MB",   Memory.Megabyte),
+				new("1GB",   Memory.Gigabyte),
+				new("1TB",   Memory.Terabyte),
 				new("32 GB", 32 * Memory.Gigabyte)
 			};
 
@@ -61,7 +61,17 @@ namespace Postgres.Marula.Tests.Infrastructure
 		private static IEnumerable<OperatorTestCase> OperatorTestCases()
 			=> new OperatorTestCase[]
 			{
-				new(() => 0.25 * Memory.Gigabyte, Memory.Parse("256MB"))
+				new(() => 25 * Memory.Gigabyte,    Memory.Parse("25GB")),
+				new(() => Memory.Terabyte * 32,    Memory.Parse("32TB")),
+				new(() => Memory.Megabyte / 64,    Memory.Parse("16kB")),
+
+				new(() => 0.25 * Memory.Kilobyte,  Memory.Parse("256B")),
+				new(() => Memory.Megabyte * 0.125, Memory.Parse("128kB")),
+				new(() => Memory.Gigabyte / 0.125, Memory.Parse("8GB")),
+
+				new(() => 8M * Memory.Byte,        Memory.Parse("8B")),
+				new(() => Memory.Megabyte * 48M,   Memory.Parse("48MB")),
+				new(() => Memory.Gigabyte / 0.01M, Memory.Parse("100GB"))
 			};
 
 		/// <summary>
