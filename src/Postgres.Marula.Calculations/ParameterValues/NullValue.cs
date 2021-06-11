@@ -12,7 +12,7 @@ namespace Postgres.Marula.Calculations.ParameterValues
 	public sealed class NullValue : IParameterValue
 	{
 		private NullValue(NonEmptyString parameterName)
-			=> ParameterLink = new ParameterLink(parameterName);
+			=> Link = new ParameterLink(parameterName);
 
 		/// <summary>
 		/// Create new instance of <see cref="NullValue"/> related to <paramref name="parameter"/>. 
@@ -21,7 +21,7 @@ namespace Postgres.Marula.Calculations.ParameterValues
 			=> new NullValue(parameter.Name);
 
 		/// <inheritdoc />
-		public IParameterLink ParameterLink { get; }
+		public IParameterLink Link { get; }
 
 		/// <inheritdoc />
 		IUnit IParameterValue.Unit => throw AccessError();

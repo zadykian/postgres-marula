@@ -76,10 +76,10 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 			// let postmaster reload configuration. 
 			await Task.Delay(millisecondsDelay: 100);
 
-			var rawParameterValue = await databaseServer.GetRawParameterValueAsync(valueToApply.ParameterLink);
+			var rawParameterValue = await databaseServer.GetRawParameterValueAsync(valueToApply.Link);
 
 			var parameterValueParser = GetService<IParameterValueParser>();
-			var parsedValue = parameterValueParser.Parse(valueToApply.ParameterLink, rawParameterValue);
+			var parsedValue = parameterValueParser.Parse(valueToApply.Link, rawParameterValue);
 			Assert.AreEqual(valueToApply, parsedValue);
 		}
 
@@ -141,7 +141,7 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 			var parameterValueParser = GetService<IParameterValueParser>();
 
 			var valuesFromServer = await parameterValues
-				.Select(parameterValue => parameterValue.ParameterLink)
+				.Select(parameterValue => parameterValue.Link)
 				.SelectAsync(async parameterLink =>
 				{
 					var rawParameterValue = await databaseServer.GetRawParameterValueAsync(parameterLink);

@@ -11,7 +11,7 @@ namespace Postgres.Marula.Calculations.ParameterValues.Base
 		/// <summary>
 		/// Link to parameter.
 		/// </summary>
-		IParameterLink ParameterLink { get; }
+		IParameterLink Link { get; }
 
 		/// <summary>
 		/// Parameter unit.

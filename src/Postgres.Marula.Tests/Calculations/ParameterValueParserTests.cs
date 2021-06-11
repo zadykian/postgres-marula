@@ -28,7 +28,7 @@ namespace Postgres.Marula.Tests.Calculations
 
 			Assert.IsInstanceOf<TimeSpanParameterValue>(parameterValue);
 			Assert.AreEqual(new IUnit.Milliseconds(), parameterValue.Unit);
-			Assert.AreEqual(parameterLink, parameterValue.ParameterLink);
+			Assert.AreEqual(parameterLink, parameterValue.Link);
 		}
 
 		/// <summary>
@@ -46,7 +46,7 @@ namespace Postgres.Marula.Tests.Calculations
 			Assert.IsInstanceOf<MemoryParameterValue>(parameterValue);
 			// 4GB is less then 10GB, so it's normalized to megabytes.
 			Assert.AreEqual(new IUnit.Mem(Memory.Unit.Megabytes), parameterValue.Unit);
-			Assert.AreEqual(parameterLink, parameterValue.ParameterLink);
+			Assert.AreEqual(parameterLink, parameterValue.Link);
 		}
 
 		/// <summary>
@@ -63,7 +63,7 @@ namespace Postgres.Marula.Tests.Calculations
 
 			Assert.IsInstanceOf<FractionParameterValue>(parameterValue);
 			Assert.AreEqual(new IUnit.None(), parameterValue.Unit);
-			Assert.AreEqual(parameterLink, parameterValue.ParameterLink);
+			Assert.AreEqual(parameterLink, parameterValue.Link);
 		}
 
 		/// <summary>
@@ -80,7 +80,7 @@ namespace Postgres.Marula.Tests.Calculations
 
 			Assert.IsInstanceOf<FractionParameterValue>(parameterValue);
 			Assert.AreEqual(new IUnit.None(), parameterValue.Unit);
-			Assert.AreEqual(parameterLink, parameterValue.ParameterLink);
+			Assert.AreEqual(parameterLink, parameterValue.Link);
 		}
 
 		/// <summary>
@@ -97,7 +97,7 @@ namespace Postgres.Marula.Tests.Calculations
 
 			Assert.IsInstanceOf<BooleanParameterValue>(parameterValue);
 			Assert.AreEqual(new IUnit.None(), parameterValue.Unit);
-			Assert.AreEqual(parameterLink, parameterValue.ParameterLink);
+			Assert.AreEqual(parameterLink, parameterValue.Link);
 			Assert.AreEqual(underlyingValue, ((BooleanParameterValue) parameterValue).Value);
 		}
 
@@ -116,7 +116,7 @@ namespace Postgres.Marula.Tests.Calculations
 
 			Assert.IsInstanceOf<IntegerParameterValue>(parameterValue);
 			Assert.AreEqual(new IUnit.None(), parameterValue.Unit);
-			Assert.AreEqual(parameterLink, parameterValue.ParameterLink);
+			Assert.AreEqual(parameterLink, parameterValue.Link);
 			Assert.AreEqual(underlyingValue, ((IntegerParameterValue) parameterValue).Value);
 		}
 	}

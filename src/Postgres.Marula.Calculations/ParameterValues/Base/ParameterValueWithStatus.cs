@@ -26,6 +26,6 @@ namespace Postgres.Marula.Calculations.ParameterValues.Base
 
 		/// <inheritdoc />
 		public override string ToString()
-			=> $"{Value.ParameterLink.Name}: {Value} ({CalculationStatus.StringRepresentation()})";
+			=> $"{Value.Link.Name}: {Value} ({CalculationStatus.StringRepresentation()})";
 	}
 }

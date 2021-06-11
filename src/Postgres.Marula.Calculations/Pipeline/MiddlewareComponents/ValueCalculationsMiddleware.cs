@@ -64,7 +64,7 @@ namespace Postgres.Marula.Calculations.Pipeline.MiddlewareComponents
 				return await parameterToCalculate.CalculateAsync();
 			}
 
-			var parameterNames = notCalculated.Select(value => value.ParameterLink.Name);
+			var parameterNames = notCalculated.Select(value => value.Link.Name);
 			logger.LogWarning(
 				$"Unable to calculate value of parameter '{parameterToCalculate.Name}' " +
 				$"because it has dependencies which are not calculated: [{parameterNames.JoinBy(", ")}].");
