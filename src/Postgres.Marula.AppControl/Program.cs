@@ -18,7 +18,6 @@ namespace Postgres.Marula.AppControl
 				.WithConfig(args, "marula-ctl-config")
 				.ConfigureServices(services => services.AddComponent<AppControlAppComponent>())
 				// todo
-				.Build()
-				.RunAsync();
+				.RunConsoleAsync();
 	}
 }
