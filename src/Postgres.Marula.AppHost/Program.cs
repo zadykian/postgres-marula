@@ -16,14 +16,8 @@ namespace Postgres.Marula.AppHost
 		/// Entry point method. 
 		/// </summary>
 		private static Task Main(string[] args)
-			=> Host
-				.CreateDefaultBuilder(args)
-				.AddJsonConfig("marula-app-config")
-				.UseDefaultServiceProvider(options =>
-				{
-					options.ValidateScopes = true;
-					options.ValidateOnBuild = true;
-				})
+			=> MarulaHost
+				.WithConfig(args, "marula-app-config")
 				.ConfigureServices(services => services
 					.AddComponent<InfrastructureAppComponent>()
 					.AddComponent<DatabaseAccessAppComponent>()

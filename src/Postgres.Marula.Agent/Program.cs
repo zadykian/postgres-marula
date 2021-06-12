@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using Postgres.Marula.HwInfo;
+using Postgres.Marula.Infrastructure;
 using Postgres.Marula.Infrastructure.Extensions;
 
 namespace Postgres.Marula.Agent
@@ -15,14 +16,8 @@ namespace Postgres.Marula.Agent
 		/// Entry point method. 
 		/// </summary>
 		private static Task Main(string[] args)
-			=> Host
-				.CreateDefaultBuilder(args)
-				.AddJsonConfig("marula-agent-config")
-				.UseDefaultServiceProvider(options =>
-				{
-					options.ValidateScopes = true;
-					options.ValidateOnBuild = true;
-				})
+			=> MarulaHost
+				.WithConfig(args, "marula-agent-config")
 				.ConfigureWebHostDefaults(builder => builder.UseStartup<Startup>())
 				.ConfigureServices(services => services.AddComponent<HwInfoAppComponent>())
 				.Build()
