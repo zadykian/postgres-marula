@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Postgres.Marula.HwInfo", "P
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Postgres.Marula.Agent", "Postgres.Marula.Agent\Postgres.Marula.Agent.csproj", "{49743399-7DE4-4CA8-9FE5-1D7DE685659B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Postgres.Marula.ControlApp", "Postgres.Marula.ControlApp\Postgres.Marula.ControlApp.csproj", "{689F9651-4D82-4AC4-8976-82E29C63690C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,5 +55,9 @@ Global
 		{49743399-7DE4-4CA8-9FE5-1D7DE685659B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{49743399-7DE4-4CA8-9FE5-1D7DE685659B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{49743399-7DE4-4CA8-9FE5-1D7DE685659B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{689F9651-4D82-4AC4-8976-82E29C63690C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{689F9651-4D82-4AC4-8976-82E29C63690C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{689F9651-4D82-4AC4-8976-82E29C63690C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{689F9651-4D82-4AC4-8976-82E29C63690C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
