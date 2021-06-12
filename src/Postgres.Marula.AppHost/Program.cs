@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Postgres.Marula.Calculations;
 using Postgres.Marula.DatabaseAccess;
@@ -18,12 +19,18 @@ namespace Postgres.Marula.AppHost
 		private static Task Main(string[] args)
 			=> MarulaHost
 				.WithConfig(args, "marula-app-config")
-				.ConfigureServices(services => services
-					.AddComponent<InfrastructureAppComponent>()
-					.AddComponent<DatabaseAccessAppComponent>()
-					.AddComponent<CalculationsAppComponent>()
-					.AddComponent<AppHostAppComponent>())
+				.ConfigureServices(AddComponents)
 				.Build()
 				.RunAsync();
+
+		/// <summary>
+		/// Add all required components to <paramref name="services"/>. 
+		/// </summary>
+		private static void AddComponents(IServiceCollection services)
+			=> services
+				.AddComponent<InfrastructureAppComponent>()
+				.AddComponent<DatabaseAccessAppComponent>()
+				.AddComponent<CalculationsAppComponent>()
+				.AddComponent<AppHostAppComponent>();
 	}
 }
