@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 using Postgres.Marula.Infrastructure.Extensions;
 
-namespace Postgres.Marula.ControlApp
+namespace Postgres.Marula.AppControl
 {
 	/// <summary>
 	/// Application entry point.
@@ -16,6 +16,12 @@ namespace Postgres.Marula.ControlApp
 			=> Host
 				.CreateDefaultBuilder(args)
 				.AddJsonConfig("marula-ctl-config")
+				.UseDefaultServiceProvider(options =>
+				{
+					options.ValidateScopes = true;
+					options.ValidateOnBuild = true;
+				})
+				.ConfigureServices(services => services.AddComponent<AppControlAppComponent>())
 				// todo
 				.Build()
 				.RunAsync();
