@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
+using Postgres.Marula.Infrastructure.Extensions;
 
 namespace Postgres.Marula.ControlApp
 {
@@ -14,6 +15,7 @@ namespace Postgres.Marula.ControlApp
 		private static Task Main(string[] args)
 			=> Host
 				.CreateDefaultBuilder(args)
+				.AddJsonConfig("marula-ctl-config")
 				// todo
 				.Build()
 				.RunAsync();
