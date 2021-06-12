@@ -2,10 +2,16 @@ using Terminal.Gui;
 
 namespace Postgres.Marula.AppControl
 {
-	internal class App : Window
+	/// <summary>
+	/// Main UI window.
+	/// </summary>
+	internal class ControlWindow : Window
 	{
-		public App() => Initialize();
+		public ControlWindow() => Initialize();
 
+		/// <summary>
+		/// Perform main window initialization.
+		/// </summary>
 		private void Initialize()
 		{
 			Title = "postgres-marula-ctl";

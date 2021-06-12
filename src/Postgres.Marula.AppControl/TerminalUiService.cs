@@ -1,6 +1,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
+using Terminal.Gui;
 
 namespace Postgres.Marula.AppControl
 {
@@ -10,9 +11,17 @@ namespace Postgres.Marula.AppControl
 	internal class TerminalUiService : IHostedService
 	{
 		/// <inheritdoc />
-		Task IHostedService.StartAsync(CancellationToken cancellationToken) => throw new System.NotImplementedException();
+		async Task IHostedService.StartAsync(CancellationToken cancellationToken)
+		{
+			await Task.CompletedTask;
+			Application.Run<ControlWindow>();
+		}
 
 		/// <inheritdoc />
-		Task IHostedService.StopAsync(CancellationToken cancellationToken) => throw new System.NotImplementedException();
+		async Task IHostedService.StopAsync(CancellationToken cancellationToken)
+		{
+			await Task.CompletedTask;
+			Application.RequestStop();
+		}
 	}
 }
