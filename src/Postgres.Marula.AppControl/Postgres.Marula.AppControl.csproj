@@ -5,4 +5,8 @@
 	<ItemGroup>
 		<ProjectReference Include="..\Postgres.Marula.Infrastructure\Postgres.Marula.Infrastructure.csproj" />
 	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Terminal.Gui" Version="1.1.1" />
+	</ItemGroup>
 </Project>
