@@ -14,7 +14,7 @@ namespace Postgres.Marula.AppControl
 		/// Entry point method.
 		/// </summary>
 		private static Task Main(string[] args)
-			=> MarulaHost
+			=> CommonHostBuilder
 				.WithConfig(args, "marula-ctl-config")
 				.ConfigureServices(services => services.AddComponent<AppControlAppComponent>())
 				// todo

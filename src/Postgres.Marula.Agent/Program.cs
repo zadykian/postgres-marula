@@ -16,7 +16,7 @@ namespace Postgres.Marula.Agent
 		/// Entry point method. 
 		/// </summary>
 		private static Task Main(string[] args)
-			=> MarulaHost
+			=> CommonHostBuilder
 				.WithConfig(args, "marula-agent-config")
 				.ConfigureWebHostDefaults(builder => builder.UseStartup<Startup>())
 				.ConfigureServices(services => services.AddComponent<HwInfoAppComponent>())

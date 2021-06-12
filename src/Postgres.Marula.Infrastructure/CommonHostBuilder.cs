@@ -7,9 +7,10 @@ using Postgres.Marula.Infrastructure.TypeDecorators;
 namespace Postgres.Marula.Infrastructure
 {
 	/// <summary>
-	/// Application generic host.
+	/// Application generic host builder shared
+	/// among all executables - main host, agent, control app, etc.
 	/// </summary>
-	public static class MarulaHost
+	public static class CommonHostBuilder
 	{
 		/// <summary>
 		/// Create <see cref="IHostBuilder"/> instance configured

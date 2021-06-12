@@ -17,7 +17,7 @@ namespace Postgres.Marula.AppHost
 		/// Entry point method. 
 		/// </summary>
 		private static Task Main(string[] args)
-			=> MarulaHost
+			=> CommonHostBuilder
 				.WithConfig(args, "marula-app-config")
 				.ConfigureServices(AddComponents)
 				.Build()
