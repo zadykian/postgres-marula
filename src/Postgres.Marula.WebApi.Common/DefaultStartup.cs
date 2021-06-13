@@ -4,12 +4,12 @@ using System.Reflection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Postgres.Marula.Agent
+namespace Postgres.Marula.WebApi.Common
 {
 	/// <summary>
-	/// Web application configuration.
+	/// Default web application startup.
 	/// </summary>
-	internal class Startup
+	internal class DefaultStartup
 	{
 		/// <summary>
 		/// Configure application services. 

@@ -4,6 +4,7 @@ using Microsoft.Extensions.Hosting;
 using Postgres.Marula.HwInfo;
 using Postgres.Marula.Infrastructure.Extensions;
 using Postgres.Marula.Infrastructure.Hosting;
+using Postgres.Marula.WebApi.Common;
 
 namespace Postgres.Marula.Agent
 {
@@ -18,7 +19,7 @@ namespace Postgres.Marula.Agent
 		private static Task Main(string[] args)
 			=> CommonHostBuilder
 				.WithConfig(args, "marula-agent-config")
-				.ConfigureWebHostDefaults(builder => builder.UseStartup<DefaultStartup>())
+				.WebWithDefaultStartup()
 				.ConfigureServices(services => services.AddComponent<HwInfoAppComponent>())
 				.Build()
 				.RunAsync();

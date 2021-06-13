@@ -10,11 +10,7 @@
 	<ItemGroup>
 		<ProjectReference Include="..\Postgres.Marula.HwInfo\Postgres.Marula.HwInfo.csproj" />
 		<ProjectReference Include="..\Postgres.Marula.Infrastructure\Postgres.Marula.Infrastructure.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.1.4" />
-		<PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.1.4" />
+		<ProjectReference Include="..\Postgres.Marula.WebApi.Common\Postgres.Marula.WebApi.Common.csproj" />
 	</ItemGroup>
 
 </Project>
