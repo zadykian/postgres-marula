@@ -1,5 +1,4 @@
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using Postgres.Marula.HwInfo;
 using Postgres.Marula.Infrastructure.Extensions;
