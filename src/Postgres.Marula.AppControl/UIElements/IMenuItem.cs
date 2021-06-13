@@ -1,6 +1,6 @@
 using Postgres.Marula.Infrastructure.TypeDecorators;
 
-namespace Postgres.Marula.AppControl.DataSources
+namespace Postgres.Marula.AppControl.UIElements
 {
 	/// <summary>
 	/// Control application menu item.

@@ -1,4 +1,4 @@
-namespace Postgres.Marula.AppControl.DataSources
+namespace Postgres.Marula.AppControl.UIElements
 {
 	/// <summary>
 	/// Source of displayable data.

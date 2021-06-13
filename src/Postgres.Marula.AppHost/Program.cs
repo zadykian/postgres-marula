@@ -5,6 +5,7 @@ using Postgres.Marula.Calculations;
 using Postgres.Marula.DatabaseAccess;
 using Postgres.Marula.Infrastructure;
 using Postgres.Marula.Infrastructure.Extensions;
+using Postgres.Marula.Infrastructure.Hosting;
 
 namespace Postgres.Marula.AppHost
 {
