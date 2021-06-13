@@ -2,12 +2,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Postgres.Marula.Infrastructure.TypeDecorators;
 
-namespace Postgres.Marula.Infrastructure.Extensions
+namespace Postgres.Marula.Infrastructure.Hosting
 {
 	/// <summary>
 	/// Extension methods for <see cref="IHostBuilder"/> type.
 	/// </summary>
-	public static class HostBuilderExtensions
+	internal static class HostBuilderExtensions
 	{
 		/// <summary>
 		/// Add json file named <paramref name="jsonFileName"/> to app configuration.
