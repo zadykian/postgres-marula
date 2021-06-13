@@ -76,7 +76,9 @@ namespace Postgres.Marula.DatabaseAccess.ConnectionFactory
 		/// </summary>
 		private async Task FillParameterDictionaryTable(IDbConnection dbConnection)
 		{
-			var parameterNames = AllParameterNames();
+			var parameterNames = AllParameterNames()
+				.Select(name => (string) name)
+				.ToImmutableArray();
 
 			var commandText = string.Intern($@"
 				insert into {namingConventions.SystemSchemaName}.{namingConventions.ParametersTableName}
@@ -90,15 +92,14 @@ namespace Postgres.Marula.DatabaseAccess.ConnectionFactory
 		/// <summary>
 		/// Get names of all parameters defined in application. 
 		/// </summary>
-		private static IEnumerable<string> AllParameterNames()
+		private static IEnumerable<NonEmptyString> AllParameterNames()
 			=> AppDomain
 				.CurrentDomain
 				.GetAssemblies()
 				.SelectMany(assembly => assembly.GetTypes())
 				.Where(type => !type.IsAbstract && type.IsAssignableTo(typeof(IParameter)))
 				.Select(parameterType => new ParameterLink(parameterType))
-				.Select(link => (string) link.Name)
-				.OrderBy(parameterName => parameterName)
-				.ToImmutableArray();
+				.Select(link => link.Name)
+				.OrderBy(parameterName => parameterName);
 	}
 }

@@ -44,8 +44,7 @@ namespace Postgres.Marula.Tests.HwInfo
 				errorOutputTask,
 				Task.Delay(millisecondsDelay: 5000)) == errorOutputTask)
 			{
-				await TestContext.Error.WriteLineAsync(errorOutputTask.Result);
-				Assert.Fail("failed to start agent process.");
+				Assert.Fail($"failed to start agent process: {errorOutputTask.Result}.");
 			}
 
 			TestContext.WriteLine("agent process is started.");
