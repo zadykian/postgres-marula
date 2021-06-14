@@ -1,6 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Postgres.Marula.AppControl.UIElements;
+using Postgres.Marula.AppControl.UIElements.Lifetime;
 using Postgres.Marula.AppControl.UIElements.Menu;
 using Postgres.Marula.AppControl.UIElements.Messages;
 using Postgres.Marula.Infrastructure.AppComponents;
@@ -17,7 +18,8 @@ namespace Postgres.Marula.AppControl
 				.AddSingleton<IMessageBox, TerminalMessageBox>()
 				.To(RegisterGeneralMenuItems)
 				.AddSingleton<IAppMenu, AppMenu>()
-				.AddSingleton<IUserInterface, ControlWindow>()
+				.AddSingleton<IUIStartup, ControlWindow>()
+				.AddSingleton<IUIShutdown, UiShutdown>()
 				.AddSingleton<IHostedService, TerminalUiService>();
 
 		private static IServiceCollection RegisterGeneralMenuItems(IServiceCollection services)

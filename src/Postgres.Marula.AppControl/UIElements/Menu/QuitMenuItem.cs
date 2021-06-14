@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Postgres.Marula.AppControl.UIElements.Lifetime;
 using Postgres.Marula.AppControl.UIElements.Messages;
 
 namespace Postgres.Marula.AppControl.UIElements.Menu
@@ -8,14 +9,14 @@ namespace Postgres.Marula.AppControl.UIElements.Menu
 	/// </summary>
 	internal class QuitMenuItem : MenuItem
 	{
-		private readonly IUserInterface userInterface;
+		private readonly IUIShutdown uiShutdown;
 		private readonly IMessageBox messageBox;
 
 		public QuitMenuItem(
-			IUserInterface userInterface,
+			IUIShutdown uiShutdown,
 			IMessageBox messageBox) : base("quit", byte.MaxValue)
 		{
-			this.userInterface = userInterface;
+			this.uiShutdown = uiShutdown;
 			this.messageBox = messageBox;
 		}
 
@@ -24,7 +25,7 @@ namespace Postgres.Marula.AppControl.UIElements.Menu
 		{
 			await base.HandleClickAsync();
 			var confirmed = await messageBox.QueryAsync(Name, "are you sure are you want to quit from ctl app?");
-			if (confirmed) await userInterface.StopAsync();
+			if (confirmed) await uiShutdown.StopAsync();
 		}
 	}
 }

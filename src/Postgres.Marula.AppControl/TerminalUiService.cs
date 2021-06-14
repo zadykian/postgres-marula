@@ -1,7 +1,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
-using Postgres.Marula.AppControl.UIElements;
+using Postgres.Marula.AppControl.UIElements.Lifetime;
 
 namespace Postgres.Marula.AppControl
 {
@@ -10,14 +10,21 @@ namespace Postgres.Marula.AppControl
 	/// </summary>
 	internal class TerminalUiService : IHostedService
 	{
-		private readonly IUserInterface userInterface;
+		private readonly IUIStartup uiStartup;
+		private readonly IUIShutdown uiShutdown;
 
-		public TerminalUiService(IUserInterface userInterface) => this.userInterface = userInterface;
+		public TerminalUiService(
+			IUIStartup uiStartup,
+			IUIShutdown uiShutdown)
+		{
+			this.uiStartup = uiStartup;
+			this.uiShutdown = uiShutdown;
+		}
 
 		/// <inheritdoc />
-		async Task IHostedService.StartAsync(CancellationToken cancellationToken) => await userInterface.StartAsync();
+		async Task IHostedService.StartAsync(CancellationToken cancellationToken) => await uiStartup.StartAsync();
 
 		/// <inheritdoc />
-		async Task IHostedService.StopAsync(CancellationToken cancellationToken) => await userInterface.StopAsync();
+		async Task IHostedService.StopAsync(CancellationToken cancellationToken) => await uiShutdown.StopAsync();
 	}
 }

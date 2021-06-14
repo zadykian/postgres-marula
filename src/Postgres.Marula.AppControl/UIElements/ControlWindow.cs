@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Hosting;
+using Postgres.Marula.AppControl.UIElements.Lifetime;
 using Postgres.Marula.AppControl.UIElements.Menu;
 using Terminal.Gui;
 
@@ -10,39 +10,18 @@ namespace Postgres.Marula.AppControl.UIElements
 	/// <summary>
 	/// Main UI window.
 	/// </summary>
-	internal class ControlWindow : Window, IUserInterface
+	internal class ControlWindow : Window, IUIStartup
 	{
 		private readonly IAppMenu appMenu;
-		private readonly IHostApplicationLifetime applicationLifetime;
 
-		public ControlWindow(
-			IAppMenu appMenu,
-			IHostApplicationLifetime applicationLifetime)
-		{
-			this.appMenu = appMenu;
-			this.applicationLifetime = applicationLifetime;
-		}
+		public ControlWindow(IAppMenu appMenu) => this.appMenu = appMenu;
 
 		/// <inheritdoc />
-		async Task IUserInterface.StartAsync()
+		async Task IUIStartup.StartAsync()
 		{
 			Application.Init();
 			await InitializeAsync();
 			Application.Run(this);
-		}
-
-		/// <inheritdoc />
-		async Task IUserInterface.StopAsync()
-		{
-			if (applicationLifetime.ApplicationStopping.IsCancellationRequested)
-			{
-				return;
-			}
-
-			await Task.CompletedTask;
-			Application.RequestStop();
-			Application.Top.Clear();
-			applicationLifetime.StopApplication();
 		}
 
 		/// <summary>
