@@ -6,7 +6,9 @@ using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.OpenApi.Models;
 using Postgres.Marula.Infrastructure.Extensions;
+using Postgres.Marula.Infrastructure.TypeDecorators;
 using Postgres.Marula.WebApi.Common.JsonConverters;
 
 namespace Postgres.Marula.WebApi.Common
@@ -16,6 +18,11 @@ namespace Postgres.Marula.WebApi.Common
 	/// </summary>
 	internal class DefaultStartup
 	{
+		/// <summary>
+		/// Name of current entry assembly.
+		/// </summary>
+		private static NonEmptyString EntryAssemblyName => Assembly.GetEntryAssembly()!.GetName().Name!;
+
 		/// <summary>
 		/// Configure application services. 
 		/// </summary>
@@ -33,9 +40,15 @@ namespace Postgres.Marula.WebApi.Common
 				.Services
 				.AddSwaggerGen(options =>
 				{
-					var xmlFile = $"{Assembly.GetEntryAssembly()!.GetName().Name}.xml";
+					var xmlFile = $"{EntryAssemblyName}.xml";
 					var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
 					options.IncludeXmlComments(xmlPath);
+					options.SwaggerDoc("v1", new OpenApiInfo
+					{
+						Version = "v1",
+						Title = EntryAssemblyName,
+						Description = $"{EntryAssemblyName}'s public API.",
+					});
 				});
 
 		/// <summary>
@@ -57,6 +70,11 @@ namespace Postgres.Marula.WebApi.Common
 				.UseRouting()
 				.UseEndpoints(endpointBuilder => endpointBuilder.MapControllers())
 				.UseSwagger()
-				.UseSwaggerUI();
+				.UseSwaggerUI(options =>
+				{
+					options.DocumentTitle = EntryAssemblyName;
+					options.RoutePrefix = string.Empty;
+					options.SwaggerEndpoint("/swagger/v1/swagger.json", EntryAssemblyName);
+				});
 	}
 }
