@@ -44,7 +44,7 @@ namespace Postgres.Marula.AppControl.UIElements
 
 			var menuWidth = generalMenuItems
 				.Concat(jobMenuItems)
-				.Max(item => item.Name.Length) + 5;
+				.Max(item => item.Name.Length) + 8;
 
 			var generalMenuView = CreateGeneralMenuView(menuWidth, generalMenuItems);
 			Add(generalMenuView);
@@ -132,8 +132,37 @@ namespace Postgres.Marula.AppControl.UIElements
 
 			jobsMenuView.ShortcutAction = () => jobsMenuView.SetFocus();
 
+			var startAllButton = new Button("start all");
+			startAllButton.Clicked += () =>
+			{
+				/* todo: call IJobs.StartAll with confirmation */
+			};
+
+			var buttonsFrame = new FrameView
+			{
+				Height = Dim.Height(startAllButton) + 2,
+				Width = Dim.Fill()
+			};
+
+			buttonsFrame.Add(startAllButton);
+
+			var stopAllButton = new Button("stop all")
+			{
+				X = Pos.Right(startAllButton) + 1
+			};
+
+			stopAllButton.Clicked += () =>
+			{
+				/* todo: call IJobs.StopAll with confirmation */
+			};
+
+			buttonsFrame.Add(stopAllButton);
+
+			jobsMenuView.Add(buttonsFrame);
+
 			jobsMenuView.Add(new ListView(jobMenuItems.ToArray())
 			{
+				Y = Pos.Bottom(buttonsFrame),
 				Width = Dim.Fill(),
 				Height = Dim.Fill(),
 				AllowsMarking = false,
