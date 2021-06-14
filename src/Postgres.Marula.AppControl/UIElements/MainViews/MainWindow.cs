@@ -29,7 +29,7 @@ namespace Postgres.Marula.AppControl.UIElements.MainViews
 		/// <summary>
 		/// Perform main window initialization.
 		/// </summary>
-		public async Task InitializeAsync()
+		private async Task InitializeAsync()
 		{
 			Title = "postgres-marula-ctl";
 			ColorScheme = DefaultColorScheme();
