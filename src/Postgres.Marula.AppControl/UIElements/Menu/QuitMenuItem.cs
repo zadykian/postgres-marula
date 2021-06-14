@@ -22,10 +22,8 @@ namespace Postgres.Marula.AppControl.UIElements.Menu
 
 		/// <inheritdoc />
 		public override async Task HandleClickAsync()
-		{
-			await base.HandleClickAsync();
-			var confirmed = await messageBox.QueryAsync(Name, "are you sure are you want to quit from ctl app?");
-			if (confirmed) await uiShutdown.StopAsync();
-		}
+			=> await messageBox
+				.QueryAsync(Name, "are you sure are you want to quit from ctl app?")
+				.OnConfirmed(uiShutdown.StopAsync);
 	}
 }

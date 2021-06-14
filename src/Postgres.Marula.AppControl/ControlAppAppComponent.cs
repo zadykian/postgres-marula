@@ -3,6 +3,7 @@ using Microsoft.Extensions.Hosting;
 using Postgres.Marula.AppControl.Configuration;
 using Postgres.Marula.AppControl.PeriodicJobs;
 using Postgres.Marula.AppControl.UIElements;
+using Postgres.Marula.AppControl.UIElements.Controls;
 using Postgres.Marula.AppControl.UIElements.Lifetime;
 using Postgres.Marula.AppControl.UIElements.Menu;
 using Postgres.Marula.AppControl.UIElements.Messages;
@@ -21,6 +22,7 @@ namespace Postgres.Marula.AppControl
 				.AddSingleton<IControlAppConfiguration, ControlAppConfiguration>()
 				.AddSingleton<IJobs, RemoteJobs>()
 				.AddSingleton<IMessageBox, TerminalMessageBox>()
+				.AddSingleton<IButtons, Buttons>()
 				.To(RegisterGeneralMenuItems)
 				.AddSingleton<IAppMenu, AppMenu>()
 				.AddSingleton<IUIStartup, ControlWindow>()

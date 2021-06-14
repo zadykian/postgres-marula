@@ -1,8 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Postgres.Marula.AppControl.UIElements.Controls;
 using Postgres.Marula.AppControl.UIElements.Lifetime;
 using Postgres.Marula.AppControl.UIElements.Menu;
+using Postgres.Marula.Infrastructure.Extensions;
 using Terminal.Gui;
 
 namespace Postgres.Marula.AppControl.UIElements
@@ -13,8 +15,13 @@ namespace Postgres.Marula.AppControl.UIElements
 	internal class ControlWindow : Window, IUIStartup
 	{
 		private readonly IAppMenu appMenu;
+		private readonly IButtons buttons;
 
-		public ControlWindow(IAppMenu appMenu) => this.appMenu = appMenu;
+		public ControlWindow(IAppMenu appMenu, IButtons buttons)
+		{
+			this.appMenu = appMenu;
+			this.buttons = buttons;
+		}
 
 		/// <inheritdoc />
 		async Task IUIStartup.StartAsync()
@@ -82,23 +89,6 @@ namespace Postgres.Marula.AppControl.UIElements
 		}
 
 		/// <summary>
-		/// Create UI color scheme for buttons. 
-		/// </summary>
-		private static ColorScheme ButtonColorScheme()
-		{
-			var normal = Application.Driver.MakeAttribute(fore: Color.Black, back: Color.Gray);
-			var focused = Application.Driver.MakeAttribute(fore: Color.White, back: Color.Cyan);
-
-			return new ColorScheme
-			{
-				Normal = normal,
-				Focus = focused,
-				HotNormal = normal,
-				HotFocus = normal
-			};
-		}
-
-		/// <summary>
 		/// Create general menu view. 
 		/// </summary>
 		private static FrameView CreateGeneralMenuView(
@@ -135,7 +125,7 @@ namespace Postgres.Marula.AppControl.UIElements
 		/// <summary>
 		/// Create main host's jobs view. 
 		/// </summary>
-		private static FrameView CreateJobsMenuView(
+		private FrameView CreateJobsMenuView(
 			int menuWidth,
 			IEnumerable<IMenuItem> jobMenuItems,
 			View generalMenuView)
@@ -150,37 +140,7 @@ namespace Postgres.Marula.AppControl.UIElements
 
 			jobsMenuView.ShortcutAction = () => jobsMenuView.SetFocus();
 
-			var startAllButton = new Button("start all")
-			{
-				ColorScheme = ButtonColorScheme()
-			};
-
-			startAllButton.Clicked += () =>
-			{
-				/* todo: call IJobs.StartAll with confirmation */
-			};
-
-			var buttonsFrame = new FrameView
-			{
-				Height = Dim.Height(startAllButton) + 2,
-				Width = Dim.Fill()
-			};
-
-			buttonsFrame.Add(startAllButton);
-
-			var stopAllButton = new Button("stop all")
-			{
-				X = Pos.Right(startAllButton) + 1,
-				ColorScheme = ButtonColorScheme()
-			};
-
-			stopAllButton.Clicked += () =>
-			{
-				/* todo: call IJobs.StopAll with confirmation */
-			};
-
-			buttonsFrame.Add(stopAllButton);
-
+			var buttonsFrame = CreateButtonsFrame();
 			jobsMenuView.Add(buttonsFrame);
 
 			jobsMenuView.Add(new ListView(jobMenuItems.ToArray())
@@ -193,6 +153,29 @@ namespace Postgres.Marula.AppControl.UIElements
 			});
 
 			return jobsMenuView;
+		}
+
+		/// <summary>
+		/// Create frame with job management buttons. 
+		/// </summary>
+		private FrameView CreateButtonsFrame()
+		{
+			var startAllButton = buttons.StartAllJobs();
+
+			var buttonsFrame = new FrameView
+			{
+				Height = Dim.Height(startAllButton) + 2,
+				Width = Dim.Fill()
+			};
+
+			buttonsFrame.Add(startAllButton);
+
+			buttons
+				.StopAllJobs()
+				.WithHorizontalOffset(Pos.Right(startAllButton) + 1)
+				.To(buttonsFrame.Add);
+
+			return buttonsFrame;
 		}
 	}
 }
