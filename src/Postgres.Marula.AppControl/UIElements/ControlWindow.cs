@@ -125,21 +125,10 @@ namespace Postgres.Marula.AppControl.UIElements
 				CanFocus = true
 			};
 
-			generalMenuListView.OpenSelectedItem += eventArgs =>
+			generalMenuListView.OpenSelectedItem += async eventArgs =>
 			{
 				var menuItem = (IMenuItem) eventArgs.Value;
-
-				if (menuItem is QuitMenuItem)
-				{
-					var answerButtonNumber = MessageBox.Query(
-						"quit",
-						"are you sure are you want to quit from ctl app?", "yes", "no");
-					if (answerButtonNumber == 0)
-					{
-						((IUserInterface) this).StopAsync();
-						//applicationLifetime.StopApplication();
-					}
-				}
+				await menuItem.HandleClickAsync();
 			};
 
 			generalMenuView.Add(generalMenuListView);

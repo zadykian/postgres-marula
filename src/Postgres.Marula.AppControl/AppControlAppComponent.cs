@@ -2,7 +2,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Postgres.Marula.AppControl.UIElements;
 using Postgres.Marula.AppControl.UIElements.Menu;
+using Postgres.Marula.AppControl.UIElements.Messages;
 using Postgres.Marula.Infrastructure.AppComponents;
+using Postgres.Marula.Infrastructure.Extensions;
 
 namespace Postgres.Marula.AppControl
 {
@@ -12,8 +14,18 @@ namespace Postgres.Marula.AppControl
 		/// <inheritdoc />
 		void IAppComponent.RegisterServices(IServiceCollection services)
 			=> services
+				.AddSingleton<IMessageBox, TerminalMessageBox>()
+				.To(RegisterGeneralMenuItems)
 				.AddSingleton<IAppMenu, AppMenu>()
 				.AddSingleton<IUserInterface, ControlWindow>()
 				.AddSingleton<IHostedService, TerminalUiService>();
+
+		private static IServiceCollection RegisterGeneralMenuItems(IServiceCollection services)
+			=> services
+				.AddSingleton<IMenuItem>(new MenuItem("view ctl app logs", 0))
+				.AddSingleton<IMenuItem>(new MenuItem("calculate immediately", 1))
+				.AddSingleton<IMenuItem>(new MenuItem("view calculated values", 2))
+				.AddSingleton<IMenuItem>(new MenuItem("export values to .sql", 3))
+				.AddSingleton<IMenuItem, QuitMenuItem>();
 	}
 }
