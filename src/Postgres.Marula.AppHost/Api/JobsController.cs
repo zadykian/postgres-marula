@@ -13,6 +13,9 @@ namespace Postgres.Marula.AppHost.Api
 	{
 		private readonly IJobs jobs;
 
+		/// <param name="jobs">
+		/// All long-running jobs.
+		/// </param>
 		public JobsController(IJobs jobs) => this.jobs = jobs;
 
 		/// <inheritdoc cref="IJobs.InfoAboutAllAsync"/>
