@@ -1,7 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Hosting;
 using Postgres.Marula.AppControl.UIElements.Menu;
 using Terminal.Gui;
 
@@ -13,8 +13,15 @@ namespace Postgres.Marula.AppControl.UIElements
 	internal class ControlWindow : Window, IUserInterface
 	{
 		private readonly IAppMenu appMenu;
+		private readonly IHostApplicationLifetime applicationLifetime;
 
-		public ControlWindow(IAppMenu appMenu) => this.appMenu = appMenu;
+		public ControlWindow(
+			IAppMenu appMenu,
+			IHostApplicationLifetime applicationLifetime)
+		{
+			this.appMenu = appMenu;
+			this.applicationLifetime = applicationLifetime;
+		}
 
 		/// <inheritdoc />
 		async Task IUserInterface.StartAsync()
@@ -27,10 +34,15 @@ namespace Postgres.Marula.AppControl.UIElements
 		/// <inheritdoc />
 		async Task IUserInterface.StopAsync()
 		{
+			if (applicationLifetime.ApplicationStopping.IsCancellationRequested)
+			{
+				return;
+			}
+
 			await Task.CompletedTask;
 			Application.RequestStop();
 			Application.Top.Clear();
-			Environment.Exit(exitCode: 0);
+			applicationLifetime.StopApplication();
 		}
 
 		/// <summary>
@@ -92,7 +104,7 @@ namespace Postgres.Marula.AppControl.UIElements
 		/// <summary>
 		/// Create general menu view. 
 		/// </summary>
-		private static FrameView CreateGeneralMenuView(
+		private FrameView CreateGeneralMenuView(
 			int menuWidth,
 			IEnumerable<IMenuItem> generalMenuItems)
 		{
@@ -124,8 +136,8 @@ namespace Postgres.Marula.AppControl.UIElements
 						"are you sure are you want to quit from ctl app?", "yes", "no");
 					if (answerButtonNumber == 0)
 					{
-						Application.RequestStop();
-						Application.Top.Clear();
+						((IUserInterface) this).StopAsync();
+						//applicationLifetime.StopApplication();
 					}
 				}
 			};
