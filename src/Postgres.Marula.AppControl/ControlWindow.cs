@@ -26,33 +26,60 @@ namespace Postgres.Marula.AppControl
 			Height = Dim.Fill();
 			ColorScheme = new ColorScheme
 			{
-				Normal = Application.Driver.MakeAttribute(fore: Color.White, back: Color.DarkGray)
+				Normal = Application.Driver.MakeAttribute(fore: Color.White, back: Color.DarkGray),
+				Focus =  Application.Driver.MakeAttribute(fore: Color.White, back: Color.Cyan)
 			};
 
-			var menuItems = await appMenu
-				.LoadAsync()
+			var generalMenuItems = appMenu
+				.LoadGeneral()
+				.ToArray();
+
+			var jobMenuItems = await appMenu
+				.LoadJobsAsync()
 				.ToArrayAsync();
 
-			var menuView = new FrameView
+			var menuWidth = generalMenuItems
+				.Concat(jobMenuItems)
+				.Max(item => item.Name.Length) + 5;
+
+			var generalMenuView = new FrameView("general")
 			{
-				Width = menuItems.Max(item => item.Name.Length) + 5,
-				Height = Dim.Fill(),
-				CanFocus = false,
-				Shortcut = Key.CtrlMask | Key.C
+				Width = menuWidth,
+				Height = Dim.Percent(50f),
+				CanFocus = false
 			};
 
-			menuView.ShortcutAction = () => menuView.SetFocus();
+			generalMenuView.ShortcutAction = () => generalMenuView.SetFocus();
 
-			var menuItemsView = new ListView(menuItems)
+			generalMenuView.Add(new ListView(generalMenuItems)
+			{
+				Width = Dim.Fill(),
+				Height = Dim.Fill(),
+				AllowsMarking = false,
+				CanFocus = true
+			});
+
+			Add(generalMenuView);
+
+			var jobsMenuView = new FrameView("jobs")
+			{
+				Y = Pos.Bottom(generalMenuView),
+				Width = menuWidth,
+				Height = Dim.Percent(50f),
+				CanFocus = false
+			};
+
+			jobsMenuView.ShortcutAction = () => jobsMenuView.SetFocus();
+
+			jobsMenuView.Add(new ListView(jobMenuItems)
 			{
 				Width = Dim.Fill(),
 				Height = Dim.Fill(),
 				AllowsMarking = false,
 				CanFocus = true,
-			};
-
-			menuView.Add(menuItemsView);
-			Add(menuView);
+			});
+			
+			Add(jobsMenuView);
 		}
 	}
 }

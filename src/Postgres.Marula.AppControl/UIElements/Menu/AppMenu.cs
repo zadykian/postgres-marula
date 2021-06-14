@@ -7,15 +7,23 @@ namespace Postgres.Marula.AppControl.UIElements.Menu
 	internal class AppMenu : IAppMenu
 	{
 		/// <inheritdoc />
-		async IAsyncEnumerable<IMenuItem> IAppMenu.LoadAsync()
+		IEnumerable<IMenuItem> IAppMenu.LoadGeneral()
 		{
-			await Task.CompletedTask;
 			yield return new MenuItem("view logs");
-			// todo: get jobs from main host
 			yield return new MenuItem("calculate immediately");
 			yield return new MenuItem("view calculated values");
 			yield return new MenuItem("export values to .sql");
 			yield return new MenuItem("quit");
+		}
+
+		/// <inheritdoc />
+		async IAsyncEnumerable<IMenuItem> IAppMenu.LoadJobsAsync()
+		{
+			// todo: get jobs from main host
+			await Task.CompletedTask;
+			yield return new MenuItem("calculations");
+			yield return new MenuItem("wal lsn logging");
+			yield return new MenuItem("bloat fraction logging");
 		}
 	}
 }

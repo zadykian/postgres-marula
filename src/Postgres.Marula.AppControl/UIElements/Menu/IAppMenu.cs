@@ -8,8 +8,13 @@ namespace Postgres.Marula.AppControl.UIElements.Menu
 	internal interface IAppMenu
 	{
 		/// <summary>
-		/// Load all application menu items. 
+		/// Load all general menu items. 
 		/// </summary>
-		IAsyncEnumerable<IMenuItem> LoadAsync();
+		IEnumerable<IMenuItem> LoadGeneral();
+
+		/// <summary>
+		/// Load all main host job items. 
+		/// </summary>
+		IAsyncEnumerable<IMenuItem> LoadJobsAsync();
 	}
 }
