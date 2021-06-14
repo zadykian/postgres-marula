@@ -9,15 +9,17 @@ using Postgres.Marula.Infrastructure.Extensions;
 
 namespace Postgres.Marula.AppHost
 {
-	/// <inheritdoc />
-	internal class HostedService : BackgroundService
+	/// <summary>
+	/// Service to run and stop all long-running jobs.
+	/// </summary>
+	internal class JobRunner : BackgroundService
 	{
 		private readonly IReadOnlyCollection<IJob> jobs;
-		private readonly ILogger<HostedService> logger;
+		private readonly ILogger<JobRunner> logger;
 
-		public HostedService(
+		public JobRunner(
 			IEnumerable<IJob> jobs,
-			ILogger<HostedService> logger)
+			ILogger<JobRunner> logger)
 		{
 			this.jobs = jobs.ToImmutableArray();
 			this.logger = logger;
@@ -26,16 +28,18 @@ namespace Postgres.Marula.AppHost
 		/// <inheritdoc />
 		protected override async Task ExecuteAsync(CancellationToken stoppingToken)
 		{
+			logger.LogInformation("starting all jobs.");
 			jobs.ForEach(job => job.Start());
-			logger.LogInformation("Marula application is running.");
+			logger.LogInformation("all jobs are started.");
 			await Task.CompletedTask;
 		}
 
 		/// <inheritdoc />
 		public override async Task StopAsync(CancellationToken cancellationToken)
 		{
-			logger.LogInformation("Marula application is stopping.");
+			logger.LogInformation("stopping all executing jobs.");
 			jobs.ForEach(job => job.Stop());
+			logger.LogInformation("all jobs are stopped.");
 			await base.StopAsync(cancellationToken);
 		}
 	}

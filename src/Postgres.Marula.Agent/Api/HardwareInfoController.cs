@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Postgres.Marula.HwInfo;
 using Postgres.Marula.WebApi.Common;
 
-namespace Postgres.Marula.Agent
+namespace Postgres.Marula.Agent.Api
 {
 	/// <summary>
 	/// Hardware info access.

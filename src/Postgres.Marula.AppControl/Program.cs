@@ -19,6 +19,7 @@ namespace Postgres.Marula.AppControl
 				.WithConfig(args, "marula-ctl-config")
 				.ConfigureLogging(builder =>
 				{
+					// todo: and in-memory logging
 					builder.ClearProviders();
 				})
 				.ConfigureServices(services => services.AddComponent<AppControlAppComponent>())

@@ -13,7 +13,10 @@ namespace Postgres.Marula.AppControl.UIElements.Menu
 			=> this.generalMenuItems = generalMenuItems.ToArray();
 
 		/// <inheritdoc />
-		IEnumerable<IMenuItem> IAppMenu.LoadGeneral() => generalMenuItems;
+		IEnumerable<IMenuItem> IAppMenu.LoadGeneral()
+			=> generalMenuItems
+				.OrderBy(menuItem => menuItem.Order)
+				.ToArray();
 
 		/// <inheritdoc />
 		async IAsyncEnumerable<IMenuItem> IAppMenu.LoadJobsAsync()
