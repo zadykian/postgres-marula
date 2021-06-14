@@ -17,4 +17,7 @@ namespace Postgres.Marula.Calculations.PeriodicJobs.PublicApi
 		/// </summary>
 		JobState State { get; }
 	}
+
+	/// <inheritdoc cref="IJobInfo"/>
+	public record JobInfo(NonEmptyString Name, JobState State) : IJobInfo;
 }
