@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace Postgres.Marula.Calculations.PeriodicJobs.PublicApi
 {
 	/// <summary>
@@ -5,6 +7,11 @@ namespace Postgres.Marula.Calculations.PeriodicJobs.PublicApi
 	/// </summary>
 	public interface IJobs
 	{
+		/// <summary>
+		/// Get info about all jobs.
+		/// </summary>
+		IReadOnlyCollection<IJobInfo> InfoAboutAll();
+
 		/// <summary>
 		/// Start all jobs.
 		/// </summary>

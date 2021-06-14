@@ -24,7 +24,7 @@ namespace Postgres.Marula.Calculations.PeriodicJobs.Implementations
 		}
 
 		/// <inheritdoc />
-		protected override NonEmptyString Description => "bloat fraction logging";
+		public override NonEmptyString Name => "bloat fraction logging";
 
 		/// <inheritdoc />
 		protected override async ValueTask ExecuteAsync(IServiceScope serviceScope)

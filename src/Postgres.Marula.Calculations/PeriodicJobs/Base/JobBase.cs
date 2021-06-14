@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using System.Timers;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Postgres.Marula.Calculations.PeriodicJobs.PublicApi;
 using Postgres.Marula.Infrastructure.Extensions;
 using Postgres.Marula.Infrastructure.TypeDecorators;
 
@@ -28,10 +29,11 @@ namespace Postgres.Marula.Calculations.PeriodicJobs.Base
 			this.logger = logger;
 		}
 
-		/// <summary>
-		/// Job description.
-		/// </summary>
-		protected abstract NonEmptyString Description { get; }
+		/// <inheritdoc />
+		public abstract NonEmptyString Name { get; }
+
+		/// <inheritdoc />
+		JobState IJobInfo.State => timer.Enabled ? JobState.Running : JobState.Stopped;
 
 		/// <summary>
 		/// Perform single iteration in service scope.
@@ -43,17 +45,17 @@ namespace Postgres.Marula.Calculations.PeriodicJobs.Base
 		/// </summary>
 		private async ValueTask OnTimerElapsed()
 		{
-			logger.LogInformation($"[{Description}] iteration is started.");
+			logger.LogInformation($"[{Name}] iteration is started.");
 
 			var serviceScope = serviceScopeFactory.CreateScope();
 			try
 			{
 				await ExecuteAsync(serviceScope);
-				logger.LogInformation($"[{Description}] iteration is completed.");
+				logger.LogInformation($"[{Name}] iteration is completed.");
 			}
 			catch (Exception exception)
 			{
-				logger.LogError(exception, $"[{Description}] iteration is failed.");
+				logger.LogError(exception, $"[{Name}] iteration is failed.");
 			}
 			finally
 			{
@@ -74,14 +76,14 @@ namespace Postgres.Marula.Calculations.PeriodicJobs.Base
 		void IJob.Start()
 		{
 			timer.Start();
-			logger.LogInformation($"[{Description}] job is started.");
+			logger.LogInformation($"[{Name}] job is started.");
 		}
 
 		/// <inheritdoc />
 		void IJob.Stop()
 		{
 			timer.Stop();
-			logger.LogInformation($"[{Description}] job is stopped.");
+			logger.LogInformation($"[{Name}] job is stopped.");
 		}
 
 		/// <inheritdoc />

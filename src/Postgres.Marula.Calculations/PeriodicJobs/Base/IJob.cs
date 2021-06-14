@@ -1,9 +1,11 @@
+using Postgres.Marula.Calculations.PeriodicJobs.PublicApi;
+
 namespace Postgres.Marula.Calculations.PeriodicJobs.Base
 {
 	/// <summary>
 	/// Component responsible for long-time periodic process.
 	/// </summary>
-	internal interface IJob
+	internal interface IJob : IJobInfo
 	{
 		/// <summary>
 		/// Start job.

@@ -24,7 +24,7 @@ namespace Postgres.Marula.Calculations.PeriodicJobs.Implementations
 		}
 
 		/// <inheritdoc />
-		protected override NonEmptyString Description => "wal insert location logging";
+		public override NonEmptyString Name => "wal insert location logging";
 
 		/// <inheritdoc />
 		protected override async ValueTask ExecuteAsync(IServiceScope serviceScope)

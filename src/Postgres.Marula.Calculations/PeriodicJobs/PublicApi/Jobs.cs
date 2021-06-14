@@ -1,8 +1,10 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Linq;
 using Microsoft.Extensions.Logging;
 using Postgres.Marula.Calculations.PeriodicJobs.Base;
 using Postgres.Marula.Infrastructure.Extensions;
+using Postgres.Marula.Infrastructure.TypeDecorators;
 
 namespace Postgres.Marula.Calculations.PeriodicJobs.PublicApi
 {
@@ -21,6 +23,12 @@ namespace Postgres.Marula.Calculations.PeriodicJobs.PublicApi
 		}
 
 		/// <inheritdoc />
+		IReadOnlyCollection<IJobInfo> IJobs.InfoAboutAll()
+			=> jobs
+				.Select(job => new JobInfo(job.Name, job.State))
+				.ToImmutableArray();
+
+		/// <inheritdoc />
 		void IJobs.StartAll()
 		{
 			logger.LogInformation("starting all jobs.");
@@ -35,5 +43,8 @@ namespace Postgres.Marula.Calculations.PeriodicJobs.PublicApi
 			jobs.ForEach(job => job.Stop());
 			logger.LogInformation("all jobs are stopped.");
 		}
+
+		/// <inheritdoc cref="IJobInfo"/>
+		private sealed record JobInfo(NonEmptyString Name, JobState State) : IJobInfo;
 	}
 }

@@ -26,7 +26,7 @@ namespace Postgres.Marula.Calculations.PeriodicJobs.Implementations
 			=> this.pipelineFactory = pipelineFactory;
 
 		/// <inheritdoc />
-		protected override NonEmptyString Description => "parameters calculation";
+		public override NonEmptyString Name => "parameters calculation";
 
 		/// <inheritdoc />
 		protected override async ValueTask ExecuteAsync(IServiceScope serviceScope)
