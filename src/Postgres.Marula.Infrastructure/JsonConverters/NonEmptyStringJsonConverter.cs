@@ -4,12 +4,12 @@ using System.Text.Json.Serialization;
 using Postgres.Marula.Infrastructure.Extensions;
 using Postgres.Marula.Infrastructure.TypeDecorators;
 
-namespace Postgres.Marula.WebApi.Common.JsonConverters
+namespace Postgres.Marula.Infrastructure.JsonConverters
 {
 	/// <summary>
 	/// JSON converter for <see cref="NonEmptyString"/> type.
 	/// </summary>
-	internal class NonEmptyStringJsonConverter : JsonConverter<NonEmptyString>
+	public class NonEmptyStringJsonConverter : JsonConverter<NonEmptyString>
 	{
 		/// <inheritdoc />
 		public override NonEmptyString Read(

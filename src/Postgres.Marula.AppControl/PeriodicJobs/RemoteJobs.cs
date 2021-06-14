@@ -1,9 +1,11 @@
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Postgres.Marula.AppControl.Configuration;
 using Postgres.Marula.Calculations.PeriodicJobs.PublicApi;
 using Postgres.Marula.Infrastructure.Http;
+using Postgres.Marula.Infrastructure.JsonConverters;
 
 namespace Postgres.Marula.AppControl.PeriodicJobs
 {
@@ -20,7 +22,7 @@ namespace Postgres.Marula.AppControl.PeriodicJobs
 		/// <inheritdoc />
 		async IAsyncEnumerable<IJobInfo> IJobs.InfoAboutAllAsync()
 		{
-			var jobInfos = await PerformRequestAsync<JobInfo[]>(HttpMethod.Get, "Jobs/InfoAboutAll");
+			var jobInfos = await PerformRequestAsync<JobInfo[]>(HttpMethod.Get, "Jobs/InfoAboutAll").ConfigureAwait(false);
 			foreach (var jobInfo in jobInfos) yield return jobInfo;
 		}
 
@@ -31,5 +33,11 @@ namespace Postgres.Marula.AppControl.PeriodicJobs
 		/// <inheritdoc />
 		async ValueTask IJobs.StopAllAsync()
 			=> await PerformRequestAsync<Unit>(HttpMethod.Patch, "Jobs/StopAll");
+
+		protected override JsonSerializerOptions ConfigureSerializerOptions(JsonSerializerOptions serializerOptions)
+		{
+			serializerOptions.Converters.Add(new NonEmptyStringJsonConverter());
+			return base.ConfigureSerializerOptions(serializerOptions);
+		}
 	}
 }

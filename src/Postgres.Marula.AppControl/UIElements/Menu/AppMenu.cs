@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Extensions.Logging;
 using Postgres.Marula.Calculations.PeriodicJobs.PublicApi;
 
 namespace Postgres.Marula.AppControl.UIElements.Menu
@@ -9,13 +11,16 @@ namespace Postgres.Marula.AppControl.UIElements.Menu
 	{
 		private readonly IReadOnlyCollection<IMenuItem> generalMenuItems;
 		private readonly IJobs jobs;
+		private readonly ILogger<AppMenu> logger;
 
 		public AppMenu(
 			IEnumerable<IMenuItem> generalMenuItems,
-			IJobs jobs)
+			IJobs jobs,
+			ILogger<AppMenu> logger)
 		{
-			this.jobs = jobs;
 			this.generalMenuItems = generalMenuItems.ToArray();
+			this.jobs = jobs;
+			this.logger = logger;
 		}
 
 		/// <inheritdoc />
@@ -25,9 +30,23 @@ namespace Postgres.Marula.AppControl.UIElements.Menu
 				.ToArray();
 
 		/// <inheritdoc />
-		IAsyncEnumerable<IMenuItem> IAppMenu.LoadJobsAsync()
-			=> jobs
-				.InfoAboutAllAsync()
-				.Select((jobInfo, index) => new MenuItem(jobInfo.Name, (byte) index));
+		async IAsyncEnumerable<IMenuItem> IAppMenu.LoadJobsAsync()
+		{
+			IMenuItem[] jobInfoItems;
+			try
+			{
+				jobInfoItems = await jobs
+					.InfoAboutAllAsync()
+					.Select((jobInfo, index) => new MenuItem(jobInfo.Name, (byte) index))
+					.ToArrayAsync();
+			}
+			catch (Exception exception)
+			{
+				logger.LogError(exception, "failed to get info about jobs from main host.");
+				yield break;
+			}
+
+			foreach (var jobInfo in jobInfoItems) yield return jobInfo;
+		}
 	}
 }

@@ -2,14 +2,15 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using Postgres.Marula.Infrastructure.Extensions;
+using Postgres.Marula.Infrastructure.JsonConverters;
 using Postgres.Marula.Infrastructure.TypeDecorators;
-using Postgres.Marula.WebApi.Common.JsonConverters;
 
 namespace Postgres.Marula.WebApi.Common
 {
@@ -41,6 +42,7 @@ namespace Postgres.Marula.WebApi.Common
 					var converters = options.JsonSerializerOptions.Converters;
 					converters.Add(new JsonStringEnumConverter());
 					converters.Add(new NonEmptyStringJsonConverter());
+					options.JsonSerializerOptions.PropertyNamingPolicy = new LiteralNamingPolicy();
 				})
 				.Services
 				.AddSwaggerGen(options =>
@@ -83,5 +85,12 @@ namespace Postgres.Marula.WebApi.Common
 					options.RoutePrefix = string.Empty;
 					options.SwaggerEndpoint($"/swagger/{ApiVersion}/swagger.json", EntryAssemblyName);
 				});
+
+		/// <inheritdoc />
+		private sealed class LiteralNamingPolicy : JsonNamingPolicy
+		{
+			/// <inheritdoc />
+			public override string ConvertName(string name) => name;
+		}
 	}
 }

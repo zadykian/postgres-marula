@@ -8,11 +8,11 @@ namespace Postgres.Marula.Calculations.PeriodicJobs.PublicApi
 		/// <summary>
 		/// Job is stopped.
 		/// </summary>
-		Stopped,
+		Stopped = 1,
 
 		/// <summary>
 		/// Job is running.
 		/// </summary>
-		Running
+		Running = 2
 	}
 }

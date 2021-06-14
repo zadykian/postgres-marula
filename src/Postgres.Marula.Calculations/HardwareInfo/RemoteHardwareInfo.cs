@@ -40,7 +40,7 @@ namespace Postgres.Marula.Calculations.HardwareInfo
 		protected override JsonSerializerOptions ConfigureSerializerOptions(JsonSerializerOptions serializerOptions)
 		{
 			serializerOptions.Converters.Add(MemoryConverter.Instance);
-			return serializerOptions;
+			return base.ConfigureSerializerOptions(serializerOptions);
 		}
 
 		/// <summary>
