@@ -13,7 +13,7 @@ namespace Postgres.Marula.AppControl
 		void IAppComponent.RegisterServices(IServiceCollection services)
 			=> services
 				.AddSingleton<IAppMenu, AppMenu>()
-				.AddSingleton<ControlWindow>()
+				.AddSingleton<IUserInterface, ControlWindow>()
 				.AddSingleton<IHostedService, TerminalUiService>();
 	}
 }

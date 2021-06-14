@@ -13,7 +13,7 @@ namespace Postgres.Marula.AppControl.UIElements.Menu
 			yield return new MenuItem("calculate immediately");
 			yield return new MenuItem("view calculated values");
 			yield return new MenuItem("export values to .sql");
-			yield return new MenuItem("quit");
+			yield return new QuitMenuItem();
 		}
 
 		/// <inheritdoc />

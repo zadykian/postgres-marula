@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,11 +10,28 @@ namespace Postgres.Marula.AppControl.UIElements
 	/// <summary>
 	/// Main UI window.
 	/// </summary>
-	internal class ControlWindow : Window
+	internal class ControlWindow : Window, IUserInterface
 	{
 		private readonly IAppMenu appMenu;
 
 		public ControlWindow(IAppMenu appMenu) => this.appMenu = appMenu;
+
+		/// <inheritdoc />
+		async Task IUserInterface.StartAsync()
+		{
+			Application.Init();
+			await InitializeAsync();
+			Application.Run(this);
+		}
+
+		/// <inheritdoc />
+		async Task IUserInterface.StopAsync()
+		{
+			await Task.CompletedTask;
+			Application.RequestStop();
+			Application.Top.Clear();
+			Environment.Exit(exitCode: 0);
+		}
 
 		/// <summary>
 		/// Perform main window initialization.
@@ -40,7 +58,7 @@ namespace Postgres.Marula.AppControl.UIElements
 			var generalMenuView = CreateGeneralMenuView(menuWidth, generalMenuItems);
 			Add(generalMenuView);
 
-			var jobsMenuView = CreateJobsMenuView( menuWidth, jobMenuItems, generalMenuView);
+			var jobsMenuView = CreateJobsMenuView(menuWidth, jobMenuItems, generalMenuView);
 			Add(jobsMenuView);
 
 			var currentOutputView = new FrameView("current output")
@@ -97,8 +115,19 @@ namespace Postgres.Marula.AppControl.UIElements
 
 			generalMenuListView.OpenSelectedItem += eventArgs =>
 			{
-				// todo
 				var menuItem = (IMenuItem) eventArgs.Value;
+
+				if (menuItem is QuitMenuItem)
+				{
+					var answerButtonNumber = MessageBox.Query(
+						"quit",
+						"are you sure are you want to quit from ctl app?", "yes", "no");
+					if (answerButtonNumber == 0)
+					{
+						Application.RequestStop();
+						Application.Top.Clear();
+					}
+				}
 			};
 
 			generalMenuView.Add(generalMenuListView);

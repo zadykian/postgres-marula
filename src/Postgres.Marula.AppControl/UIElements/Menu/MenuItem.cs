@@ -13,4 +13,14 @@ namespace Postgres.Marula.AppControl.UIElements.Menu
 		/// <inheritdoc />
 		public override string ToString() => $"> {Name}";
 	}
+
+	/// <summary>
+	/// Quit menu item.
+	/// </summary>
+	internal class QuitMenuItem : MenuItem
+	{
+		public QuitMenuItem() : base("quit")
+		{
+		}
+	}
 }
