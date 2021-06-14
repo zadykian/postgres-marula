@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Threading.Tasks;
 using NUnit.Framework;
-using Postgres.Marula.Calculations.Jobs.Base;
+using Postgres.Marula.Calculations.PeriodicJobs.Base;
 using Postgres.Marula.Infrastructure.Extensions;
 using Postgres.Marula.Tests.Calculations.Base;
 using Postgres.Marula.Tests.Calculations.FakeServices;

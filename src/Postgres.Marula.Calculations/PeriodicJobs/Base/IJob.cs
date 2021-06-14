@@ -1,9 +1,9 @@
-namespace Postgres.Marula.Calculations.Jobs.Base
+namespace Postgres.Marula.Calculations.PeriodicJobs.Base
 {
 	/// <summary>
 	/// Component responsible for long-time periodic process.
 	/// </summary>
-	public interface IJob
+	internal interface IJob
 	{
 		/// <summary>
 		/// Start job.

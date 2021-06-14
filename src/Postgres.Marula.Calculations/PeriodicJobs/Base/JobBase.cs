@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 using Postgres.Marula.Infrastructure.Extensions;
 using Postgres.Marula.Infrastructure.TypeDecorators;
 
-namespace Postgres.Marula.Calculations.Jobs.Base
+namespace Postgres.Marula.Calculations.PeriodicJobs.Base
 {
 	/// <inheritdoc cref="IJob"/>
 	/// <remarks>

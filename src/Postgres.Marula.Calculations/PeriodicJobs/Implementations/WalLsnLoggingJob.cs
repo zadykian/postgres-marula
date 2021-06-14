@@ -3,12 +3,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Postgres.Marula.Calculations.Configuration;
 using Postgres.Marula.Calculations.ExternalDependencies;
-using Postgres.Marula.Calculations.Jobs.Base;
+using Postgres.Marula.Calculations.PeriodicJobs.Base;
 using Postgres.Marula.Infrastructure.TypeDecorators;
 
 // ReSharper disable UnusedType.Global
 
-namespace Postgres.Marula.Calculations.Jobs
+namespace Postgres.Marula.Calculations.PeriodicJobs.Implementations
 {
 	/// <inheritdoc cref="IJob"/>
 	/// <remarks>

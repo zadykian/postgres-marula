@@ -1,5 +1,4 @@
 using System.Threading.Tasks;
-using Microsoft.Extensions.Hosting;
 using Postgres.Marula.Infrastructure.TypeDecorators;
 
 namespace Postgres.Marula.AppControl.UIElements.Menu
