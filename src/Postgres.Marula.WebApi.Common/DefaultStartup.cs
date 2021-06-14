@@ -24,6 +24,11 @@ namespace Postgres.Marula.WebApi.Common
 		private static NonEmptyString EntryAssemblyName => Assembly.GetEntryAssembly()!.GetName().Name!;
 
 		/// <summary>
+		/// API version.
+		/// </summary>
+		private static NonEmptyString ApiVersion => "v1";
+
+		/// <summary>
 		/// Configure application services. 
 		/// </summary>
 		public void ConfigureServices(IServiceCollection services)
@@ -40,12 +45,14 @@ namespace Postgres.Marula.WebApi.Common
 				.Services
 				.AddSwaggerGen(options =>
 				{
-					var xmlFile = $"{EntryAssemblyName}.xml";
-					var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-					options.IncludeXmlComments(xmlPath);
-					options.SwaggerDoc("v1", new OpenApiInfo
+					AppContext
+						.BaseDirectory
+						.To(dir => Path.Combine(dir, $"{EntryAssemblyName}.xml"))
+						.To(path => options.IncludeXmlComments(path));
+
+					options.SwaggerDoc(ApiVersion, new OpenApiInfo
 					{
-						Version = "v1",
+						Version = ApiVersion,
 						Title = EntryAssemblyName,
 						Description = $"{EntryAssemblyName}'s public API.",
 					});
@@ -74,7 +81,7 @@ namespace Postgres.Marula.WebApi.Common
 				{
 					options.DocumentTitle = EntryAssemblyName;
 					options.RoutePrefix = string.Empty;
-					options.SwaggerEndpoint("/swagger/v1/swagger.json", EntryAssemblyName);
+					options.SwaggerEndpoint($"/swagger/{ApiVersion}/swagger.json", EntryAssemblyName);
 				});
 	}
 }
