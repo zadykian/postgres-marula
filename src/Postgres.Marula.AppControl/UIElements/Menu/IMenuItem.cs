@@ -1,6 +1,6 @@
 using Postgres.Marula.Infrastructure.TypeDecorators;
 
-namespace Postgres.Marula.AppControl.UIElements
+namespace Postgres.Marula.AppControl.UIElements.Menu
 {
 	/// <summary>
 	/// Control application menu item.
@@ -12,9 +12,9 @@ namespace Postgres.Marula.AppControl.UIElements
 		/// </summary>
 		NonEmptyString Name { get; }
 
-		/// <summary>
-		/// Source of data related to menu item.
-		/// </summary>
-		IDataSource DataSource { get; }
+		// /// <summary>
+		// /// Source of data related to menu item.
+		// /// </summary>
+		// IPageContent PageContent { get; }
 	}
 }

@@ -1,5 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Postgres.Marula.AppControl.UIElements.Menu;
 using Postgres.Marula.Infrastructure.AppComponents;
 
 namespace Postgres.Marula.AppControl
@@ -10,6 +11,8 @@ namespace Postgres.Marula.AppControl
 		/// <inheritdoc />
 		void IAppComponent.RegisterServices(IServiceCollection services)
 			=> services
+				.AddSingleton<IAppMenu, AppMenu>()
+				.AddSingleton<ControlWindow>()
 				.AddSingleton<IHostedService, TerminalUiService>();
 	}
 }

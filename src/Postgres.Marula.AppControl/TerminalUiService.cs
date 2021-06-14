@@ -10,11 +10,16 @@ namespace Postgres.Marula.AppControl
 	/// </summary>
 	internal class TerminalUiService : IHostedService
 	{
+		private readonly ControlWindow controlWindow;
+
+		public TerminalUiService(ControlWindow controlWindow) => this.controlWindow = controlWindow;
+
 		/// <inheritdoc />
 		async Task IHostedService.StartAsync(CancellationToken cancellationToken)
 		{
-			await Task.CompletedTask;
-			Application.Run<ControlWindow>();
+			await controlWindow.InitializeAsync();
+			Application.Init();
+			Application.Run(controlWindow);
 		}
 
 		/// <inheritdoc />

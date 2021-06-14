@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Postgres.Marula.AppControl.UIElements
+namespace Postgres.Marula.AppControl.UIElements.Menu
 {
 	/// <summary>
 	/// Control application menu.
