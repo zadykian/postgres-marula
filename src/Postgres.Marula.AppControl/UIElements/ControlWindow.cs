@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Postgres.Marula.AppControl.UIElements.Menu;
@@ -19,20 +20,10 @@ namespace Postgres.Marula.AppControl.UIElements
 		/// </summary>
 		public async Task InitializeAsync()
 		{
-			await Task.CompletedTask;
 			Title = "postgres-marula-ctl";
-
+			ColorScheme = CreateColorScheme();
 			Width = Dim.Fill();
 			Height = Dim.Fill();
-			ColorScheme = new ColorScheme
-			{
-				Normal = Application.Driver.MakeAttribute(fore: Color.White, back: Color.DarkGray),
-				Focus = Application.Driver.MakeAttribute(fore: Color.White, back: Color.Cyan),
-				HotNormal = Application.Driver.MakeAttribute(fore: Color.White, back: Color.DarkGray),
-				HotFocus = Application.Driver.MakeAttribute(fore: Color.White, back: Color.DarkGray),
-			};
-
-			//ColorScheme = Colors.Base;
 
 			var generalMenuItems = appMenu
 				.LoadGeneral()
@@ -46,6 +37,47 @@ namespace Postgres.Marula.AppControl.UIElements
 				.Concat(jobMenuItems)
 				.Max(item => item.Name.Length) + 5;
 
+			var generalMenuView = CreateGeneralMenuView(menuWidth, generalMenuItems);
+			Add(generalMenuView);
+
+			var jobsMenuView = CreateJobsMenuView( menuWidth, jobMenuItems, generalMenuView);
+			Add(jobsMenuView);
+
+			var currentOutputView = new FrameView("current output")
+			{
+				X = Pos.Right(generalMenuView),
+				Width = Dim.Fill(),
+				Height = Dim.Fill(),
+				CanFocus = false
+			};
+
+			Add(currentOutputView);
+		}
+
+		/// <summary>
+		/// Create UI color scheme. 
+		/// </summary>
+		private static ColorScheme CreateColorScheme()
+		{
+			var normal = Application.Driver.MakeAttribute(fore: Color.White, back: Color.DarkGray);
+			var focused = Application.Driver.MakeAttribute(fore: Color.White, back: Color.Cyan);
+
+			return new ColorScheme
+			{
+				Normal = normal,
+				Focus = focused,
+				HotNormal = normal,
+				HotFocus = normal
+			};
+		}
+
+		/// <summary>
+		/// Create general menu view. 
+		/// </summary>
+		private static FrameView CreateGeneralMenuView(
+			int menuWidth,
+			IEnumerable<IMenuItem> generalMenuItems)
+		{
 			var generalMenuView = new FrameView("general")
 			{
 				Width = menuWidth,
@@ -55,7 +87,7 @@ namespace Postgres.Marula.AppControl.UIElements
 
 			generalMenuView.ShortcutAction = () => generalMenuView.SetFocus();
 
-			var generalMenuListView = new ListView(generalMenuItems)
+			var generalMenuListView = new ListView(generalMenuItems.ToArray())
 			{
 				Width = Dim.Fill(),
 				Height = Dim.Fill(),
@@ -66,32 +98,40 @@ namespace Postgres.Marula.AppControl.UIElements
 			generalMenuListView.OpenSelectedItem += eventArgs =>
 			{
 				// todo
-				var selectedValue = eventArgs.Value;
+				var menuItem = (IMenuItem) eventArgs.Value;
 			};
-			
+
 			generalMenuView.Add(generalMenuListView);
+			return generalMenuView;
+		}
 
-			Add(generalMenuView);
-
+		/// <summary>
+		/// Create main host's jobs view. 
+		/// </summary>
+		private static FrameView CreateJobsMenuView(
+			int menuWidth,
+			IEnumerable<IMenuItem> jobMenuItems,
+			View generalMenuView)
+		{
 			var jobsMenuView = new FrameView("jobs")
 			{
 				Y = Pos.Bottom(generalMenuView),
 				Width = menuWidth,
-				Height = Dim.Percent(50f),
+				Height = Dim.Fill(),
 				CanFocus = false
 			};
 
 			jobsMenuView.ShortcutAction = () => jobsMenuView.SetFocus();
 
-			jobsMenuView.Add(new ListView(jobMenuItems)
+			jobsMenuView.Add(new ListView(jobMenuItems.ToArray())
 			{
 				Width = Dim.Fill(),
 				Height = Dim.Fill(),
 				AllowsMarking = false,
-				CanFocus = true,
+				CanFocus = true
 			});
-			
-			Add(jobsMenuView);
+
+			return jobsMenuView;
 		}
 	}
 }
