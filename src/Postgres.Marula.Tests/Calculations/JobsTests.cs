@@ -1,36 +1,33 @@
 using System;
-using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Threading.Tasks;
 using NUnit.Framework;
-using Postgres.Marula.Calculations.PeriodicJobs.Base;
-using Postgres.Marula.Infrastructure.Extensions;
+using Postgres.Marula.Calculations.PeriodicJobs.PublicApi;
 using Postgres.Marula.Tests.Calculations.Base;
 using Postgres.Marula.Tests.Calculations.FakeServices;
 
 namespace Postgres.Marula.Tests.Calculations
 {
 	/// <summary>
-	/// <see cref="IJob"/> tests.
+	/// <see cref="IJobs"/> tests.
 	/// </summary>
-	internal class JobTests : CalculationsTestFixtureBase
+	internal class JobsTests : CalculationsTestFixtureBase
 	{
 		/// <summary>
 		/// Run all application jobs.
 		/// </summary>
 		[Test]
-		public async Task RunAllJobsTest()
+		public async Task RunAndStopAllJobsTest()
 		{
-			var allJobs = GetService<IEnumerable<IJob>>().ToImmutableArray();
+			var jobs = GetService<IJobs>();
 
-			allJobs.ForEach(job => job.Start());
+			jobs.StartAll();
 
 			await Task.Delay(TimeSpan.FromSeconds(5));
 
 			var databaseTracker = GetService<IDatabaseServerAccessTracker>();
 			Assert.IsTrue(databaseTracker.ApplyMethodWasCalled);
 
-			allJobs.ForEach(job => job.Stop());
+			jobs.StopAll();
 		}
 	}
 }
