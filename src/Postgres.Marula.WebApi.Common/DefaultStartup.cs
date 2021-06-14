@@ -11,6 +11,7 @@ using Microsoft.OpenApi.Models;
 using Postgres.Marula.Infrastructure.Extensions;
 using Postgres.Marula.Infrastructure.JsonConverters;
 using Postgres.Marula.Infrastructure.TypeDecorators;
+using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace Postgres.Marula.WebApi.Common
 {
@@ -45,20 +46,25 @@ namespace Postgres.Marula.WebApi.Common
 					options.JsonSerializerOptions.PropertyNamingPolicy = new LiteralNamingPolicy();
 				})
 				.Services
-				.AddSwaggerGen(options =>
-				{
-					AppContext
-						.BaseDirectory
-						.To(dir => Path.Combine(dir, $"{EntryAssemblyName}.xml"))
-						.To(path => options.IncludeXmlComments(path));
+				.AddSwaggerGen(ConfigureSwagger);
 
-					options.SwaggerDoc(ApiVersion, new OpenApiInfo
-					{
-						Version = ApiVersion,
-						Title = EntryAssemblyName,
-						Description = $"{EntryAssemblyName}'s public API.",
-					});
-				});
+		/// <summary>
+		/// Perform Swagger configuration. 
+		/// </summary>
+		private static void ConfigureSwagger(SwaggerGenOptions options)
+		{
+			AppContext
+				.BaseDirectory
+				.To(dir => Path.Combine(dir, $"{EntryAssemblyName}.xml"))
+				.To(path => options.IncludeXmlComments(path));
+
+			options.SwaggerDoc(ApiVersion, new OpenApiInfo
+			{
+				Version = ApiVersion,
+				Title = EntryAssemblyName,
+				Description = $"{EntryAssemblyName}'s public API.",
+			});
+		}
 
 		/// <summary>
 		/// Add to <paramref name="mvcBuilder"/> all assemblies containing
