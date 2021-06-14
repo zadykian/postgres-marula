@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Postgres.Marula.Calculations.PeriodicJobs.PublicApi
 {
@@ -10,16 +11,16 @@ namespace Postgres.Marula.Calculations.PeriodicJobs.PublicApi
 		/// <summary>
 		/// Get info about all jobs.
 		/// </summary>
-		IReadOnlyCollection<IJobInfo> InfoAboutAll();
+		IAsyncEnumerable<IJobInfo> InfoAboutAll();
 
 		/// <summary>
 		/// Start all jobs.
 		/// </summary>
-		void StartAll();
+		ValueTask StartAllAsync();
 
 		/// <summary>
 		/// Stop all executing jobs.
 		/// </summary>
-		void StopAll();
+		ValueTask StopAllAsync();
 	}
 }

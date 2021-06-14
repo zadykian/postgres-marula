@@ -20,14 +20,14 @@ namespace Postgres.Marula.Tests.Calculations
 		{
 			var jobs = GetService<IJobs>();
 
-			jobs.StartAll();
+			await jobs.StartAllAsync();
 
 			await Task.Delay(TimeSpan.FromSeconds(5));
 
 			var databaseTracker = GetService<IDatabaseServerAccessTracker>();
 			Assert.IsTrue(databaseTracker.ApplyMethodWasCalled);
 
-			jobs.StopAll();
+			await jobs.StopAllAsync();
 		}
 	}
 }

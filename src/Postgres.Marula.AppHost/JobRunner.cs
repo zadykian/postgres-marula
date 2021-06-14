@@ -15,16 +15,12 @@ namespace Postgres.Marula.AppHost
 		public JobRunner(IJobs jobs) => this.jobs = jobs;
 
 		/// <inheritdoc />
-		protected override async Task ExecuteAsync(CancellationToken stoppingToken)
-		{
-			jobs.StartAll();
-			await Task.CompletedTask;
-		}
+		protected override async Task ExecuteAsync(CancellationToken stoppingToken) => await jobs.StartAllAsync();
 
 		/// <inheritdoc />
 		public override async Task StopAsync(CancellationToken cancellationToken)
 		{
-			jobs.StopAll();
+			await jobs.StopAllAsync();
 			await base.StopAsync(cancellationToken);
 		}
 	}

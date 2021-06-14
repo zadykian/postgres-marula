@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Postgres.Marula.Calculations.PeriodicJobs.Base;
 using Postgres.Marula.Infrastructure.Extensions;
@@ -22,22 +23,24 @@ namespace Postgres.Marula.Calculations.PeriodicJobs.PublicApi
 		}
 
 		/// <inheritdoc />
-		IReadOnlyCollection<IJobInfo> IJobs.InfoAboutAll()
+		IAsyncEnumerable<IJobInfo> IJobs.InfoAboutAll()
 			=> jobs
 				.Select(job => new JobInfo(job.Name, job.State))
-				.ToImmutableArray();
+				.ToAsyncEnumerable();
 
 		/// <inheritdoc />
-		void IJobs.StartAll()
+		async ValueTask IJobs.StartAllAsync()
 		{
+			await ValueTask.CompletedTask;
 			logger.LogInformation("starting all jobs.");
 			jobs.ForEach(job => job.Start());
 			logger.LogInformation("all jobs are started.");
 		}
 
 		/// <inheritdoc />
-		void IJobs.StopAll()
+		async ValueTask IJobs.StopAllAsync()
 		{
+			await ValueTask.CompletedTask;
 			logger.LogInformation("stopping all executing jobs.");
 			jobs.ForEach(job => job.Stop());
 			logger.LogInformation("all jobs are stopped.");
