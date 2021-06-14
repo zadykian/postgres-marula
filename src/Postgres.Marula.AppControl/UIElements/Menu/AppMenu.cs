@@ -10,10 +10,10 @@ namespace Postgres.Marula.AppControl.UIElements.Menu
 		async IAsyncEnumerable<IMenuItem> IAppMenu.LoadAsync()
 		{
 			await Task.CompletedTask;
-			yield return new MenuItem("logs");
+			yield return new MenuItem("view logs");
 			// todo: get jobs from main host
 			yield return new MenuItem("calculate immediately");
-			yield return new MenuItem("calculated values");
+			yield return new MenuItem("view calculated values");
 			yield return new MenuItem("export values to .sql");
 			yield return new MenuItem("quit");
 		}

@@ -9,5 +9,8 @@ namespace Postgres.Marula.AppControl.UIElements.Menu
 
 		/// <inheritdoc />
 		public NonEmptyString Name { get; }
+
+		/// <inheritdoc />
+		public override string ToString() => $"> {Name}";
 	}
 }

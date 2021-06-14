@@ -1,6 +1,5 @@
 using System.Linq;
 using System.Threading.Tasks;
-using Postgres.Marula.AppControl.UIElements;
 using Postgres.Marula.AppControl.UIElements.Menu;
 using Terminal.Gui;
 
@@ -12,7 +11,7 @@ namespace Postgres.Marula.AppControl
 	internal class ControlWindow : Window
 	{
 		private readonly IAppMenu appMenu;
-		
+
 		public ControlWindow(IAppMenu appMenu) => this.appMenu = appMenu;
 
 		/// <summary>
@@ -29,28 +28,23 @@ namespace Postgres.Marula.AppControl
 			{
 				Normal = Application.Driver.MakeAttribute(fore: Color.White, back: Color.DarkGray)
 			};
-			
-			var menuView = new FrameView ("app menu") 
-			{
-				// X = 0,
-				// Y = 0,
-				Width = 25,
-				Height = Dim.Fill (1),
-				CanFocus = false,
-				Shortcut = Key.CtrlMask | Key.C
-			};
-			
-			menuView.Title = $"{menuView.Title} ({menuView.ShortcutTag})";
-			menuView.ShortcutAction = () => menuView.SetFocus();
 
 			var menuItems = await appMenu
 				.LoadAsync()
 				.ToArrayAsync();
-			
+
+			var menuView = new FrameView
+			{
+				Width = menuItems.Max(item => item.Name.Length) + 5,
+				Height = Dim.Fill(),
+				CanFocus = false,
+				Shortcut = Key.CtrlMask | Key.C
+			};
+
+			menuView.ShortcutAction = () => menuView.SetFocus();
+
 			var menuItemsView = new ListView(menuItems)
 			{
-				X = 0,
-				Y = 0,
 				Width = Dim.Fill(),
 				Height = Dim.Fill(),
 				AllowsMarking = false,
@@ -58,6 +52,7 @@ namespace Postgres.Marula.AppControl
 			};
 
 			menuView.Add(menuItemsView);
+			Add(menuView);
 		}
 	}
 }

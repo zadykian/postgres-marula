@@ -17,8 +17,8 @@ namespace Postgres.Marula.AppControl
 		/// <inheritdoc />
 		async Task IHostedService.StartAsync(CancellationToken cancellationToken)
 		{
-			await controlWindow.InitializeAsync();
 			Application.Init();
+			await controlWindow.InitializeAsync();
 			Application.Run(controlWindow);
 		}
 
