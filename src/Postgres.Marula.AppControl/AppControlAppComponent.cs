@@ -1,9 +1,11 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Postgres.Marula.AppControl.PeriodicJobs;
 using Postgres.Marula.AppControl.UIElements;
 using Postgres.Marula.AppControl.UIElements.Lifetime;
 using Postgres.Marula.AppControl.UIElements.Menu;
 using Postgres.Marula.AppControl.UIElements.Messages;
+using Postgres.Marula.Calculations.PeriodicJobs.PublicApi;
 using Postgres.Marula.Infrastructure.AppComponents;
 using Postgres.Marula.Infrastructure.Extensions;
 
@@ -16,6 +18,7 @@ namespace Postgres.Marula.AppControl
 		void IAppComponent.RegisterServices(IServiceCollection services)
 			=> services
 				.AddSingleton<IMessageBox, TerminalMessageBox>()
+				.AddSingleton<IJobs, RemoteJobs>()
 				.To(RegisterGeneralMenuItems)
 				.AddSingleton<IAppMenu, AppMenu>()
 				.AddSingleton<IUIStartup, ControlWindow>()

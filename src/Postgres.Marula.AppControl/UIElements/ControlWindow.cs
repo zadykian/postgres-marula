@@ -30,7 +30,7 @@ namespace Postgres.Marula.AppControl.UIElements
 		public async Task InitializeAsync()
 		{
 			Title = "postgres-marula-ctl";
-			ColorScheme = CreateColorScheme();
+			ColorScheme = DefaultColorScheme();
 			Width = Dim.Fill();
 			Height = Dim.Fill();
 
@@ -64,9 +64,9 @@ namespace Postgres.Marula.AppControl.UIElements
 		}
 
 		/// <summary>
-		/// Create UI color scheme. 
+		/// Create default UI color scheme. 
 		/// </summary>
-		private static ColorScheme CreateColorScheme()
+		private static ColorScheme DefaultColorScheme()
 		{
 			var normal = Application.Driver.MakeAttribute(fore: Color.White, back: Color.DarkGray);
 			var focused = Application.Driver.MakeAttribute(fore: Color.White, back: Color.Cyan);
@@ -81,9 +81,26 @@ namespace Postgres.Marula.AppControl.UIElements
 		}
 
 		/// <summary>
+		/// Create UI color scheme for buttons. 
+		/// </summary>
+		private static ColorScheme ButtonColorScheme()
+		{
+			var normal = Application.Driver.MakeAttribute(fore: Color.Black, back: Color.Gray);
+			var focused = Application.Driver.MakeAttribute(fore: Color.White, back: Color.Cyan);
+
+			return new ColorScheme
+			{
+				Normal = normal,
+				Focus = focused,
+				HotNormal = normal,
+				HotFocus = normal
+			};
+		}
+
+		/// <summary>
 		/// Create general menu view. 
 		/// </summary>
-		private FrameView CreateGeneralMenuView(
+		private static FrameView CreateGeneralMenuView(
 			int menuWidth,
 			IEnumerable<IMenuItem> generalMenuItems)
 		{
@@ -132,7 +149,11 @@ namespace Postgres.Marula.AppControl.UIElements
 
 			jobsMenuView.ShortcutAction = () => jobsMenuView.SetFocus();
 
-			var startAllButton = new Button("start all");
+			var startAllButton = new Button("start all")
+			{
+				ColorScheme = ButtonColorScheme()
+			};
+
 			startAllButton.Clicked += () =>
 			{
 				/* todo: call IJobs.StartAll with confirmation */
@@ -148,7 +169,8 @@ namespace Postgres.Marula.AppControl.UIElements
 
 			var stopAllButton = new Button("stop all")
 			{
-				X = Pos.Right(startAllButton) + 1
+				X = Pos.Right(startAllButton) + 1,
+				ColorScheme = ButtonColorScheme()
 			};
 
 			stopAllButton.Clicked += () =>
