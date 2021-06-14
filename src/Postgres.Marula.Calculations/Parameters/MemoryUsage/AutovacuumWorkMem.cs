@@ -41,7 +41,7 @@ namespace Postgres.Marula.Calculations.Parameters.MemoryUsage
 		/// <inheritdoc />
 		protected override async ValueTask<Memory> CalculateValueAsync()
 		{
-			var totalRamSize = await hardwareInfo.TotalRam();
+			var totalRamSize = await hardwareInfo.GetTotalRamAsync();
 			var autovacuumMaxWorkers = await pgSettings.ReadAsync<AutovacuumMaxWorkers, WorkersCount>();
 			return 0.1 * totalRamSize / autovacuumMaxWorkers;
 		}

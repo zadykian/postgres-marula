@@ -22,7 +22,7 @@ namespace Postgres.Marula.HwInfo
 		protected override NonEmptyString PathToExecutable => "powershell.exe";
 
 		/// <inheritdoc />
-		protected override async Task<Memory> GetTotalRamAsync()
+		protected override async Task<Memory> GetTotalRamAsyncImpl()
 		{
 			const string command = "(Get-CimInstance Win32_PhysicalMemory | Measure-Object -Property capacity -Sum).Sum";
 			var totalRamInBytesString = await ExecuteCommandAsync(command);
@@ -30,7 +30,7 @@ namespace Postgres.Marula.HwInfo
 		}
 
 		/// <inheritdoc />
-		protected override async Task<CoresCount> GetCpuCoresCountAsync()
+		protected override async Task<CoresCount> GetCpuCoresCountAsyncImpl()
 		{
 			await Task.CompletedTask;
 			var coresCountString = Environment.GetEnvironmentVariable("NUMBER_OF_PROCESSORS")!;

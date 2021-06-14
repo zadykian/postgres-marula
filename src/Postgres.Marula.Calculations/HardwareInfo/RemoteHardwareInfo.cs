@@ -29,11 +29,11 @@ namespace Postgres.Marula.Calculations.HardwareInfo
 				.To(endpoint => new HttpClient {BaseAddress = endpoint});
 
 		/// <inheritdoc />
-		async Task<Memory> IHardwareInfo.TotalRam()
+		async Task<Memory> IHardwareInfo.GetTotalRamAsync()
 			=> await PerformRequestAsync<Memory>(HttpMethod.Get, "HardwareInfo/GetTotalRam");
 
 		/// <inheritdoc />
-		async Task<CoresCount> IHardwareInfo.CpuCoresCount()
+		async Task<CoresCount> IHardwareInfo.GetCpuCoresCountAsync()
 			=> await PerformRequestAsync<CoresCount>(HttpMethod.Get, "HardwareInfo/GetCpuCoresCount");
 
 		/// <summary>

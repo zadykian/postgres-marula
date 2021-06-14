@@ -24,7 +24,7 @@ namespace Postgres.Marula.Calculations.Parameters.MemoryUsage
 		/// <inheritdoc />
 		protected override async ValueTask<Memory> CalculateValueAsync()
 		{
-			var totalRamSize = await hardwareInfo.TotalRam();
+			var totalRamSize = await hardwareInfo.GetTotalRamAsync();
 			return 0.25 * totalRamSize;
 		}
 	}

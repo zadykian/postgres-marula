@@ -20,27 +20,27 @@ namespace Postgres.Marula.HwInfo
 
 		protected HardwareInfoBase(ILogger<HardwareInfoBase> logger)
 		{
-			ramSizeAsyncCache = new(GetTotalRamAsync);
-			coresCountAsyncCache = new(GetCpuCoresCountAsync);
+			ramSizeAsyncCache = new(GetTotalRamAsyncImpl);
+			coresCountAsyncCache = new(GetCpuCoresCountAsyncImpl);
 			this.logger = logger;
 		}
 
 		/// <inheritdoc />
-		async Task<Memory> IHardwareInfo.TotalRam() => await ramSizeAsyncCache;
+		async Task<Memory> IHardwareInfo.GetTotalRamAsync() => await ramSizeAsyncCache;
 
 		/// <inheritdoc />
-		async Task<CoresCount> IHardwareInfo.CpuCoresCount() => await coresCountAsyncCache;
+		async Task<CoresCount> IHardwareInfo.GetCpuCoresCountAsync() => await coresCountAsyncCache;
 
 		/// <summary>
 		/// Path to executable.
 		/// </summary>
 		protected abstract NonEmptyString PathToExecutable { get; }
 
-		/// <inheritdoc cref="IHardwareInfo.TotalRam"/>
-		protected abstract Task<Memory> GetTotalRamAsync();
+		/// <inheritdoc cref="IHardwareInfo.GetTotalRamAsync"/>
+		protected abstract Task<Memory> GetTotalRamAsyncImpl();
 
-		/// <inheritdoc cref="IHardwareInfo.CpuCoresCount"/>
-		protected abstract Task<CoresCount> GetCpuCoresCountAsync();
+		/// <inheritdoc cref="IHardwareInfo.GetCpuCoresCountAsync"/>
+		protected abstract Task<CoresCount> GetCpuCoresCountAsyncImpl();
 
 		/// <summary>
 		/// Execute command and return received output. 
