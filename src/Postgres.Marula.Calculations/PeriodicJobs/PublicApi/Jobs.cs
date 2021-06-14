@@ -23,7 +23,7 @@ namespace Postgres.Marula.Calculations.PeriodicJobs.PublicApi
 		}
 
 		/// <inheritdoc />
-		IAsyncEnumerable<IJobInfo> IJobs.InfoAboutAll()
+		IAsyncEnumerable<IJobInfo> IJobs.InfoAboutAllAsync()
 			=> jobs
 				.Select(job => new JobInfo(job.Name, job.State))
 				.ToAsyncEnumerable();

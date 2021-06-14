@@ -11,7 +11,7 @@ namespace Postgres.Marula.Calculations.PeriodicJobs.PublicApi
 		/// <summary>
 		/// Get info about all jobs.
 		/// </summary>
-		IAsyncEnumerable<IJobInfo> InfoAboutAll();
+		IAsyncEnumerable<IJobInfo> InfoAboutAllAsync();
 
 		/// <summary>
 		/// Start all jobs.
