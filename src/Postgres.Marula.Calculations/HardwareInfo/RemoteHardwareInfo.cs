@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Postgres.Marula.Calculations.Configuration;
 using Postgres.Marula.Calculations.Exceptions;
 using Postgres.Marula.HwInfo;
-using Postgres.Marula.Infrastructure.Extensions;
+using Postgres.Marula.Infrastructure.Http;
 using Postgres.Marula.Infrastructure.TypeDecorators;
 
 // ReSharper disable BuiltInTypeReferenceStyle
@@ -14,19 +14,16 @@ using CoresCount = System.Byte;
 
 namespace Postgres.Marula.Calculations.HardwareInfo
 {
-	/// <inheritdoc />
+	/// <inheritdoc cref="IHardwareInfo" />
 	/// <remarks>
 	/// This implementations accesses remote agent via HTTP.
 	/// </remarks>
-	internal class RemoteHardwareInfo : IHardwareInfo
+	internal class RemoteHardwareInfo : HttpComponentBase, IHardwareInfo
 	{
-		private readonly HttpClient httpClient;
-
 		public RemoteHardwareInfo(ICalculationsConfiguration configuration)
-			=> httpClient = configuration
-				.General()
-				.AgentApiUri()
-				.To(endpoint => new HttpClient {BaseAddress = endpoint});
+			: base(configuration.General().AgentApiUri())
+		{
+		}
 
 		/// <inheritdoc />
 		async Task<Memory> IHardwareInfo.GetTotalRamAsync()
@@ -36,28 +33,14 @@ namespace Postgres.Marula.Calculations.HardwareInfo
 		async Task<CoresCount> IHardwareInfo.GetCpuCoresCountAsync()
 			=> await PerformRequestAsync<CoresCount>(HttpMethod.Get, "HardwareInfo/GetCpuCoresCount");
 
-		/// <summary>
-		/// Send HTTP request to remote agent.
-		/// </summary>
-		/// <exception cref="RemoteAgentAccessException">
-		/// Remote agent request failed.
-		/// </exception>
-		private async Task<TResponse> PerformRequestAsync<TResponse>(HttpMethod httpMethod, NonEmptyString route)
+		/// <inheritdoc />
+		protected override Exception WrapException(Exception occuredError) => Error.FailedToAccessAgent(occuredError);
+
+		/// <inheritdoc />
+		protected override JsonSerializerOptions ConfigureSerializerOptions(JsonSerializerOptions serializerOptions)
 		{
-			HttpResponseMessage httpResponseMessage;
-
-			try
-			{
-				httpResponseMessage = await httpClient.SendAsync(new(httpMethod, route));
-			}
-			catch (Exception exception)
-			{
-				throw Error.FailedToAccessAgent(exception);
-			}
-
-			var responseBody = await httpResponseMessage.Content.ReadAsStringAsync();
-			var options = new JsonSerializerOptions { Converters = { MemoryConverter.Instance } };
-			return JsonSerializer.Deserialize<TResponse>(responseBody, options)!;
+			serializerOptions.Converters.Add(MemoryConverter.Instance);
+			return serializerOptions;
 		}
 
 		/// <summary>
