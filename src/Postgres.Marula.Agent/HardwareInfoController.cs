@@ -1,19 +1,14 @@
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Postgres.Marula.HwInfo;
-using static System.Net.Mime.MediaTypeNames;
+using Postgres.Marula.WebApi.Common;
 
 namespace Postgres.Marula.Agent
 {
 	/// <summary>
 	/// Hardware info access.
 	/// </summary>
-	[ApiController]
-	[Route("[controller]/[action]")]
-	[Produces(Application.Json)]
-	[ProducesResponseType(StatusCodes.Status200OK)]
-	public class HardwareInfoController : Controller
+	public class HardwareInfoController : ApiControllerBase
 	{
 		private readonly IHardwareInfo hardwareInfo;
 
