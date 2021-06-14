@@ -11,7 +11,7 @@
 		"General": {
 			"RecalculationIntervalInSeconds": 60,
 			"AutoAdjustParams": false,
-			"AgentEndpoint": "http://localhost:5000"
+			"AgentApiUri": "http://localhost:5000"
 		},
 		"Autovacuum": {
 			"BloatLoggingIntervalInSeconds": 600,
@@ -25,7 +25,7 @@
 	"Kestrel": {
 		"Endpoints": {
 			"Http": {
-				"Url": "http://localhost:5000"
+				"Url": "http://localhost:5001"
 			}
 		}
 	}

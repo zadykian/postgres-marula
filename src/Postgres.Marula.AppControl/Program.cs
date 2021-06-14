@@ -22,7 +22,7 @@ namespace Postgres.Marula.AppControl
 					// todo: and in-memory logging
 					builder.ClearProviders();
 				})
-				.ConfigureServices(services => services.AddComponent<AppControlAppComponent>())
+				.ConfigureServices(services => services.AddComponent<ControlAppAppComponent>())
 				.RunConsoleAsync();
 	}
 }

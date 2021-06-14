@@ -68,7 +68,7 @@ namespace Postgres.Marula.Calculations.Configuration
 			/// <inheritdoc />
 			Uri IGeneralConfiguration.AgentApiUri()
 				=> configurationSection
-					.GetSection("AgentEndpoint")
+					.GetSection("AgentApiUri")
 					.Value
 					.To(uriString => new Uri(uriString));
 		}

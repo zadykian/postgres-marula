@@ -48,7 +48,7 @@ namespace Postgres.Marula.Tests.Infrastructure
 		/// <see cref="IGeneralConfiguration.AgentApiUri"/> test.
 		/// </summary>
 		[Test]
-		public void AgentEndpointTest()
+		public void AgentApiUriTest()
 			=> GetService<ICalculationsConfiguration>()
 				.General()
 				.AgentApiUri()

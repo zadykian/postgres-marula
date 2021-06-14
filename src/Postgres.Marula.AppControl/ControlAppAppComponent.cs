@@ -1,5 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Postgres.Marula.AppControl.Configuration;
 using Postgres.Marula.AppControl.PeriodicJobs;
 using Postgres.Marula.AppControl.UIElements;
 using Postgres.Marula.AppControl.UIElements.Lifetime;
@@ -12,13 +13,14 @@ using Postgres.Marula.Infrastructure.Extensions;
 namespace Postgres.Marula.AppControl
 {
 	/// <inheritdoc />
-	internal class AppControlAppComponent : IAppComponent
+	internal class ControlAppAppComponent : IAppComponent
 	{
 		/// <inheritdoc />
 		void IAppComponent.RegisterServices(IServiceCollection services)
 			=> services
-				.AddSingleton<IMessageBox, TerminalMessageBox>()
+				.AddSingleton<IControlAppConfiguration, ControlAppConfiguration>()
 				.AddSingleton<IJobs, RemoteJobs>()
+				.AddSingleton<IMessageBox, TerminalMessageBox>()
 				.To(RegisterGeneralMenuItems)
 				.AddSingleton<IAppMenu, AppMenu>()
 				.AddSingleton<IUIStartup, ControlWindow>()
