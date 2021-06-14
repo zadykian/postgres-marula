@@ -40,7 +40,9 @@ namespace Postgres.Marula.Infrastructure.Http
 			}
 			catch (Exception exception)
 			{
-				throw WrapException(exception);
+				var wrapped = WrapException(exception);
+				if (ReferenceEquals(exception, wrapped)) throw;
+				throw wrapped;
 			}
 
 			if (typeof(TResponse) == typeof(Unit))
