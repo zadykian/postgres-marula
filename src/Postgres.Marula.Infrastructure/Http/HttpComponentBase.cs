@@ -1,6 +1,7 @@
 using System;
 using System.Net.Http;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Postgres.Marula.Infrastructure.TypeDecorators;
 
@@ -38,7 +39,7 @@ namespace Postgres.Marula.Infrastructure.Http
 			{
 				httpResponseMessage = await httpClient
 					.SendAsync(httpRequestMessage)
-					.ConfigureAwait(false);
+					.ConfigureAwait(false); // todo
 			}
 			catch (Exception exception)
 			{
@@ -70,7 +71,10 @@ namespace Postgres.Marula.Infrastructure.Http
 		/// </summary>
 		protected virtual JsonSerializerOptions ConfigureSerializerOptions(
 			JsonSerializerOptions serializerOptions)
-			=> serializerOptions;
+		{
+			serializerOptions.Converters.Add(new JsonStringEnumConverter());
+			return serializerOptions;
+		}
 
 		/// <summary>
 		/// Representation of empty type.

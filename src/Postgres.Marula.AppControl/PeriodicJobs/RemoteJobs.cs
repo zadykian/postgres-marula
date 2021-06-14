@@ -22,7 +22,7 @@ namespace Postgres.Marula.AppControl.PeriodicJobs
 		/// <inheritdoc />
 		async IAsyncEnumerable<IJobInfo> IJobs.InfoAboutAllAsync()
 		{
-			var jobInfos = await PerformRequestAsync<JobInfo[]>(HttpMethod.Get, "Jobs/InfoAboutAll").ConfigureAwait(false);
+			var jobInfos = await PerformRequestAsync<IEnumerable<JobInfo>>(HttpMethod.Get, "Jobs/InfoAboutAll").ConfigureAwait(false); // todo
 			foreach (var jobInfo in jobInfos) yield return jobInfo;
 		}
 

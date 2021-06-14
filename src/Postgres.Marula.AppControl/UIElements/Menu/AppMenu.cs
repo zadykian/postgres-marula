@@ -38,7 +38,8 @@ namespace Postgres.Marula.AppControl.UIElements.Menu
 				jobInfoItems = await jobs
 					.InfoAboutAllAsync()
 					.Select((jobInfo, index) => new MenuItem(jobInfo.Name, (byte) index))
-					.ToArrayAsync();
+					.ToArrayAsync()
+					.ConfigureAwait(false); // todo
 			}
 			catch (Exception exception)
 			{

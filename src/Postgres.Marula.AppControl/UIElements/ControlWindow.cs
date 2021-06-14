@@ -20,7 +20,7 @@ namespace Postgres.Marula.AppControl.UIElements
 		async Task IUIStartup.StartAsync()
 		{
 			Application.Init();
-			await InitializeAsync();
+			await InitializeAsync().ConfigureAwait(false); // todo
 			Application.Run(this);
 		}
 
@@ -40,11 +40,12 @@ namespace Postgres.Marula.AppControl.UIElements
 
 			var jobMenuItems = await appMenu
 				.LoadJobsAsync()
-				.ToArrayAsync();
+				.ToArrayAsync()
+				.ConfigureAwait(false); // todo
 
 			var menuWidth = generalMenuItems
 				.Concat(jobMenuItems)
-				.Max(item => item.Name.Length) + 8;
+				.Max(item => item.Name.Length) + 4;
 
 			var generalMenuView = CreateGeneralMenuView(menuWidth, generalMenuItems);
 			Add(generalMenuView);
