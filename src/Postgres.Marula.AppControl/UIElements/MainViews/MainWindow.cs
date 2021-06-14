@@ -36,7 +36,7 @@ namespace Postgres.Marula.AppControl.UIElements.MainViews
 			Width = Dim.Fill();
 			Height = Dim.Fill();
 
-			Add(await generalMenu.InitializeAsync());
+			Add(await generalMenu.InitializeAsync().ConfigureAwait(false)); // todo;
 			Add(await jobsMenu.InitializeAsync(Pos.Bottom(generalMenu)));
 
 			var currentOutputView = new FrameView("current output")

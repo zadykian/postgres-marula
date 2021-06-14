@@ -26,7 +26,7 @@ namespace Postgres.Marula.AppControl.UIElements.MainViews
 		{
 			Title = "jobs";
 			Y = verticalOffset;
-			Width = await appMenu.TotalWidthAsync();
+			Width = await appMenu.TotalWidthAsync().ConfigureAwait(false); // todo;
 			Height = Dim.Fill();
 			CanFocus = false;
 
@@ -36,7 +36,8 @@ namespace Postgres.Marula.AppControl.UIElements.MainViews
 
 			var jobMenuItems = await appMenu
 				.LoadJobsAsync()
-				.ToArrayAsync();
+				.ToArrayAsync()
+				.ConfigureAwait(false); // todo;
 
 			Add(new ListView(jobMenuItems)
 			{

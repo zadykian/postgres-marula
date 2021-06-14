@@ -20,7 +20,7 @@ namespace Postgres.Marula.AppControl.UIElements.MainViews
 		public async Task<GeneralMenu> InitializeAsync()
 		{
 			Title = "general";
-			Width = await appMenu.TotalWidthAsync();
+			Width = await appMenu.TotalWidthAsync().ConfigureAwait(false); // todo;
 			Height = Dim.Percent(50f);
 
 			CanFocus = false;
