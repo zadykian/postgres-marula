@@ -2,10 +2,12 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Postgres.Marula.Infrastructure.Extensions;
+using Postgres.Marula.WebApi.Common.JsonConverters;
 
 namespace Postgres.Marula.WebApi.Common
 {
@@ -22,6 +24,12 @@ namespace Postgres.Marula.WebApi.Common
 				.AddMvc()
 				.To(AddForeignAssemblies)
 				.AddControllersAsServices()
+				.AddJsonOptions(options =>
+				{
+					var converters = options.JsonSerializerOptions.Converters;
+					converters.Add(new JsonStringEnumConverter());
+					converters.Add(new NonEmptyStringJsonConverter());
+				})
 				.Services
 				.AddSwaggerGen(options =>
 				{

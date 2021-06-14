@@ -1,4 +1,4 @@
-using System.Linq;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Postgres.Marula.Calculations.PeriodicJobs.PublicApi;
@@ -9,7 +9,7 @@ namespace Postgres.Marula.AppHost.Api
 	/// <summary>
 	/// Access to long-running jobs.
 	/// </summary>
-	public class JobsController : ApiControllerBase
+	public class JobsController : ApiControllerBase, IJobs
 	{
 		private readonly IJobs jobs;
 
@@ -18,24 +18,22 @@ namespace Postgres.Marula.AppHost.Api
 		/// </param>
 		public JobsController(IJobs jobs) => this.jobs = jobs;
 
-		/// <inheritdoc cref="IJobs.InfoAboutAllAsync"/>
+		/// <summary>
+		/// Get info about all jobs.
+		/// </summary>
 		[HttpGet]
-		public async Task<IActionResult> InfoAboutAllAsync() => Ok(await jobs.InfoAboutAllAsync().ToArrayAsync());
+		public IAsyncEnumerable<IJobInfo> InfoAboutAllAsync() => jobs.InfoAboutAllAsync();
 
-		/// <inheritdoc cref="IJobs.StartAllAsync"/>
+		/// <summary>
+		/// Start all jobs.
+		/// </summary>
 		[HttpPatch]
-		public async Task<IActionResult> StartAllAsync()
-		{
-			await jobs.StartAllAsync();
-			return Ok();
-		}
+		public async ValueTask StartAllAsync() => await jobs.StartAllAsync();
 
-		/// <inheritdoc cref="IJobs.StopAllAsync"/>
+		/// <summary>
+		/// Stop all executing jobs.
+		/// </summary>
 		[HttpPatch]
-		public async Task<IActionResult> StopAllAsync()
-		{
-			await jobs.StopAllAsync();
-			return Ok();
-		}
+		public async ValueTask StopAllAsync() => await jobs.StopAllAsync();
 	}
 }
