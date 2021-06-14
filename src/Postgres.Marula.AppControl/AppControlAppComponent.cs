@@ -1,5 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Postgres.Marula.AppControl.UIElements;
 using Postgres.Marula.AppControl.UIElements.Menu;
 using Postgres.Marula.Infrastructure.AppComponents;
 

@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Postgres.Marula.AppControl.UIElements.Menu;
 using Terminal.Gui;
 
-namespace Postgres.Marula.AppControl
+namespace Postgres.Marula.AppControl.UIElements
 {
 	/// <summary>
 	/// Main UI window.
@@ -27,8 +27,12 @@ namespace Postgres.Marula.AppControl
 			ColorScheme = new ColorScheme
 			{
 				Normal = Application.Driver.MakeAttribute(fore: Color.White, back: Color.DarkGray),
-				Focus =  Application.Driver.MakeAttribute(fore: Color.White, back: Color.Cyan)
+				Focus = Application.Driver.MakeAttribute(fore: Color.White, back: Color.Cyan),
+				HotNormal = Application.Driver.MakeAttribute(fore: Color.White, back: Color.DarkGray),
+				HotFocus = Application.Driver.MakeAttribute(fore: Color.White, back: Color.DarkGray),
 			};
+
+			//ColorScheme = Colors.Base;
 
 			var generalMenuItems = appMenu
 				.LoadGeneral()
@@ -51,13 +55,21 @@ namespace Postgres.Marula.AppControl
 
 			generalMenuView.ShortcutAction = () => generalMenuView.SetFocus();
 
-			generalMenuView.Add(new ListView(generalMenuItems)
+			var generalMenuListView = new ListView(generalMenuItems)
 			{
 				Width = Dim.Fill(),
 				Height = Dim.Fill(),
 				AllowsMarking = false,
 				CanFocus = true
-			});
+			};
+
+			generalMenuListView.OpenSelectedItem += eventArgs =>
+			{
+				// todo
+				var selectedValue = eventArgs.Value;
+			};
+			
+			generalMenuView.Add(generalMenuListView);
 
 			Add(generalMenuView);
 
