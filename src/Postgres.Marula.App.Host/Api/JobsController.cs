@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Postgres.Marula.Calculations.PeriodicJobs.PublicApi;
 using Postgres.Marula.WebApi.Common;
 
-namespace Postgres.Marula.AppHost.Api
+namespace Postgres.Marula.App.Host.Api
 {
 	/// <summary>
 	/// Access to long-running jobs.

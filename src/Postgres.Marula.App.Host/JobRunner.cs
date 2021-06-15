@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 using Postgres.Marula.Calculations.PeriodicJobs.PublicApi;
 
-namespace Postgres.Marula.AppHost
+namespace Postgres.Marula.App.Host
 {
 	/// <summary>
 	/// Service to run and stop all long-running jobs.

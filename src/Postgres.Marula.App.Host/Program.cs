@@ -8,7 +8,7 @@ using Postgres.Marula.Infrastructure.Extensions;
 using Postgres.Marula.Infrastructure.Hosting;
 using Postgres.Marula.WebApi.Common;
 
-namespace Postgres.Marula.AppHost
+namespace Postgres.Marula.App.Host
 {
 	/// <summary>
 	/// Application entry point. 
@@ -20,7 +20,7 @@ namespace Postgres.Marula.AppHost
 		/// </summary>
 		private static Task Main(string[] args)
 			=> CommonHostBuilder
-				.WithConfig(args, "marula-app-config")
+				.WithConfig(args, "marula-host-config")
 				.WebWithDefaultStartup()
 				.ConfigureServices(AddComponents)
 				.Build()
@@ -34,6 +34,6 @@ namespace Postgres.Marula.AppHost
 				.AddComponent<InfrastructureAppComponent>()
 				.AddComponent<DatabaseAccessAppComponent>()
 				.AddComponent<CalculationsAppComponent>()
-				.AddComponent<AppHostAppComponent>();
+				.AddComponent<HostAppComponent>();
 	}
 }
