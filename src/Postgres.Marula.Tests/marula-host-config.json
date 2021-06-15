@@ -21,5 +21,12 @@
 			"LsnLoggingIntervalInSeconds": 0.01,
 			"MovingAverageWindowInSeconds": 10800
 		}
+	},
+	"Kestrel": {
+		"Endpoints": {
+			"Http": {
+				"Url": "http://localhost:5001"
+			}
+		}
 	}
 }
