@@ -20,7 +20,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Postgres.Marula.HwInfo", "P
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Postgres.Marula.App.Agent", "Postgres.Marula.App.Agent\Postgres.Marula.App.Agent.csproj", "{49743399-7DE4-4CA8-9FE5-1D7DE685659B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Postgres.Marula.AppControl", "Postgres.Marula.AppControl\Postgres.Marula.AppControl.csproj", "{689F9651-4D82-4AC4-8976-82E29C63690C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Postgres.Marula.App.Control", "Postgres.Marula.App.Control\Postgres.Marula.App.Control.csproj", "{689F9651-4D82-4AC4-8976-82E29C63690C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Postgres.Marula.WebApi.Common", "Postgres.Marula.WebApi.Common\Postgres.Marula.WebApi.Common.csproj", "{34A4BD2D-1C8F-460B-A40E-C253B1A01BE1}"
 EndProject
