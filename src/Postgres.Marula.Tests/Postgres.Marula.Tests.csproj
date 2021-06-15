@@ -13,7 +13,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Postgres.Marula.Agent\Postgres.Marula.Agent.csproj" />
+		<ProjectReference Include="..\Postgres.Marula.App.Agent\Postgres.Marula.App.Agent.csproj" />
 		<ProjectReference Include="..\Postgres.Marula.HwInfo\Postgres.Marula.HwInfo.csproj" />
 		<ProjectReference Include="..\Postgres.Marula.DatabaseAccess\Postgres.Marula.DatabaseAccess.csproj" />
 	</ItemGroup>

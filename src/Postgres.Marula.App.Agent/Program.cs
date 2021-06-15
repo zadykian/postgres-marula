@@ -5,7 +5,7 @@ using Postgres.Marula.Infrastructure.Extensions;
 using Postgres.Marula.Infrastructure.Hosting;
 using Postgres.Marula.WebApi.Common;
 
-namespace Postgres.Marula.Agent
+namespace Postgres.Marula.App.Agent
 {
 	/// <summary>
 	/// Application entry point. 

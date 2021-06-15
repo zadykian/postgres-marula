@@ -7,7 +7,7 @@ using Postgres.Marula.WebApi.Common;
 // ReSharper disable BuiltInTypeReferenceStyle
 using CoresCount = System.Byte;
 
-namespace Postgres.Marula.Agent.Api
+namespace Postgres.Marula.App.Agent.Api
 {
 	/// <summary>
 	/// Hardware info access.

@@ -4,7 +4,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
-using Postgres.Marula.Agent.Api;
+using Postgres.Marula.App.Agent.Api;
 using Postgres.Marula.Calculations.HardwareInfo;
 using Postgres.Marula.HwInfo;
 using Postgres.Marula.Infrastructure.Extensions;
