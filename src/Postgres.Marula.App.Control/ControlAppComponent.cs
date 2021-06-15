@@ -21,17 +21,27 @@ namespace Postgres.Marula.App.Control
 			=> services
 				.AddSingleton<IControlAppConfiguration, ControlAppConfiguration>()
 				.AddSingleton<IJobs, RemoteJobs>()
+				.AddSingleton<IAppMenu, AppMenu>()
+				.To(RegisterUIElements)
+				.AddSingleton<IHostedService, TerminalUiService>();
+
+		/// <summary>
+		/// Add all UI elements to <paramref name="services"/>. 
+		/// </summary>
+		private static IServiceCollection RegisterUIElements(IServiceCollection services)
+			=> services
 				.AddSingleton<IMessageBox, TerminalMessageBox>()
 				.AddSingleton<IButtons, Buttons>()
-				.AddSingleton<IAppMenu, AppMenu>()
 				.AddSingleton<JobButtonsFrame>()
 				.AddSingleton<JobsMenu>()
 				.To(RegisterGeneralMenuItems)
 				.AddSingleton<GeneralMenu>()
 				.AddSingleton<IUIStartup, MainWindow>()
-				.AddSingleton<IUIShutdown, UiShutdown>()
-				.AddSingleton<IHostedService, TerminalUiService>();
+				.AddSingleton<IUIShutdown, UiShutdown>();
 
+		/// <summary>
+		/// Add general menu UI elements to <paramref name="services"/>. 
+		/// </summary>
 		private static IServiceCollection RegisterGeneralMenuItems(IServiceCollection services)
 			=> services
 				.AddSingleton<IMenuItem>(new MenuItem("view ctl app logs", 0))
