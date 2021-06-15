@@ -15,7 +15,7 @@ namespace Postgres.Marula.Infrastructure.Hosting
 		/// Create <see cref="IHostBuilder"/> instance configured
 		/// with json configuration file named <paramref name="jsonFileName"/>.
 		/// </summary>
-		public static IHostBuilder WithConfig(
+		public static IHostBuilder WithJsonConfig(
 			IEnumerable<string> args,
 			NonEmptyString jsonFileName)
 			=> Host

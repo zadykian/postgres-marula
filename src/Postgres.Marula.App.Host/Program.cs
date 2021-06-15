@@ -20,7 +20,7 @@ namespace Postgres.Marula.App.Host
 		/// </summary>
 		private static Task Main(string[] args)
 			=> CommonHostBuilder
-				.WithConfig(args, "marula-host-config")
+				.WithJsonConfig(args, "marula-host-config")
 				.WebWithDefaultStartup()
 				.ConfigureServices(AddComponents)
 				.Build()
