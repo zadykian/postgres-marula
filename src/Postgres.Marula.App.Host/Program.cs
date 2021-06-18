@@ -3,10 +3,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Postgres.Marula.Calculations;
 using Postgres.Marula.DatabaseAccess;
+using Postgres.Marula.HttpApi.Common;
 using Postgres.Marula.Infrastructure;
 using Postgres.Marula.Infrastructure.Extensions;
 using Postgres.Marula.Infrastructure.Hosting;
-using Postgres.Marula.WebApi.Common;
 
 namespace Postgres.Marula.App.Host
 {
@@ -21,7 +21,7 @@ namespace Postgres.Marula.App.Host
 		private static Task Main(string[] args)
 			=> CommonHostBuilder
 				.WithJsonConfig(args, "marula-host-config")
-				.WebWithDefaultStartup()
+				.ApiWithDefaultStartup()
 				.ConfigureServices(AddComponents)
 				.Build()
 				.RunAsync();

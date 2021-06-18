@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Postgres.Marula.Calculations.PeriodicJobs.PublicApi;
-using Postgres.Marula.WebApi.Common;
+using Postgres.Marula.HttpApi.Common;
 
 namespace Postgres.Marula.App.Host.Api
 {

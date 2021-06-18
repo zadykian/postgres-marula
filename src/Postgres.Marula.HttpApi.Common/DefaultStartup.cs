@@ -13,10 +13,10 @@ using Postgres.Marula.Infrastructure.JsonConverters;
 using Postgres.Marula.Infrastructure.TypeDecorators;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace Postgres.Marula.WebApi.Common
+namespace Postgres.Marula.HttpApi.Common
 {
 	/// <summary>
-	/// Default web application startup.
+	/// Default HTTP API application startup.
 	/// </summary>
 	internal class DefaultStartup
 	{

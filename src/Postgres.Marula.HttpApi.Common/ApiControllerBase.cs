@@ -2,7 +2,7 @@ using System.Net.Mime;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Postgres.Marula.WebApi.Common
+namespace Postgres.Marula.HttpApi.Common
 {
 	/// <summary>
 	/// Base type for API controllers.

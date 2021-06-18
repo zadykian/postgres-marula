@@ -9,7 +9,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\Postgres.Marula.Infrastructure\Postgres.Marula.Infrastructure.csproj" />
-		<ProjectReference Include="..\Postgres.Marula.WebApi.Common\Postgres.Marula.WebApi.Common.csproj" />
+		<ProjectReference Include="..\Postgres.Marula.HttpApi.Common\Postgres.Marula.HttpApi.Common.csproj" />
 	</ItemGroup>
 
 </Project>

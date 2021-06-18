@@ -1,8 +1,8 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Postgres.Marula.HttpApi.Common;
 using Postgres.Marula.HwInfo;
 using Postgres.Marula.Infrastructure.TypeDecorators;
-using Postgres.Marula.WebApi.Common;
 
 // ReSharper disable BuiltInTypeReferenceStyle
 using CoresCount = System.Byte;

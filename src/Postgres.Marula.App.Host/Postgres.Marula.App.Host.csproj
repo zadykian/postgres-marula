@@ -9,6 +9,7 @@
 	<ItemGroup>
 		<ProjectReference Include="..\Postgres.Marula.Calculations\Postgres.Marula.Calculations.csproj" />
 		<ProjectReference Include="..\Postgres.Marula.DatabaseAccess\Postgres.Marula.DatabaseAccess.csproj" />
+		<ProjectReference Include="..\Postgres.Marula.HttpApi.Common\Postgres.Marula.HttpApi.Common.csproj" />
 	</ItemGroup>
 
 </Project>

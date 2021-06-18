@@ -22,7 +22,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Postgres.Marula.App.Agent",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Postgres.Marula.App.Control", "Postgres.Marula.App.Control\Postgres.Marula.App.Control.csproj", "{689F9651-4D82-4AC4-8976-82E29C63690C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Postgres.Marula.WebApi.Common", "Postgres.Marula.WebApi.Common\Postgres.Marula.WebApi.Common.csproj", "{34A4BD2D-1C8F-460B-A40E-C253B1A01BE1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Postgres.Marula.HttpApi.Common", "Postgres.Marula.HttpApi.Common\Postgres.Marula.HttpApi.Common.csproj", "{34A4BD2D-1C8F-460B-A40E-C253B1A01BE1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
