@@ -57,7 +57,7 @@ namespace Postgres.Marula.Calculations.Parameters.Autovacuum.Bloat
 		private IAsyncEnumerable<BloatFractionHistoryEntry> LoadHistory()
 			=> configuration
 				.Autovacuum()
-				.MovingAverageWindow()
+				.RollingWindow()
 				.To(systemStorage.GetBloatFractionHistory);
 	}
 }

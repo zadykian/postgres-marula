@@ -15,11 +15,11 @@
 		},
 		"Autovacuum": {
 			"BloatLoggingIntervalInSeconds": 600,
-			"MovingAverageWindowInSeconds": 10800
+			"RollingWindowInSeconds": 10800
 		},
 		"Wal": {
 			"LsnLoggingIntervalInSeconds": 60,
-			"MovingAverageWindowInSeconds": 10800
+			"RollingWindowInSeconds": 10800
 		}
 	},
 	"Kestrel": {

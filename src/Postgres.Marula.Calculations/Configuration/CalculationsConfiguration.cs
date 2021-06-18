@@ -89,9 +89,9 @@ namespace Postgres.Marula.Calculations.Configuration
 					.To(ParseFromSeconds);
 
 			/// <inheritdoc />
-			PositiveTimeSpan IPeriodicLoggingConfiguration.MovingAverageWindow()
+			PositiveTimeSpan IPeriodicLoggingConfiguration.RollingWindow()
 				=> configurationSection
-					.GetSection("MovingAverageWindowInSeconds")
+					.GetSection("RollingWindowInSeconds")
 					.To(ParseFromSeconds);
 		}
 	}

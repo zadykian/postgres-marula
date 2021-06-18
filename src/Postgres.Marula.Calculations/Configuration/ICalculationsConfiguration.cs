@@ -54,8 +54,8 @@ namespace Postgres.Marula.Calculations.Configuration
 		PositiveTimeSpan Interval();
 
 		/// <summary>
-		/// Window in seconds used to calculate average WAL traffic. 
+		/// Window in seconds used to filter outdated records from time series.
 		/// </summary>
-		PositiveTimeSpan MovingAverageWindow();
+		PositiveTimeSpan RollingWindow();
 	}
 }

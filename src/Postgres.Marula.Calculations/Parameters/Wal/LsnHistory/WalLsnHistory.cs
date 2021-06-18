@@ -21,7 +21,7 @@ namespace Postgres.Marula.Calculations.Parameters.Wal.LsnHistory
 		IAsyncEnumerable<LsnHistoryEntry> IWalLsnHistory.ReadAsync()
 			=> configuration
 				.Wal()
-				.MovingAverageWindow()
+				.RollingWindow()
 				.To(systemStorage.GetLsnHistoryAsync);
 	}
 }

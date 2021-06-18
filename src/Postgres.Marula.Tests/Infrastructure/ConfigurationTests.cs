@@ -67,13 +67,13 @@ namespace Postgres.Marula.Tests.Infrastructure
 				));
 
 		/// <summary>
-		/// <see cref="IPeriodicLoggingConfiguration.MovingAverageWindow"/> test.
+		/// <see cref="IPeriodicLoggingConfiguration.RollingWindow"/> test.
 		/// </summary>
 		[Test]
 		public void AutovacuumMovingAverageWindowTest()
 			=> GetService<ICalculationsConfiguration>()
 				.Autovacuum()
-				.MovingAverageWindow()
+				.RollingWindow()
 				.To(recalculationInterval => Assert.IsTrue(
 					((TimeSpan) recalculationInterval).TotalSeconds > 0
 				));
@@ -91,13 +91,13 @@ namespace Postgres.Marula.Tests.Infrastructure
 				));
 
 		/// <summary>
-		/// <see cref="IPeriodicLoggingConfiguration.MovingAverageWindow"/> test.
+		/// <see cref="IPeriodicLoggingConfiguration.RollingWindow"/> test.
 		/// </summary>
 		[Test]
 		public void WalMovingAverageWindowTest()
 			=> GetService<ICalculationsConfiguration>()
 				.Wal()
-				.MovingAverageWindow()
+				.RollingWindow()
 				.To(recalculationInterval => Assert.IsTrue(
 					((TimeSpan) recalculationInterval).TotalSeconds > 0
 				));
