@@ -11,7 +11,7 @@ namespace Postgres.Marula.HttpApi.Common
 		/// <summary>
 		/// Configure <paramref name="hostBuilder"/> for hosting web application with default startup.
 		/// </summary>
-		public static IHostBuilder ApiWithDefaultStartup(this IHostBuilder hostBuilder)
-			=> hostBuilder.ConfigureWebHostDefaults(builder => builder.UseStartup<DefaultStartup>());
+		public static IHostBuilder EnableHttpApi(this IHostBuilder hostBuilder)
+			=> hostBuilder.ConfigureWebHostDefaults(builder => builder.UseStartup<ApiStartup>());
 	}
 }

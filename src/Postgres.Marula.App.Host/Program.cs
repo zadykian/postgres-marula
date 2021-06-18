@@ -21,7 +21,7 @@ namespace Postgres.Marula.App.Host
 		private static Task Main(string[] args)
 			=> CommonHostBuilder
 				.WithJsonConfig(args, "marula-host-config")
-				.ApiWithDefaultStartup()
+				.EnableHttpApi()
 				.ConfigureServices(AddComponents)
 				.Build()
 				.RunAsync();

@@ -5,7 +5,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".build", ".build", "{37435E2D-0CEA-4EA2-8647-CA5D40007786}"
 ProjectSection(SolutionItems) = preProject
 	common.props = common.props
-	common.web.props = common.web.props
+	common.api.props = common.api.props
 EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Postgres.Marula.Infrastructure", "Postgres.Marula.Infrastructure\Postgres.Marula.Infrastructure.csproj", "{35BF40AD-FE4A-4CD0-B3AD-31D8A78F0ACD}"

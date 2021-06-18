@@ -18,7 +18,7 @@ namespace Postgres.Marula.HttpApi.Common
 	/// <summary>
 	/// Default HTTP API application startup.
 	/// </summary>
-	internal class DefaultStartup
+	internal class ApiStartup
 	{
 		/// <summary>
 		/// Name of current entry assembly.

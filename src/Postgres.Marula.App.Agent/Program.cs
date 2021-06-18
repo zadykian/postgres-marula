@@ -18,7 +18,7 @@ namespace Postgres.Marula.App.Agent
 		private static Task Main(string[] args)
 			=> CommonHostBuilder
 				.WithJsonConfig(args, "marula-agent-config")
-				.ApiWithDefaultStartup()
+				.EnableHttpApi()
 				.ConfigureServices(services => services.AddComponent<HwInfoAppComponent>())
 				.Build()
 				.RunAsync();
