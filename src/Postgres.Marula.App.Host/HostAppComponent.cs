@@ -7,7 +7,7 @@ namespace Postgres.Marula.App.Host
 	internal class HostAppComponent : IAppComponent
 	{
 		/// <inheritdoc />
-		void IAppComponent.RegisterServices(IServiceCollection serviceCollection)
+		IServiceCollection IAppComponent.RegisterServices(IServiceCollection serviceCollection)
 			=> serviceCollection.AddHostedService<JobRunner>();
 	}
 }

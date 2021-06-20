@@ -25,7 +25,7 @@ namespace Postgres.Marula.Calculations
 	public class CalculationsAppComponent : IAppComponent
 	{
 		/// <inheritdoc />
-		void IAppComponent.RegisterServices(IServiceCollection serviceCollection)
+		IServiceCollection IAppComponent.RegisterServices(IServiceCollection serviceCollection)
 			=> serviceCollection
 				.AddSingleton<ICalculationsConfiguration, CalculationsConfiguration>()
 				.AddSingleton<IParameterValueParser, DefaultParameterValueParser>()

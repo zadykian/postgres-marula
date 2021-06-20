@@ -13,6 +13,6 @@ namespace Postgres.Marula.Infrastructure.AppComponents
 		/// <param name="serviceCollection">
 		/// Collection of application services.
 		/// </param>
-		void RegisterServices(IServiceCollection serviceCollection);
+		IServiceCollection RegisterServices(IServiceCollection serviceCollection);
 	}
 }

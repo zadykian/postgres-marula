@@ -10,8 +10,7 @@ namespace Postgres.Marula.Infrastructure
 	public class InfrastructureAppComponent : IAppComponent
 	{
 		/// <inheritdoc />
-		void IAppComponent.RegisterServices(IServiceCollection serviceCollection)
-		{
-		}
+		IServiceCollection IAppComponent.RegisterServices(IServiceCollection serviceCollection)
+			=> serviceCollection;
 	}
 }

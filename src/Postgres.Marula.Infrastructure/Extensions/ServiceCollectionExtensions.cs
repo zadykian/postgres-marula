@@ -45,14 +45,20 @@ namespace Postgres.Marula.Infrastructure.Extensions
 		}
 
 		/// <summary>
+		/// Add service <typeparamref name="TForwarding"/> as implementation of <typeparamref name="TForwardTo"/>. 
+		/// </summary>
+		public static IServiceCollection Forward<TForwarding, TForwardTo>(this IServiceCollection serviceCollection)
+			where TForwarding : class, TForwardTo
+			where TForwardTo : class
+			=> serviceCollection
+				.AddTransient<TForwardTo>(provider => provider.GetRequiredService<TForwarding>());
+
+		/// <summary>
 		/// Add all services from component <typeparamref name="TAppComponent"/>
 		/// to collection <paramref name="serviceCollection"/>. 
 		/// </summary>
 		public static IServiceCollection AddComponent<TAppComponent>(this IServiceCollection serviceCollection)
 			where TAppComponent : IAppComponent, new()
-		{
-			new TAppComponent().RegisterServices(serviceCollection);
-			return serviceCollection;
-		}
+			=> new TAppComponent().RegisterServices(serviceCollection);
 	}
 }

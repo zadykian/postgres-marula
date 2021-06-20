@@ -17,7 +17,7 @@ namespace Postgres.Marula.App.Control
 	internal class ControlAppComponent : IAppComponent
 	{
 		/// <inheritdoc />
-		void IAppComponent.RegisterServices(IServiceCollection services)
+		IServiceCollection IAppComponent.RegisterServices(IServiceCollection services)
 			=> services
 				.AddSingleton<IControlAppConfiguration, ControlAppConfiguration>()
 				.AddSingleton<IJobs, RemoteJobs>()
