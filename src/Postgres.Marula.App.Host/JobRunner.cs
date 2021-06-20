@@ -1,7 +1,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
-using Postgres.Marula.Calculations.PeriodicJobs.PublicApi;
+using Postgres.Marula.Calculations.PublicApi;
 
 namespace Postgres.Marula.App.Host
 {

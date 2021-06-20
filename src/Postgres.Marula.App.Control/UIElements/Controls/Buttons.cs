@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 using Postgres.Marula.App.Control.UIElements.Messages;
-using Postgres.Marula.Calculations.PeriodicJobs.PublicApi;
+using Postgres.Marula.Calculations.PublicApi;
 using Terminal.Gui;
 
 namespace Postgres.Marula.App.Control.UIElements.Controls

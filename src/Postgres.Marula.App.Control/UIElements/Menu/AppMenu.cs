@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.Logging;
-using Postgres.Marula.Calculations.PeriodicJobs.PublicApi;
+using Postgres.Marula.Calculations.PublicApi;
 
 namespace Postgres.Marula.App.Control.UIElements.Menu
 {

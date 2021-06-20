@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using NUnit.Framework;
-using Postgres.Marula.Calculations.PeriodicJobs.PublicApi;
+using Postgres.Marula.Calculations.PublicApi;
 using Postgres.Marula.Tests.Calculations.Base;
 using Postgres.Marula.Tests.Calculations.FakeServices;
 

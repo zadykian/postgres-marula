@@ -12,6 +12,7 @@ using Postgres.Marula.Calculations.PeriodicJobs.PublicApi;
 using Postgres.Marula.Calculations.Pipeline;
 using Postgres.Marula.Calculations.Pipeline.Factory;
 using Postgres.Marula.Calculations.Pipeline.MiddlewareComponents;
+using Postgres.Marula.Calculations.PublicApi;
 using Postgres.Marula.HwInfo;
 using Postgres.Marula.Infrastructure.AppComponents;
 using Postgres.Marula.Infrastructure.Extensions;

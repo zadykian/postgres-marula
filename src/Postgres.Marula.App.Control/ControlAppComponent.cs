@@ -7,7 +7,7 @@ using Postgres.Marula.App.Control.UIElements.Lifetime;
 using Postgres.Marula.App.Control.UIElements.MainViews;
 using Postgres.Marula.App.Control.UIElements.Menu;
 using Postgres.Marula.App.Control.UIElements.Messages;
-using Postgres.Marula.Calculations.PeriodicJobs.PublicApi;
+using Postgres.Marula.Calculations.PublicApi;
 using Postgres.Marula.Infrastructure.AppComponents;
 using Postgres.Marula.Infrastructure.Extensions;
 

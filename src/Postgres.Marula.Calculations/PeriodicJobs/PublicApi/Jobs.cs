@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Postgres.Marula.Calculations.PeriodicJobs.Base;
+using Postgres.Marula.Calculations.PublicApi;
 using Postgres.Marula.Infrastructure.Extensions;
 
 namespace Postgres.Marula.Calculations.PeriodicJobs.PublicApi

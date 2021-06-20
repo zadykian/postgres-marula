@@ -1,7 +1,8 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Postgres.Marula.Calculations.PeriodicJobs.PublicApi;
 
-namespace Postgres.Marula.Calculations.PeriodicJobs.PublicApi
+namespace Postgres.Marula.Calculations.PublicApi
 {
 	/// <summary>
 	/// All long-running jobs.
