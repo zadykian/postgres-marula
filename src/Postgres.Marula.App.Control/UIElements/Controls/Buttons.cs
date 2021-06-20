@@ -25,11 +25,14 @@ namespace Postgres.Marula.App.Control.UIElements.Controls
 				ColorScheme = ButtonColorScheme()
 			};
 
-			calculateImmediatelyButton.Clicked += async () =>
-			{
-				// todo
-				await Task.CompletedTask;
-			};
+			calculateImmediatelyButton.Clicked += async ()
+				=> await messageBox
+					.QueryAsync("calculate values", "calculate parameter values immediately?")
+					.OnConfirmed( () =>
+					{
+						// todo
+						return Task.CompletedTask;
+					});
 
 			return calculateImmediatelyButton;
 		}
@@ -42,11 +45,14 @@ namespace Postgres.Marula.App.Control.UIElements.Controls
 				ColorScheme = ButtonColorScheme()
 			};
 
-			exportValuesButton.Clicked += async () =>
-			{
-				// todo
-				await Task.CompletedTask;
-			};
+			exportValuesButton.Clicked += async ()
+				=> await messageBox
+					.QueryAsync("export values", "export parameter values to .sql file?")
+					.OnConfirmed( () =>
+					{
+						// todo
+						return Task.CompletedTask;
+					});
 
 			return exportValuesButton;
 		}
@@ -59,8 +65,8 @@ namespace Postgres.Marula.App.Control.UIElements.Controls
 				ColorScheme = ButtonColorScheme()
 			};
 
-			startAllButton.Clicked += async () =>
-				await messageBox
+			startAllButton.Clicked += async ()
+				=> await messageBox
 					.QueryAsync("start jobs", "send request to host app?")
 					.OnConfirmed(jobs.StartAllAsync);
 
@@ -75,8 +81,8 @@ namespace Postgres.Marula.App.Control.UIElements.Controls
 				ColorScheme = ButtonColorScheme()
 			};
 
-			stopAllButton.Clicked += async () =>
-				await messageBox
+			stopAllButton.Clicked += async ()
+				=> await messageBox
 					.QueryAsync("stop jobs", "send request to host app?")
 					.OnConfirmed(jobs.StopAllAsync);
 
