@@ -3,7 +3,6 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,6 +19,10 @@ namespace Postgres.Marula.HttpApi.Common
 	/// </summary>
 	internal class ApiStartup
 	{
+		private readonly IJsonConverters jsonConverters;
+
+		public ApiStartup(IJsonConverters jsonConverters) => this.jsonConverters = jsonConverters;
+
 		/// <summary>
 		/// Name of current entry assembly.
 		/// </summary>
@@ -40,9 +43,10 @@ namespace Postgres.Marula.HttpApi.Common
 				.AddControllersAsServices()
 				.AddJsonOptions(options =>
 				{
-					var converters = options.JsonSerializerOptions.Converters;
-					converters.Add(new JsonStringEnumConverter());
-					converters.Add(new NonEmptyStringJsonConverter());
+					jsonConverters
+						.All()
+						.ForEach(options.JsonSerializerOptions.Converters.Add);
+
 					options.JsonSerializerOptions.PropertyNamingPolicy = new LiteralNamingPolicy();
 				})
 				.Services

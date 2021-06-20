@@ -69,7 +69,7 @@ namespace Postgres.Marula.Infrastructure.Http
 		/// Configure <see cref="JsonSerializerOptions"/> for request body serialization
 		/// and response body deserialization.
 		/// </summary>
-		protected virtual JsonSerializerOptions ConfigureSerializerOptions(
+		private static JsonSerializerOptions ConfigureSerializerOptions(
 			JsonSerializerOptions serializerOptions)
 		{
 			serializerOptions.Converters.Add(new JsonStringEnumConverter());

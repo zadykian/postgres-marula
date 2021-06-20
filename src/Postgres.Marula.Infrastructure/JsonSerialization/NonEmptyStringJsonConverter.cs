@@ -1,15 +1,16 @@
 using System;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using Postgres.Marula.Infrastructure.Extensions;
 using Postgres.Marula.Infrastructure.TypeDecorators;
+
+// ReSharper disable UnusedType.Global
 
 namespace Postgres.Marula.Infrastructure.JsonSerialization
 {
 	/// <summary>
 	/// JSON converter for <see cref="NonEmptyString"/> type.
 	/// </summary>
-	public class NonEmptyStringJsonConverter : JsonConverter<NonEmptyString>
+	internal class NonEmptyStringJsonConverter : CustomJsonConverter<NonEmptyString>
 	{
 		/// <inheritdoc />
 		public override NonEmptyString Read(
