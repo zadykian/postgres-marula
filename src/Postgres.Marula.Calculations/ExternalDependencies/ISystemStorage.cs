@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Postgres.Marula.Calculations.ParameterValues.Base;
+using Postgres.Marula.Calculations.PublicApi;
 using Postgres.Marula.Infrastructure.TypeDecorators;
 
 namespace Postgres.Marula.Calculations.ExternalDependencies
@@ -8,7 +9,7 @@ namespace Postgres.Marula.Calculations.ExternalDependencies
 	/// <summary>
 	/// Application system storage.
 	/// </summary>
-	public interface ISystemStorage
+	public interface ISystemStorage : IParameterValues
 	{
 		/// <summary>
 		/// Save calculated parameter values.

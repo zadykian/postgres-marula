@@ -1,7 +1,15 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Postgres.Marula.Calculations.ExternalDependencies;
+using Postgres.Marula.Calculations.Parameters.Autovacuum;
+using Postgres.Marula.Calculations.Parameters.Base;
+using Postgres.Marula.Calculations.Parameters.LockManagement;
+using Postgres.Marula.Calculations.Parameters.MemoryUsage;
+using Postgres.Marula.Calculations.Parameters.Wal;
+using Postgres.Marula.Calculations.ParameterValues;
 using Postgres.Marula.Calculations.ParameterValues.Base;
+using Postgres.Marula.Calculations.PublicApi;
 using Postgres.Marula.Infrastructure.TypeDecorators;
 
 namespace Postgres.Marula.Tests.Calculations.FakeServices
@@ -39,6 +47,17 @@ namespace Postgres.Marula.Tests.Calculations.FakeServices
 			yield return new(new(2021, 05, 1, 12, 0, 0), 0.5M);
 			yield return new(new(2021, 05, 1, 15, 0, 0), 0.6M);
 			yield return new(new(2021, 05, 1, 18, 0, 0), 0.5M);
+		}
+
+		/// <inheritdoc />
+		async IAsyncEnumerable<IParameterValue> IParameterValues.MostRecent()
+		{
+			await Task.CompletedTask;
+			yield return new BooleanParameterValue(new ParameterLink(typeof(Autovacuum)), true);
+			yield return new FractionParameterValue(new ParameterLink(typeof(CheckpointCompletionTarget)), 0.8M);
+			yield return new IntegerParameterValue(new ParameterLink(typeof(MaxLocksPerTransaction)), 96);
+			yield return new MemoryParameterValue(new ParameterLink(typeof(SharedBuffers)), Memory.Gigabyte);
+			yield return new TimeSpanParameterValue(new ParameterLink(typeof(AutovacuumVacuumCostDelay)), TimeSpan.FromMilliseconds(2));
 		}
 	}
 }

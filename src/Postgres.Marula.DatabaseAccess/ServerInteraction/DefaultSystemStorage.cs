@@ -7,6 +7,7 @@ using Postgres.Marula.Calculations.ExternalDependencies;
 using Postgres.Marula.Calculations.ParameterProperties;
 using Postgres.Marula.Calculations.ParameterProperties.StringRepresentation;
 using Postgres.Marula.Calculations.ParameterValues.Base;
+using Postgres.Marula.Calculations.PublicApi;
 using Postgres.Marula.DatabaseAccess.ConnectionFactory;
 using Postgres.Marula.DatabaseAccess.Conventions;
 using Postgres.Marula.DatabaseAccess.ServerInteraction.Base;
@@ -142,6 +143,12 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 			var dbConnection = await Connection();
 			var historyEntries = await dbConnection.QueryAsync<BloatFractionHistoryEntry>(commandText, new {Window = (TimeSpan) window});
 			foreach (var bloatFractionHistoryEntry in historyEntries) yield return bloatFractionHistoryEntry;
+		}
+
+		/// <inheritdoc />
+		IAsyncEnumerable<IParameterValue> IParameterValues.MostRecent()
+		{
+			// todo
 		}
 	}
 }
