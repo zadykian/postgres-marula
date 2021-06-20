@@ -41,9 +41,9 @@ namespace Postgres.Marula.Calculations.ParameterProperties
 		public static NonEmptyString AsString(this IUnit unit)
 			=> unit switch
 			{
-				IUnit.Mem mem => mem.Unit.StringRepresentation(),
+				IUnit.Mem mem           => mem.Unit.StringRepresentation(),
 				IUnit.TimeSpan timeSpan => timeSpan.Unit.StringRepresentation(),
-				_ => unit.GetType().Name.ToSnakeCase()
+				_                       => unit.GetType().Name.ToSnakeCase()
 			};
 	}
 }
