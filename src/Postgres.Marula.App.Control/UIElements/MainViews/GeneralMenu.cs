@@ -1,6 +1,6 @@
 using System.Linq;
 using System.Threading.Tasks;
-using Postgres.Marula.App.Control.UIElements.Menu;
+using Postgres.Marula.App.Control.UIElements.Menu.Items;
 using Terminal.Gui;
 
 namespace Postgres.Marula.App.Control.UIElements.MainViews
@@ -10,13 +10,15 @@ namespace Postgres.Marula.App.Control.UIElements.MainViews
 	/// </summary>
 	internal class GeneralMenu : FrameView
 	{
-		private readonly IAppMenu appMenu;
 		private readonly GeneralButtonFrame generalButtonFrame;
+		private readonly IAppMenu appMenu;
 
-		public GeneralMenu(IAppMenu appMenu, GeneralButtonFrame generalButtonFrame)
+		public GeneralMenu(
+			GeneralButtonFrame generalButtonFrame,
+			IAppMenu appMenu)
 		{
-			this.appMenu = appMenu;
 			this.generalButtonFrame = generalButtonFrame;
+			this.appMenu = appMenu;
 		}
 
 		/// <summary>

@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using Postgres.Marula.Infrastructure.TypeDecorators;
 
-namespace Postgres.Marula.App.Control.UIElements.Menu
+namespace Postgres.Marula.App.Control.UIElements.Menu.Items
 {
 	/// <inheritdoc />
 	internal class MenuItem : IMenuItem

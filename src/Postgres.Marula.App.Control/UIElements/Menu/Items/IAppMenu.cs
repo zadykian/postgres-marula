@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Postgres.Marula.App.Control.UIElements.Menu
+namespace Postgres.Marula.App.Control.UIElements.Menu.Items
 {
 	/// <summary>
 	/// Control application menu.

@@ -6,6 +6,7 @@ using Postgres.Marula.App.Control.UIElements.Controls;
 using Postgres.Marula.App.Control.UIElements.Lifetime;
 using Postgres.Marula.App.Control.UIElements.MainViews;
 using Postgres.Marula.App.Control.UIElements.Menu;
+using Postgres.Marula.App.Control.UIElements.Menu.Items;
 using Postgres.Marula.App.Control.UIElements.Messages;
 using Postgres.Marula.Calculations.PublicApi;
 using Postgres.Marula.Infrastructure.AppComponents;
@@ -39,6 +40,7 @@ namespace Postgres.Marula.App.Control
 				.AddSingleton<GeneralButtonFrame>()
 				.AddSingleton<GeneralMenu>()
 				.AddSingleton<OutputWindow>()
+				.Forward<OutputWindow, IOutputWindow>()
 				.AddSingleton<IUIStartup, MainWindow>()
 				.AddSingleton<IUIShutdown, UiShutdown>();
 
@@ -47,8 +49,8 @@ namespace Postgres.Marula.App.Control
 		/// </summary>
 		private static IServiceCollection RegisterGeneralMenuItems(IServiceCollection services)
 			=> services
-				.AddSingleton<IMenuItem>(new MenuItem("view ctl app logs", 0))
-				.AddSingleton<IMenuItem>(new MenuItem("view calculated values", 2))
+				.AddSingleton<IMenuItem>(new MenuItem("view ctl app logs", 0)) // todo
+				.AddSingleton<IMenuItem, CalculatedValuesMenuItem>()
 				.AddSingleton<IMenuItem, QuitMenuItem>();
 	}
 }

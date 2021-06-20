@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using Postgres.Marula.Infrastructure.TypeDecorators;
 
-namespace Postgres.Marula.App.Control.UIElements.Menu
+namespace Postgres.Marula.App.Control.UIElements.Menu.Items
 {
 	/// <summary>
 	/// Control application menu item.
@@ -22,10 +22,5 @@ namespace Postgres.Marula.App.Control.UIElements.Menu
 		/// Handle click action.
 		/// </summary>
 		Task HandleClickAsync();
-
-		// /// <summary>
-		// /// Source of data related to menu item.
-		// /// </summary>
-		// IPageContent PageContent { get; }
 	}
 }

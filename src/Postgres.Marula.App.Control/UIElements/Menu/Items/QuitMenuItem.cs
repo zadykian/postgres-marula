@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 using Postgres.Marula.App.Control.UIElements.Lifetime;
 using Postgres.Marula.App.Control.UIElements.Messages;
 
-namespace Postgres.Marula.App.Control.UIElements.Menu
+namespace Postgres.Marula.App.Control.UIElements.Menu.Items
 {
 	/// <summary>
 	/// Quit menu item.
