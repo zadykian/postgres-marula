@@ -70,7 +70,7 @@ namespace Postgres.Marula.Calculations.ParametersManagement
 
 		/// <inheritdoc />
 		async Task<TValue> IPgSettings.ReadAsync<TParameter, TValue>()
-			=> await ReadAsyncInternal<TValue>(new ParameterLink(typeof(TParameter)));
+			=> await ReadAsyncInternal<TValue>(new Link<TParameter>());
 
 		/// <inheritdoc />
 		async Task<TValue> IPgSettings.ReadAsync<TValue>(NonEmptyString parameterName)

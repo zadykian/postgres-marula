@@ -53,11 +53,11 @@ namespace Postgres.Marula.Tests.Calculations.FakeServices
 		async IAsyncEnumerable<IParameterValue> IParameterValues.MostRecent()
 		{
 			await Task.CompletedTask;
-			yield return new BooleanParameterValue(new ParameterLink(typeof(Autovacuum)), true);
-			yield return new FractionParameterValue(new ParameterLink(typeof(CheckpointCompletionTarget)), 0.8M);
-			yield return new IntegerParameterValue(new ParameterLink(typeof(MaxLocksPerTransaction)), 96);
-			yield return new MemoryParameterValue(new ParameterLink(typeof(SharedBuffers)), Memory.Gigabyte);
-			yield return new TimeSpanParameterValue(new ParameterLink(typeof(AutovacuumVacuumCostDelay)), TimeSpan.FromMilliseconds(2));
+			yield return new BooleanParameterValue(new Link<Autovacuum>(), true);
+			yield return new FractionParameterValue(new Link<CheckpointCompletionTarget>(), 0.8M);
+			yield return new IntegerParameterValue(new Link<MaxLocksPerTransaction>(), 96);
+			yield return new MemoryParameterValue(new Link<SharedBuffers>(), Memory.Gigabyte);
+			yield return new TimeSpanParameterValue(new Link<AutovacuumVacuumCostDelay>(), TimeSpan.FromMilliseconds(2));
 		}
 	}
 }
