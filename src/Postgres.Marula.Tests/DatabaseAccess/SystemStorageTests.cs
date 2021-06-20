@@ -139,7 +139,7 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 		public async Task MostResentValuesTest()
 		{
 			var parameterValues = GetService<IParameterValues>();
-			var mostRecent = await parameterValues.MostRecent().ToArrayAsync();
+			var mostRecent = await parameterValues.MostRecentAsync().ToArrayAsync();
 			Assert.True(mostRecent.Any());
 		}
 	}

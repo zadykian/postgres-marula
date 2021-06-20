@@ -21,6 +21,6 @@ namespace Postgres.Marula.App.Host.Api
 		/// Get parameter values calculated during most recent job iteration. 
 		/// </summary>
 		[HttpGet]
-		public IAsyncEnumerable<IValueView> MostRecent() => parameterValues.MostRecent();
+		public IAsyncEnumerable<IValueView> MostRecentAsync() => parameterValues.MostRecentAsync();
 	}
 }

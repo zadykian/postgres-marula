@@ -8,7 +8,7 @@ using Postgres.Marula.Calculations.PublicApi;
 using Postgres.Marula.Infrastructure.Http;
 using Postgres.Marula.Infrastructure.JsonConverters;
 
-namespace Postgres.Marula.App.Control.PeriodicJobs
+namespace Postgres.Marula.App.Control.HostAccess
 {
 	/// <inheritdoc cref="IJobs" />
 	/// <remarks>

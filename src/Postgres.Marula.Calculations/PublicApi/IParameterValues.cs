@@ -13,7 +13,7 @@ namespace Postgres.Marula.Calculations.PublicApi
 		/// <summary>
 		/// Get parameter values calculated during most recent job iteration. 
 		/// </summary>
-		IAsyncEnumerable<IValueView> MostRecent();
+		IAsyncEnumerable<IValueView> MostRecentAsync();
 	}
 
 	/// <summary>

@@ -146,7 +146,7 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 		}
 
 		/// <inheritdoc />
-		async IAsyncEnumerable<IValueView> IParameterValues.MostRecent()
+		async IAsyncEnumerable<IValueView> IParameterValues.MostRecentAsync()
 		{
 			// todo
 			var queryText = $@"

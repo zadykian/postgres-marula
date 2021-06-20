@@ -49,7 +49,7 @@ namespace Postgres.Marula.Tests.Calculations.FakeServices
 		}
 
 		/// <inheritdoc />
-		IAsyncEnumerable<IValueView> IParameterValues.MostRecent()
+		IAsyncEnumerable<IValueView> IParameterValues.MostRecentAsync()
 			=> new ValueView[]
 				{
 					new(new Link<Autovacuum>(),                 "true"),

@@ -1,7 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Postgres.Marula.App.Control.Configuration;
-using Postgres.Marula.App.Control.PeriodicJobs;
+using Postgres.Marula.App.Control.HostAccess;
 using Postgres.Marula.App.Control.UIElements.Controls;
 using Postgres.Marula.App.Control.UIElements.Lifetime;
 using Postgres.Marula.App.Control.UIElements.MainViews;
@@ -21,6 +21,7 @@ namespace Postgres.Marula.App.Control
 			=> services
 				.AddSingleton<IControlAppConfiguration, ControlAppConfiguration>()
 				.AddSingleton<IJobs, RemoteJobs>()
+				.AddSingleton<IParameterValues, RemoteParameterValues>()
 				.AddSingleton<IAppMenu, AppMenu>()
 				.To(RegisterUIElements)
 				.AddSingleton<IHostedService, TerminalUiService>();
