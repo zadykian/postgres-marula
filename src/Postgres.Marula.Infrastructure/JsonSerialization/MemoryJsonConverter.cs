@@ -15,19 +15,12 @@ namespace Postgres.Marula.Infrastructure.JsonSerialization
 		public override Memory Read(
 			ref Utf8JsonReader reader,
 			Type typeToConvert,
-			JsonSerializerOptions options)
-		{
-			reader.Read(); // skip start object: '{'
-			reader.Read(); // skip property name: 'totalBytes'
-			var totalBytesValue = reader.GetUInt64();
-			while (reader.TokenType != JsonTokenType.EndObject) reader.Read();
-			return new(totalBytesValue);
-		}
+			JsonSerializerOptions options) => new(reader.GetUInt64());
 
 		/// <inheritdoc />
 		public override void Write(
 			Utf8JsonWriter writer,
 			Memory value,
-			JsonSerializerOptions options) => throw new NotSupportedException();
+			JsonSerializerOptions options) => writer.WriteNumberValue(value.TotalBytes);
 	}
 }

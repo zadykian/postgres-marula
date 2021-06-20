@@ -8,6 +8,7 @@ using Postgres.Marula.App.Agent.Api;
 using Postgres.Marula.Calculations.HardwareInfo;
 using Postgres.Marula.HwInfo;
 using Postgres.Marula.Infrastructure.Extensions;
+using Postgres.Marula.Infrastructure.JsonSerialization;
 using Postgres.Marula.Infrastructure.TypeDecorators;
 
 // ReSharper disable SwitchExpressionHandlesSomeKnownEnumValuesWithExceptionInDefault
@@ -25,6 +26,7 @@ namespace Postgres.Marula.Tests.HwInfo
 		protected override void ConfigureServices(IServiceCollection serviceCollection)
 		{
 			base.ConfigureServices(serviceCollection);
+			serviceCollection.AddSingleton<IJsonConverters, JsonConverters>();
 			serviceCollection.AddSingleton<IHardwareInfo, RemoteHardwareInfo>();
 		}
 
