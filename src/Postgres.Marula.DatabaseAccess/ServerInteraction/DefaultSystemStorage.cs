@@ -161,15 +161,15 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 					from {conventions.SystemSchemaName}.{conventions.ValuesHistoryTableName} as history
 				)
 				select
-					parameters.name,
-					ranked_values.calculated_value
+					parameters.name                as {nameof(IValueView.Link)},
+					ranked_values.calculated_value as {nameof(IValueView.Value)}
 				from ranked_values
 				inner join {conventions.SystemSchemaName}.{conventions.ParametersTableName} as parameters 
 					on ranked_values.parameter_id = parameters.id
 				where ranked_values.rank = 1;";
 
 			var connection = await Connection();
-			var parameterValues = await connection.QueryAsync<IValueView>(queryText);
+			var parameterValues = await connection.QueryAsync<ValueView>(queryText);
 			foreach (var parameterValue in parameterValues) yield return parameterValue;
 		}
 	}
