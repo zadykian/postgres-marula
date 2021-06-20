@@ -35,6 +35,7 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 		/// Save calculated values to system storage. 
 		/// </summary>
 		[Test]
+		[Order(0)]
 		public async Task SaveCalculatedValuesTest()
 		{
 			var parameterValues = new ParameterValueWithStatus[]
@@ -134,6 +135,7 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 		/// Get most recent parameter values.
 		/// </summary>
 		[Test]
+		[Order(1)]
 		public async Task MostResentValuesTest()
 		{
 			var parameterValues = GetService<IParameterValues>();

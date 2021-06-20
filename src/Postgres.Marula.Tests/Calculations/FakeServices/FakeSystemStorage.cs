@@ -1,5 +1,5 @@
-using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Postgres.Marula.Calculations.ExternalDependencies;
 using Postgres.Marula.Calculations.Parameters.Autovacuum;
@@ -7,7 +7,6 @@ using Postgres.Marula.Calculations.Parameters.Base;
 using Postgres.Marula.Calculations.Parameters.LockManagement;
 using Postgres.Marula.Calculations.Parameters.MemoryUsage;
 using Postgres.Marula.Calculations.Parameters.Wal;
-using Postgres.Marula.Calculations.ParameterValues;
 using Postgres.Marula.Calculations.ParameterValues.Base;
 using Postgres.Marula.Calculations.PublicApi;
 using Postgres.Marula.Infrastructure.TypeDecorators;
@@ -50,14 +49,15 @@ namespace Postgres.Marula.Tests.Calculations.FakeServices
 		}
 
 		/// <inheritdoc />
-		async IAsyncEnumerable<IParameterValueView> IParameterValues.MostRecent()
-		{
-			await Task.CompletedTask;
-			yield return new BooleanParameterValue(new Link<Autovacuum>(), true);
-			yield return new FractionParameterValue(new Link<CheckpointCompletionTarget>(), 0.8M);
-			yield return new IntegerParameterValue(new Link<MaxLocksPerTransaction>(), 96);
-			yield return new MemoryParameterValue(new Link<SharedBuffers>(), Memory.Gigabyte);
-			yield return new TimeSpanParameterValue(new Link<AutovacuumVacuumCostDelay>(), TimeSpan.FromMilliseconds(2));
-		}
+		IAsyncEnumerable<IValueView> IParameterValues.MostRecent()
+			=> new ValueView[]
+				{
+					new(new Link<Autovacuum>(),                 "true"),
+					new(new Link<CheckpointCompletionTarget>(), "0.8" ),
+					new(new Link<MaxLocksPerTransaction>(),     "96"  ),
+					new(new Link<SharedBuffers>(),              "1GB" ),
+					new(new Link<AutovacuumVacuumCostDelay>(),  "2ms" )
+				}
+				.ToAsyncEnumerable();
 	}
 }

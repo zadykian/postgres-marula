@@ -19,12 +19,12 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 	/// <inheritdoc cref="ISystemStorage" />
 	internal class DefaultSystemStorage : DatabaseInteractionComponent, ISystemStorage
 	{
-		private readonly INamingConventions namingConventions;
+		private readonly INamingConventions conventions;
 
 		public DefaultSystemStorage(
 			IDbConnectionFactory dbConnectionFactory,
-			INamingConventions namingConventions) : base(dbConnectionFactory)
-			=> this.namingConventions = namingConventions;
+			INamingConventions conventions) : base(dbConnectionFactory)
+			=> this.conventions = conventions;
 
 		/// <inheritdoc />
 		async Task ISystemStorage.SaveParameterValuesAsync(IReadOnlyCollection<ParameterValueWithStatus> parameterValues)
@@ -52,7 +52,7 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 							{parameterValues.Select(ToValuesString).JoinBy($",{Environment.NewLine}")}
 					) as values
 				)
-				insert into {namingConventions.SystemSchemaName}.{namingConventions.ValuesHistoryTableName}
+				insert into {conventions.SystemSchemaName}.{conventions.ValuesHistoryTableName}
 					(parameter_id, calculated_value, unit, status)
 				select
 					parameters.id,
@@ -60,7 +60,7 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 					parameter_values.unit,
 					parameter_values.status
 				from
-					{namingConventions.SystemSchemaName}.{namingConventions.ParametersTableName} as parameters
+					{conventions.SystemSchemaName}.{conventions.ParametersTableName} as parameters
 
 				-- perform right join to fail in case when
 				-- parameters dictionary table is not consistent.
@@ -79,10 +79,10 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 					$"'{parameterValue.Value}'",
 
 					$"'{parameterValue.Value.Unit.AsString()}'" +
-					$"::{namingConventions.SystemSchemaName}.{namingConventions.ParameterUnitEnumName}",
+					$"::{conventions.SystemSchemaName}.{conventions.ParameterUnitEnumName}",
 
 					$"'{parameterValue.CalculationStatus.StringRepresentation()}'" +
-					$"::{namingConventions.SystemSchemaName}.{namingConventions.CalculationStatusEnumName}"
+					$"::{conventions.SystemSchemaName}.{conventions.CalculationStatusEnumName}"
 				}
 				.JoinBy(", ")
 				.To(values => $"({values})");
@@ -91,7 +91,7 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 		async Task ISystemStorage.SaveLogSeqNumberAsync(LogSeqNumber logSeqNumber)
 		{
 			var commandText = string.Intern($@"
-				insert into {namingConventions.SystemSchemaName}.{namingConventions.WalLsnHistoryTableName}
+				insert into {conventions.SystemSchemaName}.{conventions.WalLsnHistoryTableName}
 					(wal_insert_location)
 				values
 					(@{nameof(logSeqNumber)}::pg_catalog.pg_lsn);");
@@ -107,7 +107,7 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 				select
 					log_timestamp       as {nameof(LsnHistoryEntry.LogTimestamp)},
 					wal_insert_location as {nameof(LsnHistoryEntry.WalInsertLocation)}
-				from {namingConventions.SystemSchemaName}.{namingConventions.WalLsnHistoryTableName}
+				from {conventions.SystemSchemaName}.{conventions.WalLsnHistoryTableName}
 				where log_timestamp >= (current_timestamp - @Window)
 				order by log_timestamp;");
 
@@ -120,7 +120,7 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 		async Task ISystemStorage.SaveBloatFractionAsync(Fraction averageBloatFraction)
 		{
 			var commandText = $@"
-				insert into {namingConventions.SystemSchemaName}.{namingConventions.BloatFractionHistoryTableName}
+				insert into {conventions.SystemSchemaName}.{conventions.BloatFractionHistoryTableName}
 					(average_bloat_fraction)
 				values
 					(@{nameof(averageBloatFraction)});";
@@ -136,7 +136,7 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 				select
 					log_timestamp          as {nameof(BloatFractionHistoryEntry.LogTimestamp)},
 					average_bloat_fraction as {nameof(BloatFractionHistoryEntry.AverageBloatFraction)}
-				from {namingConventions.SystemSchemaName}.{namingConventions.BloatFractionHistoryTableName}
+				from {conventions.SystemSchemaName}.{conventions.BloatFractionHistoryTableName}
 				where log_timestamp >= (current_timestamp - @Window)
 				order by log_timestamp;");
 
@@ -146,13 +146,30 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 		}
 
 		/// <inheritdoc />
-		async IAsyncEnumerable<IParameterValueView> IParameterValues.MostRecent()
+		async IAsyncEnumerable<IValueView> IParameterValues.MostRecent()
 		{
 			// todo
-			var queryText = $@"";
+			var queryText = $@"
+				with ranked_values as
+				(
+					select
+						parameter_id,
+						calculated_value,
+						row_number() over (
+							partition by parameter_id
+							order by calculation_timestamp desc) as rank
+					from {conventions.SystemSchemaName}.{conventions.ValuesHistoryTableName} as history
+				)
+				select
+					parameters.name,
+					ranked_values.calculated_value
+				from ranked_values
+				inner join {conventions.SystemSchemaName}.{conventions.ParametersTableName} as parameters 
+					on ranked_values.parameter_id = parameters.id
+				where ranked_values.rank = 1;";
 
 			var connection = await Connection();
-			var parameterValues = await connection.QueryAsync<IParameterValueView>(queryText);
+			var parameterValues = await connection.QueryAsync<IValueView>(queryText);
 			foreach (var parameterValue in parameterValues) yield return parameterValue;
 		}
 	}
