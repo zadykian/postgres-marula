@@ -17,7 +17,7 @@ namespace Postgres.Marula.Infrastructure.JsonSerialization
 				.SelectMany(assembly => assembly.GetTypes())
 				.Where(type =>
 					!type.IsAbstract
-					&& type.IsGenericType
+					&& (type.BaseType?.IsGenericType ?? false)
 					&& type.BaseType?.GetGenericTypeDefinition() == typeof(CustomJsonConverter<>))
 				.Select(Activator.CreateInstance)
 				.Cast<JsonConverter>()

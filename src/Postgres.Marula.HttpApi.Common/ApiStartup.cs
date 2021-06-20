@@ -12,6 +12,8 @@ using Postgres.Marula.Infrastructure.JsonSerialization;
 using Postgres.Marula.Infrastructure.TypeDecorators;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
+#pragma warning disable ASP0000
+
 namespace Postgres.Marula.HttpApi.Common
 {
 	/// <summary>
@@ -19,10 +21,6 @@ namespace Postgres.Marula.HttpApi.Common
 	/// </summary>
 	internal class ApiStartup
 	{
-		private readonly IJsonConverters jsonConverters;
-
-		public ApiStartup(IJsonConverters jsonConverters) => this.jsonConverters = jsonConverters;
-
 		/// <summary>
 		/// Name of current entry assembly.
 		/// </summary>
@@ -43,7 +41,9 @@ namespace Postgres.Marula.HttpApi.Common
 				.AddControllersAsServices()
 				.AddJsonOptions(options =>
 				{
-					jsonConverters
+					services
+						.BuildServiceProvider()
+						.GetRequiredService<IJsonConverters>()
 						.All()
 						.ForEach(options.JsonSerializerOptions.Converters.Add);
 

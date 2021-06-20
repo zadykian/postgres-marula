@@ -1,8 +1,8 @@
 using System;
 using System.Linq;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using Postgres.Marula.Infrastructure.Extensions;
+using Postgres.Marula.Infrastructure.JsonSerialization;
 using Postgres.Marula.Infrastructure.TypeDecorators;
 
 namespace Postgres.Marula.Calculations.Parameters.Base
@@ -59,7 +59,7 @@ namespace Postgres.Marula.Calculations.Parameters.Base
 
 	// ReSharper disable once UnusedType.Global
 	/// <inheritdoc />
-	internal class ParameterLinkConverter : JsonConverter<IParameterLink>
+	internal class ParameterLinkConverter : CustomJsonConverter<IParameterLink>
 	{
 		/// <inheritdoc />
 		public override IParameterLink Read(
