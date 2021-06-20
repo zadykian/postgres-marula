@@ -38,6 +38,7 @@ namespace Postgres.Marula.App.Control
 				.To(RegisterGeneralMenuItems)
 				.AddSingleton<GeneralButtonFrame>()
 				.AddSingleton<GeneralMenu>()
+				.AddSingleton<OutputWindow>()
 				.AddSingleton<IUIStartup, MainWindow>()
 				.AddSingleton<IUIShutdown, UiShutdown>();
 

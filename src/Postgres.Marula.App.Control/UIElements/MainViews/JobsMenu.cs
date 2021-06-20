@@ -6,7 +6,7 @@ using Terminal.Gui;
 namespace Postgres.Marula.App.Control.UIElements.MainViews
 {
 	/// <summary>
-	/// Main host's jobs menu.
+	/// Host's jobs menu.
 	/// </summary>
 	internal class JobsMenu : FrameView
 	{

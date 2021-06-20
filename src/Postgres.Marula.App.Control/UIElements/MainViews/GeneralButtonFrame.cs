@@ -1,4 +1,5 @@
 using Postgres.Marula.App.Control.UIElements.Controls;
+using Postgres.Marula.App.Control.UIElements.Extensions;
 using Postgres.Marula.Infrastructure.Extensions;
 using Terminal.Gui;
 

@@ -1,5 +1,7 @@
 using System.Threading.Tasks;
+using Postgres.Marula.App.Control.UIElements.Extensions;
 using Postgres.Marula.App.Control.UIElements.Lifetime;
+using Postgres.Marula.Infrastructure.Extensions;
 using Terminal.Gui;
 
 namespace Postgres.Marula.App.Control.UIElements.MainViews
@@ -11,10 +13,15 @@ namespace Postgres.Marula.App.Control.UIElements.MainViews
 	{
 		private readonly GeneralMenu generalMenu;
 		private readonly JobsMenu jobsMenu;
+		private readonly OutputWindow outputWindow;
 
-		public MainWindow(GeneralMenu generalMenu, JobsMenu jobsMenu)
+		public MainWindow(
+			GeneralMenu generalMenu,
+			JobsMenu jobsMenu,
+			OutputWindow outputWindow)
 		{
 			this.jobsMenu = jobsMenu;
+			this.outputWindow = outputWindow;
 			this.generalMenu = generalMenu;
 		}
 
@@ -39,15 +46,10 @@ namespace Postgres.Marula.App.Control.UIElements.MainViews
 			Add(await generalMenu.InitializeAsync().ConfigureAwait(false)); // todo;
 			Add(await jobsMenu.InitializeAsync(Pos.Bottom(generalMenu)));
 
-			var currentOutputView = new FrameView("current output")
-			{
-				X = Pos.Right(generalMenu),
-				Width = Dim.Fill(),
-				Height = Dim.Fill(),
-				CanFocus = false
-			};
-
-			Add(currentOutputView);
+			outputWindow
+				.Initialize()
+				.WithHorizontalOffset(Pos.Right(generalMenu))
+				.To(Add);
 		}
 
 		/// <summary>
