@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using Postgres.Marula.Calculations.Parameters.Base;
-using Postgres.Marula.Calculations.ParameterValues.Base;
 using Postgres.Marula.Infrastructure.TypeDecorators;
 
 namespace Postgres.Marula.Calculations.PublicApi
@@ -19,8 +18,13 @@ namespace Postgres.Marula.Calculations.PublicApi
 	/// <summary>
 	/// View of calculated parameter value.
 	/// </summary>
-	public interface IValueView : IHasLinkToParameter
+	public interface IValueView
 	{
+		/// <summary>
+		/// Link to parameter.
+		/// </summary>
+		IParameterLink Link { get; }
+
 		/// <summary>
 		/// String representation of actual value.
 		/// </summary>
