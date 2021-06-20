@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Postgres.Marula.App.Control.UIElements.Messages;
 using Postgres.Marula.Calculations.PeriodicJobs.PublicApi;
 using Terminal.Gui;
@@ -14,6 +15,40 @@ namespace Postgres.Marula.App.Control.UIElements.Controls
 		{
 			this.jobs = jobs;
 			this.messageBox = messageBox;
+		}
+
+		/// <inheritdoc />
+		Button IButtons.CalculateImmediately()
+		{
+			var calculateImmediatelyButton = new Button("calculate immediately")
+			{
+				ColorScheme = ButtonColorScheme()
+			};
+
+			calculateImmediatelyButton.Clicked += async () =>
+			{
+				// todo
+				await Task.CompletedTask;
+			};
+
+			return calculateImmediatelyButton;
+		}
+
+		/// <inheritdoc />
+		Button IButtons.ExportValues()
+		{
+			var exportValuesButton = new Button("export values to .sql")
+			{
+				ColorScheme = ButtonColorScheme()
+			};
+
+			exportValuesButton.Clicked += async () =>
+			{
+				// todo
+				await Task.CompletedTask;
+			};
+
+			return exportValuesButton;
 		}
 
 		/// <inheritdoc />

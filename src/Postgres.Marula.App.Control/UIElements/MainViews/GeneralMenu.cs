@@ -11,8 +11,13 @@ namespace Postgres.Marula.App.Control.UIElements.MainViews
 	internal class GeneralMenu : FrameView
 	{
 		private readonly IAppMenu appMenu;
+		private readonly GeneralButtonFrame generalButtonFrame;
 
-		public GeneralMenu(IAppMenu appMenu) => this.appMenu = appMenu;
+		public GeneralMenu(IAppMenu appMenu, GeneralButtonFrame generalButtonFrame)
+		{
+			this.appMenu = appMenu;
+			this.generalButtonFrame = generalButtonFrame;
+		}
 
 		/// <summary>
 		/// Perform initialization. 
@@ -26,10 +31,13 @@ namespace Postgres.Marula.App.Control.UIElements.MainViews
 			CanFocus = false;
 			ShortcutAction = SetFocus;
 
+			Add(generalButtonFrame.Initialize());
+
 			var generalMenuListView = new ListView(appMenu.LoadGeneral().ToArray())
 			{
 				Width = Dim.Fill(),
 				Height = Dim.Fill(),
+				Y = Pos.Bottom(generalButtonFrame),
 				AllowsMarking = false,
 				CanFocus = true
 			};

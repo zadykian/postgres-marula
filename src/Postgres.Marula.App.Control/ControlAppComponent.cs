@@ -35,6 +35,7 @@ namespace Postgres.Marula.App.Control
 				.AddSingleton<JobButtonsFrame>()
 				.AddSingleton<JobsMenu>()
 				.To(RegisterGeneralMenuItems)
+				.AddSingleton<GeneralButtonFrame>()
 				.AddSingleton<GeneralMenu>()
 				.AddSingleton<IUIStartup, MainWindow>()
 				.AddSingleton<IUIShutdown, UiShutdown>();
@@ -45,9 +46,7 @@ namespace Postgres.Marula.App.Control
 		private static IServiceCollection RegisterGeneralMenuItems(IServiceCollection services)
 			=> services
 				.AddSingleton<IMenuItem>(new MenuItem("view ctl app logs", 0))
-				.AddSingleton<IMenuItem>(new MenuItem("calculate immediately", 1))
 				.AddSingleton<IMenuItem>(new MenuItem("view calculated values", 2))
-				.AddSingleton<IMenuItem>(new MenuItem("export values to .sql", 3))
 				.AddSingleton<IMenuItem, QuitMenuItem>();
 	}
 }
