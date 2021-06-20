@@ -18,6 +18,9 @@ namespace Postgres.Marula.Calculations.ParameterValues.Raw
 		/// </summary>
 		public NonEmptyString Value { get; }
 
+		/// <summary>
+		/// Type of raw value.
+		/// </summary>
 		public RawValueType Type { get; }
 
 		/// <inheritdoc />

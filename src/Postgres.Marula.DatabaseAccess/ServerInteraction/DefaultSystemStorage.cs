@@ -146,13 +146,13 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 		}
 
 		/// <inheritdoc />
-		async IAsyncEnumerable<IParameterValue> IParameterValues.MostRecent()
+		async IAsyncEnumerable<IParameterValueView> IParameterValues.MostRecent()
 		{
 			// todo
 			var queryText = $@"";
 
 			var connection = await Connection();
-			var parameterValues = await connection.QueryAsync<IParameterValue>(queryText);
+			var parameterValues = await connection.QueryAsync<IParameterValueView>(queryText);
 			foreach (var parameterValue in parameterValues) yield return parameterValue;
 		}
 	}

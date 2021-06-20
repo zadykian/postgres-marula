@@ -50,7 +50,7 @@ namespace Postgres.Marula.Tests.Calculations.FakeServices
 		}
 
 		/// <inheritdoc />
-		async IAsyncEnumerable<IParameterValue> IParameterValues.MostRecent()
+		async IAsyncEnumerable<IParameterValueView> IParameterValues.MostRecent()
 		{
 			await Task.CompletedTask;
 			yield return new BooleanParameterValue(new Link<Autovacuum>(), true);
