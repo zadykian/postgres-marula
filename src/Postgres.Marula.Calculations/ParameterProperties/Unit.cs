@@ -15,9 +15,9 @@ namespace Postgres.Marula.Calculations.ParameterProperties
 		record Mem(Memory.Unit Unit) : IUnit;
 
 		/// <summary>
-		/// Milliseconds (interval, timeout and so on).
+		/// Time span.
 		/// </summary>
-		record Milliseconds : IUnit;
+		record TimeSpan(PositiveTimeSpan.Unit Unit) : IUnit;
 
 		/// <summary>
 		/// Enumeration item.
@@ -42,6 +42,7 @@ namespace Postgres.Marula.Calculations.ParameterProperties
 			=> unit switch
 			{
 				IUnit.Mem mem => mem.Unit.StringRepresentation(),
+				IUnit.TimeSpan timeSpan => timeSpan.Unit.StringRepresentation(),
 				_ => unit.GetType().Name.ToSnakeCase()
 			};
 	}

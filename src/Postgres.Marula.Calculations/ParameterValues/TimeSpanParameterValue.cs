@@ -16,6 +16,6 @@ namespace Postgres.Marula.Calculations.ParameterValues
 		}
 
 		/// <inheritdoc />
-		public override IUnit Unit => new IUnit.Milliseconds();
+		public override IUnit Unit => new IUnit.TimeSpan(Value.Normalized().Unit);
 	}
 }
