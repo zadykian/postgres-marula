@@ -35,8 +35,8 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 			}
 
 			var commandText = GetCommandTextToInsertValues(parameterValues);
-			var dbConnection = await Connection();
-			await dbConnection.ExecuteAsync(commandText);
+			var connection = await Connection();
+			await connection.ExecuteAsync(commandText);
 		}
 
 		/// <summary>
@@ -96,14 +96,14 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 				values
 					(@{nameof(logSeqNumber)}::pg_catalog.pg_lsn);");
 
-			var dbConnection = await Connection();
-			await dbConnection.ExecuteAsync(commandText, new {logSeqNumber});
+			var connection = await Connection();
+			await connection.ExecuteAsync(commandText, new {logSeqNumber});
 		}
 
 		/// <inheritdoc />
 		async IAsyncEnumerable<LsnHistoryEntry> ISystemStorage.GetLsnHistoryAsync(PositiveTimeSpan window)
 		{
-			var commandText = string.Intern($@"
+			var queryText = string.Intern($@"
 				select
 					log_timestamp       as {nameof(LsnHistoryEntry.LogTimestamp)},
 					wal_insert_location as {nameof(LsnHistoryEntry.WalInsertLocation)}
@@ -111,8 +111,8 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 				where log_timestamp >= (current_timestamp - @Window)
 				order by log_timestamp;");
 
-			var dbConnection = await Connection();
-			var historyEntries = await dbConnection.QueryAsync<LsnHistoryEntry>(commandText, new {Window = (TimeSpan) window});
+			var connection = await Connection();
+			var historyEntries = await connection.QueryAsync<LsnHistoryEntry>(queryText, new {Window = (TimeSpan) window});
 			foreach (var lsnHistoryEntry in historyEntries) yield return lsnHistoryEntry;
 		}
 
@@ -125,14 +125,14 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 				values
 					(@{nameof(averageBloatFraction)});";
 
-			var dbConnection = await Connection();
-			await dbConnection.ExecuteAsync(commandText, new {averageBloatFraction});
+			var connection = await Connection();
+			await connection.ExecuteAsync(commandText, new {averageBloatFraction});
 		}
 
 		/// <inheritdoc />
 		async IAsyncEnumerable<BloatFractionHistoryEntry> ISystemStorage.GetBloatFractionHistory(PositiveTimeSpan window)
 		{
-			var commandText = string.Intern($@"
+			var queryText = string.Intern($@"
 				select
 					log_timestamp          as {nameof(BloatFractionHistoryEntry.LogTimestamp)},
 					average_bloat_fraction as {nameof(BloatFractionHistoryEntry.AverageBloatFraction)}
@@ -140,15 +140,20 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 				where log_timestamp >= (current_timestamp - @Window)
 				order by log_timestamp;");
 
-			var dbConnection = await Connection();
-			var historyEntries = await dbConnection.QueryAsync<BloatFractionHistoryEntry>(commandText, new {Window = (TimeSpan) window});
+			var connection = await Connection();
+			var historyEntries = await connection.QueryAsync<BloatFractionHistoryEntry>(queryText, new {Window = (TimeSpan) window});
 			foreach (var bloatFractionHistoryEntry in historyEntries) yield return bloatFractionHistoryEntry;
 		}
 
 		/// <inheritdoc />
-		IAsyncEnumerable<IParameterValue> IParameterValues.MostRecent()
+		async IAsyncEnumerable<IParameterValue> IParameterValues.MostRecent()
 		{
 			// todo
+			var queryText = $@"";
+
+			var connection = await Connection();
+			var parameterValues = await connection.QueryAsync<IParameterValue>(queryText);
+			foreach (var parameterValue in parameterValues) yield return parameterValue;
 		}
 	}
 }
