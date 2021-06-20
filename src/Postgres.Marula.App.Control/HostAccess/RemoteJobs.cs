@@ -6,7 +6,7 @@ using Postgres.Marula.App.Control.Configuration;
 using Postgres.Marula.Calculations.PeriodicJobs.PublicApi;
 using Postgres.Marula.Calculations.PublicApi;
 using Postgres.Marula.Infrastructure.Http;
-using Postgres.Marula.Infrastructure.JsonConverters;
+using Postgres.Marula.Infrastructure.JsonSerialization;
 
 namespace Postgres.Marula.App.Control.HostAccess
 {

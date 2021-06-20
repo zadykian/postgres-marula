@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 using Postgres.Marula.Infrastructure.Extensions;
 using Postgres.Marula.Infrastructure.TypeDecorators;
 
-namespace Postgres.Marula.Infrastructure.JsonConverters
+namespace Postgres.Marula.Infrastructure.JsonSerialization
 {
 	/// <summary>
 	/// JSON converter for <see cref="NonEmptyString"/> type.

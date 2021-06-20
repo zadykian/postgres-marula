@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using Postgres.Marula.Infrastructure.Extensions;
-using Postgres.Marula.Infrastructure.JsonConverters;
+using Postgres.Marula.Infrastructure.JsonSerialization;
 using Postgres.Marula.Infrastructure.TypeDecorators;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
