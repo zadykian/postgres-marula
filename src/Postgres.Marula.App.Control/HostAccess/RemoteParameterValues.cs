@@ -3,6 +3,7 @@ using System.Net.Http;
 using Postgres.Marula.App.Control.Configuration;
 using Postgres.Marula.Calculations.PublicApi;
 using Postgres.Marula.Infrastructure.Http;
+using Postgres.Marula.Infrastructure.JsonSerialization;
 
 namespace Postgres.Marula.App.Control.HostAccess
 {
@@ -12,7 +13,9 @@ namespace Postgres.Marula.App.Control.HostAccess
 	/// </remarks>
 	internal class RemoteParameterValues : HttpComponentBase, IParameterValues
 	{
-		public RemoteParameterValues(IControlAppConfiguration configuration) : base(configuration.HostApiUri())
+		public RemoteParameterValues(
+			IControlAppConfiguration configuration,
+			IJsonConverters jsonConverters) : base(configuration.HostApiUri(), jsonConverters)
 		{
 		}
 

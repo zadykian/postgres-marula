@@ -5,6 +5,7 @@ using Postgres.Marula.Calculations.Configuration;
 using Postgres.Marula.Calculations.Exceptions;
 using Postgres.Marula.HwInfo;
 using Postgres.Marula.Infrastructure.Http;
+using Postgres.Marula.Infrastructure.JsonSerialization;
 using Postgres.Marula.Infrastructure.TypeDecorators;
 
 // ReSharper disable BuiltInTypeReferenceStyle
@@ -18,8 +19,9 @@ namespace Postgres.Marula.Calculations.HardwareInfo
 	/// </remarks>
 	internal class RemoteHardwareInfo : HttpComponentBase, IHardwareInfo
 	{
-		public RemoteHardwareInfo(ICalculationsConfiguration configuration)
-			: base(configuration.General().AgentApiUri())
+		public RemoteHardwareInfo(
+			ICalculationsConfiguration configuration,
+			IJsonConverters jsonConverters) : base(configuration.General().AgentApiUri(), jsonConverters)
 		{
 		}
 

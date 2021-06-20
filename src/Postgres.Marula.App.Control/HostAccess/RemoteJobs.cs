@@ -5,6 +5,7 @@ using Postgres.Marula.App.Control.Configuration;
 using Postgres.Marula.Calculations.PeriodicJobs.PublicApi;
 using Postgres.Marula.Calculations.PublicApi;
 using Postgres.Marula.Infrastructure.Http;
+using Postgres.Marula.Infrastructure.JsonSerialization;
 
 namespace Postgres.Marula.App.Control.HostAccess
 {
@@ -14,7 +15,9 @@ namespace Postgres.Marula.App.Control.HostAccess
 	/// </remarks>
 	internal class RemoteJobs : HttpComponentBase, IJobs
 	{
-		public RemoteJobs(IControlAppConfiguration configuration) : base(configuration.HostApiUri())
+		public RemoteJobs(
+			IControlAppConfiguration configuration,
+			IJsonConverters jsonConverters) : base(configuration.HostApiUri(), jsonConverters)
 		{
 		}
 

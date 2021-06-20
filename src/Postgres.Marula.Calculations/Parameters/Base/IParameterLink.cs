@@ -1,5 +1,7 @@
 using System;
 using System.Linq;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Postgres.Marula.Infrastructure.Extensions;
 using Postgres.Marula.Infrastructure.TypeDecorators;
 
@@ -53,5 +55,22 @@ namespace Postgres.Marula.Calculations.Parameters.Base
 		public Link() : base(typeof(TParameter))
 		{
 		}
+	}
+
+	// ReSharper disable once UnusedType.Global
+	/// <inheritdoc />
+	internal class ParameterLinkConverter : JsonConverter<IParameterLink>
+	{
+		/// <inheritdoc />
+		public override IParameterLink Read(
+			ref Utf8JsonReader reader,
+			Type typeToConvert,
+			JsonSerializerOptions options) => new ParameterLink(reader.GetString()!);
+
+		/// <inheritdoc />
+		public override void Write(
+			Utf8JsonWriter writer,
+			IParameterLink link,
+			JsonSerializerOptions options) => writer.WriteStringValue(link.Name);
 	}
 }

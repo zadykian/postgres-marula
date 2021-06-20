@@ -1,8 +1,9 @@
 using System;
 using System.Net.Http;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using Postgres.Marula.Infrastructure.Extensions;
+using Postgres.Marula.Infrastructure.JsonSerialization;
 using Postgres.Marula.Infrastructure.TypeDecorators;
 
 namespace Postgres.Marula.Infrastructure.Http
@@ -13,8 +14,15 @@ namespace Postgres.Marula.Infrastructure.Http
 	public abstract class HttpComponentBase
 	{
 		private readonly HttpClient httpClient;
+		private readonly IJsonConverters jsonConverters;
 
-		protected HttpComponentBase(Uri baseAddress) => httpClient = new() {BaseAddress = baseAddress};
+		protected HttpComponentBase(
+			Uri baseAddress,
+			IJsonConverters jsonConverters)
+		{
+			httpClient = new() {BaseAddress = baseAddress};
+			this.jsonConverters = jsonConverters;
+		}
 
 		/// <summary>
 		/// Send HTTP request to remote API.
@@ -30,8 +38,7 @@ namespace Postgres.Marula.Infrastructure.Http
 
 			if (requestBody is not (null or Unit))
 			{
-				var serializationOptions = ConfigureSerializerOptions(new());
-				var serialized = JsonSerializer.Serialize(requestBody, serializationOptions);
+				var serialized = JsonSerializer.Serialize(requestBody, Options());
 				httpRequestMessage.Content = new StringContent(serialized);
 			}
 
@@ -54,8 +61,17 @@ namespace Postgres.Marula.Infrastructure.Http
 			}
 
 			var responseBody = await httpResponseMessage.Content.ReadAsStringAsync();
-			var deserializationOptions = ConfigureSerializerOptions(new());
-			return JsonSerializer.Deserialize<TResponse>(responseBody, deserializationOptions)!;
+			return JsonSerializer.Deserialize<TResponse>(responseBody, Options())!;
+		}
+
+		/// <summary>
+		/// Get <see cref="JsonSerializerOptions"/> to serialize request body and deserialize response body. 
+		/// </summary>
+		private JsonSerializerOptions Options()
+		{
+			var serializerOptions = new JsonSerializerOptions();
+			jsonConverters.All().ForEach(serializerOptions.Converters.Add);
+			return serializerOptions;
 		}
 
 		/// <summary>
@@ -64,17 +80,6 @@ namespace Postgres.Marula.Infrastructure.Http
 		/// </summary>
 		protected virtual Exception WrapException(Exception occuredError)
 			=> occuredError;
-
-		/// <summary>
-		/// Configure <see cref="JsonSerializerOptions"/> for request body serialization
-		/// and response body deserialization.
-		/// </summary>
-		private static JsonSerializerOptions ConfigureSerializerOptions(
-			JsonSerializerOptions serializerOptions)
-		{
-			serializerOptions.Converters.Add(new JsonStringEnumConverter());
-			return serializerOptions;
-		}
 
 		/// <summary>
 		/// Representation of empty type.
