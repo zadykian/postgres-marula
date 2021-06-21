@@ -1,6 +1,8 @@
 using System.Linq;
 using System.Threading.Tasks;
+using Postgres.Marula.App.Control.UIElements.Extensions;
 using Postgres.Marula.App.Control.UIElements.Menu.Items;
+using Postgres.Marula.Infrastructure.Extensions;
 using Terminal.Gui;
 
 namespace Postgres.Marula.App.Control.UIElements.MainViews
@@ -28,9 +30,6 @@ namespace Postgres.Marula.App.Control.UIElements.MainViews
 			Y = verticalOffset;
 			Width = await appMenu.TotalWidthAsync().ConfigureAwait(false); // todo;
 			Height = Dim.Fill();
-			CanFocus = false;
-
-			ShortcutAction = SetFocus;
 
 			Add(jobButtonsFrame.Initialize());
 
@@ -39,14 +38,11 @@ namespace Postgres.Marula.App.Control.UIElements.MainViews
 				.ToArrayAsync()
 				.ConfigureAwait(false); // todo;
 
-			Add(new ListView(jobMenuItems)
-			{
-				Y = Pos.Bottom(jobButtonsFrame),
-				Width = Dim.Fill(),
-				Height = Dim.Fill(),
-				AllowsMarking = false,
-				CanFocus = true
-			});
+			jobMenuItems
+				.AsListView()
+				.FillDimensions()
+				.WithVerticalOffset(Pos.Bottom(jobButtonsFrame))
+				.To(Add);
 
 			return this;
 		}
