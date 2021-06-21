@@ -7,7 +7,7 @@ namespace Postgres.Marula.Infrastructure.TypeDecorators
 	/// <summary>
 	/// Memory volume.
 	/// </summary>
-	public readonly struct Memory : IEquatable<Memory>
+	public readonly struct Memory : IEquatable<Memory>, IComparable<Memory>, IComparable
 	{
 		public Memory(ulong totalBytes) => TotalBytes = totalBytes;
 
@@ -58,15 +58,15 @@ namespace Postgres.Marula.Infrastructure.TypeDecorators
 		/// <inheritdoc />
 		public override int GetHashCode() => TotalBytes.GetHashCode();
 
-		/// <summary>
-		/// Equality operator. 
-		/// </summary>
-		public static bool operator ==(Memory left, Memory right) => left.Equals(right);
+		/// <inheritdoc />
+		public int CompareTo(Memory other) => TotalBytes.CompareTo(other.TotalBytes);
 
-		/// <summary>
-		/// Inequality operator. 
-		/// </summary>
-		public static bool operator !=(Memory left, Memory right) => !(left == right);
+		/// <inheritdoc />
+		int IComparable.CompareTo(object? obj)
+		{
+			if (ReferenceEquals(null, obj)) return 1;
+			return obj is Memory other ? CompareTo(other) : throw new ArgumentException($"Object must be of type {nameof(Memory)}");
+		}
 
 		#endregion
 
@@ -136,6 +136,30 @@ namespace Postgres.Marula.Infrastructure.TypeDecorators
 		}
 
 		#region Operators
+
+		/// <summary>
+		/// Equality operator. 
+		/// </summary>
+		public static bool operator ==(Memory left, Memory right) => left.Equals(right);
+
+		/// <summary>
+		/// Inequality operator. 
+		/// </summary>
+		public static bool operator !=(Memory left, Memory right) => !(left == right);
+
+		/// <summary>
+		/// Comparison operator.
+		/// </summary>
+		public static bool operator <(Memory left, Memory right) => left.CompareTo(right) < 0;
+
+		/// <inheritdoc cref="op_LessThan"/>
+		public static bool operator >(Memory left, Memory right) => left.CompareTo(right) > 0;
+
+		/// <inheritdoc cref="op_LessThan"/>
+		public static bool operator <=(Memory left, Memory right) => left.CompareTo(right) <= 0;
+
+		/// <inheritdoc cref="op_LessThan"/>
+		public static bool operator >=(Memory left, Memory right) => left.CompareTo(right) >= 0;
 
 		/// <summary>
 		/// Multiplication operator.

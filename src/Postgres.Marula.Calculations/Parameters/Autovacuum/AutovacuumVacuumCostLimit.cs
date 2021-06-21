@@ -7,7 +7,7 @@ using Postgres.Marula.Calculations.ParametersManagement;
 // ReSharper disable UnusedType.Global
 // ReSharper disable BuiltInTypeReferenceStyle
 using CostLimit = System.UInt32;
-using WorkersCount = System.UInt32;
+using CoresCount = System.UInt32;
 
 namespace Postgres.Marula.Calculations.Parameters.Autovacuum
 {
@@ -35,7 +35,7 @@ namespace Postgres.Marula.Calculations.Parameters.Autovacuum
 			// todo: perform calculations based on BloatCoefficients.
 			await bloatAnalysis.ExecuteAsync();
 
-			var autovacuumMaxWorkers = await pgSettings.ReadAsync<AutovacuumMaxWorkers, WorkersCount>();
+			var autovacuumMaxWorkers = await pgSettings.ReadAsync<AutovacuumMaxWorkers, CoresCount>();
 			return 500 * autovacuumMaxWorkers;
 		}
 	}

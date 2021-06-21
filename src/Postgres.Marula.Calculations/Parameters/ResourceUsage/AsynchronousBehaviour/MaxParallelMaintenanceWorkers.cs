@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Postgres.Marula.Calculations.Parameters.Base;
@@ -7,26 +8,26 @@ using Postgres.Marula.HwInfo;
 // ReSharper disable BuiltInTypeReferenceStyle
 using CoresCount = System.UInt32;
 
-namespace Postgres.Marula.Calculations.Parameters.Autovacuum
+namespace Postgres.Marula.Calculations.Parameters.ResourceUsage.AsynchronousBehaviour
 {
 	/// <summary>
-	/// [autovacuum_max_workers]
-	/// Specifies the maximum number of autovacuum
-	/// processes (other than the autovacuum launcher) that may be running at any one time.
+	/// [max_parallel_maintenance_workers]
+	/// Sets the maximum number of parallel processes per maintenance operation.
 	/// </summary>
-	internal class AutovacuumMaxWorkers : IntegerParameterBase
+	internal class MaxParallelMaintenanceWorkers : IntegerParameterBase
 	{
 		private readonly IHardwareInfo hardwareInfo;
 
-		public AutovacuumMaxWorkers(
+		public MaxParallelMaintenanceWorkers(
 			IHardwareInfo hardwareInfo,
 			ILogger<IntegerParameterBase> logger) : base(logger)
 			=> this.hardwareInfo = hardwareInfo;
 
-		protected override async ValueTask<CoresCount> CalculateValueAsync()
+		/// <inheritdoc />
+		protected override async ValueTask<uint> CalculateValueAsync()
 		{
 			var cpuCoresCount = await hardwareInfo.CpuCoresCount();
-			return (CoresCount) (0.5 * cpuCoresCount);
+			return (CoresCount) Math.Min(4, 0.5 * cpuCoresCount);
 		}
 	}
 }
