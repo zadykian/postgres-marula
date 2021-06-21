@@ -27,7 +27,7 @@ namespace Postgres.Marula.App.Control.UIElements.Menu.Items
 			var valueViews = await parameterValues
 				.MostRecentAsync()
 				.OrderBy(view => view.Link.Name)
-				.Select(view => $"{view.Link.Name,-32}{view.Value}")
+				.Select(view => $"{view.Link.Name,-36}{view.Value}")
 				.ToArrayAsync();
 
 			outputWindow
