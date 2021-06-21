@@ -28,7 +28,7 @@ namespace Postgres.Marula.App.Control.UIElements.Controls
 			calculateImmediatelyButton.Clicked += async ()
 				=> await messageBox
 					.QueryAsync("calculate values", "calculate parameter values immediately?")
-					.OnConfirmed( () =>
+					.OnConfirmed(() =>
 					{
 						// todo
 						return Task.CompletedTask;
@@ -48,7 +48,7 @@ namespace Postgres.Marula.App.Control.UIElements.Controls
 			exportValuesButton.Clicked += async ()
 				=> await messageBox
 					.QueryAsync("export values", "export parameter values to .sql file?")
-					.OnConfirmed( () =>
+					.OnConfirmed(() =>
 					{
 						// todo
 						return Task.CompletedTask;
@@ -68,7 +68,7 @@ namespace Postgres.Marula.App.Control.UIElements.Controls
 			applyValuesButton.Clicked += async ()
 				=> await messageBox
 					.QueryAsync("apply values", "apply calculated values to database server configuration?")
-					.OnConfirmed( () =>
+					.OnConfirmed(() =>
 					{
 						// todo
 						return Task.CompletedTask;
