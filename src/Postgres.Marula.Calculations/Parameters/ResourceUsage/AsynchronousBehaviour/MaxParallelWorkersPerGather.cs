@@ -24,9 +24,9 @@ namespace Postgres.Marula.Calculations.Parameters.ResourceUsage.AsynchronousBeha
 			=> this.hardwareInfo = hardwareInfo;
 
 		/// <inheritdoc />
-		protected override async ValueTask<uint> CalculateValueAsync()
+		protected override async ValueTask<CoresCount> CalculateValueAsync()
 		{
-			var cpuCoresCount = await hardwareInfo.CpuCoresCount();
+			var cpuCoresCount = await hardwareInfo.GetCpuCoresCountAsync();
 			return (CoresCount) Math.Min(4, 0.5 * cpuCoresCount);
 		}
 	}

@@ -5,7 +5,7 @@ using Postgres.Marula.Calculations.ExternalDependencies;
 using Postgres.Marula.Calculations.Parameters.Autovacuum;
 using Postgres.Marula.Calculations.Parameters.Base;
 using Postgres.Marula.Calculations.Parameters.LockManagement;
-using Postgres.Marula.Calculations.Parameters.MemoryUsage;
+using Postgres.Marula.Calculations.Parameters.ResourceUsage.Memory;
 using Postgres.Marula.Calculations.Parameters.Wal;
 using Postgres.Marula.Calculations.ParameterValues.Base;
 using Postgres.Marula.Calculations.PublicApi;

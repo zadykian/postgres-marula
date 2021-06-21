@@ -4,6 +4,8 @@ using Postgres.Marula.Calculations.Parameters.Base;
 using Postgres.Marula.HwInfo;
 
 // ReSharper disable UnusedType.Global
+// ReSharper disable BuiltInTypeReferenceStyle
+using CoresCount = System.UInt32;
 
 namespace Postgres.Marula.Calculations.Parameters.ResourceUsage.AsynchronousBehaviour
 {
@@ -21,6 +23,6 @@ namespace Postgres.Marula.Calculations.Parameters.ResourceUsage.AsynchronousBeha
 			=> this.hardwareInfo = hardwareInfo;
 
 		/// <inheritdoc />
-		protected override async ValueTask<uint> CalculateValueAsync() => await hardwareInfo.CpuCoresCount();
+		protected override async ValueTask<CoresCount> CalculateValueAsync() => await hardwareInfo.GetCpuCoresCountAsync();
 	}
 }
