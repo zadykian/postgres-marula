@@ -5,6 +5,7 @@ using Postgres.Marula.Calculations.ParametersManagement;
 using Postgres.Marula.HwInfo;
 
 // ReSharper disable UnusedType.Global
+using Mem = Postgres.Marula.Infrastructure.TypeDecorators.Memory;
 
 namespace Postgres.Marula.Calculations.Parameters.ResourceUsage.Memory
 {
@@ -28,7 +29,7 @@ namespace Postgres.Marula.Calculations.Parameters.ResourceUsage.Memory
 		}
 
 		/// <inheritdoc />
-		protected override async ValueTask<Infrastructure.TypeDecorators.Memory> CalculateValueAsync()
+		protected override async ValueTask<Mem> CalculateValueAsync()
 		{
 			var totalRamSize = await hardwareInfo.TotalRam();
 			var maxConnections = await pgSettings.ReadAsync<uint>("max_connections");

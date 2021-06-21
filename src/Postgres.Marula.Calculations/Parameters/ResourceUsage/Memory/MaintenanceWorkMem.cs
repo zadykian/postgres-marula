@@ -4,6 +4,7 @@ using Postgres.Marula.Calculations.Parameters.Base;
 using Postgres.Marula.HwInfo;
 
 // ReSharper disable UnusedType.Global
+using Mem = Postgres.Marula.Infrastructure.TypeDecorators.Memory;
 
 namespace Postgres.Marula.Calculations.Parameters.ResourceUsage.Memory
 {
@@ -22,7 +23,7 @@ namespace Postgres.Marula.Calculations.Parameters.ResourceUsage.Memory
 			=> this.hardwareInfo = hardwareInfo;
 
 		/// <inheritdoc />
-		protected override async ValueTask<Infrastructure.TypeDecorators.Memory> CalculateValueAsync()
+		protected override async ValueTask<Mem> CalculateValueAsync()
 		{
 			var totalRamSize = await hardwareInfo.TotalRam();
 			return 0.05 * totalRamSize;
