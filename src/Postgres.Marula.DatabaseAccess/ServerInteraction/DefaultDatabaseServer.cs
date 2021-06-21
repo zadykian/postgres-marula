@@ -56,6 +56,7 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 
 			var commandText = alterSystemCommands
 				.Add("select pg_reload_conf();")
+				.Select(nonEmpty => (string) nonEmpty)
 				.JoinBy(Environment.NewLine);
 
 			var connection = await Connection();

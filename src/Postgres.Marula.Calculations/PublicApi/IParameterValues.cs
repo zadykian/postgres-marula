@@ -43,6 +43,6 @@ namespace Postgres.Marula.Calculations.PublicApi
 		/// Represent <paramref name="valueView"/> as ALTER SYSTEM command. 
 		/// </summary>
 		public static NonEmptyString AsAlterSystem(this IValueView valueView)
-			=> $"alter system set {valueView.Link.Name} = {valueView.Value}";
+			=> $"alter system set {valueView.Link.Name} = {valueView.Value};";
 	}
 }
