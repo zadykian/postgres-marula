@@ -1,5 +1,6 @@
 using System.Collections.Generic;
-using System.Linq;
+using Postgres.Marula.App.Control.UIElements.Extensions;
+using Postgres.Marula.Infrastructure.Extensions;
 using Postgres.Marula.Infrastructure.TypeDecorators;
 using Terminal.Gui;
 
@@ -13,12 +14,12 @@ namespace Postgres.Marula.App.Control.UIElements.MainViews
 		/// <summary>
 		/// Set new title for window. 
 		/// </summary>
-		IOutputWindow Title(NonEmptyString newValue);
+		IOutputWindow Titled(NonEmptyString newValue);
 
 		/// <summary>
-		/// Show <paramref name="outputLines"/> in the window. 
+		/// Show <paramref name="output"/> in the window. 
 		/// </summary>
-		IOutputWindow Show(IEnumerable<NonEmptyString> outputLines);
+		IOutputWindow Show<T>(IEnumerable<T> output);
 	}
 
 	/// <inheritdoc cref="IOutputWindow" />
@@ -36,23 +37,13 @@ namespace Postgres.Marula.App.Control.UIElements.MainViews
 		}
 
 		/// <inheritdoc />
-		IOutputWindow IOutputWindow.Title(NonEmptyString newValue)
-		{
-			Title = (string) newValue;
-			return this;
-		}
+		IOutputWindow IOutputWindow.Titled(NonEmptyString newValue) => this.Titled(newValue);
 
 		/// <inheritdoc />
-		IOutputWindow IOutputWindow.Show(IEnumerable<NonEmptyString> outputLines)
-		{
-			Clear();
-			Add(new ListView(outputLines.ToArray())
-			{
-				Width = Dim.Fill(),
-				Height = Dim.Fill()
-			});
-
-			return this;
-		}
+		IOutputWindow IOutputWindow.Show<T>(IEnumerable<T> output)
+			=> output
+				.AsListView()
+				.FillDimensions()
+				.To(listView => this.Cleared().With(listView));
 	}
 }

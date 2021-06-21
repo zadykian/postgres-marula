@@ -2,7 +2,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Postgres.Marula.App.Control.UIElements.MainViews;
 using Postgres.Marula.Calculations.PublicApi;
-using Postgres.Marula.Infrastructure.TypeDecorators;
 
 namespace Postgres.Marula.App.Control.UIElements.Menu.Items
 {
@@ -29,11 +28,10 @@ namespace Postgres.Marula.App.Control.UIElements.Menu.Items
 				.MostRecentAsync()
 				.OrderBy(view => view.Link.Name)
 				.Select(view => $"{view.Link.Name,-32}{view.Value}")
-				.Select(line => (NonEmptyString) line)
 				.ToArrayAsync();
 
 			outputWindow
-				.Title("calculated values")
+				.Titled("calculated values")
 				.Show(valueViews);
 		}
 	}
