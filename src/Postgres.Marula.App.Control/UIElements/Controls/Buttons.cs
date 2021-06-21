@@ -58,6 +58,26 @@ namespace Postgres.Marula.App.Control.UIElements.Controls
 		}
 
 		/// <inheritdoc />
+		Button IButtons.ApplyCalculatedValues()
+		{
+			var applyValuesButton = new Button("apply calculated values")
+			{
+				ColorScheme = ButtonColorScheme()
+			};
+
+			applyValuesButton.Clicked += async ()
+				=> await messageBox
+					.QueryAsync("apply values", "apply calculated values to database server configuration?")
+					.OnConfirmed( () =>
+					{
+						// todo
+						return Task.CompletedTask;
+					});
+
+			return applyValuesButton;
+		}
+
+		/// <inheritdoc />
 		Button IButtons.StartAllJobs()
 		{
 			var startAllButton = new Button("start all")

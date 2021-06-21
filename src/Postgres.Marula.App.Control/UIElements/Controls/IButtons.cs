@@ -18,6 +18,11 @@ namespace Postgres.Marula.App.Control.UIElements.Controls
 		Button ExportValues();
 
 		/// <summary>
+		/// Button to apply most recent calculated values to database server configuration. 
+		/// </summary>
+		Button ApplyCalculatedValues();
+
+		/// <summary>
 		/// Button to start all main host's jobs. 
 		/// </summary>
 		Button StartAllJobs();
