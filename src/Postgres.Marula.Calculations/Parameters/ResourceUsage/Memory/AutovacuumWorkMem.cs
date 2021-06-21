@@ -8,7 +8,7 @@ using Postgres.Marula.HwInfo;
 
 // ReSharper disable UnusedType.Global
 // ReSharper disable BuiltInTypeReferenceStyle
-using WorkersCount = System.UInt32;
+using CoresCount = System.UInt32;
 using Mem = Postgres.Marula.Infrastructure.TypeDecorators.Memory;
 
 namespace Postgres.Marula.Calculations.Parameters.ResourceUsage.Memory
@@ -42,7 +42,7 @@ namespace Postgres.Marula.Calculations.Parameters.ResourceUsage.Memory
 		protected override async ValueTask<Mem> CalculateValueAsync()
 		{
 			var totalRamSize = await hardwareInfo.TotalRam();
-			var autovacuumMaxWorkers = await pgSettings.ReadAsync<AutovacuumMaxWorkers, WorkersCount>();
+			var autovacuumMaxWorkers = await pgSettings.ReadAsync<AutovacuumMaxWorkers, CoresCount>();
 			return 0.1 * totalRamSize / autovacuumMaxWorkers;
 		}
 	}
