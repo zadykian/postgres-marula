@@ -49,7 +49,7 @@ namespace Postgres.Marula.App.Control
 		/// </summary>
 		private static IServiceCollection RegisterGeneralMenuItems(IServiceCollection services)
 			=> services
-				.AddSingleton<IMenuItem>(new MenuItem("view ctl app logs", 0)) // todo
+				.AddSingleton<IMenuItem, AppLogsMenuItem>()
 				.AddSingleton<IMenuItem, CalculatedValuesMenuItem>()
 				.AddSingleton<IMenuItem, QuitMenuItem>();
 	}
