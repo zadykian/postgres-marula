@@ -3,11 +3,10 @@ using Microsoft.Extensions.Logging;
 using Postgres.Marula.Calculations.Parameters.Base;
 using Postgres.Marula.Calculations.ParametersManagement;
 using Postgres.Marula.HwInfo;
-using Postgres.Marula.Infrastructure.TypeDecorators;
 
 // ReSharper disable UnusedType.Global
 
-namespace Postgres.Marula.Calculations.Parameters.MemoryUsage
+namespace Postgres.Marula.Calculations.Parameters.ResourceUsage.Memory
 {
 	/// <summary>
 	/// [work_mem]
@@ -29,7 +28,7 @@ namespace Postgres.Marula.Calculations.Parameters.MemoryUsage
 		}
 
 		/// <inheritdoc />
-		protected override async ValueTask<Memory> CalculateValueAsync()
+		protected override async ValueTask<Infrastructure.TypeDecorators.Memory> CalculateValueAsync()
 		{
 			var totalRamSize = await hardwareInfo.TotalRam();
 			var maxConnections = await pgSettings.ReadAsync<uint>("max_connections");
