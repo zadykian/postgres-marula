@@ -10,7 +10,8 @@ namespace Postgres.Marula.App.Control.UIElements.Extensions
 		/// <summary>
 		/// Set horizontal offset <paramref name="offset"/> for <paramref name="view"/>.
 		/// </summary>
-		public static View WithHorizontalOffset(this View view, Pos offset)
+		public static TView WithHorizontalOffset<TView>(this TView view, Pos offset)
+			where TView : View
 		{
 			view.X = offset;
 			return view;
@@ -19,9 +20,21 @@ namespace Postgres.Marula.App.Control.UIElements.Extensions
 		/// <summary>
 		/// Set vertical offset <paramref name="offset"/> for <paramref name="view"/>.
 		/// </summary>
-		public static View WithVerticalOffset(this View view, Pos offset)
+		public static TView WithVerticalOffset<TView>(this TView view, Pos offset)
+			where TView : View
 		{
 			view.Y = offset;
+			return view;
+		}
+
+		/// <summary>
+		/// Fill all available space in width and height. 
+		/// </summary>
+		public static TView FillDimensions<TView>(this TView view)
+			where TView : View
+		{
+			view.Width = Dim.Fill();
+			view.Height = Dim.Fill();
 			return view;
 		}
 	}

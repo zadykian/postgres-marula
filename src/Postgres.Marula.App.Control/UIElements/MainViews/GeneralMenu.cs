@@ -1,6 +1,7 @@
-using System.Linq;
 using System.Threading.Tasks;
+using Postgres.Marula.App.Control.UIElements.Extensions;
 using Postgres.Marula.App.Control.UIElements.Menu.Items;
+using Postgres.Marula.Infrastructure.Extensions;
 using Terminal.Gui;
 
 namespace Postgres.Marula.App.Control.UIElements.MainViews
@@ -27,30 +28,22 @@ namespace Postgres.Marula.App.Control.UIElements.MainViews
 		public async Task<GeneralMenu> InitializeAsync()
 		{
 			Title = "general";
-			Width = await appMenu.TotalWidthAsync().ConfigureAwait(false); // todo;
-			Height = Dim.Percent(50f);
 
-			CanFocus = false;
-			ShortcutAction = SetFocus;
+			// todo: ConfigureAwait
+			// todo: TotalWidth
+			Width = await appMenu.TotalWidthAsync().ConfigureAwait(false);
+			Height = Dim.Percent(50f);
 
 			Add(generalButtonFrame.Initialize());
 
-			var generalMenuListView = new ListView(appMenu.LoadGeneral().ToArray())
-			{
-				Width = Dim.Fill(),
-				Height = Dim.Fill(),
-				Y = Pos.Bottom(generalButtonFrame),
-				AllowsMarking = false,
-				CanFocus = true
-			};
+			appMenu
+				.LoadGeneral()
+				.AsListView()
+				.FillDimensions()
+				.WithVerticalOffset(Pos.Bottom(generalButtonFrame))
+				.OnSelectionOf<IMenuItem>(menuItem => menuItem.HandleClickAsync())
+				.To(Add);
 
-			generalMenuListView.OpenSelectedItem += async eventArgs =>
-			{
-				var menuItem = (IMenuItem) eventArgs.Value;
-				await menuItem.HandleClickAsync();
-			};
-
-			Add(generalMenuListView);
 			return this;
 		}
 	}
