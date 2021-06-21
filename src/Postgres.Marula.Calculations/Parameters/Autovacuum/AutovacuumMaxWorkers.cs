@@ -5,7 +5,7 @@ using Postgres.Marula.HwInfo;
 
 // ReSharper disable UnusedType.Global
 // ReSharper disable BuiltInTypeReferenceStyle
-using WorkersCount = System.UInt32;
+using CoresCount = System.UInt32;
 
 namespace Postgres.Marula.Calculations.Parameters.Autovacuum
 {
@@ -23,10 +23,10 @@ namespace Postgres.Marula.Calculations.Parameters.Autovacuum
 			ILogger<IntegerParameterBase> logger) : base(logger)
 			=> this.hardwareInfo = hardwareInfo;
 
-		protected override async ValueTask<WorkersCount> CalculateValueAsync()
+		protected override async ValueTask<CoresCount> CalculateValueAsync()
 		{
 			var cpuCoresCount = await hardwareInfo.GetCpuCoresCountAsync();
-			return (WorkersCount) (0.5 * cpuCoresCount);
+			return (CoresCount) (0.5 * cpuCoresCount);
 		}
 	}
 }
