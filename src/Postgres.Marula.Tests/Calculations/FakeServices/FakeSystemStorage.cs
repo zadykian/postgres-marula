@@ -1,14 +1,7 @@
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Postgres.Marula.Calculations.ExternalDependencies;
-using Postgres.Marula.Calculations.Parameters.Autovacuum;
-using Postgres.Marula.Calculations.Parameters.Base;
-using Postgres.Marula.Calculations.Parameters.LockManagement;
-using Postgres.Marula.Calculations.Parameters.ResourceUsage.Memory;
-using Postgres.Marula.Calculations.Parameters.Wal;
 using Postgres.Marula.Calculations.ParameterValues.Base;
-using Postgres.Marula.Calculations.PublicApi;
 using Postgres.Marula.Infrastructure.TypeDecorators;
 
 namespace Postgres.Marula.Tests.Calculations.FakeServices
@@ -47,17 +40,5 @@ namespace Postgres.Marula.Tests.Calculations.FakeServices
 			yield return new(new(2021, 05, 1, 15, 0, 0), 0.6M);
 			yield return new(new(2021, 05, 1, 18, 0, 0), 0.5M);
 		}
-
-		/// <inheritdoc />
-		IAsyncEnumerable<IValueView> IParameterValues.MostRecentAsync()
-			=> new ValueView[]
-				{
-					new(new Link<Autovacuum>(),                 "true"),
-					new(new Link<CheckpointCompletionTarget>(), "0.8" ),
-					new(new Link<MaxLocksPerTransaction>(),     "96"  ),
-					new(new Link<SharedBuffers>(),              "1GB" ),
-					new(new Link<AutovacuumVacuumCostDelay>(),  "2ms" )
-				}
-				.ToAsyncEnumerable();
 	}
 }

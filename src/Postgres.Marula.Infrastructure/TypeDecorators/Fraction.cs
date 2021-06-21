@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using Postgres.Marula.Infrastructure.Extensions;
 
@@ -21,6 +22,24 @@ namespace Postgres.Marula.Infrastructure.TypeDecorators
 
 		/// <inheritdoc />
 		public string ToString(string? format, IFormatProvider? formatProvider) => underlyingValue.ToString(format, formatProvider);
+
+		/// <summary>
+		/// Try parse <paramref name="input"/> to <see cref="Fraction"/> instance. 
+		/// </summary>
+		public static bool TryParse(
+			NonEmptyString input,
+			[NotNullWhen(returnValue: true)] out Fraction? fraction)
+		{
+			if (!decimal.TryParse(input, out var decimalValue)
+				|| !decimalValue.InRangeBetween(decimal.Zero, decimal.One))
+			{
+				fraction = null;
+				return false;
+			}
+
+			fraction = new(decimalValue);
+			return true;
+		}
 
 		#region EqualityMembers
 

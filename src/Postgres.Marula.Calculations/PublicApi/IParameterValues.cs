@@ -33,4 +33,16 @@ namespace Postgres.Marula.Calculations.PublicApi
 
 	/// <inheritdoc cref="IValueView" />
 	public record ValueView(IParameterLink Link, NonEmptyString Value) : IValueView;
+
+	/// <summary>
+	/// Extension methods for <see cref="IValueView"/> type.
+	/// </summary>
+	public static class ValueViewExtensions
+	{
+		/// <summary>
+		/// Represent <paramref name="valueView"/> as ALTER SYSTEM command. 
+		/// </summary>
+		public static NonEmptyString AsAlterSystem(this IValueView valueView)
+			=> $"alter system set {valueView.Link.Name} = {valueView.Value}";
+	}
 }

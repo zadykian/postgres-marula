@@ -20,5 +20,9 @@ namespace Postgres.Marula.App.Control.UIElements.Messages
 				? ConfirmationResult.Confirmed
 				: ConfirmationResult.Rejected;
 		}
+
+		/// <inheritdoc />
+		void IMessageBox.Show(NonEmptyString title, NonEmptyString message)
+			=> MessageBox.Query((string) title, (string) message, "ok");
 	}
 }

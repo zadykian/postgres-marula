@@ -29,7 +29,7 @@ namespace Postgres.Marula.App.Control.UIElements.Buttons
 			Clicked += async ()
 				=> await messageBox
 					.QueryAsync("stop jobs", "send request to host app?")
-					.OnConfirmed(jobs.StopAllAsync);
+					.OnConfirmed(async () => await jobs.StopAllAsync());
 
 			return this;
 		}

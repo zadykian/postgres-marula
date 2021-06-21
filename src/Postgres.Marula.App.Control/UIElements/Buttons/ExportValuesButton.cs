@@ -1,6 +1,8 @@
-using System.Threading.Tasks;
+using System.Linq;
 using Postgres.Marula.App.Control.UIElements.Buttons.Base;
 using Postgres.Marula.App.Control.UIElements.Messages;
+using Postgres.Marula.App.Control.ValuesExport;
+using Postgres.Marula.Calculations.PublicApi;
 
 namespace Postgres.Marula.App.Control.UIElements.Buttons
 {
@@ -10,10 +12,17 @@ namespace Postgres.Marula.App.Control.UIElements.Buttons
 	internal class ExportValuesButton : ButtonBase
 	{
 		private readonly IMessageBox messageBox;
+		private readonly IParameterValues parameterValues;
+		private readonly IValuesExport valuesExport;
 
-		public ExportValuesButton(IMessageBox messageBox)
+		public ExportValuesButton(
+			IMessageBox messageBox,
+			IParameterValues parameterValues,
+			IValuesExport valuesExport)
 		{
 			this.messageBox = messageBox;
+			this.parameterValues = parameterValues;
+			this.valuesExport = valuesExport;
 		}
 
 		/// <summary>
@@ -27,10 +36,11 @@ namespace Postgres.Marula.App.Control.UIElements.Buttons
 			Clicked += async ()
 				=> await messageBox
 					.QueryAsync("export values", "export parameter values to .sql file?")
-					.OnConfirmed(() =>
+					.OnConfirmed(async () =>
 					{
-						// todo
-						return Task.CompletedTask;
+						var values = await parameterValues.MostRecentAsync().ToArrayAsync();
+						var fileName = await valuesExport.ExportAsync(values);
+						messageBox.Show("values are exported successfully", $"script file name: '{fileName}'");
 					});
 
 			return this;

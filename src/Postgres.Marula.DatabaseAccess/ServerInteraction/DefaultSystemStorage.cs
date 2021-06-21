@@ -7,7 +7,6 @@ using Postgres.Marula.Calculations.ExternalDependencies;
 using Postgres.Marula.Calculations.ParameterProperties;
 using Postgres.Marula.Calculations.ParameterProperties.StringRepresentation;
 using Postgres.Marula.Calculations.ParameterValues.Base;
-using Postgres.Marula.Calculations.PublicApi;
 using Postgres.Marula.DatabaseAccess.ConnectionFactory;
 using Postgres.Marula.DatabaseAccess.Conventions;
 using Postgres.Marula.DatabaseAccess.ServerInteraction.Base;
@@ -143,33 +142,6 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 			var connection = await Connection();
 			var historyEntries = await connection.QueryAsync<BloatFractionHistoryEntry>(queryText, new {Window = (TimeSpan) window});
 			foreach (var bloatFractionHistoryEntry in historyEntries) yield return bloatFractionHistoryEntry;
-		}
-
-		/// <inheritdoc />
-		async IAsyncEnumerable<IValueView> IParameterValues.MostRecentAsync()
-		{
-			var queryText = string.Intern($@"
-				with ranked_values as
-				(
-					select
-						parameter_id,
-						calculated_value,
-						row_number() over (
-							partition by parameter_id
-							order by calculation_timestamp desc) as rank
-					from {conventions.SystemSchemaName}.{conventions.ValuesHistoryTableName} as history
-				)
-				select
-					parameters.name                as {nameof(IValueView.Link)},
-					ranked_values.calculated_value as {nameof(IValueView.Value)}
-				from ranked_values
-				inner join {conventions.SystemSchemaName}.{conventions.ParametersTableName} as parameters 
-					on ranked_values.parameter_id = parameters.id
-				where ranked_values.rank = 1;");
-
-			var connection = await Connection();
-			var parameterValues = await connection.QueryAsync<ValueView>(queryText);
-			foreach (var parameterValue in parameterValues) yield return parameterValue;
 		}
 	}
 }
