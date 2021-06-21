@@ -40,7 +40,7 @@ namespace Postgres.Marula.App.Control.UIElements.Menu
 					.InfoAboutAllAsync()
 					.Select((jobInfo, index) => new MenuItem(jobInfo.Name, (byte) index))
 					.ToArrayAsync()
-					.ConfigureAwait(false); // todo
+					.ConfigureAwait(false);
 			}
 			catch (Exception exception)
 			{

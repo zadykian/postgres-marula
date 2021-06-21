@@ -148,8 +148,7 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 		/// <inheritdoc />
 		async IAsyncEnumerable<IValueView> IParameterValues.MostRecentAsync()
 		{
-			// todo
-			var queryText = $@"
+			var queryText = string.Intern($@"
 				with ranked_values as
 				(
 					select
@@ -166,7 +165,7 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 				from ranked_values
 				inner join {conventions.SystemSchemaName}.{conventions.ParametersTableName} as parameters 
 					on ranked_values.parameter_id = parameters.id
-				where ranked_values.rank = 1;";
+				where ranked_values.rank = 1;");
 
 			var connection = await Connection();
 			var parameterValues = await connection.QueryAsync<ValueView>(queryText);

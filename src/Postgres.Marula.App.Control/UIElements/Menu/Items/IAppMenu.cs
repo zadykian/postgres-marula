@@ -20,10 +20,13 @@ namespace Postgres.Marula.App.Control.UIElements.Menu.Items
 		IAsyncEnumerable<IMenuItem> LoadJobsAsync();
 	}
 
+	/// <summary>
+	/// Extension methods for <see cref="IAppMenu"/> type.
+	/// </summary>
 	internal static class AppMenuExtensions
 	{
 		/// <summary>
-		///  
+		/// Get total width based on all <paramref name="appMenu"/> items.
 		/// </summary>
 		public static async Task<int> TotalWidthAsync(this IAppMenu appMenu)
 		{
@@ -34,7 +37,7 @@ namespace Postgres.Marula.App.Control.UIElements.Menu.Items
 			var jobMenuItems = await appMenu
 				.LoadJobsAsync()
 				.ToArrayAsync()
-				.ConfigureAwait(false); // todo
+				.ConfigureAwait(false);
 
 			return generalMenuItems
 				.Concat(jobMenuItems)

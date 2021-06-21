@@ -29,7 +29,7 @@ namespace Postgres.Marula.App.Control.UIElements.MainViews
 		async Task IUIStartup.StartAsync()
 		{
 			Application.Init();
-			await InitializeAsync().ConfigureAwait(false); // todo
+			await InitializeAsync().ConfigureAwait(false);
 			Application.Run(this);
 		}
 
@@ -43,7 +43,7 @@ namespace Postgres.Marula.App.Control.UIElements.MainViews
 			Width = Dim.Fill();
 			Height = Dim.Fill();
 
-			Add(await generalMenu.InitializeAsync().ConfigureAwait(false)); // todo;
+			Add(await generalMenu.InitializeAsync().ConfigureAwait(false));
 			Add(await jobsMenu.InitializeAsync(Pos.Bottom(generalMenu)));
 
 			outputWindow

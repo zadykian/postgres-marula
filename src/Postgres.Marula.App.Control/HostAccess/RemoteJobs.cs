@@ -24,7 +24,7 @@ namespace Postgres.Marula.App.Control.HostAccess
 		/// <inheritdoc />
 		async IAsyncEnumerable<IJobInfo> IJobs.InfoAboutAllAsync()
 		{
-			var jobInfos = await PerformRequestAsync<IEnumerable<JobInfo>>(HttpMethod.Get, "Jobs/InfoAboutAll").ConfigureAwait(false); // todo
+			var jobInfos = await PerformRequestAsync<IEnumerable<JobInfo>>(HttpMethod.Get, "Jobs/InfoAboutAll").ConfigureAwait(false);
 			foreach (var jobInfo in jobInfos) yield return jobInfo;
 		}
 

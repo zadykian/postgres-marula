@@ -46,7 +46,7 @@ namespace Postgres.Marula.Infrastructure.Http
 			{
 				httpResponseMessage = await httpClient
 					.SendAsync(httpRequestMessage)
-					.ConfigureAwait(false); // todo
+					.ConfigureAwait(false);
 			}
 			catch (Exception exception)
 			{

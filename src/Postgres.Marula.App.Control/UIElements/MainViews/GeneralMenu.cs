@@ -29,8 +29,6 @@ namespace Postgres.Marula.App.Control.UIElements.MainViews
 		{
 			Title = "general";
 
-			// todo: ConfigureAwait
-			// todo: TotalWidth
 			Width = await appMenu.TotalWidthAsync().ConfigureAwait(false);
 			Height = Dim.Percent(50f);
 
