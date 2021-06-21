@@ -34,7 +34,7 @@ namespace Postgres.Marula.App.Control.UIElements.MainViews
 		}
 
 		/// <summary>
-		/// Perform main window initialization.
+		/// Perform initialization.
 		/// </summary>
 		private async Task InitializeAsync()
 		{

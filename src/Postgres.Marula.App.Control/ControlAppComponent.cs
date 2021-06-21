@@ -2,7 +2,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Postgres.Marula.App.Control.Configuration;
 using Postgres.Marula.App.Control.HostAccess;
-using Postgres.Marula.App.Control.UIElements.Controls;
+using Postgres.Marula.App.Control.UIElements.Buttons;
 using Postgres.Marula.App.Control.UIElements.Lifetime;
 using Postgres.Marula.App.Control.UIElements.MainViews;
 using Postgres.Marula.App.Control.UIElements.Menu;
@@ -33,24 +33,35 @@ namespace Postgres.Marula.App.Control
 		private static IServiceCollection RegisterUIElements(IServiceCollection services)
 			=> services
 				.AddSingleton<IMessageBox, TerminalMessageBox>()
-				.AddSingleton<IButtons, Buttons>()
-				.AddSingleton<JobButtonsFrame>()
-				.AddSingleton<JobsMenu>()
-				.To(RegisterGeneralMenuItems)
-				.AddSingleton<GeneralButtonFrame>()
-				.AddSingleton<GeneralMenu>()
+				.To(AddGeneralMenu)
+				.To(AddJobsMenu)
 				.AddSingleton<OutputWindow>()
 				.Forward<OutputWindow, IOutputWindow>()
 				.AddSingleton<IUIStartup, MainWindow>()
 				.AddSingleton<IUIShutdown, UiShutdown>();
 
 		/// <summary>
-		/// Add general menu UI elements to <paramref name="services"/>. 
+		/// Add general menu and its' nested elements to <paramref name="services"/>. 
 		/// </summary>
-		private static IServiceCollection RegisterGeneralMenuItems(IServiceCollection services)
+		private static IServiceCollection AddGeneralMenu(IServiceCollection services)
 			=> services
+				.AddSingleton<CalculateValuesButton>()
+				.AddSingleton<ExportValuesButton>()
+				.AddSingleton<ApplyValuesButton>()
+				.AddSingleton<GeneralButtonFrame>()
 				.AddSingleton<IMenuItem, AppLogsMenuItem>()
 				.AddSingleton<IMenuItem, CalculatedValuesMenuItem>()
-				.AddSingleton<IMenuItem, QuitMenuItem>();
+				.AddSingleton<IMenuItem, QuitMenuItem>()
+				.AddSingleton<GeneralMenu>();
+
+		/// <summary>
+		/// Add jobs menu and its' nested elements to <paramref name="services"/>. 
+		/// </summary>
+		private static IServiceCollection AddJobsMenu(IServiceCollection services)
+			=> services
+				.AddSingleton<StartJobsButton>()
+				.AddSingleton<StopJobsButton>()
+				.AddSingleton<JobButtonsFrame>()
+				.AddSingleton<JobsMenu>();
 	}
 }

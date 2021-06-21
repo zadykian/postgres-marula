@@ -1,4 +1,4 @@
-using Postgres.Marula.App.Control.UIElements.Controls;
+using Postgres.Marula.App.Control.UIElements.Buttons;
 using Postgres.Marula.App.Control.UIElements.Extensions;
 using Postgres.Marula.Infrastructure.Extensions;
 using Terminal.Gui;
@@ -10,20 +10,30 @@ namespace Postgres.Marula.App.Control.UIElements.MainViews
 	/// </summary>
 	internal class GeneralButtonFrame : FrameView
 	{
-		private readonly IButtons buttons;
+		private readonly CalculateValuesButton calculateButton;
+		private readonly ExportValuesButton exportButton;
+		private readonly ApplyValuesButton applyButton;
 
-		public GeneralButtonFrame(IButtons buttons) => this.buttons = buttons;
+		public GeneralButtonFrame(
+			CalculateValuesButton calculateButton,
+			ExportValuesButton exportButton,
+			ApplyValuesButton applyButton)
+		{
+			this.calculateButton = calculateButton;
+			this.exportButton = exportButton;
+			this.applyButton = applyButton;
+		}
 
 		/// <summary>
 		/// Perform initialization. 
 		/// </summary>
 		public GeneralButtonFrame Initialize()
 		{
-			var calculateButton = buttons.CalculateImmediately();
-			var exportButton = buttons.ExportValues();
-			var applyButton = buttons.ApplyCalculatedValues();
+			Height = Dim.Height(calculateButton.Initialize())
+			         + Dim.Height(exportButton.Initialize())
+			         + Dim.Height(applyButton.Initialize())
+			         + 4;
 
-			Height = Dim.Height(calculateButton) + Dim.Height(exportButton) + Dim.Height(applyButton) + 4;
 			Width = Dim.Fill();
 
 			Add(calculateButton);
