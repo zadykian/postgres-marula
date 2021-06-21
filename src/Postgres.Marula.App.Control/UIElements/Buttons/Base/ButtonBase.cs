@@ -1,6 +1,6 @@
 using Terminal.Gui;
 
-namespace Postgres.Marula.App.Control.UIElements.Buttons
+namespace Postgres.Marula.App.Control.UIElements.Buttons.Base
 {
 	/// <summary>
 	/// Base class for all UI buttons.
