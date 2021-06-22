@@ -1,5 +1,4 @@
 using System;
-using System.Globalization;
 using System.Text.RegularExpressions;
 using Postgres.Marula.Calculations.Parameters.Base;
 using Postgres.Marula.Calculations.ParameterValues.Base;
@@ -27,9 +26,9 @@ namespace Postgres.Marula.Calculations.ParameterValues.Parsing
 						.To(memory => new MemoryParameterValue(parameterLink, memory)),
 
 				{ } when rawParameterValue.Type == RawValueType.Real
-				         && TryParseDecimal(rawParameterValue.Value, out var decimalValue)
+				         && Fraction.TryParse(rawParameterValue.Value, out var rawFraction)
 				         && rawParameterValue is RawRangeParameterValue rawRangeParameterValue
-					=> ToFraction(decimalValue, rawRangeParameterValue.ValidRange)
+					=> ToFraction(rawFraction.Value, rawRangeParameterValue.ValidRange)
 						.To(fraction => new FractionParameterValue(parameterLink, fraction)),
 
 				{ } when rawParameterValue.Type == RawValueType.Integer
@@ -47,16 +46,6 @@ namespace Postgres.Marula.Calculations.ParameterValues.Parsing
 				_ => throw new ParameterValueParseException(
 					$"Failed to parse value '{rawParameterValue.Value}' of parameter '{parameterLink.Name}'.")
 			};
-
-		/// <summary>
-		/// Try parse string <paramref name="input"/> to decimal value.
-		/// </summary>
-		private static bool TryParseDecimal(string input, out decimal decimalValue)
-			=> decimal.TryParse(
-				input,
-				NumberStyles.Number,
-				CultureInfo.InvariantCulture,
-				out decimalValue);
 
 		/// <summary>
 		/// Convert decimal value with range of valid values to <see cref="Fraction"/> instance.

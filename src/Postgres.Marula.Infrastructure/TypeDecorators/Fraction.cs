@@ -30,7 +30,7 @@ namespace Postgres.Marula.Infrastructure.TypeDecorators
 			NonEmptyString input,
 			[NotNullWhen(returnValue: true)] out Fraction? fraction)
 		{
-			if (!decimal.TryParse(input, out var decimalValue)
+			if (!decimal.TryParse(input, NumberStyles.Number, CultureInfo.InvariantCulture, out var decimalValue)
 				|| !decimalValue.InRangeBetween(decimal.Zero, decimal.One))
 			{
 				fraction = null;
