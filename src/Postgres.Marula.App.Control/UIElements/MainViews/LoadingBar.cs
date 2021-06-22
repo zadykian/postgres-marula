@@ -29,10 +29,18 @@ namespace Postgres.Marula.App.Control.UIElements.MainViews
 		public LoadingBar()
 		{
 			Height = 1;
-			ColorScheme = Colors.Error;
 			Width = Dim.Fill(1);
-			timer = new(interval: 20);
+			timer = new(interval: 30);
 			timer.Elapsed += (_, _) => Application.MainLoop?.Invoke(Pulse);
+		}
+
+		/// <summary>
+		/// Perform initialization. 
+		/// </summary>
+		public LoadingBar Initialize()
+		{
+			ColorScheme = BarColorScheme();
+			return this;
 		}
 
 		/// <inheritdoc />
@@ -43,6 +51,23 @@ namespace Postgres.Marula.App.Control.UIElements.MainViews
 		{
 			timer.Stop();
 			Fraction = 0;
+		}
+		
+		/// <summary>
+		/// Create UI color scheme for loading bar. 
+		/// </summary>
+		protected static ColorScheme BarColorScheme()
+		{
+			var normal = Application.Driver.MakeAttribute(fore: Color.Black, back: Color.Gray);
+			var focused = Application.Driver.MakeAttribute(fore: Color.White, back: Color.Cyan);
+
+			return new ColorScheme
+			{
+				Normal = normal,
+				Focus = focused,
+				HotNormal = normal,
+				HotFocus = normal
+			};
 		}
 	}
 }

@@ -50,6 +50,7 @@ namespace Postgres.Marula.App.Control.UIElements.MainViews
 			Add(await jobsMenu.InitializeAsync(Pos.Bottom(generalMenu)));
 
 			loadingBar
+				.Initialize()
 				.WithHorizontalOffset(Pos.Right(generalMenu) + 1)
 				.WithVerticalOffset(Pos.Bottom(this) - 3)
 				.To(Add);
