@@ -30,7 +30,7 @@ namespace Postgres.Marula.App.Control.UIElements.MainViews
 		{
 			Height = 1;
 			Width = Dim.Fill(1);
-			timer = new(interval: 30);
+			timer = new(interval: 20);
 			timer.Elapsed += (_, _) => Application.MainLoop?.Invoke(Pulse);
 		}
 
