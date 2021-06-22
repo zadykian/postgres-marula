@@ -39,6 +39,8 @@ namespace Postgres.Marula.App.Control
 				.To(AddJobsMenu)
 				.AddSingleton<OutputWindow>()
 				.Forward<OutputWindow, IOutputWindow>()
+				.AddSingleton<LoadingBar>()
+				.Forward<LoadingBar, ILoader>()
 				.AddSingleton<IUIStartup, MainWindow>()
 				.AddSingleton<IUIShutdown, UiShutdown>();
 

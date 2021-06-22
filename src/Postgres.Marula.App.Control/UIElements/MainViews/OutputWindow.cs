@@ -31,7 +31,7 @@ namespace Postgres.Marula.App.Control.UIElements.MainViews
 		public OutputWindow Initialize()
 		{
 			Width = Dim.Fill();
-			Height = Dim.Fill();
+			Height = Dim.Fill(1); // left space for loading bar at the bottom
 			CanFocus = false;
 			return this;
 		}

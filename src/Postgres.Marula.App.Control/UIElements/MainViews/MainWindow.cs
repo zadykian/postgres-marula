@@ -14,15 +14,18 @@ namespace Postgres.Marula.App.Control.UIElements.MainViews
 		private readonly GeneralMenu generalMenu;
 		private readonly JobsMenu jobsMenu;
 		private readonly OutputWindow outputWindow;
+		private readonly LoadingBar loadingBar;
 
 		public MainWindow(
 			GeneralMenu generalMenu,
 			JobsMenu jobsMenu,
-			OutputWindow outputWindow)
+			OutputWindow outputWindow,
+			LoadingBar loadingBar)
 		{
+			this.generalMenu = generalMenu;
 			this.jobsMenu = jobsMenu;
 			this.outputWindow = outputWindow;
-			this.generalMenu = generalMenu;
+			this.loadingBar = loadingBar;
 		}
 
 		/// <inheritdoc />
@@ -45,6 +48,11 @@ namespace Postgres.Marula.App.Control.UIElements.MainViews
 
 			Add(await generalMenu.InitializeAsync().ConfigureAwait(false));
 			Add(await jobsMenu.InitializeAsync(Pos.Bottom(generalMenu)));
+
+			loadingBar
+				.WithHorizontalOffset(Pos.Right(generalMenu) + 1)
+				.WithVerticalOffset(Pos.Bottom(this) - 3)
+				.To(Add);
 
 			outputWindow
 				.Initialize()
