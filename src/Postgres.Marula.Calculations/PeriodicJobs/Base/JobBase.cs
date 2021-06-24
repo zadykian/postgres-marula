@@ -43,7 +43,7 @@ namespace Postgres.Marula.Calculations.PeriodicJobs.Base
 		/// <summary>
 		/// <see cref="Timer.Elapsed"/> event handler.
 		/// </summary>
-		private async ValueTask OnTimerElapsed()
+		private async ValueTask ExecuteIteration()
 		{
 			logger.LogInformation($"[{Name}] iteration is started.");
 
@@ -70,12 +70,19 @@ namespace Postgres.Marula.Calculations.PeriodicJobs.Base
 		private Timer CreateTimer(PositiveTimeSpan executionInterval)
 			=> executionInterval
 				.To(interval => new Timer(interval.TotalMilliseconds) {AutoReset = false})
-				.Then(intervalTimer => intervalTimer.Elapsed += async (_, _) => await OnTimerElapsed());
+				.Then(intervalTimer => intervalTimer.Elapsed += async (_, _) => await ExecuteIteration());
 
 		/// <inheritdoc />
 		void IJob.Start()
 		{
-			timer.Start();
+			if (timer.Enabled)
+			{
+				return;
+			}
+
+			// Run first iteration immediately in background,
+			// then start timer to schedule next iterations.
+			Task.Run(ExecuteIteration).ContinueWith(_ => timer.Start());
 			logger.LogInformation($"[{Name}] job is started.");
 		}
 
