@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.Hosting;
@@ -26,5 +27,14 @@ namespace Postgres.Marula.Infrastructure.Hosting
 					options.ValidateScopes = true;
 					options.ValidateOnBuild = true;
 				});
+
+		/// <summary>
+		/// Set title to current application (if it's running in terminal).
+		/// </summary>
+		public static IHostBuilder Titled(this IHostBuilder hostBuilder, NonEmptyString applicationTitle)
+		{
+			Console.Title = applicationTitle;
+			return hostBuilder;
+		}
 	}
 }

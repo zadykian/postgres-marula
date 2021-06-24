@@ -20,6 +20,7 @@ namespace Postgres.Marula.App.Agent
 		private static Task Main(string[] args)
 			=> CommonHostBuilder
 				.WithJsonConfig(args, "marula-agent-config")
+				.Titled("postgres-marula-agent")
 				.EnableHttpApi()
 				.ConfigureServices(AddComponents)
 				.Build()

@@ -19,6 +19,7 @@ namespace Postgres.Marula.App.Control
 		private static Task Main(string[] args)
 			=> CommonHostBuilder
 				.WithJsonConfig(args, "marula-control-config")
+				.Titled("postgres-marula-ctl")
 				.ConfigureLogging(builder =>
 				{
 					// todo: and in-memory logging
