@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -44,6 +45,11 @@ namespace Postgres.Marula.App.Control.UIElements.Menu.Items
 					.Select(view => $"{view.Link.Name,-36}{view.Value}")
 					.ToArrayAsync();
 			}
+			catch (Exception exception)
+			{
+				messageBox.Error("failed to load values from host app", exception);
+				return;
+			}
 			finally
 			{
 				loader.OnLoadingFinished();
@@ -55,9 +61,7 @@ namespace Postgres.Marula.App.Control.UIElements.Menu.Items
 
 			if (!valueViews.Any())
 			{
-				messageBox.Show(
-					"unable to load parameter values",
-					"there are no any calculated values found!");
+				messageBox.Info("unable to load parameter values", "there are no any calculated values found!");
 			}
 		}
 	}

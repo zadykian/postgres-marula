@@ -1,8 +1,12 @@
+using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Postgres.Marula.App.Control.UIElements.Buttons.Base;
+using Postgres.Marula.App.Control.UIElements.MainViews;
 using Postgres.Marula.App.Control.UIElements.Messages;
 using Postgres.Marula.App.Control.ValuesExport;
 using Postgres.Marula.Calculations.PublicApi;
+using Postgres.Marula.Infrastructure.TypeDecorators;
 
 namespace Postgres.Marula.App.Control.UIElements.Buttons
 {
@@ -14,15 +18,18 @@ namespace Postgres.Marula.App.Control.UIElements.Buttons
 		private readonly IMessageBox messageBox;
 		private readonly IParameterValues parameterValues;
 		private readonly IValuesExport valuesExport;
+		private readonly ILoader loader;
 
 		public ExportValuesButton(
 			IMessageBox messageBox,
 			IParameterValues parameterValues,
-			IValuesExport valuesExport)
+			IValuesExport valuesExport,
+			ILoader loader)
 		{
 			this.messageBox = messageBox;
 			this.parameterValues = parameterValues;
 			this.valuesExport = valuesExport;
+			this.loader = loader;
 		}
 
 		/// <summary>
@@ -36,14 +43,35 @@ namespace Postgres.Marula.App.Control.UIElements.Buttons
 			Clicked += async ()
 				=> await messageBox
 					.QueryAsync("export values", "export parameter values to .sql file?")
-					.OnConfirmed(async () =>
-					{
-						var values = await parameterValues.MostRecentAsync().ToArrayAsync();
-						var fileName = await valuesExport.ExportAsync(values);
-						messageBox.Show("values are exported successfully", $"script file name: '{fileName}'");
-					});
+					.OnConfirmed(ExportOnConfirmed);
 
 			return this;
+		}
+
+		/// <summary>
+		/// Export parameter values to file.
+		/// </summary>
+		private async Task ExportOnConfirmed()
+		{
+			loader.OnLoadingStarted();
+			NonEmptyString fileName;
+
+			try
+			{
+				var values = await parameterValues.MostRecentAsync().ToArrayAsync();
+				fileName = await valuesExport.ExportAsync(values);
+			}
+			catch (Exception exception)
+			{
+				messageBox.Error("failed to export values", exception);
+				return;
+			}
+			finally
+			{
+				loader.OnLoadingFinished();
+			}
+
+			messageBox.Info("values are exported successfully", $"script file name: '{fileName}'");
 		}
 	}
 }

@@ -20,7 +20,7 @@ namespace Postgres.Marula.Infrastructure.Http
 			Uri baseAddress,
 			IJsonConverters jsonConverters)
 		{
-			httpClient = new() {BaseAddress = baseAddress};
+			httpClient = new() {BaseAddress = baseAddress, Timeout = TimeSpan.FromSeconds(5)};
 			this.jsonConverters = jsonConverters;
 		}
 
