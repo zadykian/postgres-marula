@@ -94,6 +94,7 @@ namespace Postgres.Marula.HttpApi.Common
 					options.DocumentTitle = EntryAssemblyName;
 					options.RoutePrefix = string.Empty;
 					options.SwaggerEndpoint($"/swagger/{ApiVersion}/swagger.json", EntryAssemblyName);
+					options.DisplayRequestDuration();
 				});
 
 		/// <inheritdoc />
