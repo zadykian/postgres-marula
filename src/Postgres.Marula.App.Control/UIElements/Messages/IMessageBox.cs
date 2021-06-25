@@ -1,5 +1,4 @@
 using System;
-using System.Threading.Tasks;
 using Postgres.Marula.Infrastructure.TypeDecorators;
 
 namespace Postgres.Marula.App.Control.UIElements.Messages
@@ -13,7 +12,7 @@ namespace Postgres.Marula.App.Control.UIElements.Messages
 		/// Show message box with <paramref name="title"/>, <paramref name="message"/>
 		/// and confirm/reject buttons
 		/// </summary>
-		Task<ConfirmationResult> QueryAsync(NonEmptyString title, NonEmptyString message);
+		ConfirmationResult Query(NonEmptyString title, NonEmptyString message);
 
 		/// <summary>
 		/// Show info message box with <paramref name="title"/> and <paramref name="message"/>. 
@@ -23,6 +22,6 @@ namespace Postgres.Marula.App.Control.UIElements.Messages
 		/// <summary>
 		/// Show error message box with <paramref name="title"/> and <see cref="Exception.Message"/>.
 		/// </summary>
-		void Error( NonEmptyString title, Exception exception);
+		void Error(NonEmptyString title, Exception exception);
 	}
 }

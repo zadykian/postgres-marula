@@ -42,8 +42,8 @@ namespace Postgres.Marula.App.Control.UIElements.Buttons
 
 			Clicked += async ()
 				=> await messageBox
-					.QueryAsync("export values", "export parameter values to .sql file?")
-					.OnConfirmed(ExportOnConfirmed);
+					.Query("export values", "export parameter values to .sql file?")
+					.OnConfirmedAsync(ExportOnConfirmed);
 
 			return this;
 		}

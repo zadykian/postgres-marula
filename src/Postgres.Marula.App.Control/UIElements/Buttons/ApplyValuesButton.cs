@@ -26,8 +26,8 @@ namespace Postgres.Marula.App.Control.UIElements.Buttons
 
 			Clicked += async ()
 				=> await messageBox
-					.QueryAsync("apply values", "apply calculated values to database server configuration?")
-					.OnConfirmed(() =>
+					.Query("apply values", "apply calculated values to database server configuration?")
+					.OnConfirmedAsync(() =>
 					{
 						// todo
 						return Task.CompletedTask;

@@ -23,7 +23,7 @@ namespace Postgres.Marula.App.Control.UIElements.Menu.Items
 		/// <inheritdoc />
 		public override async Task HandleClickAsync()
 			=> await messageBox
-				.QueryAsync(Name, "are you sure are you want to quit from ctl app?")
-				.OnConfirmed(uiShutdown.StopAsync);
+				.Query(Name, "are you sure are you want to quit from ctl app?")
+				.OnConfirmedAsync(uiShutdown.StopAsync);
 	}
 }

@@ -1,5 +1,4 @@
 using System;
-using System.Threading.Tasks;
 using Postgres.Marula.Infrastructure.TypeDecorators;
 using Terminal.Gui;
 
@@ -9,10 +8,8 @@ namespace Postgres.Marula.App.Control.UIElements.Messages
 	internal class TerminalMessageBox : IMessageBox
 	{
 		/// <inheritdoc />
-		async Task<ConfirmationResult> IMessageBox.QueryAsync(NonEmptyString title, NonEmptyString message)
+		ConfirmationResult IMessageBox.Query(NonEmptyString title, NonEmptyString message)
 		{
-			await Task.CompletedTask;
-
 			var answerButtonNumber = MessageBox.Query(
 				(string) title,
 				(string) message, "yes", "no");
@@ -27,7 +24,7 @@ namespace Postgres.Marula.App.Control.UIElements.Messages
 			=> MessageBox.Query((string) title, (string) message, "ok");
 
 		/// <inheritdoc />
-		void IMessageBox.Error( NonEmptyString title, Exception exception)
+		void IMessageBox.Error(NonEmptyString title, Exception exception)
 			=> MessageBox.ErrorQuery((string) title, $"error occured: '{exception.Message}'", "ok");
 	}
 }
