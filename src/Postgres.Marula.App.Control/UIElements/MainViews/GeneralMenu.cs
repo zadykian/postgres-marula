@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Postgres.Marula.App.Control.UIElements.Extensions;
-using Postgres.Marula.App.Control.UIElements.Menu.Items;
+using Postgres.Marula.App.Control.UIElements.Menu;
+using Postgres.Marula.App.Control.UIElements.Menu.Items.Base;
 using Postgres.Marula.Infrastructure.Extensions;
 using Terminal.Gui;
 

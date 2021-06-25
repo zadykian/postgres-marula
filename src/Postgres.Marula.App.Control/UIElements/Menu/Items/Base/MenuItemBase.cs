@@ -1,12 +1,12 @@
 using System.Threading.Tasks;
 using Postgres.Marula.Infrastructure.TypeDecorators;
 
-namespace Postgres.Marula.App.Control.UIElements.Menu.Items
+namespace Postgres.Marula.App.Control.UIElements.Menu.Items.Base
 {
 	/// <inheritdoc />
-	internal class MenuItem : IMenuItem
+	internal abstract class MenuItemBase : IMenuItem
 	{
-		public MenuItem(NonEmptyString name, byte order)
+		protected MenuItemBase(NonEmptyString name, byte order)
 		{
 			Name = name;
 			Order = order;
@@ -19,7 +19,7 @@ namespace Postgres.Marula.App.Control.UIElements.Menu.Items
 		public NonEmptyString Name { get; }
 
 		/// <inheritdoc />
-		public virtual async Task HandleClickAsync() => await Task.CompletedTask;
+		public abstract Task HandleClickAsync();
 
 		/// <inheritdoc />
 		public override string ToString() => $"> {Name}";

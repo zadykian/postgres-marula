@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.Logging;
 using Postgres.Marula.App.Control.UIElements.Menu.Items;
+using Postgres.Marula.App.Control.UIElements.Menu.Items.Base;
 using Postgres.Marula.Calculations.PublicApi;
 
 namespace Postgres.Marula.App.Control.UIElements.Menu
@@ -38,7 +39,7 @@ namespace Postgres.Marula.App.Control.UIElements.Menu
 			{
 				jobInfoItems = await jobs
 					.InfoAboutAllAsync()
-					.Select((jobInfo, index) => new MenuItem(jobInfo.Name, (byte) index))
+					.Select((jobInfo, index) => new JobMenuItem(jobInfo, (byte) index))
 					.ToArrayAsync()
 					.ConfigureAwait(false);
 			}

@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using Postgres.Marula.App.Control.UIElements.Lifetime;
+using Postgres.Marula.App.Control.UIElements.Menu.Items.Base;
 using Postgres.Marula.App.Control.UIElements.Messages;
 
 namespace Postgres.Marula.App.Control.UIElements.Menu.Items
@@ -7,7 +8,7 @@ namespace Postgres.Marula.App.Control.UIElements.Menu.Items
 	/// <summary>
 	/// Quit menu item.
 	/// </summary>
-	internal class QuitMenuItem : MenuItem
+	internal class QuitMenuItem : MenuItemBase
 	{
 		private readonly IUIShutdown uiShutdown;
 		private readonly IMessageBox messageBox;

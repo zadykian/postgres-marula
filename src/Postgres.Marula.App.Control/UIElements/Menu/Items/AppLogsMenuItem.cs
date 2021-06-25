@@ -1,12 +1,13 @@
 using System.Threading.Tasks;
 using Postgres.Marula.App.Control.UIElements.MainViews;
+using Postgres.Marula.App.Control.UIElements.Menu.Items.Base;
 
 namespace Postgres.Marula.App.Control.UIElements.Menu.Items
 {
 	/// <summary>
 	/// Control application logs menu item.
 	/// </summary>
-	internal class AppLogsMenuItem : MenuItem
+	internal class AppLogsMenuItem : MenuItemBase
 	{
 		private readonly IOutputWindow outputWindow;
 

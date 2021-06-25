@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using Postgres.Marula.Infrastructure.TypeDecorators;
 
-namespace Postgres.Marula.App.Control.UIElements.Menu.Items
+namespace Postgres.Marula.App.Control.UIElements.Menu.Items.Base
 {
 	/// <summary>
 	/// Control application menu item.

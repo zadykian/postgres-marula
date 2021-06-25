@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Postgres.Marula.App.Control.UIElements.MainViews;
+using Postgres.Marula.App.Control.UIElements.Menu.Items.Base;
 using Postgres.Marula.App.Control.UIElements.Messages;
 using Postgres.Marula.Calculations.PublicApi;
 
@@ -11,7 +12,7 @@ namespace Postgres.Marula.App.Control.UIElements.Menu.Items
 	/// <summary>
 	/// Calculated values menu item.
 	/// </summary>
-	internal class CalculatedValuesMenuItem : MenuItem
+	internal class CalculatedValuesMenuItem : MenuItemBase
 	{
 		private readonly IParameterValues parameterValues;
 		private readonly IOutputWindow outputWindow;
