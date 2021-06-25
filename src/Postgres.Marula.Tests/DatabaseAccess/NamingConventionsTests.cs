@@ -1,24 +1,17 @@
 using System.Text.RegularExpressions;
-using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
+using Postgres.Marula.DatabaseAccess;
 using Postgres.Marula.DatabaseAccess.Conventions;
 using Postgres.Marula.Infrastructure.Extensions;
-using Postgres.Marula.Tests.DatabaseAccess.Base;
+using Postgres.Marula.Tests.Base;
 
 namespace Postgres.Marula.Tests.DatabaseAccess
 {
 	/// <summary>
 	/// Database objects naming conventions tests.
 	/// </summary>
-	internal class NamingConventionsTests : DatabaseAccessTestFixtureBase
+	internal class NamingConventionsTests : SingleComponentTestFixtureBase<DatabaseAccessAppComponent>
 	{
-		/// <inheritdoc />
-		protected override void ConfigureServices(IServiceCollection serviceCollection)
-		{
-			base.ConfigureServices(serviceCollection);
-			serviceCollection.AddSingleton<INamingConventions, DefaultNamingConventions>();
-		}
-
 		/// <summary>
 		/// System schema name format test.
 		/// </summary>
