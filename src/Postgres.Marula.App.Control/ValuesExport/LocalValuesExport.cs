@@ -14,7 +14,7 @@ namespace Postgres.Marula.App.Control.ValuesExport
 		/// <inheritdoc />
 		async Task<NonEmptyString> IValuesExport.ExportAsync(IEnumerable<IValueView> valueViews)
 		{
-			var fileName = $"marula-profile-{DateTime.Now:yyyy-MM-dd_hh-mm-ss}.sql";
+			var fileName = $"marula-profile-{DateTime.Now:yyyy-MM-dd_HH-mm-ss}.sql";
 			var fullPath = Path.Combine(Environment.CurrentDirectory, fileName);
 			var alterSystemLines = valueViews.Select(view => (string) view.AsAlterSystem());
 			await File.WriteAllLinesAsync(fullPath, alterSystemLines);
