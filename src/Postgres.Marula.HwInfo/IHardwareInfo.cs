@@ -14,11 +14,11 @@ namespace Postgres.Marula.HwInfo
 		/// <summary>
 		/// Total size of RAM.
 		/// </summary>
-		Task<Memory> TotalRam();
+		Task<Memory> GetTotalRamAsync();
 
 		/// <summary>
 		/// Number of CPU cores. 
 		/// </summary>
-		Task<CoresCount> CpuCoresCount();
+		Task<CoresCount> GetCpuCoresCountAsync();
 	}
 }

@@ -27,7 +27,8 @@ namespace Postgres.Marula.Tests.Calculations
 			var parameterValue = parameterValueParser.Parse(parameterLink, rawParameterValue);
 
 			Assert.IsInstanceOf<TimeSpanParameterValue>(parameterValue);
-			Assert.AreEqual(new IUnit.Milliseconds(), parameterValue.Unit);
+			// 30s is more then 10s, so it's normalized to seconds.
+			Assert.AreEqual(new IUnit.TimeSpan(PositiveTimeSpan.Unit.Seconds), parameterValue.Unit);
 			Assert.AreEqual(parameterLink, parameterValue.Link);
 		}
 

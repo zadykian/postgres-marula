@@ -3,3 +3,4 @@ bin/
 obj/
 *.local.json
 *.user
+marula-profile*

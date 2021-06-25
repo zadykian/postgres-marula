@@ -11,7 +11,7 @@ namespace Postgres.Marula.Calculations.Exceptions
 		/// <summary>
 		/// Get exception object which is being thrown when
 		/// there is not enough LSN history entries
-		/// in window <see cref="IPeriodicLoggingConfiguration.MovingAverageWindow"/>.
+		/// in window <see cref="IPeriodicLoggingConfiguration.RollingWindow"/>.
 		/// </summary>
 		public static ParameterValueCalculationException NoLsnHistory()
 			=> new("There is not enough LSN history entries in configured window.");
@@ -19,7 +19,7 @@ namespace Postgres.Marula.Calculations.Exceptions
 		/// <summary>
 		/// Get exception object which is being thrown when
 		/// there is not enough bloat fraction history entries
-		/// in window <see cref="IPeriodicLoggingConfiguration.MovingAverageWindow"/>.
+		/// in window <see cref="IPeriodicLoggingConfiguration.RollingWindow"/>.
 		/// </summary>
 		public static ParameterValueCalculationException NoBloatHistory()
 			=> new("There is not enough bloat fraction history entries in configured window.");

@@ -18,12 +18,12 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 	/// <inheritdoc cref="ISystemStorage" />
 	internal class DefaultSystemStorage : DatabaseInteractionComponent, ISystemStorage
 	{
-		private readonly INamingConventions namingConventions;
+		private readonly INamingConventions conventions;
 
 		public DefaultSystemStorage(
 			IDbConnectionFactory dbConnectionFactory,
-			INamingConventions namingConventions) : base(dbConnectionFactory)
-			=> this.namingConventions = namingConventions;
+			INamingConventions conventions) : base(dbConnectionFactory)
+			=> this.conventions = conventions;
 
 		/// <inheritdoc />
 		async Task ISystemStorage.SaveParameterValuesAsync(IReadOnlyCollection<ParameterValueWithStatus> parameterValues)
@@ -34,8 +34,8 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 			}
 
 			var commandText = GetCommandTextToInsertValues(parameterValues);
-			var dbConnection = await Connection();
-			await dbConnection.ExecuteAsync(commandText);
+			var connection = await Connection();
+			await connection.ExecuteAsync(commandText);
 		}
 
 		/// <summary>
@@ -51,7 +51,7 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 							{parameterValues.Select(ToValuesString).JoinBy($",{Environment.NewLine}")}
 					) as values
 				)
-				insert into {namingConventions.SystemSchemaName}.{namingConventions.ValuesHistoryTableName}
+				insert into {conventions.SystemSchemaName}.{conventions.ValuesHistoryTableName}
 					(parameter_id, calculated_value, unit, status)
 				select
 					parameters.id,
@@ -59,7 +59,7 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 					parameter_values.unit,
 					parameter_values.status
 				from
-					{namingConventions.SystemSchemaName}.{namingConventions.ParametersTableName} as parameters
+					{conventions.SystemSchemaName}.{conventions.ParametersTableName} as parameters
 
 				-- perform right join to fail in case when
 				-- parameters dictionary table is not consistent.
@@ -78,10 +78,10 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 					$"'{parameterValue.Value}'",
 
 					$"'{parameterValue.Value.Unit.AsString()}'" +
-					$"::{namingConventions.SystemSchemaName}.{namingConventions.ParameterUnitEnumName}",
+					$"::{conventions.SystemSchemaName}.{conventions.ParameterUnitEnumName}",
 
 					$"'{parameterValue.CalculationStatus.StringRepresentation()}'" +
-					$"::{namingConventions.SystemSchemaName}.{namingConventions.CalculationStatusEnumName}"
+					$"::{conventions.SystemSchemaName}.{conventions.CalculationStatusEnumName}"
 				}
 				.JoinBy(", ")
 				.To(values => $"({values})");
@@ -90,28 +90,28 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 		async Task ISystemStorage.SaveLogSeqNumberAsync(LogSeqNumber logSeqNumber)
 		{
 			var commandText = string.Intern($@"
-				insert into {namingConventions.SystemSchemaName}.{namingConventions.WalLsnHistoryTableName}
+				insert into {conventions.SystemSchemaName}.{conventions.WalLsnHistoryTableName}
 					(wal_insert_location)
 				values
 					(@{nameof(logSeqNumber)}::pg_catalog.pg_lsn);");
 
-			var dbConnection = await Connection();
-			await dbConnection.ExecuteAsync(commandText, new {logSeqNumber});
+			var connection = await Connection();
+			await connection.ExecuteAsync(commandText, new {logSeqNumber});
 		}
 
 		/// <inheritdoc />
 		async IAsyncEnumerable<LsnHistoryEntry> ISystemStorage.GetLsnHistoryAsync(PositiveTimeSpan window)
 		{
-			var commandText = string.Intern($@"
+			var queryText = string.Intern($@"
 				select
 					log_timestamp       as {nameof(LsnHistoryEntry.LogTimestamp)},
 					wal_insert_location as {nameof(LsnHistoryEntry.WalInsertLocation)}
-				from {namingConventions.SystemSchemaName}.{namingConventions.WalLsnHistoryTableName}
+				from {conventions.SystemSchemaName}.{conventions.WalLsnHistoryTableName}
 				where log_timestamp >= (current_timestamp - @Window)
 				order by log_timestamp;");
 
-			var dbConnection = await Connection();
-			var historyEntries = await dbConnection.QueryAsync<LsnHistoryEntry>(commandText, new {Window = (TimeSpan) window});
+			var connection = await Connection();
+			var historyEntries = await connection.QueryAsync<LsnHistoryEntry>(queryText, new {Window = (TimeSpan) window});
 			foreach (var lsnHistoryEntry in historyEntries) yield return lsnHistoryEntry;
 		}
 
@@ -119,28 +119,28 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 		async Task ISystemStorage.SaveBloatFractionAsync(Fraction averageBloatFraction)
 		{
 			var commandText = $@"
-				insert into {namingConventions.SystemSchemaName}.{namingConventions.BloatFractionHistoryTableName}
+				insert into {conventions.SystemSchemaName}.{conventions.BloatFractionHistoryTableName}
 					(average_bloat_fraction)
 				values
 					(@{nameof(averageBloatFraction)});";
 
-			var dbConnection = await Connection();
-			await dbConnection.ExecuteAsync(commandText, new {averageBloatFraction});
+			var connection = await Connection();
+			await connection.ExecuteAsync(commandText, new {averageBloatFraction});
 		}
 
 		/// <inheritdoc />
 		async IAsyncEnumerable<BloatFractionHistoryEntry> ISystemStorage.GetBloatFractionHistory(PositiveTimeSpan window)
 		{
-			var commandText = string.Intern($@"
+			var queryText = string.Intern($@"
 				select
 					log_timestamp          as {nameof(BloatFractionHistoryEntry.LogTimestamp)},
 					average_bloat_fraction as {nameof(BloatFractionHistoryEntry.AverageBloatFraction)}
-				from {namingConventions.SystemSchemaName}.{namingConventions.BloatFractionHistoryTableName}
+				from {conventions.SystemSchemaName}.{conventions.BloatFractionHistoryTableName}
 				where log_timestamp >= (current_timestamp - @Window)
 				order by log_timestamp;");
 
-			var dbConnection = await Connection();
-			var historyEntries = await dbConnection.QueryAsync<BloatFractionHistoryEntry>(commandText, new {Window = (TimeSpan) window});
+			var connection = await Connection();
+			var historyEntries = await connection.QueryAsync<BloatFractionHistoryEntry>(queryText, new {Window = (TimeSpan) window});
 			foreach (var bloatFractionHistoryEntry in historyEntries) yield return bloatFractionHistoryEntry;
 		}
 	}

@@ -33,7 +33,7 @@ namespace Postgres.Marula.Calculations.ParametersManagement
 			this.databaseServer = databaseServer;
 			this.parameterValueParser = parameterValueParser;
 			this.configuration = configuration;
-			valuesCache = new();
+			valuesCache = new(new LinkComparer());
 		}
 
 		/// <inheritdoc />
@@ -70,7 +70,7 @@ namespace Postgres.Marula.Calculations.ParametersManagement
 
 		/// <inheritdoc />
 		async Task<TValue> IPgSettings.ReadAsync<TParameter, TValue>()
-			=> await ReadAsyncInternal<TValue>(new ParameterLink(typeof(TParameter)));
+			=> await ReadAsyncInternal<TValue>(new Link<TParameter>());
 
 		/// <inheritdoc />
 		async Task<TValue> IPgSettings.ReadAsync<TValue>(NonEmptyString parameterName)
@@ -125,5 +125,19 @@ namespace Postgres.Marula.Calculations.ParametersManagement
 		/// Value was updated by application and needs to be flushed to database server.
 		/// </param>
 		private sealed record CacheEntry(IParameterValue Value, bool Updated);
+
+		/// <inheritdoc />
+		private sealed class LinkComparer : IEqualityComparer<IParameterLink>
+		{
+			/// <inheritdoc />
+			bool IEqualityComparer<IParameterLink>.Equals(IParameterLink? left, IParameterLink? right)
+			{
+				if (left is null || right is null) throw new ArgumentNullException();
+				return left.Name.Equals(right.Name);
+			}
+
+			/// <inheritdoc />
+			int IEqualityComparer<IParameterLink>.GetHashCode(IParameterLink link) => link.Name.GetHashCode();
+		}
 	}
 }

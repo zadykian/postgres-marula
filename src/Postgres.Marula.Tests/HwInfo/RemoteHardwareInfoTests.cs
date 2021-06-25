@@ -4,10 +4,11 @@ using System.IO;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
-using Postgres.Marula.Agent;
+using Postgres.Marula.App.Agent.Api;
 using Postgres.Marula.Calculations.HardwareInfo;
 using Postgres.Marula.HwInfo;
 using Postgres.Marula.Infrastructure.Extensions;
+using Postgres.Marula.Infrastructure.JsonSerialization;
 using Postgres.Marula.Infrastructure.TypeDecorators;
 
 // ReSharper disable SwitchExpressionHandlesSomeKnownEnumValuesWithExceptionInDefault
@@ -25,6 +26,7 @@ namespace Postgres.Marula.Tests.HwInfo
 		protected override void ConfigureServices(IServiceCollection serviceCollection)
 		{
 			base.ConfigureServices(serviceCollection);
+			serviceCollection.AddSingleton<IJsonConverters, JsonConverters>();
 			serviceCollection.AddSingleton<IHardwareInfo, RemoteHardwareInfo>();
 		}
 
@@ -44,8 +46,7 @@ namespace Postgres.Marula.Tests.HwInfo
 				errorOutputTask,
 				Task.Delay(millisecondsDelay: 5000)) == errorOutputTask)
 			{
-				await TestContext.Error.WriteLineAsync(errorOutputTask.Result);
-				Assert.Fail("failed to start agent process.");
+				Assert.Fail($"failed to start agent process: {errorOutputTask.Result}.");
 			}
 
 			TestContext.WriteLine("agent process is started.");

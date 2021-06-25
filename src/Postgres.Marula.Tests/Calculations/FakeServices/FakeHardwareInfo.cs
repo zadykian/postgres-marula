@@ -11,9 +11,9 @@ namespace Postgres.Marula.Tests.Calculations.FakeServices
 	internal class FakeHardwareInfo : IHardwareInfo
 	{
 		/// <inheritdoc />
-		Task<Memory> IHardwareInfo.TotalRam() => Task.FromResult(32 * Memory.Gigabyte);
+		Task<Memory> IHardwareInfo.GetTotalRamAsync() => Task.FromResult(32 * Memory.Gigabyte);
 
 		/// <inheritdoc />
-		Task<CoresCount> IHardwareInfo.CpuCoresCount() => Task.FromResult((CoresCount) 16);
+		Task<CoresCount> IHardwareInfo.GetCpuCoresCountAsync() => Task.FromResult((CoresCount) 16);
 	}
 }

@@ -68,7 +68,7 @@ namespace Postgres.Marula.Calculations.Configuration
 			/// <inheritdoc />
 			Uri IGeneralConfiguration.AgentApiUri()
 				=> configurationSection
-					.GetSection("AgentEndpoint")
+					.GetSection("AgentApiUri")
 					.Value
 					.To(uriString => new Uri(uriString));
 		}
@@ -89,9 +89,9 @@ namespace Postgres.Marula.Calculations.Configuration
 					.To(ParseFromSeconds);
 
 			/// <inheritdoc />
-			PositiveTimeSpan IPeriodicLoggingConfiguration.MovingAverageWindow()
+			PositiveTimeSpan IPeriodicLoggingConfiguration.RollingWindow()
 				=> configurationSection
-					.GetSection("MovingAverageWindowInSeconds")
+					.GetSection("RollingWindowInSeconds")
 					.To(ParseFromSeconds);
 		}
 	}

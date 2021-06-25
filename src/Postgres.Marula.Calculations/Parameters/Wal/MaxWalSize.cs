@@ -67,9 +67,11 @@ namespace Postgres.Marula.Calculations.Parameters.Wal
 			var multiplier = await databaseServer.GetPostgresVersionAsync() >= new Version(11, 0) ? 1 : 2;
 			var checkpointCompletionTarget = await pgSettings.ReadAsync<CheckpointCompletionTarget, Fraction>();
 
-			return walTrafficPerSecond
+			var calculated = walTrafficPerSecond
 			       * checkpointTimeout.TotalSeconds
 			       * (multiplier + checkpointCompletionTarget);
+
+			return calculated.Limit(Memory.Gigabyte, 32 * Memory.Gigabyte);
 		}
 
 		/// <summary>

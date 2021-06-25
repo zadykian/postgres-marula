@@ -10,6 +10,7 @@ create type UNIT_ENUM_NAME_TO_REPLACE as enum
 	'gigabytes',
 	'terabytes',
 	'milliseconds',
+	'seconds',
 	'enum',
 	'none'
 );

@@ -2,15 +2,17 @@ using System.Runtime.CompilerServices;
 using Microsoft.Extensions.DependencyInjection;
 using Postgres.Marula.Calculations.Configuration;
 using Postgres.Marula.Calculations.HardwareInfo;
-using Postgres.Marula.Calculations.Jobs.Base;
 using Postgres.Marula.Calculations.Parameters.Autovacuum.Bloat;
 using Postgres.Marula.Calculations.Parameters.Base;
 using Postgres.Marula.Calculations.Parameters.Wal.LsnHistory;
 using Postgres.Marula.Calculations.ParametersManagement;
 using Postgres.Marula.Calculations.ParameterValues.Parsing;
+using Postgres.Marula.Calculations.PeriodicJobs.Base;
+using Postgres.Marula.Calculations.PeriodicJobs.PublicApi;
 using Postgres.Marula.Calculations.Pipeline;
 using Postgres.Marula.Calculations.Pipeline.Factory;
 using Postgres.Marula.Calculations.Pipeline.MiddlewareComponents;
+using Postgres.Marula.Calculations.PublicApi;
 using Postgres.Marula.HwInfo;
 using Postgres.Marula.Infrastructure.AppComponents;
 using Postgres.Marula.Infrastructure.Extensions;
@@ -23,7 +25,7 @@ namespace Postgres.Marula.Calculations
 	public class CalculationsAppComponent : IAppComponent
 	{
 		/// <inheritdoc />
-		void IAppComponent.RegisterServices(IServiceCollection serviceCollection)
+		IServiceCollection IAppComponent.RegisterServices(IServiceCollection serviceCollection)
 			=> serviceCollection
 				.AddSingleton<ICalculationsConfiguration, CalculationsConfiguration>()
 				.AddSingleton<IParameterValueParser, DefaultParameterValueParser>()
@@ -33,7 +35,8 @@ namespace Postgres.Marula.Calculations
 				.AddSingleton<IHardwareInfo, RemoteHardwareInfo>()
 				.AddBasedOn<IParameter>(ServiceLifetime.Scoped)
 				.To(RegisterPipelineServices)
-				.AddBasedOn<IJob>();
+				.AddBasedOn<IJob>()
+				.AddSingleton<IJobs, Jobs>();
 
 		/// <summary>
 		/// Register services related to calculations pipeline.

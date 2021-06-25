@@ -197,7 +197,7 @@ namespace Postgres.Marula.Infrastructure.TypeDecorators
 		/// <summary>
 		/// Memory unit.
 		/// </summary>
-		public enum Unit
+		public enum Unit : byte
 		{
 			/// <summary>
 			/// Bytes.

@@ -25,7 +25,7 @@ namespace Postgres.Marula.Calculations.Parameters.Autovacuum
 
 		protected override async ValueTask<CoresCount> CalculateValueAsync()
 		{
-			var cpuCoresCount = await hardwareInfo.CpuCoresCount();
+			var cpuCoresCount = await hardwareInfo.GetCpuCoresCountAsync();
 			return (CoresCount) (0.5 * cpuCoresCount);
 		}
 	}

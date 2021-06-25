@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -10,13 +9,14 @@ using Postgres.Marula.Calculations.ExternalDependencies;
 using Postgres.Marula.Calculations.ParameterProperties;
 using Postgres.Marula.Calculations.ParameterProperties.StringRepresentation;
 using Postgres.Marula.Calculations.Parameters.Base;
-using Postgres.Marula.Calculations.ParameterValues;
 using Postgres.Marula.Calculations.ParameterValues.Base;
 using Postgres.Marula.Calculations.ParameterValues.Raw;
+using Postgres.Marula.Calculations.PublicApi;
 using Postgres.Marula.DatabaseAccess.Configuration;
 using Postgres.Marula.DatabaseAccess.ConnectionFactory;
 using Postgres.Marula.DatabaseAccess.ServerInteraction.Base;
 using Postgres.Marula.DatabaseAccess.ServerInteraction.Exceptions;
+using Postgres.Marula.DatabaseAccess.ServerInteraction.ViewFactory;
 using Postgres.Marula.Infrastructure.Extensions;
 using Postgres.Marula.Infrastructure.TypeDecorators;
 
@@ -29,11 +29,16 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 	internal class DefaultDatabaseServer : DatabaseInteractionComponent, IDatabaseServer
 	{
 		private readonly IDatabaseAccessConfiguration configuration;
+		private readonly IValueViewFactory valueViewFactory;
 
 		public DefaultDatabaseServer(
 			IDbConnectionFactory dbConnectionFactory,
+			IValueViewFactory valueViewFactory,
 			IDatabaseAccessConfiguration configuration) : base(dbConnectionFactory)
-			=> this.configuration = configuration;
+		{
+			this.configuration = configuration;
+			this.valueViewFactory = valueViewFactory;
+		}
 
 		/// <inheritdoc />
 		async Task IDatabaseServer.ApplyToConfigurationAsync(IReadOnlyCollection<IParameterValue> parameterValues)
@@ -44,12 +49,14 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 			}
 
 			var alterSystemCommands = await parameterValues
-				.SelectAsync(async value =>
-					$"alter system set {value.Link.Name} = " +
-					$"'{await GetValueStringRepresentation(value)}';");
+				.ToAsyncEnumerable()
+				.SelectAwait(async value => await valueViewFactory.CreateAsync(value.Link, value.ToString()!))
+				.Select(view => view.AsAlterSystem())
+				.ToArrayAsync();
 
 			var commandText = alterSystemCommands
 				.Add("select pg_reload_conf();")
+				.Select(nonEmpty => (string) nonEmpty)
 				.JoinBy(Environment.NewLine);
 
 			var connection = await Connection();
@@ -59,38 +66,6 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 			{
 				throw new DatabaseServerConfigurationException("Failed to reload server configuration.");
 			}
-		}
-
-		/// <summary>
-		/// Get parameter value full string representation.
-		/// </summary>
-		private async ValueTask<NonEmptyString> GetValueStringRepresentation(IParameterValue parameterValue)
-		{
-			if (parameterValue is not FractionParameterValue fractionParameterValue)
-			{
-				return parameterValue.ToString()!;
-			}
-
-			var commandText = string.Intern($@"
-				select min_val, max_val
-				from pg_catalog.pg_settings
-				where name = @{nameof(IParameterLink.Name)};");
-
-			var connection = await Connection();
-			var (minValue, maxValue) = await connection.QuerySingleAsync<(decimal, decimal)>(
-				commandText,
-				new {parameterValue.Link.Name});
-
-			var multiplier = (minValue, maxValue) switch
-			{
-				(decimal.Zero, decimal.One) => decimal.One,
-				(decimal.Zero, 100)         => 100,
-				_ => throw new NotSupportedException(
-					$"Fraction parameter range [{minValue} .. {maxValue}] is not " +
-					$"supported (parameter '{parameterValue.Link.Name}').")
-			};
-
-			return (fractionParameterValue.Value * multiplier).ToString(CultureInfo.InvariantCulture);
 		}
 
 		/// <inheritdoc />
@@ -200,10 +175,10 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 		/// <inheritdoc />
 		async Task<TuplesCount> IDatabaseServer.GetAverageTableSizeAsync()
 		{
-			var queryText = @"
+			var queryText = string.Intern(@"
 				select avg(n_live_tup + n_dead_tup)
 				from pg_catalog.pg_stat_all_tables
-				where n_live_tup + n_dead_tup != 0;";
+				where n_live_tup + n_dead_tup != 0;");
 
 			var connection = await Connection();
 			return await connection.ExecuteScalarAsync<TuplesCount>(queryText);
@@ -212,10 +187,10 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 		/// <inheritdoc />
 		async Task<Fraction> IDatabaseServer.GetAverageBloatFractionAsync()
 		{
-			var queryText = @"
+			var queryText = string.Intern(@"
 				select avg(n_dead_tup / (n_dead_tup + n_live_tup))
 				from pg_catalog.pg_stat_all_tables
-				where n_live_tup + n_dead_tup != 0;";
+				where n_live_tup + n_dead_tup != 0;");
 
 			var connection = await Connection();
 			return await connection.ExecuteScalarAsync<Fraction>(queryText);
@@ -224,7 +199,7 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 		/// <inheritdoc />
 		async IAsyncEnumerable<ParentToChild> IDatabaseServer.GetAllHierarchicalLinks()
 		{
-			var queryText = $@"
+			var queryText = string.Intern($@"
 				select
 					concat_ws('.',
 						parent_class.relnamespace::regnamespace,
@@ -237,7 +212,7 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 					on pg_inherits.inhparent = parent_class.oid
 				inner join pg_catalog.pg_class child_class
 					on pg_inherits.inhrelid = child_class.oid
-				where parent_class.relkind in ('p', 'r');";
+				where parent_class.relkind in ('p', 'r');");
 
 			var connection = await Connection();
 			var parentToChildLinks = await connection.QueryAsync<ParentToChild>(queryText);

@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using Postgres.Marula.Calculations.ParameterProperties;
 using Postgres.Marula.Calculations.Parameters.Base;
 
@@ -26,7 +27,8 @@ namespace Postgres.Marula.Calculations.ParameterValues.Base
 		public abstract IUnit Unit { get; }
 
 		/// <inheritdoc />
-		public override string ToString() => Value.ToString()!;
+		[return: NotNull]
+		public sealed override string ToString() => Value.ToString()!;
 
 		#region EqualityMembers
 

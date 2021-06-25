@@ -22,8 +22,30 @@ namespace Postgres.Marula.Infrastructure.TypeDecorators
 		/// <inheritdoc cref="TimeSpan.TotalSeconds"/>
 		public double TotalSeconds => underlyingValue.TotalSeconds;
 
+		/// <summary>
+		/// Normalize timespan value based on its' size. 
+		/// </summary>
+		public (ulong Value, Unit Unit) Normalized()
+			=> TotalMilliseconds switch
+			{
+				<= 10 * 1000 => ((ulong) TotalMilliseconds, Unit.Milliseconds),
+				_            => ((ulong) (TotalMilliseconds / 1000), Unit.Seconds)
+			};
+
 		/// <inheritdoc />
-		public override string ToString() => $"{(ulong) TotalMilliseconds}ms";
+		public override string ToString()
+		{
+			var (value, unit) = Normalized();
+
+			var unitString = unit switch
+			{
+				Unit.Milliseconds => "ms",
+				Unit.Seconds      => "s",
+				_ => throw new ArgumentOutOfRangeException()
+			};
+
+			return $"{value}{unitString}";
+		}
 
 		/// <inheritdoc />
 		public string ToString(string? format, IFormatProvider? formatProvider) => underlyingValue.ToString(format, formatProvider);
@@ -83,5 +105,21 @@ namespace Postgres.Marula.Infrastructure.TypeDecorators
 		/// Implicit cast operator <see cref="PositiveTimeSpan"/> -> <see cref="TimeSpan"/>.
 		/// </summary>
 		public static implicit operator TimeSpan(PositiveTimeSpan positiveTimeSpan) => positiveTimeSpan.underlyingValue;
+
+		/// <summary>
+		/// Timespan unit.
+		/// </summary>
+		public enum Unit : byte
+		{
+			/// <summary>
+			/// Milliseconds
+			/// </summary>
+			Milliseconds,
+
+			/// <summary>
+			/// Seconds
+			/// </summary>
+			Seconds
+		}
 	}
 }

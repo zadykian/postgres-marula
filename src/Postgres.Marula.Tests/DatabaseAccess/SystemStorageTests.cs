@@ -8,6 +8,7 @@ using Postgres.Marula.Calculations.ParameterProperties;
 using Postgres.Marula.Calculations.Parameters.Base;
 using Postgres.Marula.Calculations.ParameterValues;
 using Postgres.Marula.Calculations.ParameterValues.Base;
+using Postgres.Marula.Calculations.PublicApi;
 using Postgres.Marula.Infrastructure.Extensions;
 using Postgres.Marula.Infrastructure.TypeDecorators;
 using Postgres.Marula.Tests.DatabaseAccess.Base;
@@ -34,6 +35,7 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 		/// Save calculated values to system storage. 
 		/// </summary>
 		[Test]
+		[Order(0)]
 		public async Task SaveCalculatedValuesTest()
 		{
 			var parameterValues = new ParameterValueWithStatus[]
@@ -127,6 +129,18 @@ namespace Postgres.Marula.Tests.DatabaseAccess
 			var systemStorage = GetService<ISystemStorage>();
 			await systemStorage.SaveBloatFractionAsync(0.5M);
 			Assert.Pass();
+		}
+
+		/// <summary>
+		/// Get most recent parameter values.
+		/// </summary>
+		[Test]
+		[Order(1)]
+		public async Task MostResentValuesTest()
+		{
+			var parameterValues = GetService<IParameterValues>();
+			var mostRecent = await parameterValues.MostRecentAsync().ToArrayAsync();
+			Assert.True(mostRecent.Any());
 		}
 	}
 }

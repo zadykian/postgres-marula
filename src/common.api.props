@@ -1,0 +1,15 @@
+<Project>
+
+	<Import Project="$(MSBuildThisFileDirectory)\common.props" />
+
+	<PropertyGroup>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<NoDefaultLaunchSettingsFile>true</NoDefaultLaunchSettingsFile>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Postgres.Marula.Infrastructure\Postgres.Marula.Infrastructure.csproj" />
+		<ProjectReference Include="..\Postgres.Marula.HttpApi.Common\Postgres.Marula.HttpApi.Common.csproj" />
+	</ItemGroup>
+
+</Project>

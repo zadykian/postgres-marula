@@ -10,7 +10,7 @@ namespace Postgres.Marula.HwInfo
 	public class HwInfoAppComponent : IAppComponent
 	{
 		/// <inheritdoc />
-		void IAppComponent.RegisterServices(IServiceCollection serviceCollection)
+		IServiceCollection IAppComponent.RegisterServices(IServiceCollection serviceCollection)
 			=> _ = Environment.OSVersion.Platform switch
 			{
 				PlatformID.Unix    => Use<BashHardwareInfo>(serviceCollection),

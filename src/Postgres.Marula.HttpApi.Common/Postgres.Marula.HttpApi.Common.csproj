@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+	<Import Project="$(MSBuildThisFileDirectory)\..\common.props" />
+
+	<PropertyGroup>
+		<OutputType>Library</OutputType>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.1.4" />
+		<PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.1.4" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Postgres.Marula.Infrastructure\Postgres.Marula.Infrastructure.csproj" />
+	</ItemGroup>
+
+</Project>

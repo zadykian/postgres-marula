@@ -50,24 +50,24 @@ namespace Postgres.Marula.DatabaseAccess.ConnectionFactory
 			if (!await DatabaseStructureIsPrepared(dbConnection))
 			{
 				await sqlScriptsExecutor.ExecuteScriptsAsync(dbConnection);
+				await FillParameterDictionaryTable(dbConnection);
 			}
 
-			await FillParameterDictionaryTable(dbConnection);
 			return dbConnection;
 		}
 
 		/// <summary>
 		/// Figure out if database structure is prepared already.
 		/// </summary>
-		private async Task<bool> DatabaseStructureIsPrepared(IDbConnection dbConnection)
+		private async Task<bool> DatabaseStructureIsPrepared(IDbConnection connection)
 		{
-			var commandText = string.Intern($@"
+			var queryText = string.Intern($@"
 				select exists (
 					select null
 					from pg_catalog.pg_namespace
 					where nspname = @{nameof(INamingConventions.SystemSchemaName)});");
 
-			return await dbConnection.QuerySingleAsync<bool>(commandText, new {namingConventions.SystemSchemaName});
+			return await connection.QuerySingleAsync<bool>(queryText, new {namingConventions.SystemSchemaName});
 		}
 
 		/// <summary>
@@ -76,7 +76,9 @@ namespace Postgres.Marula.DatabaseAccess.ConnectionFactory
 		/// </summary>
 		private async Task FillParameterDictionaryTable(IDbConnection dbConnection)
 		{
-			var parameterNames = AllParameterNames();
+			var parameterNames = AllParameterLinks()
+				.Select(name => (string) name.Name)
+				.ToImmutableArray();
 
 			var commandText = string.Intern($@"
 				insert into {namingConventions.SystemSchemaName}.{namingConventions.ParametersTableName}
@@ -88,17 +90,15 @@ namespace Postgres.Marula.DatabaseAccess.ConnectionFactory
 		}
 
 		/// <summary>
-		/// Get names of all parameters defined in application. 
+		/// Get links to all parameters defined in application. 
 		/// </summary>
-		private static IEnumerable<string> AllParameterNames()
+		private static IEnumerable<IParameterLink> AllParameterLinks()
 			=> AppDomain
 				.CurrentDomain
 				.GetAssemblies()
 				.SelectMany(assembly => assembly.GetTypes())
 				.Where(type => !type.IsAbstract && type.IsAssignableTo(typeof(IParameter)))
 				.Select(parameterType => new ParameterLink(parameterType))
-				.Select(link => (string) link.Name)
-				.OrderBy(parameterName => parameterName)
-				.ToImmutableArray();
+				.OrderBy(link => link.Name);
 	}
 }

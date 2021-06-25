@@ -16,7 +16,7 @@ namespace Postgres.Marula.Infrastructure.TypeDecorators
 	{
 		private readonly object lockObject;
 		private readonly Func<Task<T>> factoryWithRetry;
-		private Lazy<Task<T>> instance;
+		private Lazy<Task<T>> lazyInstance;
 
 		/// <summary>
 		/// Create new instance of <see cref="AsyncLazy{T}"/> which uses <paramref name="factory"/>. 
@@ -25,7 +25,7 @@ namespace Postgres.Marula.Infrastructure.TypeDecorators
 		{
 			lockObject = new();
 			factoryWithRetry = RetryOnFailure(factory);
-			instance = New();
+			lazyInstance = New();
 		}
 
 		/// <summary>
@@ -33,7 +33,7 @@ namespace Postgres.Marula.Infrastructure.TypeDecorators
 		/// </summary>
 		public TaskAwaiter<T> GetAwaiter()
 		{
-			lock (lockObject) return instance.Value.GetAwaiter();
+			lock (lockObject) return lazyInstance.Value.GetAwaiter();
 		}
 
 		/// <summary>
@@ -48,7 +48,7 @@ namespace Postgres.Marula.Infrastructure.TypeDecorators
 				}
 				catch
 				{
-					lock (lockObject) instance = New();
+					lock (lockObject) lazyInstance = New();
 					throw;
 				}
 			};

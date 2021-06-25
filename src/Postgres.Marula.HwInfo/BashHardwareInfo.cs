@@ -21,7 +21,7 @@ namespace Postgres.Marula.HwInfo
 		protected override NonEmptyString PathToExecutable => "/bin/bash";
 
 		/// <inheritdoc />
-		protected override async Task<Memory> GetTotalRamAsync()
+		protected override async Task<Memory> GetTotalRamAsyncImpl()
 		{
 			const string fieldName = "MemTotal:";
 			var memTotalString = await ExecuteCommandAsync($"grep {fieldName} /proc/meminfo");
@@ -30,7 +30,7 @@ namespace Postgres.Marula.HwInfo
 		}
 
 		/// <inheritdoc />
-		protected override async Task<CoresCount> GetCpuCoresCountAsync()
+		protected override async Task<CoresCount> GetCpuCoresCountAsyncImpl()
 		{
 			var coresCountString = await ExecuteCommandAsync("nproc");
 			return CoresCount.Parse(coresCountString);

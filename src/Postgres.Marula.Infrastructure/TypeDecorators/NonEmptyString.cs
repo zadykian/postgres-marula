@@ -14,6 +14,9 @@ namespace Postgres.Marula.Infrastructure.TypeDecorators
 				? throw new ArgumentException("String value can't be whitespace.", nameof(underlyingValue))
 				: underlyingValue;
 
+		/// <inheritdoc cref="string.Length"/>
+		public int Length => underlyingValue.Length;
+
 		/// <summary>
 		/// Replace substring <paramref name="substring"/> with value <paramref name="replaceWith"/>
 		/// and return new <see cref="NonEmptyString"/> instance. 

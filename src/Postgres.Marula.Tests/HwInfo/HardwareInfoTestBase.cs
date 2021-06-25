@@ -17,7 +17,7 @@ namespace Postgres.Marula.Tests.HwInfo
 		protected async Task GetTotalMemoryTestImpl()
 		{
 			var hardwareInfo = GetService<IHardwareInfo>();
-			var totalMemory = await hardwareInfo.TotalRam();
+			var totalMemory = await hardwareInfo.GetTotalRamAsync();
 			Assert.AreNotEqual(Memory.Zero, totalMemory);
 		}
 
@@ -27,7 +27,7 @@ namespace Postgres.Marula.Tests.HwInfo
 		protected async Task GetCpuCoresCountTestImpl()
 		{
 			var hardwareInfo = GetService<IHardwareInfo>();
-			var coresCount = await hardwareInfo.CpuCoresCount();
+			var coresCount = await hardwareInfo.GetCpuCoresCountAsync();
 			Assert.AreNotEqual(0, coresCount);
 		}
 	}

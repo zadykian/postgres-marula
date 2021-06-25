@@ -7,10 +7,12 @@ using Dapper;
 using Microsoft.Extensions.DependencyInjection;
 using Npgsql;
 using Postgres.Marula.Calculations.ExternalDependencies;
+using Postgres.Marula.Calculations.PublicApi;
 using Postgres.Marula.DatabaseAccess.Configuration;
 using Postgres.Marula.DatabaseAccess.ConnectionFactory;
 using Postgres.Marula.DatabaseAccess.Conventions;
 using Postgres.Marula.DatabaseAccess.ServerInteraction;
+using Postgres.Marula.DatabaseAccess.ServerInteraction.ViewFactory;
 using Postgres.Marula.DatabaseAccess.SqlScripts.Executor;
 using Postgres.Marula.DatabaseAccess.SqlScripts.Provider;
 using Postgres.Marula.Infrastructure.AppComponents;
@@ -26,7 +28,7 @@ namespace Postgres.Marula.DatabaseAccess
 		public DatabaseAccessAppComponent() => RegisterDapperTypeHandlers();
 
 		/// <inheritdoc />
-		void IAppComponent.RegisterServices(IServiceCollection serviceCollection)
+		IServiceCollection IAppComponent.RegisterServices(IServiceCollection serviceCollection)
 			=> serviceCollection
 				.AddSingleton<INamingConventions, DefaultNamingConventions>()
 				.AddSingleton<ISqlScriptsProvider, AssemblyResourcesSqlScriptsProvider>()
@@ -34,8 +36,10 @@ namespace Postgres.Marula.DatabaseAccess
 				.AddSingleton<IDatabaseAccessConfiguration, DatabaseAccessConfiguration>()
 				.AddScoped(DbConnectionFactoryMethod)
 				.AddScoped<IDbConnectionFactory, DefaultDbConnectionFactory>()
+				.AddScoped<IValueViewFactory, ValueViewFactory>()
 				.AddScoped<IDatabaseServer, DefaultDatabaseServer>()
-				.AddScoped<ISystemStorage, DefaultSystemStorage>();
+				.AddScoped<ISystemStorage, DefaultSystemStorage>()
+				.AddScoped<IParameterValues, DefaultParameterValues>();
 
 		/// <summary>
 		/// Register all implementations of <see cref="SqlMapper.ITypeHandler"/> defined in current assembly.

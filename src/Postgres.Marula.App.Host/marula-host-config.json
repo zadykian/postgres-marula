@@ -1,0 +1,32 @@
+{
+	"Logging": {
+		"LogLevel": {
+			"Default": "Information"
+		}
+	},
+	"DatabaseAccess": {
+		"ConnectionString": "server=localhost; port=5432; database=postgres; username=postgres; password=postgres;"
+	},
+	"Calculations": {
+		"General": {
+			"RecalculationIntervalInSeconds": 60,
+			"AutoAdjustParams": false,
+			"AgentApiUri": "http://localhost:5000"
+		},
+		"Autovacuum": {
+			"BloatLoggingIntervalInSeconds": 600,
+			"RollingWindowInSeconds": 10800
+		},
+		"Wal": {
+			"LsnLoggingIntervalInSeconds": 60,
+			"RollingWindowInSeconds": 10800
+		}
+	},
+	"Kestrel": {
+		"Endpoints": {
+			"Http": {
+				"Url": "http://localhost:5001"
+			}
+		}
+	}
+}
