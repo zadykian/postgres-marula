@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Postgres.Marula.App.Control.UIElements.Buttons.Base;
-using Postgres.Marula.App.Control.UIElements.MainViews;
+using Postgres.Marula.App.Control.UIElements.MainViews.Loader;
 using Postgres.Marula.App.Control.UIElements.Messages;
 using Postgres.Marula.App.Control.ValuesExport;
 using Postgres.Marula.Calculations.PublicApi;

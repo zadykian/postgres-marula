@@ -1,24 +1,8 @@
 using System.Timers;
 using Terminal.Gui;
 
-namespace Postgres.Marula.App.Control.UIElements.MainViews
+namespace Postgres.Marula.App.Control.UIElements.MainViews.Loader
 {
-	/// <summary>
-	/// Loader UI element.
-	/// </summary>
-	internal interface ILoader
-	{
-		/// <summary>
-		/// Being invoked when some long-running process is started.
-		/// </summary>
-		void OnLoadingStarted();
-
-		/// <summary>
-		/// Being invoked when some long-running process is finished.
-		/// </summary>
-		void OnLoadingFinished();
-	}
-
 	/// <summary>
 	/// Loading bar.
 	/// </summary>

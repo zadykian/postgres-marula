@@ -3,7 +3,7 @@ using Postgres.Marula.App.Control.UIElements.Extensions;
 using Postgres.Marula.Infrastructure.Extensions;
 using Terminal.Gui;
 
-namespace Postgres.Marula.App.Control.UIElements.MainViews
+namespace Postgres.Marula.App.Control.UIElements.MainViews.Jobs
 {
 	/// <summary>
 	/// Frame with job management buttons. 

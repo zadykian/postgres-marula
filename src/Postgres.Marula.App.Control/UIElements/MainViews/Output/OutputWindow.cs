@@ -4,24 +4,8 @@ using Postgres.Marula.Infrastructure.Extensions;
 using Postgres.Marula.Infrastructure.TypeDecorators;
 using Terminal.Gui;
 
-namespace Postgres.Marula.App.Control.UIElements.MainViews
+namespace Postgres.Marula.App.Control.UIElements.MainViews.Output
 {
-	/// <summary>
-	/// Current output UI window.
-	/// </summary>
-	internal interface IOutputWindow
-	{
-		/// <summary>
-		/// Set new title for window. 
-		/// </summary>
-		IOutputWindow Titled(NonEmptyString newValue);
-
-		/// <summary>
-		/// Show <paramref name="output"/> in the window. 
-		/// </summary>
-		IOutputWindow Show<T>(IEnumerable<T> output);
-	}
-
 	/// <inheritdoc cref="IOutputWindow" />
 	internal class OutputWindow : FrameView, IOutputWindow
 	{

@@ -1,6 +1,10 @@
 using System.Threading.Tasks;
 using Postgres.Marula.App.Control.UIElements.Extensions;
 using Postgres.Marula.App.Control.UIElements.Lifetime;
+using Postgres.Marula.App.Control.UIElements.MainViews.General;
+using Postgres.Marula.App.Control.UIElements.MainViews.Jobs;
+using Postgres.Marula.App.Control.UIElements.MainViews.Loader;
+using Postgres.Marula.App.Control.UIElements.MainViews.Output;
 using Postgres.Marula.Infrastructure.Extensions;
 using Terminal.Gui;
 
@@ -43,8 +47,7 @@ namespace Postgres.Marula.App.Control.UIElements.MainViews
 		{
 			Title = "postgres-marula-ctl";
 			ColorScheme = DefaultColorScheme();
-			Width = Dim.Fill();
-			Height = Dim.Fill();
+			this.FillDimensions();
 
 			Add(await generalMenu.InitializeAsync().ConfigureAwait(false));
 			Add(await jobsMenu.InitializeAsync(Pos.Bottom(generalMenu)));

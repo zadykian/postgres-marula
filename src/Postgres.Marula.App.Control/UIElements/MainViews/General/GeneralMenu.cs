@@ -5,7 +5,7 @@ using Postgres.Marula.App.Control.UIElements.Menu.Items.Base;
 using Postgres.Marula.Infrastructure.Extensions;
 using Terminal.Gui;
 
-namespace Postgres.Marula.App.Control.UIElements.MainViews
+namespace Postgres.Marula.App.Control.UIElements.MainViews.General
 {
 	/// <summary>
 	/// General app menu.
