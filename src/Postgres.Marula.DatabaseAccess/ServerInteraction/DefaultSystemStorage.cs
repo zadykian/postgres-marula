@@ -33,7 +33,7 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 				return;
 			}
 
-			var commandText = GetCommandTextToInsertValues(parameterValues);
+			var commandText = CommandTextToInsertValues(parameterValues);
 			var connection = await Connection();
 			await connection.ExecuteAsync(commandText);
 		}
@@ -41,7 +41,7 @@ namespace Postgres.Marula.DatabaseAccess.ServerInteraction
 		/// <summary>
 		/// Get insert statement to save calculated values to <see cref="INamingConventions.ValuesHistoryTableName"/> table.
 		/// </summary>
-		private string GetCommandTextToInsertValues(IEnumerable<ParameterValueWithStatus> parameterValues)
+		private string CommandTextToInsertValues(IEnumerable<ParameterValueWithStatus> parameterValues)
 			=> $@"
 				with parameter_values (parameter_name, calculated_value, unit, status) as
 				(
